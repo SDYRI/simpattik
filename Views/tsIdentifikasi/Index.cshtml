@@ -1,0 +1,30 @@
+﻿@{
+    ViewData["Title"] = ViewBag.Title;
+    List<object> toolbarItems = new List<object>();
+    toolbarItems.Add("Search");
+    toolbarItems.Add(new { text = "Cetak Penetapan", tooltipText = "Cetak Penetapan", prefixIcon = "feather icon-printer", id = "cetak" });
+}
+<ejs-grid id="Grid" height="490" allowPaging="true" allowResizing="true" allowSorting="true" allowReordering="true" allowGrouping="false"
+          toolbar="toolbarItems" allowFiltering="true" allowSelection="true" toolbarClick="toolbarAction">
+    <e-data-manager url="/Identifikasi/PerencanaanPengadaanAll" adaptor="UrlAdaptor"></e-data-manager>
+    <e-grid-pagesettings pageSize="12" />
+    <e-grid-filterSettings type="Menu"></e-grid-filterSettings>
+    <e-grid-selectionsettings type="Single"></e-grid-selectionsettings>
+    <e-grid-columns>
+        <e-grid-column field="ididetifikasi" headerText="ididetifikasi" isPrimaryKey="true" isIdentity="true" visible="false"></e-grid-column>
+        <e-grid-column field="jeniskebutuhan" headerText="Jenis Kebutuhan"></e-grid-column>
+        <e-grid-column field="namabrgkerj" headerText="Nama"></e-grid-column>
+        <e-grid-column field="jumlahbarang" headerText="Jumlah Barang" width="200"></e-grid-column>
+    </e-grid-columns>
+</ejs-grid>
+
+
+@section SectionControls{
+    <script type="text/javascript">
+        function toolbarAction(args) {
+            if (args.item.id === 'cetak') {
+                window.open('@Url.Action("SuratPenetapan", "Identifikasi")');
+            }
+        }
+    </script>
+}

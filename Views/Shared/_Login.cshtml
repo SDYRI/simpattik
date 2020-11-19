@@ -1,0 +1,59 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Simpattik</title>
+    <link rel="shortcut icon" type="image/x-icon" href="~/images/ico/favicon.ico">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600" rel="stylesheet">
+
+    <!-- BEGIN: Vendor CSS-->
+    <link rel="stylesheet" type="text/css" href="~/vendors/css/vendors.min.css">
+    <!-- END: Vendor CSS-->
+    <!-- BEGIN: Theme CSS-->
+    <link rel="stylesheet" type="text/css" href="~/css/bootstrap-vuexy.css">
+    <link rel="stylesheet" type="text/css" href="~/css/bootstrap-extended.css">
+    <link rel="stylesheet" type="text/css" href="~/css/colors.css">
+    <link rel="stylesheet" type="text/css" href="~/css/components.css">
+    <link rel="stylesheet" type="text/css" href="~/css/themes/dark-layout.css">
+    <link rel="stylesheet" type="text/css" href="~/css/themes/semi-dark-layout.css">
+
+    <!-- BEGIN: Page CSS-->
+    <link rel="stylesheet" type="text/css" href="~/css/core/menu/menu-types/vertical-menu.css">
+    <link rel="stylesheet" type="text/css" href="~/css/core/colors/palette-gradient.css">
+    <link rel="stylesheet" type="text/css" href="~/css/pages/authentication.css">
+    <!-- END: Page CSS-->
+
+</head>
+<body class="vertical-layout vertical-menu-modern 1-column  navbar-floating footer-static bg-full-screen-image  blank-page blank-page" data-open="click" data-menu="vertical-menu-modern" data-col="1-column">
+    <!-- BEGIN: Content-->
+    <div class="app-content content">
+        <div class="content-overlay"></div>
+        <div class="header-navbar-shadow"></div>
+        <div class="content-wrapper">
+            <div class="content-header row">
+            </div>
+            <div class="content-body">
+                @RenderBody()
+            </div>
+        </div>
+    </div>
+    <!-- END: Content-->
+
+    <script src="~/lib/jquery/dist/jquery.min.js" asp-append-version="true"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js" asp-append-version="true"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js" asp-append-version="true"></script>
+
+    <!-- BEGIN: Vendor JS-->
+    <script src="~/vendors/js/vendors.min.js"></script>
+    <!-- BEGIN Vendor JS-->
+    <!-- BEGIN: Page Vendor JS-->
+    <!-- END: Page Vendor JS-->
+    <!-- BEGIN: Theme JS-->
+    <script src="~/lib/core/app-menu.js"></script>
+    <script src="~/lib/core/app.js"></script>
+    <script src="~/lib/scripts/components.js"></script>
+    <!-- END: Theme JS-->
+
+</body>
+</html>

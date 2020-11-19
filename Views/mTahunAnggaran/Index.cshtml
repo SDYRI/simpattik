@@ -1,0 +1,134 @@
+﻿@{
+    ViewData["Title"] = ViewBag.Title;
+}
+<ejs-toast id="toast_default" created="createdToasObj">
+    <e-toast-position X="Right"></e-toast-position>
+</ejs-toast>
+
+<ejs-grid id="Grid" actionComplete="CompleteAction" height="490" allowPaging="true" allowResizing="true" allowSorting="true" allowReordering="true" allowGrouping="false"
+          toolbar="@(new List<string>() { "Search", "Add", "Edit", "ExcelExport" ,"PdfExport"})" allowFiltering="true" allowSelection="true" allowExcelExport="true" allowPdfExport="true"
+          toolbarClick="toolbarAction" created="createdGrid">
+    <e-grid-pagesettings pageSize="12" />
+    <e-grid-filterSettings type="Menu"></e-grid-filterSettings>
+    <e-grid-editSettings allowAdding="true" allowEditing="true" mode="Dialog"></e-grid-editSettings>
+    <e-grid-selectionsettings type="Single"></e-grid-selectionsettings>
+    <e-grid-columns>
+        <e-grid-column field="TahunAnggaranOld" headerText="Tahun Anggaran Old" isPrimaryKey="true" isIdentity="true" visible="false"></e-grid-column>
+        <e-grid-column field="TahunAnggaran" width="150" headerText="Tahun Anggaran"></e-grid-column>
+        <e-grid-column field="TahunAnggaranAktif" headerText="Status Aktif" editType="booleanedit" displayAsCheckBox="true" textAlign="Center" type="boolean"></e-grid-column>
+    </e-grid-columns>
+</ejs-grid>
+
+@section SectionControls{
+    <script id='templatedialog' type="text/x-template">
+        <div id="Tempdialog">
+        </div>
+    </script>
+
+    <script type="text/javascript">
+        var toastObj;
+        function createdToasObj() {
+            toastObj = this;
+        }
+
+        function CompleteAction(args) {
+            var grid = document.querySelector('#Grid').ej2_instances[0];
+
+            if (args.requestType === 'beginEdit' || args.requestType === 'add') {
+                var dialog = args.dialog;
+                dialog.height = 235;
+                // change the header of the dialog
+                dialog.header = args.requestType === 'beginEdit' ? 'Edit ' + args.rowData['TahunAnggaran'] : 'New Tahun Anggaran';
+                args.form.ej2_instances[0].addRules('TahunAnggaran', { required: [true, 'Silahkan Isi Tahun Anggaran'], minLength: [4, 'Tahun Anggaran 4 huruf'], maxLength: [4, 'Tahun Anggaran 4 huruf'] });
+
+                let spinner = ej.popups.createSpinner({ target: args.dialog.element });
+                ej.popups.showSpinner(args.dialog.element);
+                var ajax = new ej.base.Ajax({
+                    url: "@Url.Action("TahunAnggaranMasterTemplate", "TahunAnggaranMaster")", //render the partial view
+                    type: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify({ value: args.rowData })
+                });
+                ajax.send().then(function (data) {
+                    appendElement(data, args.form); //Render the edit form with selected record
+                    args.form.elements.namedItem('TahunAnggaran').focus();
+                    ej.popups.hideSpinner(args.dialog.element);
+                }).catch(function (xhr) {
+                    console.log(xhr);
+                    ej.popups.hideSpinner(args.dialog.element);
+                });
+            }
+            else if (args.requestType === 'save') {
+                grid.refresh();
+                grid.closeEdit();
+            }
+        }
+
+        function appendElement(elementString, form) {
+            form.querySelector("#Tempdialog").innerHTML = elementString;
+            var script = document.createElement('script');
+            script.type = "text/javascript";
+            var serverScript = form.querySelector("#Tempdialog").querySelector('script');
+            script.textContent = serverScript.innerHTML;
+            document.head.appendChild(script);
+            serverScript.remove();
+        }
+
+        function paramToast(title, cssclass, message) {
+            setTimeout(
+                () => {
+                    var toastObj = document.getElementById('toast_default').ej2_instances[0];
+                    toastObj.title = title;
+                    toastObj.cssClass = cssclass;
+                    toastObj.content = message;
+                    toastObj.target = document.body;
+                    toastObj.show();
+                }, 500);
+        }
+
+        function createdGrid(args) {
+            class CustomAdaptor extends ej.data.UrlAdaptor {
+                processResponse(data, ds, query, xhr, request, changes) {
+                    if (!ej.base.isNullOrUndefined(data.message)) {
+                        if (data.message.indexOf('BERHASIL DISIMPAN') == -1) {
+                            paramToast('Error Tahun Anggaran', 'e-toast-danger', data.message);
+                        }
+                        else {
+                            paramToast('Tahun Anggaran', 'e-toast-success', data.message);
+                        }
+                    }
+
+                    if (!ej.base.isNullOrUndefined(data.data))
+                        return data.data;
+                    else
+                        return data;
+                }
+            }
+            var grid = document.querySelector('#Grid').ej2_instances[0];
+            grid.dataSource = new ej.data.DataManager({
+                url: "/TahunAnggaranMaster/TahunAnggaranMasterAll",
+                crudUrl: "/TahunAnggaranMaster/TahunAnggaranMasterCrud",
+                adaptor: new CustomAdaptor()
+            });
+        }
+
+        function toolbarAction(args) {
+            var fileName = "Master Tahun Anggaran";
+
+            if (args.item.id === this.element.id + '_pdfexport') {
+                var exportProperties = {
+                    fileName: fileName + ".pdf"
+                };
+
+                this.pdfExport(exportProperties);
+            }
+            if (args.item.id === this.element.id + '_excelexport') {
+                var exportProperties = {
+                    fileName: fileName + ".xlsx"
+                };
+
+                this.excelExport(exportProperties);
+            }
+        }
+    </script>
+}

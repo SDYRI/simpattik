@@ -1,0 +1,267 @@
+﻿@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Simpattik</title>
+    <link rel="shortcut icon" type="image/x-icon" href="~/images/ico/favicon.ico">
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    @*<link rel="stylesheet" href="~/css/ej2/bootstrap4.css" />*@
+    <link rel="stylesheet" href="~/css/ej2/material.css" />
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600" rel="stylesheet">
+
+    <!-- BEGIN: Vendor CSS-->
+    <link rel="stylesheet" type="text/css" href="~/vendors/css/vendors.min.css">
+    <link rel="stylesheet" type="text/css" href="~/vendors/css/charts/apexcharts.css">
+    <link rel="stylesheet" type="text/css" href="~/vendors/css/extensions/tether-theme-arrows.css">
+    <link rel="stylesheet" type="text/css" href="~/vendors/css/extensions/tether.min.css">
+    <link rel="stylesheet" type="text/css" href="~/vendors/css/extensions/shepherd-theme-default.css">
+    <!-- END: Vendor CSS-->
+    <!-- BEGIN: Theme CSS-->
+    <link rel="stylesheet" type="text/css" href="~/css/bootstrap-vuexy.css">
+    <link rel="stylesheet" type="text/css" href="~/css/bootstrap-extended.css">
+    <link rel="stylesheet" type="text/css" href="~/css/colors.css">
+    <link rel="stylesheet" type="text/css" href="~/css/components.css">
+    <link rel="stylesheet" type="text/css" href="~/css/themes/dark-layout.css">
+    <link rel="stylesheet" type="text/css" href="~/css/themes/semi-dark-layout.css">
+
+    <!-- BEGIN: Page CSS-->
+    <link rel="stylesheet" type="text/css" href="~/css/core/menu/menu-types/vertical-menu.css">
+    <link rel="stylesheet" type="text/css" href="~/css/core/colors/palette-gradient.css">
+    <link rel="stylesheet" type="text/css" href="~/css/pages/dashboard-analytics.css">
+    <link rel="stylesheet" type="text/css" href="~/css/pages/card-analytics.css">
+    <link rel="stylesheet" type="text/css" href="~/css/plugins/tour/tour.css">
+    <!-- END: Page CSS-->
+
+    <script src="~/js/ej2/ej2.min.js" asp-append-version="true"></script>
+    <script src="~/js/vue/vue.min.js" asp-append-version="true"></script>
+</head>
+<body class="vertical-layout vertical-menu-modern 2-columns  navbar-floating footer-static  " data-open="click" data-menu="vertical-menu-modern" data-col="2-columns">
+
+    <!-- BEGIN: Header-->
+    <nav class="header-navbar navbar-expand-lg navbar navbar-with-menu floating-nav navbar-light navbar-shadow">
+        <div class="navbar-wrapper">
+            <div class="navbar-container content">
+                <div class="navbar-collapse" id="navbar-mobile">
+                    <div class="mr-auto float-left bookmark-wrapper d-flex align-items-center">
+                        <ul class="nav navbar-nav">
+                            <li class="nav-item mobile-menu d-xl-none mr-auto"><a class="nav-link nav-menu-main menu-toggle hidden-xs" href="#"><i class="ficon feather icon-menu"></i></a></li>
+                        </ul>
+                        <ul class="nav navbar-nav bookmark-icons">
+                                <li class="nav-item d-none d-lg-block">Perencanaan <b>@HttpContextAccessor.HttpContext.Session.GetString("TahunAktif")</b></li>
+                            </ul>
+                        @*<ul class="nav navbar-nav bookmark-icons">
+                                <li class="nav-item d-none d-lg-block"><a class="nav-link" href="app-todo.html" data-toggle="tooltip" data-placement="top" title="Todo"><i class="ficon feather icon-check-square"></i></a></li>
+                                <li class="nav-item d-none d-lg-block"><a class="nav-link" href="app-chat.html" data-toggle="tooltip" data-placement="top" title="Chat"><i class="ficon feather icon-message-square"></i></a></li>
+                                <li class="nav-item d-none d-lg-block"><a class="nav-link" href="app-email.html" data-toggle="tooltip" data-placement="top" title="Email"><i class="ficon feather icon-mail"></i></a></li>
+                                <li class="nav-item d-none d-lg-block"><a class="nav-link" href="app-calender.html" data-toggle="tooltip" data-placement="top" title="Calendar"><i class="ficon feather icon-calendar"></i></a></li>
+                            </ul>*@
+                    </div>
+                    <ul class="nav navbar-nav float-right">
+                        <li class="nav-item d-none d-lg-block"><a class="nav-link nav-link-expand"><i class="ficon feather icon-maximize"></i></a></li>
+                        <li class="dropdown dropdown-user nav-item">
+                            <a class="dropdown-toggle nav-link dropdown-user-link" href="#" data-toggle="dropdown">
+                                <div class="user-nav d-sm-flex d-none">
+                                    <span class="user-name text-bold-600">@HttpContextAccessor.HttpContext.Session.GetString("Nama")</span>
+                                    @if ((@HttpContextAccessor.HttpContext.Session.GetInt32("Tipe") != 1) && (@HttpContextAccessor.HttpContext.Session.GetInt32("Tipe") != 2))
+                                    {
+                                        <span class="user-status">@HttpContextAccessor.HttpContext.Session.GetString("OpdName")</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="user-status">All Opd</span>
+                                    }
+                                </div>
+                                <span><img class="round" src="~/images/avataruser/hd.jpg" alt="avatar" height="40" width="40"></span>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right">
+                                <a class="dropdown-item" href="#"><i class="feather icon-user"></i> Edit Profile</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" asp-controller="Authentication" asp-action="Logout"><i class="feather icon-power"></i> Logout</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <!-- END: Header-->
+    <!-- BEGIN: Main Menu-->
+    <div class="main-menu menu-fixed menu-light menu-accordion menu-shadow" data-scroll-to-active="true">
+        <div class="navbar-header">
+            <ul class="nav navbar-nav flex-row">
+                <li class="nav-item mr-auto">
+                    <a class="navbar-brand" asp-controller="Home" asp-action="Index">
+                        <img class="brand-logo" src="~/images/logo/Logo_Kota_Tasikmalaya.png">
+                        <h2 class="brand-text mb-0">SIMPATTIK</h2>
+                    </a>
+                </li>
+                <li class="nav-item nav-toggle"><a class="nav-link modern-nav-toggle pr-0" data-toggle="collapse"><i class="feather icon-x d-block d-xl-none font-medium-4 primary toggle-icon"></i><i class="toggle-icon feather icon-disc font-medium-4 d-none d-xl-block collapse-toggle-icon primary" data-ticon="icon-disc"></i></a></li>
+            </ul>
+        </div>
+        <div class="shadow-bottom"></div>
+        <div class="main-menu-content">
+            <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">
+                <li class="nav-item @Html.IsSelected(controller: "Home", action: "Index")">
+                    <a asp-area="" asp-controller="Home" asp-action="Index"><i class="feather icon-home"></i><span class="menu-title">Dashboard</span></a>
+                </li>
+                <li class=" navigation-header">
+                    <span>Modul</span>
+                </li>
+
+                <li class="nav-item">
+                    <a href="#"><i class="feather icon-layers"></i><span class="menu-title">Perencanaan / Planing</span></a>
+                    <ul class="menu-content">
+                        <li>
+                            <a href="#"><i class="feather icon-copy"></i><span class="menu-item">Identifikasi Kebutuhan</span></a>
+                            <ul class="menu-content">
+                                <li class="@Html.IsSelected(controller: "tsIdentifikasi", action: "IndexBarang")">
+                                    <a asp-area="" asp-controller="Identifikasi" asp-action="IndexBarang"><i class="feather icon-circle"></i><span class="menu-item">Barang</span></a>
+                                </li>
+                                <li class="@Html.IsSelected(controller: "tsIdentifikasi", action: "IndexPekerjaan")">
+                                    <a asp-area="" asp-controller="Identifikasi" asp-action="IndexPekerjaan"><i class="feather icon-circle"></i><span class="menu-item">Pekerjaan Kontruksi</span></a>
+                                </li>
+                                <li class="@Html.IsSelected(controller: "tsIdentifikasi", action: "IndexKonsultasi")">
+                                    <a asp-area="" asp-controller="Identifikasi" asp-action="IndexKonsultasi"><i class="feather icon-circle"></i><span class="menu-item">Jasa Konsultasi</span></a>
+                                </li>
+                                <li class="@Html.IsSelected(controller: "tsIdentifikasi", action: "IndexLainnya")">
+                                    <a asp-area="" asp-controller="Identifikasi" asp-action="IndexLainnya"><i class="feather icon-circle"></i><span class="menu-item">Jasa Lainnya</span></a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="@Html.IsSelected(controller: "tsIdentifikasi", action: "Index")">
+                            <a asp-area="" asp-controller="Identifikasi" asp-action="IndexMe"><i class="feather icon-copy"></i><span class="menu-item">Laporan Perencanaan Pengadaan</span></a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a href="#"><i class="feather icon-folder"></i><span class="menu-title">Pemrograman</span></a>
+                    <ul class="menu-content">
+                        <li class="@Html.IsSelected(controller: "Home", action: "Privacy")">
+                            <a asp-area="" asp-controller="Home" asp-action="Privacy"><i class="feather icon-copy"></i><span class="menu-item">Perencanaan</span></a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a href="#"><i class="feather icon-briefcase"></i><span class="menu-title">Penganggaran / Budgeting</span></a>
+                    <ul class="menu-content">
+                        <li class="@Html.IsSelected(controller: "Home", action: "Privacy")">
+                            <a asp-area="" asp-controller="Home" asp-action="Privacy"><i class="feather icon-copy"></i><span class="menu-item">Perencanaan</span></a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a href="#"><i class="feather icon-users"></i><span class="menu-title">Pemilihan Penyedia</span></a>
+                    <ul class="menu-content">
+                        <li class="@Html.IsSelected(controller: "Home", action: "Privacy")">
+                            <a asp-area="" asp-controller="Home" asp-action="Privacy"><i class="feather icon-copy"></i><span class="menu-item">Database Vendor</span></a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a href="#"><i class="feather icon-server"></i><span class="menu-title">Pelaksanaan Kontrak dan Pembayaran</span></a>
+                    <ul class="menu-content">
+                        <li class="@Html.IsSelected(controller: "Home", action: "Privacy")">
+                            <a asp-area="" asp-controller="Home" asp-action="Privacy"><i class="feather icon-copy"></i><span class="menu-item">Perencanaan</span></a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a href="#"><i class="feather icon-repeat"></i><span class="menu-title">Penyerahan Pekerjaan / Hand Over</span></a>
+                    <ul class="menu-content">
+                        <li class="@Html.IsSelected(controller: "Home", action: "Privacy")">
+                            <a asp-area="" asp-controller="Home" asp-action="Privacy"><i class="feather icon-copy"></i><span class="menu-item">Perencanaan</span></a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a href="#"><i class="feather icon-shield"></i><span class="menu-title">Pemeliharaan dan Pemanfaatan</span></a>
+                    <ul class="menu-content">
+                        <li class="@Html.IsSelected(controller: "Home", action: "Privacy")">
+                            <a asp-area="" asp-controller="Home" asp-action="Privacy"><i class="feather icon-copy"></i><span class="menu-item">Perencanaan</span></a>
+                        </li>
+                    </ul>
+                </li>
+                @if ((HttpContextAccessor.HttpContext.Session.GetInt32("Tipe") == 1) || (HttpContextAccessor.HttpContext.Session.GetInt32("Tipe") == 2))
+                {
+                    <li class="nav-item">
+                        <a href="#"><i class="feather icon-command"></i><span class="menu-title">Master</span></a>
+                        <ul class="menu-content">
+                            <li class="@Html.IsSelected(controller: "mTahunAnggaran", action: "Index")">
+                                <a asp-area="" asp-controller="TahunAnggaranMaster" asp-action="IndexMe"><i class="feather icon-copy"></i><span class="menu-item">Tahun Anggaran</span></a>
+                            </li>
+                            <li class="@Html.IsSelected(controller: "mUser", action: "Index")">
+                                <a asp-area="" asp-controller="UserMaster" asp-action="IndexMe"><i class="feather icon-copy"></i><span class="menu-item">User</span></a>
+                            </li>
+                            <li class="@Html.IsSelected(controller: "mOpd", action: "Index")">
+                                <a asp-area="" asp-controller="OpdMaster" asp-action="IndexMe"><i class="feather icon-copy"></i><span class="menu-item">OPD</span></a>
+                            </li>
+                            <li class="@Html.IsSelected(controller: "mProgram", action: "Index")">
+                                <a asp-area="" asp-controller="ProgramMaster" asp-action="IndexMe"><i class="feather icon-copy"></i><span class="menu-item">Sub Kegiatan</span></a>
+                            </li>
+                            <li class="@Html.IsSelected(controller: "mKodeRekening", action: "Index")">
+                                <a asp-area="" asp-controller="KodeRekeningMaster" asp-action="IndexMe"><i class="feather icon-copy"></i><span class="menu-item">Kode Rekening</span></a>
+                            </li>
+                        </ul>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+    <!-- END: Main Menu-->
+    <!-- BEGIN: Content-->
+    <div class="app-content content">
+        <div class="content-overlay"></div>
+        <div class="header-navbar-shadow"></div>
+        <div class="content-wrapper">
+            <div class="content-header row">
+            </div>
+            <div class="barba-container">
+                <div class="content-body">
+                    @RenderBody()
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END: Content-->
+
+    <div class="sidenav-overlay"></div>
+    <div class="drag-target"></div>
+
+    <!-- BEGIN: Footer-->
+    <footer class="footer footer-static footer-light">
+        <p class="clearfix blue-grey lighten-2 mb-0">
+            <span class="float-md-left d-block d-md-inline-block mt-25">COPYRIGHT &copy; @DateTime.Now.Year<a class="text-bold-800 grey darken-2" href="https://portal.tasikmalayakota.go.id/" target="_blank">Tasikmalaya Kota,</a>All rights Reserved</span><span class="float-md-right d-none d-md-block">Hand-crafted & Made with<i class="feather">bethasolution</i></span>
+            <button class="btn btn-primary btn-icon scroll-top" type="button"><i class="feather icon-arrow-up"></i></button>
+        </p>
+    </footer>
+    <!-- END: Footer-->
+
+
+    <script src="~/lib/jquery/dist/jquery.min.js" asp-append-version="true"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js" asp-append-version="true"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js" asp-append-version="true"></script>
+
+    <!-- BEGIN: Vendor JS-->
+    <script src="~/vendors/js/vendors.min.js"></script>
+    <!-- BEGIN Vendor JS-->
+    <!-- BEGIN: Page Vendor JS-->
+    <script src="~/vendors/js/ui/jquery.sticky.js"></script>
+    <script src="~/vendors/js/charts/apexcharts.min.js"></script>
+    <script src="~/vendors/js/extensions/tether.min.js"></script>
+    <script src="~/vendors/js/extensions/shepherd.min.js"></script>
+    <!-- END: Page Vendor JS-->
+    <!-- BEGIN: Theme JS-->
+    <script src="~/lib/core/app-menu.js"></script>
+    <script src="~/lib/core/app.js"></script>
+    <script src="~/lib/scripts/components.js"></script>
+    <!-- END: Theme JS-->
+
+    @RenderSection("Scripts", required: false)
+    @RenderSection("SectionControls", required: false)
+    <ejs-scripts></ejs-scripts>
+
+</body>
+</html>

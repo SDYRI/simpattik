@@ -1,0 +1,68 @@
+﻿@model TasikmalayaKota.Simpatik.Web.Services.mKodeRekening.Models.mKodeRekeningModel
+@{
+    ViewData["Title"] = ViewBag.Title;
+}
+
+<div>
+    <div class="form-row">
+        <div class="form-group col-md-12">
+            <div class="e-float-input e-control-wrapper">
+                <ejs-dropdownlist id="IdParentA" placeholder="Pilih Akun" popupHeight="200px" allowFiltering="true" filtering="onfilteringAkun" sortOrder="@ViewBag.sortDropdown"
+                                  query="@ViewBag.queryAkun" floatLabelType="Always" change="onchangeAkunObjek">
+                    <e-data-manager url="/KodeRekeningMaster/KodeRekeningMasterAll" adaptor="UrlAdaptor" crossDomain="true"></e-data-manager>
+                    <e-dropdownlist-fields text="NamaSubRincian" value="IdKodeRekening"></e-dropdownlist-fields>
+                </ejs-dropdownlist>
+            </div>
+        </div>
+        <div class="form-group col-md-12">
+            <div class="e-float-input e-control-wrapper">
+                <ejs-dropdownlist id="IdParentK" placeholder="Pilih Kelompok" popupHeight="200px" allowFiltering="true" filtering="onfilteringKelompok" sortOrder="@ViewBag.sortDropdown"
+                                  query="@ViewBag.queryKelompok" floatLabelType="Always" enabled="false" change="onchangeKelompokRincian">
+                    <e-data-manager url="/KodeRekeningMaster/KodeRekeningMasterAll" adaptor="UrlAdaptor" crossDomain="true"></e-data-manager>
+                    <e-dropdownlist-fields text="NamaSubRincian" value="IdKodeRekening"></e-dropdownlist-fields>
+                </ejs-dropdownlist>
+            </div>
+        </div>
+        <div class="form-group col-md-12">
+            <div class="e-float-input e-control-wrapper">
+                <ejs-dropdownlist id="IdParentJ" placeholder="Pilih Jenis" popupHeight="200px" allowFiltering="true" filtering="onfilteringJenis" sortOrder="@ViewBag.sortDropdown"
+                                  query="@ViewBag.queryJenis" floatLabelType="Always" enabled="false" change="onchangeJenisSubRincian">
+                    <e-data-manager url="/KodeRekeningMaster/KodeRekeningMasterAll" adaptor="UrlAdaptor" crossDomain="true"></e-data-manager>
+                    <e-dropdownlist-fields text="NamaSubRincian" value="IdKodeRekening"></e-dropdownlist-fields>
+                </ejs-dropdownlist>
+            </div>
+        </div>
+        <div class="form-group col-md-12">
+            <div class="e-float-input e-control-wrapper">
+                <ejs-dropdownlist id="IdParentO" placeholder="Pilih Objek" popupHeight="200px" allowFiltering="true" filtering="onfilteringObjek" sortOrder="@ViewBag.sortDropdown"
+                                  query="@ViewBag.queryObjek" floatLabelType="Always" enabled="false"  change="onchangeObjek">
+                    <e-data-manager url="/KodeRekeningMaster/KodeRekeningMasterAll" adaptor="UrlAdaptor" crossDomain="true"></e-data-manager>
+                    <e-dropdownlist-fields text="NamaSubRincian" value="IdKodeRekening"></e-dropdownlist-fields>
+                </ejs-dropdownlist>
+            </div>
+        </div>
+        <div class="form-group col-md-12">
+            <div class="e-float-input e-control-wrapper">
+                <ejs-dropdownlist id="IdParent" placeholder="Pilih Rincian" popupHeight="200px" allowFiltering="true" filtering="onfilteringRincian" sortOrder="@ViewBag.sortDropdown"
+                                  query="@ViewBag.queryRincian" floatLabelType="Always" enabled="false"
+                                  headerTemplate="@Html.Raw("<table><tr><th class=\"e-text-center\" style=\"width: 200px;\">Kode Rekening</th><th class=\"e-text-center\" style=\"width: 125px;\">Nama Rekening</th></tr></table>")"
+                              itemTemplate="@Html.Raw("<table><tbody><tr><td class=\"e-text-center\" style=\"width: 200px;\">${KodeRekening}</td><td class=\"e-text-center\" style=\"width: 125px;\">${NamaSubRincian}</td></tr></tbody></table>")">
+                    <e-data-manager url="/KodeRekeningMaster/KodeRekeningMasterAll" adaptor="UrlAdaptor" crossDomain="true"></e-data-manager>
+                    <e-dropdownlist-fields text="NamaSubRincian" value="IdKodeRekening"></e-dropdownlist-fields>
+                </ejs-dropdownlist>
+            </div>
+        </div>
+        <div class="form-group col-md-4">
+            <div class="e-float-input e-control-wrapper">
+                <ejs-textbox id="KodeSubRincian" cssClass="e-input" placeholder="Kode Sub Rincian" floatLabelType="Always" ejs-for="@Model.KodeSubRincian"></ejs-textbox>
+            </div>
+        </div>
+        <div class="form-group col-md-8">
+            <div class="e-float-input e-control-wrapper">
+                <ejs-textbox id="NamaSubRincian" cssClass="e-input" placeholder="Nama Sub Rincian" floatLabelType="Always" ejs-for="@Model.NamaSubRincian"></ejs-textbox>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ejs-scripts></ejs-scripts>

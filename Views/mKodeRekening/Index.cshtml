@@ -1,0 +1,803 @@
+﻿@{
+    ViewData["Title"] = ViewBag.Title;
+    var Akun = "#akun";
+    var Kelompok = "#kelompok";
+    var Jenis = "#jenis";
+    var Objek = "#objek";
+    var Rincian = "#rincian";
+    var SubRincian = "#subrincian";
+}
+<ejs-toast id="toast_default" created="createdToasObj">
+    <e-toast-position X="Right"></e-toast-position>
+</ejs-toast>
+
+<div id="akun" style="display: none">
+    <ejs-grid id="GridAkun" actionComplete="CompleteActionAkun" height="490" allowPaging="true" allowResizing="true" allowSorting="true" allowReordering="true" allowGrouping="false"
+              toolbar="@(new List<string>() { "Search", "Add", "Edit", "Delete","Update","Cancel" , "ExcelExport" ,"PdfExport"})" allowFiltering="true" allowSelection="true"
+              allowExcelExport="true" allowPdfExport="true" toolbarClick="toolbarAction" created="createdGridAkun" query="@ViewBag.queryAkun">
+        <e-grid-pagesettings pageCount="5" pageSize="12" pageSizes="true"></e-grid-pagesettings>
+        <e-grid-filterSettings type="Menu"></e-grid-filterSettings>
+        <e-grid-editSettings allowAdding="true" allowDeleting="true" allowEditing="true" mode="Dialog" template='#templatedialog' showDeleteConfirmDialog="true"></e-grid-editSettings>
+        <e-grid-selectionsettings type="Single"></e-grid-selectionsettings>
+        <e-grid-columns>
+            <e-grid-column field="IdKodeRekening" headerText="IdOpd" isPrimaryKey="true" isIdentity="true" visible="false"></e-grid-column>
+            <e-grid-column field="KodeSubRincian" width="50" headerText="Kode Akun"></e-grid-column>
+            <e-grid-column field="NamaSubRincian" width="150" headerText="Nama Akun"></e-grid-column>
+        </e-grid-columns>
+    </ejs-grid>
+</div>
+
+<div id="kelompok" style="display: none">
+    <ejs-grid id="GridKelompok" actionComplete="CompleteActionKelompok" height="490" allowPaging="true" allowResizing="true" allowSorting="true" allowReordering="true" allowGrouping="false"
+              toolbar="@(new List<string>() { "Search", "Add", "Edit", "Delete","Update","Cancel" , "ExcelExport" ,"PdfExport"})" allowFiltering="true" allowSelection="true"
+              allowExcelExport="true" allowPdfExport="true" toolbarClick="toolbarAction" created="createdGridKelompok" query="@ViewBag.queryKelompok">
+        <e-grid-pagesettings pageCount="5" pageSize="12" pageSizes="true"></e-grid-pagesettings>
+        <e-grid-filterSettings type="Menu"></e-grid-filterSettings>
+        <e-grid-editSettings allowAdding="true" allowDeleting="true" allowEditing="true" mode="Dialog" template='#templatedialog' showDeleteConfirmDialog="true"></e-grid-editSettings>
+        <e-grid-selectionsettings type="Single"></e-grid-selectionsettings>
+        <e-grid-columns>
+            <e-grid-column field="IdKodeRekening" headerText="IdOpd" isPrimaryKey="true" isIdentity="true" visible="false"></e-grid-column>
+            <e-grid-column field="KodeRincian" width="50" headerText="Kode Akun"></e-grid-column>
+            <e-grid-column field="KodeSubRincian" width="50" headerText="Kode Kelompok"></e-grid-column>
+            <e-grid-column field="NamaSubRincian" width="150" headerText="Nama Kelompok"></e-grid-column>
+        </e-grid-columns>
+    </ejs-grid>
+</div>
+
+<div id="jenis" style="display: none">
+    <ejs-grid id="GridJenis" actionComplete="CompleteActionJenis" height="490" allowPaging="true" allowResizing="true" allowSorting="true" allowReordering="true" allowGrouping="false"
+              toolbar="@(new List<string>() { "Search", "Add", "Edit", "Delete","Update","Cancel" , "ExcelExport" ,"PdfExport"})" allowFiltering="true" allowSelection="true"
+              allowExcelExport="true" allowPdfExport="true" toolbarClick="toolbarAction" created="createdGridJenis" query="@ViewBag.queryJenis">
+        <e-grid-pagesettings pageCount="5" pageSize="12" pageSizes="true"></e-grid-pagesettings>
+        <e-grid-filterSettings type="Menu"></e-grid-filterSettings>
+        <e-grid-editSettings allowAdding="true" allowDeleting="true" allowEditing="true" mode="Dialog" template='#templatedialog' showDeleteConfirmDialog="true"></e-grid-editSettings>
+        <e-grid-selectionsettings type="Single"></e-grid-selectionsettings>
+        <e-grid-columns>
+            <e-grid-column field="IdKodeRekening" headerText="IdOpd" isPrimaryKey="true" isIdentity="true" visible="false"></e-grid-column>
+            <e-grid-column field="KodeObjek" width="50" headerText="Kode Akun"></e-grid-column>
+            <e-grid-column field="KodeRincian" width="50" headerText="Kode Kelompok"></e-grid-column>
+            <e-grid-column field="KodeSubRincian" width="50" headerText="Kode Jenis"></e-grid-column>
+            <e-grid-column field="NamaSubRincian" width="150" headerText="Nama Jenis"></e-grid-column>
+        </e-grid-columns>
+    </ejs-grid>
+</div>
+
+<div id="objek" style="display: none">
+    <ejs-grid id="GridObjek" actionComplete="CompleteActionObjek" height="490" allowPaging="true" allowResizing="true" allowSorting="true" allowReordering="true" allowGrouping="false"
+              toolbar="@(new List<string>() { "Search", "Add", "Edit", "Delete","Update","Cancel" , "ExcelExport" ,"PdfExport"})" allowFiltering="true" allowSelection="true"
+              allowExcelExport="true" allowPdfExport="true" toolbarClick="toolbarAction" created="createdGridObjek" query="@ViewBag.queryObjek">
+        <e-grid-pagesettings pageCount="5" pageSize="12" pageSizes="true"></e-grid-pagesettings>
+        <e-grid-filterSettings type="Menu"></e-grid-filterSettings>
+        <e-grid-editSettings allowAdding="true" allowDeleting="true" allowEditing="true" mode="Dialog" template='#templatedialog' showDeleteConfirmDialog="true"></e-grid-editSettings>
+        <e-grid-selectionsettings type="Single"></e-grid-selectionsettings>
+        <e-grid-columns>
+            <e-grid-column field="IdKodeRekening" headerText="IdOpd" isPrimaryKey="true" isIdentity="true" visible="false"></e-grid-column>
+            <e-grid-column field="KodeJenis" width="50" headerText="Kode Akun"></e-grid-column>
+            <e-grid-column field="KodeObjek" width="50" headerText="Kode Kelompok"></e-grid-column>
+            <e-grid-column field="KodeRincian" width="50" headerText="Kode Jenis"></e-grid-column>
+            <e-grid-column field="KodeSubRincian" width="50" headerText="Kode Objek"></e-grid-column>
+            <e-grid-column field="NamaSubRincian" width="150" headerText="Nama Objek"></e-grid-column>
+        </e-grid-columns>
+    </ejs-grid>
+</div>
+
+<div id="rincian" style="display: none">
+    <ejs-grid id="GridRincian" actionComplete="CompleteActionRincian" height="490" allowPaging="true" allowResizing="true" allowSorting="true" allowReordering="true" allowGrouping="false"
+              toolbar="@(new List<string>() { "Search", "Add", "Edit", "Delete","Update","Cancel" , "ExcelExport" ,"PdfExport"})" allowFiltering="true" allowSelection="true"
+              allowExcelExport="true" allowPdfExport="true" toolbarClick="toolbarAction" created="createdGridRincian" query="@ViewBag.queryRincian">
+        <e-grid-pagesettings pageCount="5" pageSize="12" pageSizes="true"></e-grid-pagesettings>
+        <e-grid-filterSettings type="Menu"></e-grid-filterSettings>
+        <e-grid-editSettings allowAdding="true" allowDeleting="true" allowEditing="true" mode="Dialog" template='#templatedialog' showDeleteConfirmDialog="true"></e-grid-editSettings>
+        <e-grid-selectionsettings type="Single"></e-grid-selectionsettings>
+        <e-grid-columns>
+            <e-grid-column field="IdKodeRekening" headerText="IdOpd" isPrimaryKey="true" isIdentity="true" visible="false"></e-grid-column>
+            <e-grid-column field="KodeKelompok" width="50" headerText="Kode Akun"></e-grid-column>
+            <e-grid-column field="KodeJenis" width="50" headerText="Kode Kelompok"></e-grid-column>
+            <e-grid-column field="KodeObjek" width="50" headerText="Kode Jenis"></e-grid-column>
+            <e-grid-column field="KodeRincian" width="50" headerText="Kode Objek"></e-grid-column>
+            <e-grid-column field="KodeSubRincian" width="50" headerText="Kode Rincian"></e-grid-column>
+            <e-grid-column field="NamaSubRincian" width="150" headerText="Nama Rincian"></e-grid-column>
+        </e-grid-columns>
+    </ejs-grid>
+</div>
+
+<div id="subrincian" style="display: none">
+    <ejs-grid id="GridSubRincian" actionComplete="CompleteActionSubRincian" height="490" allowPaging="true" allowResizing="true" allowSorting="true" allowReordering="true" allowGrouping="false"
+                toolbar="@(new List<string>() { "Search", "Add", "Edit", "Delete","Update","Cancel" , "ExcelExport" ,"PdfExport"})" allowFiltering="true" allowSelection="true"
+                allowExcelExport="true" allowPdfExport="true" toolbarClick="toolbarAction" created="createdGridSubRincian" query="@ViewBag.querySubRincian">
+        <e-grid-pagesettings pageCount="5" pageSize="12" pageSizes="true"></e-grid-pagesettings>
+        <e-grid-filterSettings type="Menu"></e-grid-filterSettings>
+        <e-grid-editSettings allowAdding="true" allowDeleting="true" allowEditing="true" mode="Dialog" template='#templatedialog' showDeleteConfirmDialog="true"></e-grid-editSettings>
+        <e-grid-selectionsettings type="Single"></e-grid-selectionsettings>
+        <e-grid-columns>
+            <e-grid-column field="IdKodeRekening" headerText="IdOpd" isPrimaryKey="true" isIdentity="true" visible="false"></e-grid-column>
+            <e-grid-column field="KodeAkun" width="50" headerText="Kode Akun"></e-grid-column>
+            <e-grid-column field="KodeKelompok" width="50" headerText="Kode Kelompok"></e-grid-column>
+            <e-grid-column field="KodeJenis" width="50" headerText="Kode Jenis"></e-grid-column>
+            <e-grid-column field="KodeObjek" width="50" headerText="Kode Objek"></e-grid-column>
+            <e-grid-column field="KodeRincian" width="50" headerText="Kode Rincian"></e-grid-column>
+            <e-grid-column field="KodeSubRincian" width="50" headerText="Kode Sub Rincian"></e-grid-column>
+            <e-grid-column field="NamaSubRincian" width="150" headerText="Nama Sub Rincian"></e-grid-column>
+        </e-grid-columns>
+    </ejs-grid>
+</div>
+
+<ejs-tab id="adaptiveTab" heightAdjustMode="None" height="250px" created="tabOPD">
+    <e-tab-tabitems>
+        <e-tab-tabitem header="ViewBag.headerAkun" content="@Akun"></e-tab-tabitem>
+        <e-tab-tabitem header="ViewBag.headerKelompok" content="@Kelompok"></e-tab-tabitem>
+        <e-tab-tabitem header="ViewBag.headerJenis" content="@Jenis"></e-tab-tabitem>
+        <e-tab-tabitem header="ViewBag.headerObjek" content="@Objek"></e-tab-tabitem>
+        <e-tab-tabitem header="ViewBag.headerRincian" content="@Rincian"></e-tab-tabitem>
+        <e-tab-tabitem header="ViewBag.headerSubRincian" content="@SubRincian"></e-tab-tabitem>
+    </e-tab-tabitems>
+</ejs-tab>
+
+@section SectionControls{
+    <script id='templatedialog' type="text/x-template">
+        <div id="Tempdialog">
+        </div>
+    </script>
+
+    <script type="text/javascript">
+        var toastObj;
+        var tabObj;
+
+        function createdToasObj() {
+            toastObj = this;
+        }
+
+        function tabOPD() {
+            tabObj = document.getElementById('adaptiveTab').ej2_instances[0];
+        }
+
+        function paramToast(title, cssclass, message) {
+            setTimeout(
+                () => {
+                    var toastObj = document.getElementById('toast_default').ej2_instances[0];
+                    toastObj.title = title;
+                    toastObj.cssClass = cssclass;
+                    toastObj.content = message;
+                    toastObj.target = document.body;
+                    toastObj.show();
+                }, 500);
+        }
+
+        //#region akun
+        function CompleteActionAkun(args) {
+            var grid = document.querySelector('#GridAkun').ej2_instances[0];
+
+            if (args.requestType === 'beginEdit' || args.requestType === 'add') {
+                var dialog = args.dialog;
+                dialog.height = 220;
+                // change the header of the dialog
+                dialog.header = args.requestType === 'beginEdit' ? 'Edit ' + args.rowData['NamaSubRincian'] : 'New Akun';
+                args.form.ej2_instances[0].addRules('KodeSubRincian', { required: [true, 'Silahkan Isi Kode Akun'], minLength: [1, 'Kode Akun Minimal 1 huruf'] });
+                args.form.ej2_instances[0].addRules('NamaSubRincian', { required: [true, 'Silahkan Isi Nama Akun'], minLength: [3, 'Nama Akun Minimal 3 huruf'] });
+
+                let spinner = ej.popups.createSpinner({ target: args.dialog.element });
+                ej.popups.showSpinner(args.dialog.element);
+                var ajax = new ej.base.Ajax({
+                    url: "@Url.Action("KodeRekeningMasterTemplateAkun", "KodeRekeningMaster")", //render the partial view
+                    type: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify({ value: args.rowData })
+                });
+                ajax.send().then(function (data) {
+                    appendElement(data, args.form); //Render the edit form with selected record
+                    args.form.elements.namedItem('KodeSubRincian').focus();
+                    ej.popups.hideSpinner(args.dialog.element);
+                }).catch(function (xhr) {
+                    console.log(xhr);
+                    ej.popups.hideSpinner(args.dialog.element);
+                });
+            }
+            else if (args.requestType === 'save') {
+                grid.refresh();
+                grid.closeEdit();
+            }
+        }
+
+        function createdGridAkun(args) {
+            class CustomAdaptor extends ej.data.UrlAdaptor {
+                processResponse(data, ds, query, xhr, request, changes) {
+                    if (!ej.base.isNullOrUndefined(data.message)) {
+                        if ((data.message.indexOf('BERHASIL DISIMPAN') == -1) && (data.message.indexOf('BERHASIL DIHAPUS') == -1)) {
+                            paramToast('Error Master Akun', 'e-toast-danger', data.message);
+                        }
+                        else {
+                            paramToast('Master Akun', 'e-toast-success', data.message);
+                        }
+                    }
+
+                    if (!ej.base.isNullOrUndefined(data.data))
+                        return data.data;
+                    else
+                        return data;
+                }
+            }
+            var grid = document.querySelector('#GridAkun').ej2_instances[0];
+            grid.dataSource = new ej.data.DataManager({
+                url: "/KodeRekeningMaster/KodeRekeningMasterAll",
+                crudUrl: "/KodeRekeningMaster/KodeRekeningMasterCrud",
+                adaptor: new CustomAdaptor()
+            });
+        }
+        //#endregion akun
+
+        //#region kelompok
+        function CompleteActionKelompok(args) {
+            var grid = document.querySelector('#GridKelompok').ej2_instances[0];
+
+            if (args.requestType === 'beginEdit' || args.requestType === 'add') {
+                var dialog = args.dialog;
+                dialog.height = 320;
+                // change the header of the dialog
+                dialog.header = args.requestType === 'beginEdit' ? 'Edit ' + args.rowData['NamaSubRincian'] : 'New Kelompok';
+                args.form.ej2_instances[0].addRules('IdParent', { required: [true, 'Silahkan Pilih Akun'] });
+                args.form.ej2_instances[0].addRules('KodeSubRincian', { required: [true, 'Silahkan Isi Kode Kelompok'], minLength: [1, 'Kode Kelompok Minimal 1 huruf'] });
+                args.form.ej2_instances[0].addRules('NamaSubRincian', { required: [true, 'Silahkan Isi Nama Kelompok'], minLength: [3, 'Nama Kelompok Minimal 3 huruf'] });
+
+                let spinner = ej.popups.createSpinner({ target: args.dialog.element });
+                ej.popups.showSpinner(args.dialog.element);
+                var ajax = new ej.base.Ajax({
+                    url: "@Url.Action("KodeRekeningMasterTemplateKelompok", "KodeRekeningMaster")", //render the partial view
+                    type: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify({ value: args.rowData })
+                });
+                ajax.send().then(function (data) {
+                    appendElement(data, args.form); //Render the edit form with selected record
+                    args.form.elements.namedItem('KodeSubRincian').focus();
+                    if (typeof args.rowData['IdParent'] != 'undefined') {
+                        var dropObject = document.getElementById("IdParent").ej2_instances[0];
+                        dropObject.value = args.rowData['IdParent'];
+                        dropObject.text = args.rowData['NamaRincian'];
+                    }
+                    ej.popups.hideSpinner(args.dialog.element);
+                }).catch(function (xhr) {
+                    console.log(xhr);
+                    ej.popups.hideSpinner(args.dialog.element);
+                });
+            }
+            else if (args.requestType === 'save') {
+                grid.refresh();
+                grid.closeEdit();
+            }
+        }
+
+        function createdGridKelompok(args) {
+            class CustomAdaptor extends ej.data.UrlAdaptor {
+                processResponse(data, ds, query, xhr, request, changes) {
+                    if (!ej.base.isNullOrUndefined(data.message)) {
+                        if ((data.message.indexOf('BERHASIL DISIMPAN') == -1) && (data.message.indexOf('BERHASIL DIHAPUS') == -1)) {
+                            paramToast('Error Master Kelompok', 'e-toast-danger', data.message);
+                        }
+                        else {
+                            paramToast('Master Kelompok', 'e-toast-success', data.message);
+                        }
+                    }
+
+                    if (!ej.base.isNullOrUndefined(data.data))
+                        return data.data;
+                    else
+                        return data;
+                }
+            }
+            var grid = document.querySelector('#GridKelompok').ej2_instances[0];
+            grid.dataSource = new ej.data.DataManager({
+                url: "/KodeRekeningMaster/KodeRekeningMasterAll",
+                crudUrl: "/KodeRekeningMaster/KodeRekeningMasterCrud",
+                adaptor: new CustomAdaptor()
+            });
+        }
+
+        function onfilteringAkun(e) {
+            var KelompokObj = document.getElementById("IdParent").ej2_instances[0];
+            if (e.text == '' && e.text.length < 1) {
+                e.updateData(KelompokObj.dataSource);
+            }
+
+            let query = new ej.data.Query().select(['NamaSubRincian', 'IdKodeRekening']).take(6).addParams('IdPosisi', 1);
+            query = (e.text !== '' && e.text.length >= 1) ? query.where(new ej.data.Predicate('NamaSubRincian', 'contains', e.text, true).or('KodeSubRincian', 'contains', e.text, true)) : query;
+
+            e.updateData(KelompokObj.dataSource, query);
+        }
+        //#endregion kelompok
+
+        //#region jenis
+        function CompleteActionJenis(args) {
+            var grid = document.querySelector('#GridJenis').ej2_instances[0];
+
+            if (args.requestType === 'beginEdit' || args.requestType === 'add') {
+                var dialog = args.dialog;
+                dialog.height = 420;
+                // change the header of the dialog
+                dialog.header = args.requestType === 'beginEdit' ? 'Edit ' + args.rowData['NamaSubRincian'] : 'New Jenis';
+                args.form.ej2_instances[0].addRules('IdParentA', { required: [true, 'Silahkan Pilih Akun'] });
+                args.form.ej2_instances[0].addRules('IdParent', { required: [true, 'Silahkan Pilih Kelompok'] });
+                args.form.ej2_instances[0].addRules('KodeSubRincian', { required: [true, 'Silahkan Isi Kode Jenis'], minLength: [1, 'Kode Jenis Minimal 1 huruf'] });
+                args.form.ej2_instances[0].addRules('NamaSubRincian', { required: [true, 'Silahkan Isi Nama Jenis'], minLength: [3, 'Nama Jenis Minimal 3 huruf'] });
+
+                let spinner = ej.popups.createSpinner({ target: args.dialog.element });
+                ej.popups.showSpinner(args.dialog.element);
+                var ajax = new ej.base.Ajax({
+                    url: "@Url.Action("KodeRekeningMasterTemplateJenis", "KodeRekeningMaster")", //render the partial view
+                    type: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify({ value: args.rowData })
+                });
+                ajax.send().then(function (data) {
+                    appendElement(data, args.form); //Render the edit form with selected record
+                    args.form.elements.namedItem('KodeSubRincian').focus();
+                    if (typeof args.rowData['IdParentA'] != 'undefined') {
+                        var dropObject = document.getElementById("IdParentA").ej2_instances[0];
+                        dropObject.value = args.rowData['IdParentA'];
+                        dropObject.text = args.rowData['NamaObjek'];
+                    }
+                    if (typeof args.rowData['IdParent'] != 'undefined') {
+                        var dropObject = document.getElementById("IdParent").ej2_instances[0];
+                        dropObject.value = args.rowData['IdParent'];
+                        dropObject.text = args.rowData['NamaRincian'];
+                    }
+                    ej.popups.hideSpinner(args.dialog.element);
+                }).catch(function (xhr) {
+                    console.log(xhr);
+                    ej.popups.hideSpinner(args.dialog.element);
+                });
+            }
+            else if (args.requestType === 'save') {
+                grid.refresh();
+                grid.closeEdit();
+            }
+        }
+
+        function createdGridJenis(args) {
+            class CustomAdaptor extends ej.data.UrlAdaptor {
+                processResponse(data, ds, query, xhr, request, changes) {
+                    if (!ej.base.isNullOrUndefined(data.message)) {
+                        if ((data.message.indexOf('BERHASIL DISIMPAN') == -1) && (data.message.indexOf('BERHASIL DIHAPUS') == -1)) {
+                            paramToast('Error Master Jenis', 'e-toast-danger', data.message);
+                        }
+                        else {
+                            paramToast('Master Jenis', 'e-toast-success', data.message);
+                        }
+                    }
+
+                    if (!ej.base.isNullOrUndefined(data.data))
+                        return data.data;
+                    else
+                        return data;
+                }
+            }
+            var grid = document.querySelector('#GridJenis').ej2_instances[0];
+            grid.dataSource = new ej.data.DataManager({
+                url: "/KodeRekeningMaster/KodeRekeningMasterAll",
+                crudUrl: "/KodeRekeningMaster/KodeRekeningMasterCrud",
+                adaptor: new CustomAdaptor()
+            });
+        }
+
+        function onfilteringKelompok(e) {
+            var AkunOBJ = document.getElementById('IdParentA').ej2_instances[0];
+            var KelompokObj = document.getElementById("IdParent").ej2_instances[0];
+            if (e.text == '' && e.text.length < 3) {
+                e.updateData(KelompokObj.dataSource);
+            }
+
+            let query = new ej.data.Query().select(['NamaSubRincian', 'IdKodeRekening']).take(6).addParams('IdPosisi', 2);
+            query = (e.text !== '' && e.text.length >= 3) ? query.where(new ej.data.Predicate('NamaSubRincian', 'contains', e.text, true).and('IdParent', 'equal', AkunOBJ.value, true)) : query.where('IdParent', 'equal', AkunOBJ.value, true);
+
+            e.updateData(KelompokObj.dataSource, query);
+        }
+
+        function onchangeAkun() {
+            var AkunOBJ = document.getElementById('IdParentA').ej2_instances[0];
+            var KelompokObj = document.getElementById('IdParent').ej2_instances[0];
+            KelompokObj.enabled = true;
+            var KelompokObjQuery = new ej.data.Query().where('IdParent', 'equal', AkunOBJ.value).addParams('IdPosisi', 2);
+            KelompokObj.query = KelompokObjQuery;
+            KelompokObj.text = null;
+            KelompokObj.dataBind();
+        }
+        //#endregion jenis
+
+        //#region objek
+        function CompleteActionObjek(args) {
+            var grid = document.querySelector('#GridObjek').ej2_instances[0];
+
+            if (args.requestType === 'beginEdit' || args.requestType === 'add') {
+                var dialog = args.dialog;
+                dialog.height = 520;
+                // change the header of the dialog
+                dialog.header = args.requestType === 'beginEdit' ? 'Edit ' + args.rowData['NamaSubRincian'] : 'New Objek';
+                args.form.ej2_instances[0].addRules('IdParentA', { required: [true, 'Silahkan Pilih Akun'] });
+                args.form.ej2_instances[0].addRules('IdParentK', { required: [true, 'Silahkan Pilih Kelompok'] });
+                args.form.ej2_instances[0].addRules('IdParent', { required: [true, 'Silahkan Pilih Jenis'] });
+                args.form.ej2_instances[0].addRules('KodeSubRincian', { required: [true, 'Silahkan Isi Kode Objek'], minLength: [1, 'Kode Objek Minimal 1 huruf'] });
+                args.form.ej2_instances[0].addRules('NamaSubRincian', { required: [true, 'Silahkan Isi Nama Objek'], minLength: [3, 'Nama Objek Minimal 3 huruf'] });
+
+                let spinner = ej.popups.createSpinner({ target: args.dialog.element });
+                ej.popups.showSpinner(args.dialog.element);
+                var ajax = new ej.base.Ajax({
+                    url: "@Url.Action("KodeRekeningMasterTemplateObjek", "KodeRekeningMaster")", //render the partial view
+                    type: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify({ value: args.rowData })
+                });
+                ajax.send().then(function (data) {
+                    appendElement(data, args.form); //Render the edit form with selected record
+                    args.form.elements.namedItem('KodeSubRincian').focus();
+                    if (typeof args.rowData['IdParentA'] != 'undefined') {
+                        var dropObject = document.getElementById("IdParentA").ej2_instances[0];
+                        dropObject.value = args.rowData['IdParentA'];
+                        dropObject.text = args.rowData['NamaJenis'];
+                    }
+                    if (typeof args.rowData['IdParentK'] != 'undefined') {
+                        var dropObject = document.getElementById("IdParentK").ej2_instances[0];
+                        dropObject.value = args.rowData['IdParentK'];
+                        dropObject.text = args.rowData['NamaObjek'];
+                    }
+                    if (typeof args.rowData['IdParent'] != 'undefined') {
+                        var dropObject = document.getElementById("IdParent").ej2_instances[0];
+                        dropObject.value = args.rowData['IdParent'];
+                        dropObject.text = args.rowData['NamaRincian'];
+                    }
+                    ej.popups.hideSpinner(args.dialog.element);
+                }).catch(function (xhr) {
+                    console.log(xhr);
+                    ej.popups.hideSpinner(args.dialog.element);
+                });
+            }
+            else if (args.requestType === 'save') {
+                grid.refresh();
+                grid.closeEdit();
+            }
+        }
+
+        function createdGridObjek(args) {
+            class CustomAdaptor extends ej.data.UrlAdaptor {
+                processResponse(data, ds, query, xhr, request, changes) {
+                    if (!ej.base.isNullOrUndefined(data.message)) {
+                        if ((data.message.indexOf('BERHASIL DISIMPAN') == -1) && (data.message.indexOf('BERHASIL DIHAPUS') == -1)) {
+                            paramToast('Error Master Objek', 'e-toast-danger', data.message);
+                        }
+                        else {
+                            paramToast('Master Objek', 'e-toast-success', data.message);
+                        }
+                    }
+
+                    if (!ej.base.isNullOrUndefined(data.data))
+                        return data.data;
+                    else
+                        return data;
+                }
+            }
+            var grid = document.querySelector('#GridObjek').ej2_instances[0];
+            grid.dataSource = new ej.data.DataManager({
+                url: "/KodeRekeningMaster/KodeRekeningMasterAll",
+                crudUrl: "/KodeRekeningMaster/KodeRekeningMasterCrud",
+                adaptor: new CustomAdaptor()
+            });
+        }
+
+        function onfilteringJenis(e) {
+            var KelompokObj = document.getElementById('IdParentK').ej2_instances[0];
+            var JenisObj = document.getElementById("IdParent").ej2_instances[0];
+            if (e.text == '' && e.text.length < 3) {
+                e.updateData(JenisObj.dataSource);
+            }
+
+            let query = new ej.data.Query().select(['NamaSubRincian', 'IdKodeRekening']).take(6).addParams('IdPosisi', 3);
+            query = (e.text !== '' && e.text.length >= 3) ? query.where(new ej.data.Predicate('NamaSubRincian', 'contains', e.text, true).and('IdParent', 'equal', KelompokObj.value, true)) : query.where('IdParent', 'equal', KelompokObj.value, true);
+
+            e.updateData(JenisObj.dataSource, query);
+        }
+
+        function onchangeAkunObjek() {
+            var AkunOBJ = document.getElementById('IdParentA').ej2_instances[0];
+            var KelompokObj = document.getElementById('IdParentK').ej2_instances[0];
+            KelompokObj.enabled = true;
+            var KelompokObjQuery = new ej.data.Query().where('IdParent', 'equal', AkunOBJ.value).addParams('IdPosisi', 2);
+            KelompokObj.query = KelompokObjQuery;
+            KelompokObj.text = null;
+            KelompokObj.dataBind();
+        }
+
+        function onchangeKelompok() {
+            var KelompokObj = document.getElementById('IdParentK').ej2_instances[0];
+            var JenisObj = document.getElementById('IdParent').ej2_instances[0];
+            JenisObj.enabled = true;
+            var JenisObjQuery = new ej.data.Query().where('IdParent', 'equal', KelompokObj.value).addParams('IdPosisi', 3);
+            JenisObj.query = JenisObjQuery;
+            JenisObj.text = null;
+            JenisObj.dataBind();
+        }
+        //#endregion objek
+
+        //#region rincian
+        function CompleteActionRincian(args) {
+            var grid = document.querySelector('#GridRincian').ej2_instances[0];
+
+            if (args.requestType === 'beginEdit' || args.requestType === 'add') {
+                var dialog = args.dialog;
+                dialog.height = 620;
+                // change the header of the dialog
+                dialog.header = args.requestType === 'beginEdit' ? 'Edit ' + args.rowData['NamaSubRincian'] : 'New Rincian';
+                args.form.ej2_instances[0].addRules('IdParentA', { required: [true, 'Silahkan Pilih Akun'] });
+                args.form.ej2_instances[0].addRules('IdParentK', { required: [true, 'Silahkan Pilih Kelompok'] });
+                args.form.ej2_instances[0].addRules('IdParentJ', { required: [true, 'Silahkan Pilih Jenis'] });
+                args.form.ej2_instances[0].addRules('IdParent', { required: [true, 'Silahkan Pilih Objek'] });
+                args.form.ej2_instances[0].addRules('KodeSubRincian', { required: [true, 'Silahkan Isi Kode Rincian'], minLength: [1, 'Kode Rincian Minimal 1 huruf'] });
+                args.form.ej2_instances[0].addRules('NamaSubRincian', { required: [true, 'Silahkan Isi Nama Rincian'], minLength: [3, 'Nama Rincian Minimal 3 huruf'] });
+
+                let spinner = ej.popups.createSpinner({ target: args.dialog.element });
+                ej.popups.showSpinner(args.dialog.element);
+                var ajax = new ej.base.Ajax({
+                    url: "@Url.Action("KodeRekeningMasterTemplateRincian", "KodeRekeningMaster")", //render the partial view
+                    type: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify({ value: args.rowData })
+                });
+                ajax.send().then(function (data) {
+                    appendElement(data, args.form); //Render the edit form with selected record
+                    args.form.elements.namedItem('KodeSubRincian').focus();
+                    if (typeof args.rowData['IdParentA'] != 'undefined') {
+                        var dropObject = document.getElementById("IdParentA").ej2_instances[0];
+                        dropObject.value = args.rowData['IdParentA'];
+                        dropObject.text = args.rowData['NamaKelompok'];
+                    }
+                    if (typeof args.rowData['IdParentK'] != 'undefined') {
+                        var dropObject = document.getElementById("IdParentK").ej2_instances[0];
+                        dropObject.value = args.rowData['IdParentK'];
+                        dropObject.text = args.rowData['NamaJenis'];
+                    }
+                    if (typeof args.rowData['IdParentJ'] != 'undefined') {
+                        var dropObject = document.getElementById("IdParentJ").ej2_instances[0];
+                        dropObject.value = args.rowData['IdParentJ'];
+                        dropObject.text = args.rowData['NamaObjek'];
+                    }
+                    if (typeof args.rowData['IdParent'] != 'undefined') {
+                        var dropObject = document.getElementById("IdParent").ej2_instances[0];
+                        dropObject.value = args.rowData['IdParent'];
+                        dropObject.text = args.rowData['NamaRincian'];
+                    }
+                    ej.popups.hideSpinner(args.dialog.element);
+                }).catch(function (xhr) {
+                    console.log(xhr);
+                    ej.popups.hideSpinner(args.dialog.element);
+                });
+            }
+            else if (args.requestType === 'save') {
+                grid.refresh();
+                grid.closeEdit();
+            }
+        }
+
+        function createdGridRincian(args) {
+            class CustomAdaptor extends ej.data.UrlAdaptor {
+                processResponse(data, ds, query, xhr, request, changes) {
+                    if (!ej.base.isNullOrUndefined(data.message)) {
+                        if ((data.message.indexOf('BERHASIL DISIMPAN') == -1) && (data.message.indexOf('BERHASIL DIHAPUS') == -1)) {
+                            paramToast('Error Master Rincian', 'e-toast-danger', data.message);
+                        }
+                        else {
+                            paramToast('Master Rincian', 'e-toast-success', data.message);
+                        }
+                    }
+
+                    if (!ej.base.isNullOrUndefined(data.data))
+                        return data.data;
+                    else
+                        return data;
+                }
+            }
+            var grid = document.querySelector('#GridRincian').ej2_instances[0];
+            grid.dataSource = new ej.data.DataManager({
+                url: "/KodeRekeningMaster/KodeRekeningMasterAll",
+                crudUrl: "/KodeRekeningMaster/KodeRekeningMasterCrud",
+                adaptor: new CustomAdaptor()
+            });
+        }
+
+        function onfilteringObjek(e) {
+            var JenisObj = document.getElementById('IdParentJ').ej2_instances[0];
+            var ObjekObj = document.getElementById("IdParent").ej2_instances[0];
+            if (e.text == '' && e.text.length < 3) {
+                e.updateData(ObjekObj.dataSource);
+            }
+
+            let query = new ej.data.Query().select(['NamaSubRincian', 'IdKodeRekening']).take(6).addParams('IdPosisi', 4);
+            query = (e.text !== '' && e.text.length >= 3) ? query.where(new ej.data.Predicate('NamaSubRincian', 'contains', e.text, true).and('IdParent', 'equal', JenisObj.value, true)) : query.where('IdParent', 'equal', JenisObj.value, true);
+
+            e.updateData(ObjekObj.dataSource, query);
+        }
+
+        function onchangeKelompokRincian() {
+            var KelompokOBJ = document.getElementById('IdParentK').ej2_instances[0];
+            var JenisObj = document.getElementById('IdParentJ').ej2_instances[0];
+            JenisObj.enabled = true;
+            var JenisObjQuery = new ej.data.Query().where('IdParent', 'equal', KelompokOBJ.value).addParams('IdPosisi', 3);
+            JenisObj.query = JenisObjQuery;
+            JenisObj.text = null;
+            JenisObj.dataBind();
+        }
+
+        function onchangeJenis() {
+            var JenisObj = document.getElementById('IdParentJ').ej2_instances[0];
+            var RincianObj = document.getElementById('IdParent').ej2_instances[0];
+            RincianObj.enabled = true;
+            var RincianObjQuery = new ej.data.Query().where('IdParent', 'equal', JenisObj.value).addParams('IdPosisi', 4);
+            RincianObj.query = RincianObjQuery;
+            RincianObj.text = null;
+            RincianObj.dataBind();
+        }
+        //#endregion rincian
+
+        //#region sub rincian
+        function CompleteActionSubRincian(args) {
+            var grid = document.querySelector('#GridSubRincian').ej2_instances[0];
+
+            if (args.requestType === 'beginEdit' || args.requestType === 'add') {
+                var dialog = args.dialog;
+                dialog.height = 720;
+                // change the header of the dialog
+                dialog.header = args.requestType === 'beginEdit' ? 'Edit ' + args.rowData['NamaSubRincian'] : 'New Sub Rincian';
+                args.form.ej2_instances[0].addRules('IdParentA', { required: [true, 'Silahkan Pilih Akun'] });
+                args.form.ej2_instances[0].addRules('IdParentK', { required: [true, 'Silahkan Pilih Kelompok'] });
+                args.form.ej2_instances[0].addRules('IdParentJ', { required: [true, 'Silahkan Pilih Jenis'] });
+                args.form.ej2_instances[0].addRules('IdParentO', { required: [true, 'Silahkan Pilih Objek'] });
+                args.form.ej2_instances[0].addRules('IdParent', { required: [true, 'Silahkan Pilih Rincian'] });
+                args.form.ej2_instances[0].addRules('KodeSubRincian', { required: [true, 'Silahkan Isi Kode Sub Rincian'], minLength: [1, 'Kode Sub Rincian Minimal 1 huruf'] });
+                args.form.ej2_instances[0].addRules('NamaSubRincian', { required: [true, 'Silahkan Isi Nama Sub Rincian'], minLength: [3, 'Nama Sub Rincian Minimal 3 huruf'] });
+
+                let spinner = ej.popups.createSpinner({ target: args.dialog.element });
+                ej.popups.showSpinner(args.dialog.element);
+                var ajax = new ej.base.Ajax({
+                    url: "@Url.Action("KodeRekeningMasterTemplateSubRincian", "KodeRekeningMaster")", //render the partial view
+                    type: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify({ value: args.rowData })
+                });
+                ajax.send().then(function (data) {
+                    appendElement(data, args.form); //Render the edit form with selected record
+                    args.form.elements.namedItem('KodeSubRincian').focus();
+                    if (typeof args.rowData['IdParentA'] != 'undefined') {
+                        var dropObject = document.getElementById("IdParentA").ej2_instances[0];
+                        dropObject.value = args.rowData['IdParentA'];
+                        dropObject.text = args.rowData['NamaAkun'];
+                    }
+                    if (typeof args.rowData['IdParentK'] != 'undefined') {
+                        var dropObject = document.getElementById("IdParentK").ej2_instances[0];
+                        dropObject.value = args.rowData['IdParentK'];
+                        dropObject.text = args.rowData['NamaKelompok'];
+                    }
+                    if (typeof args.rowData['IdParentJ'] != 'undefined') {
+                        var dropObject = document.getElementById("IdParentJ").ej2_instances[0];
+                        dropObject.value = args.rowData['IdParentJ'];
+                        dropObject.text = args.rowData['NamaJenis'];
+                    }
+                    if (typeof args.rowData['IdParentO'] != 'undefined') {
+                        var dropObject = document.getElementById("IdParentO").ej2_instances[0];
+                        dropObject.value = args.rowData['IdParentO'];
+                        dropObject.text = args.rowData['NamaObjek'];
+                    }
+                    if (typeof args.rowData['IdParent'] != 'undefined') {
+                        var dropObject = document.getElementById("IdParent").ej2_instances[0];
+                        dropObject.value = args.rowData['IdParent'];
+                        dropObject.text = args.rowData['NamaRincian'];
+                    }
+                    ej.popups.hideSpinner(args.dialog.element);
+                }).catch(function (xhr) {
+                    console.log(xhr);
+                    ej.popups.hideSpinner(args.dialog.element);
+                });
+            }
+            else if (args.requestType === 'save') {
+                grid.refresh();
+                grid.closeEdit();
+            }
+        }
+
+        function createdGridSubRincian(args) {
+            class CustomAdaptor extends ej.data.UrlAdaptor {
+                processResponse(data, ds, query, xhr, request, changes) {
+                    if (!ej.base.isNullOrUndefined(data.message)) {
+                        if ((data.message.indexOf('BERHASIL DISIMPAN') == -1) && (data.message.indexOf('BERHASIL DIHAPUS') == -1)) {
+                            paramToast('Error Master Sub Rincian', 'e-toast-danger', data.message);
+                        }
+                        else {
+                            paramToast('Master Sub Rincian', 'e-toast-success', data.message);
+                        }
+                    }
+
+                    if (!ej.base.isNullOrUndefined(data.data))
+                        return data.data;
+                    else
+                        return data;
+                }
+            }
+            var grid = document.querySelector('#GridSubRincian').ej2_instances[0];
+            grid.dataSource = new ej.data.DataManager({
+                url: "/KodeRekeningMaster/KodeRekeningMasterAll",
+                crudUrl: "/KodeRekeningMaster/KodeRekeningMasterCrud",
+                adaptor: new CustomAdaptor()
+            });
+        }
+
+        function onfilteringRincian(e) {
+            var ParentObj = document.getElementById('IdParentO').ej2_instances[0];
+            var SelectObj = document.getElementById("IdParent").ej2_instances[0];
+            if (e.text == '' && e.text.length < 3) {
+                e.updateData(SelectObj.dataSource);
+            }
+
+            let query = new ej.data.Query().select(['NamaSubRincian', 'IdKodeRekening']).take(6).addParams('IdPosisi', 5);
+            query = (e.text !== '' && e.text.length >= 3) ? query.where(new ej.data.Predicate('NamaSubRincian', 'contains', e.text, true).and('IdParent', 'equal', ParentObj.value, true)) : query.where('IdParent', 'equal', ParentObj.value, true);
+
+            e.updateData(SelectObj.dataSource, query);
+        }
+
+        function onchangeJenisSubRincian() {
+            var ParentObj = document.getElementById('IdParentJ').ej2_instances[0];
+            var SelectObj = document.getElementById('IdParentO').ej2_instances[0];
+            SelectObj.enabled = true;
+            var SelectObjQuery = new ej.data.Query().where('IdParent', 'equal', ParentObj.value).addParams('IdPosisi', 4);
+            SelectObj.query = SelectObjQuery;
+            SelectObj.text = null;
+            SelectObj.dataBind();
+        }
+
+        function onchangeObjek() {
+            var ParentObj = document.getElementById('IdParentO').ej2_instances[0];
+            var SelectObj = document.getElementById('IdParent').ej2_instances[0];
+            SelectObj.enabled = true;
+            var SelectObjQuery = new ej.data.Query().where('IdParent', 'equal', ParentObj.value).addParams('IdPosisi', 5);
+            SelectObj.query = SelectObjQuery;
+            SelectObj.text = null;
+            SelectObj.dataBind();
+        }
+        //#endregion sub rincian
+
+        function appendElement(elementString, form) {
+            form.querySelector("#Tempdialog").innerHTML = elementString;
+            var script = document.createElement('script');
+            script.type = "text/javascript";
+            var serverScript = form.querySelector("#Tempdialog").querySelector('script');
+            script.textContent = serverScript.innerHTML;
+            document.head.appendChild(script);
+            serverScript.remove();
+        }
+
+        function toolbarAction(args) {
+            var fileNameGrid = "";
+
+            if (this.element.id === "GridAkun") {
+                fileNameGrid = "Akun";
+            }
+            else if (this.element.id === "GridKelompok") {
+                fileNameGrid = "Kelompok";
+            }
+            else if (this.element.id === "GridJenis") {
+                fileNameGrid = "Jenis";
+            }
+
+            var fileName = "Master " + fileNameGrid;
+
+            if (args.item.id === this.element.id + '_pdfexport') {
+                var exportProperties = {
+                    fileName: fileName + ".pdf"
+                };
+
+                this.pdfExport(exportProperties);
+            }
+            if (args.item.id === this.element.id + '_excelexport') {
+                var exportProperties = {
+                    fileName: fileName + ".xlsx"
+                };
+
+                this.excelExport(exportProperties);
+            }
+        }
+    </script>
+}

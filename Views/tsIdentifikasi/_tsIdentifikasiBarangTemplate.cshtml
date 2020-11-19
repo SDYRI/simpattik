@@ -1,0 +1,223 @@
+﻿@model TasikmalayaKota.Simpatik.Web.Services.tsIdentifikasi.Models.tsIdentifikasiModel
+@{
+    ViewData["Title"] = ViewBag.Title;
+}
+
+<div>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <div class="e-float-input e-control-wrapper">
+                <div class="e-float-input e-control-wrapper e-input e-valid-input">
+                    <input id="opd" data-val="true" class="e-control e-textbox e-lib" type="text" role="textbox" asp-for="@Model.opd" readonly>
+                    <input id="jeniskebutuhan" data-val="true" class="e-control e-textbox e-lib" type="text" role="textbox" asp-for="@Model.jeniskebutuhan" readonly hidden>
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text e-label-top" id="label_opd">OPD</label>
+                </div>
+            </div>
+            <div class="e-float-input e-control-wrapper">
+                <div class="e-float-input e-control-wrapper e-input e-valid-input">
+                    <input id="pejabat" data-val="true" class="e-control e-textbox e-lib" type="text" role="textbox" asp-for="@Model.pejabat" readonly>
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text e-label-top" id="label_pejabat">Pejabat Pembuat Komitmen</label>
+                </div>
+            </div>
+            <div class="e-float-input e-control-wrapper">
+                <ejs-textbox id="program" cssClass="e-input" placeholder="Program" floatLabelType="Always" ejs-for="@Model.program"></ejs-textbox>
+            </div>
+            <div class="e-float-input e-control-wrapper">
+                <ejs-textbox id="kegiatan" cssClass="e-input" placeholder="Kegiatan" floatLabelType="Always" ejs-for="@Model.kegiatan"></ejs-textbox>
+            </div>
+            <div class="e-float-input e-control-wrapper">
+                <ejs-textbox id="subkegiatan" cssClass="e-input" placeholder="Sub Kegiatan" floatLabelType="Always" ejs-for="@Model.subkegiatan"></ejs-textbox>
+            </div>
+            <div class="e-float-input e-control-wrapper">
+                <ejs-textbox id="outputidentifikasi" cssClass="e-input" placeholder="Output" floatLabelType="Always" ejs-for="@Model.outputidentifikasi"></ejs-textbox>
+            </div>
+            @*<div class="e-float-input e-control-wrapper">
+                <div class="e-float-input e-control-wrapper e-input e-valid-input">
+                    <input id="jeniskebutuhan" data-val="true" class="e-control e-textbox e-lib" type="text" role="textbox" asp-for="@Model.jeniskebutuhan" readonly>
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text e-label-top" id="label_jeniskebutuhan">Jenis Kebutuhan</label>
+                </div>
+            </div>*@
+            <div class="e-float-input e-control-wrapper">
+                <ejs-textbox id="namabrgkerj" cssClass="e-input" placeholder="Nama/ Jenis" floatLabelType="Always" ejs-for="@Model.namabrgkerj"></ejs-textbox>
+            </div>
+            <div class="e-float-input e-control-wrapper">
+                <ejs-textbox id="fungsi" cssClass="e-input" placeholder="Fungsi" floatLabelType="Always" ejs-for="@Model.fungsi"></ejs-textbox>
+            </div>
+            <div class="e-float-input e-control-wrapper">
+                <ejs-textbox id="ukurankapasitas" cssClass="e-input" placeholder="Ukuran/ Kapasitas" floatLabelType="Always" ejs-for="@Model.ukurankapasitas"></ejs-textbox>
+            </div>
+            <div class="e-float-input e-control-wrapper">
+                <ejs-textbox id="jumlahbarang" cssClass="e-input" placeholder="Jumlah" floatLabelType="Always" ejs-for="@Model.jumlahbarang"></ejs-textbox>
+            </div>
+            <div class="e-float-input e-control-wrapper">
+                <ejs-textbox id="waktu" cssClass="e-input" placeholder="Waktu Pemanfaatan" floatLabelType="Always" ejs-for="@Model.waktu"></ejs-textbox>
+            </div>
+            <div class="e-float-input e-control-wrapper">
+                <ejs-textbox id="pihak" cssClass="e-input" placeholder="Pihak" floatLabelType="Always" ejs-for="@Model.pihak"></ejs-textbox>
+            </div>
+            <div class="e-float-input e-control-wrapper">
+                <ejs-textbox id="totalwaktu" cssClass="e-input" placeholder="Total Waktu" floatLabelType="Always" ejs-for="@Model.totalwaktu"></ejs-textbox>
+            </div>
+            <div class="e-float-input e-control-wrapper">
+                <ejs-textbox id="ekatalog" cssClass="e-input" placeholder="e-katalog" floatLabelType="Always" ejs-for="@Model.ekatalog"></ejs-textbox>
+            </div>
+            <div class="e-float-input e-control-wrapper">
+                <ejs-textbox id="prioritas" cssClass="e-input" placeholder="Prioritas" floatLabelType="Always" ejs-for="@Model.prioritas"></ejs-textbox>
+            </div>
+            <div class="e-float-input e-control-wrapper">
+                <ejs-textbox id="perkiraanbiaya" cssClass="e-input" placeholder="Perkiraan Biaya" floatLabelType="Always" ejs-for="@Model.perkiraanbiaya"></ejs-textbox>
+            </div>
+            <div class="e-float-input e-control-wrapper">
+                <ejs-textbox id="jumlahpegawai" cssClass="e-input" placeholder="Jumlah Pegawai" floatLabelType="Always" ejs-for="@Model.jumlahpegawai"></ejs-textbox>
+            </div>
+            <div class="e-float-input e-control-wrapper">
+                <ejs-textbox id="bebantugas" cssClass="e-input" placeholder="Beban Tugas" floatLabelType="Always" ejs-for="@Model.bebantugas"></ejs-textbox>
+            </div>
+            <div class="e-float-input e-control-wrapper">
+                <ejs-textbox id="jumlahbarangtersedia" cssClass="e-input" placeholder="Jumlah yang Telah Tersedia" floatLabelType="Always" ejs-for="@Model.jumlahbarangtersedia"></ejs-textbox>
+            </div>
+            <div class="e-float-input e-control-wrapper">
+                <ejs-textbox id="jumlahbarangsejenis" cssClass="e-input" placeholder="Jumlah Sejenis" floatLabelType="Always" ejs-for="@Model.jumlahbarangsejenis"></ejs-textbox>
+            </div>
+            <div class="e-float-input e-control-wrapper">
+                <ejs-textbox id="kondisilayak" cssClass="e-input" placeholder="Kondisi Layak Pakai" floatLabelType="Always" ejs-for="@Model.kondisilayak"></ejs-textbox>
+            </div>
+            <div class="e-float-input e-control-wrapper">
+                <ejs-textbox id="kondisirusak" cssClass="e-input" placeholder="Kondisi Rusak" floatLabelType="Always" ejs-for="@Model.kondisirusak"></ejs-textbox>
+            </div>
+            <div class="e-float-input e-control-wrapper">
+                <ejs-textbox id="kondisitidakdapat" cssClass="e-input" placeholder="Kondisi Tidak dapat Digunakan" floatLabelType="Always" ejs-for="@Model.kondisitidakdapat"></ejs-textbox>
+            </div>
+            <div class="e-float-input e-control-wrapper">
+                <ejs-textbox id="lokasi" cssClass="e-input" placeholder="Lokasi" floatLabelType="Always" ejs-for="@Model.lokasi"></ejs-textbox>
+            </div>
+            <div class="e-float-input e-control-wrapper">
+                <ejs-textbox id="sumberdanaapbn" cssClass="e-input" placeholder="Sumber Dana APBN" floatLabelType="Always" ejs-for="@Model.sumberdanaapbn"></ejs-textbox>
+            </div>
+            <div class="e-float-input e-control-wrapper">
+                <ejs-textbox id="sumberdanaapbd" cssClass="e-input" placeholder="Sumber Dana APBD" floatLabelType="Always" ejs-for="@Model.sumberdanaapbd"></ejs-textbox>
+            </div>
+            <div class="e-float-input e-control-wrapper">
+                <ejs-textbox id="kemudahan" cssClass="e-input" placeholder="Kemudahan Memperoleh" floatLabelType="Always" ejs-for="@Model.kemudahan"></ejs-textbox>
+            </div>
+            <div class="e-float-input e-control-wrapper">
+                <ejs-textbox id="produsen" cssClass="e-input" placeholder="Terdapat Produsen" floatLabelType="Always" ejs-for="@Model.produsen"></ejs-textbox>
+            </div>
+            <div class="e-float-input e-control-wrapper">
+                <ejs-textbox id="kriteria" cssClass="e-input" placeholder="Kriteria" floatLabelType="Always" ejs-for="@Model.kriteria"></ejs-textbox>
+            </div>
+            <div class="e-float-input e-control-wrapper">
+                <ejs-textbox id="tkdn" cssClass="e-input" placeholder="TKDN" floatLabelType="Always" ejs-for="@Model.tkdn"></ejs-textbox>
+            </div>
+            <div class="e-float-input e-control-wrapper">
+                <ejs-textbox id="nilaitkdn" cssClass="e-input" placeholder="Nilai TKDN" floatLabelType="Always" ejs-for="@Model.nilaitkdn"></ejs-textbox>
+            </div>
+        </div>
+        <div class="form-group col-md-6">
+            <div class="e-float-input e-control-wrapper">
+                <ejs-textbox id="pengiriman" cssClass="e-input" placeholder="Pengiriman" floatLabelType="Always" ejs-for="@Model.pengiriman"></ejs-textbox>
+            </div>
+            <div class="e-float-input e-control-wrapper">
+                <ejs-textbox id="pengakutan" cssClass="e-input" placeholder="Pengangkutan" floatLabelType="Always" ejs-for="@Model.pengakutan"></ejs-textbox>
+            </div>
+            <div class="e-float-input e-control-wrapper">
+                <ejs-textbox id="pemasangan" cssClass="e-input" placeholder="Pemasangan" floatLabelType="Always" ejs-for="@Model.pemasangan"></ejs-textbox>
+            </div>
+            <div class="e-float-input e-control-wrapper">
+                <ejs-textbox id="penimbunan" cssClass="e-input" placeholder="Penimbunan" floatLabelType="Always" ejs-for="@Model.penimbunan"></ejs-textbox>
+            </div>
+            <div class="e-float-input e-control-wrapper">
+                <ejs-textbox id="pengunaan" cssClass="e-input" placeholder="Penggunaan" floatLabelType="Always" ejs-for="@Model.pengunaan"></ejs-textbox>
+            </div>
+            <div class="e-float-input e-control-wrapper">
+                <ejs-textbox id="kebutuhanpelatihan" cssClass="e-input" placeholder="Kebutuhan Pelatihan" floatLabelType="Always" ejs-for="@Model.kebutuhanpelatihan"></ejs-textbox>
+            </div>
+            <div class="e-float-input e-control-wrapper">
+                <ejs-textbox id="aspek" cssClass="e-input" placeholder="Aspek Pengadaan" floatLabelType="Always" ejs-for="@Model.aspek"></ejs-textbox>
+            </div>
+            <div class="e-float-input e-control-wrapper">
+                <ejs-textbox id="barangsejenis" cssClass="e-input" placeholder="Terdapat Pengadaan Sejenis" floatLabelType="Always" ejs-for="@Model.barangsejenis"></ejs-textbox>
+            </div>
+            <div class="e-float-input e-control-wrapper">
+                <ejs-textbox id="indikasikonsolidasi" cssClass="e-input" placeholder="Indikasi Konsolidasi" floatLabelType="Always" ejs-for="@Model.indikasikonsolidasi"></ejs-textbox>
+            </div>
+            <div class="e-float-input e-control-wrapper">
+                <ejs-textbox id="target" cssClass="e-input" placeholder="Target/ Sasaran" floatLabelType="Always" ejs-for="@Model.target"></ejs-textbox>
+            </div>
+            <div class="e-float-input e-control-wrapper">
+                <ejs-textbox id="studikelayakan" cssClass="e-input" placeholder="Studi Kelayakan" floatLabelType="Always" ejs-for="@Model.studikelayakan"></ejs-textbox>
+            </div>
+            <div class="e-float-input e-control-wrapper">
+                <ejs-textbox id="ded" cssClass="e-input" placeholder="DED" floatLabelType="Always" ejs-for="@Model.ded"></ejs-textbox>
+            </div>
+            <div class="e-float-input e-control-wrapper">
+                <ejs-textbox id="komplektifitas" cssClass="e-input" placeholder="Kompleksitas" floatLabelType="Always" ejs-for="@Model.komplektifitas"></ejs-textbox>
+            </div>
+            <div class="e-float-input e-control-wrapper">
+                <ejs-textbox id="tahunpelaksanaan" cssClass="e-input" placeholder="Dilaksanakan dengan Kontrak Tahun Jamak" floatLabelType="Always" ejs-for="@Model.tahunpelaksanaan"></ejs-textbox>
+            </div>
+            <div class="e-float-input e-control-wrapper">
+                <ejs-textbox id="jumlahtahunpelaksanaan" cssClass="e-input" placeholder="Jumlah Tahun Pelaksanaan" floatLabelType="Always" ejs-for="@Model.jumlahtahunpelaksanaan"></ejs-textbox>
+            </div>
+            <div class="e-float-input e-control-wrapper">
+                <ejs-textbox id="suratijin" cssClass="e-input" placeholder="Surat Ijin" floatLabelType="Always" ejs-for="@Model.suratijin"></ejs-textbox>
+            </div>
+            <div class="e-float-input e-control-wrapper">
+                <ejs-textbox id="nomorsuratijin" cssClass="e-input" placeholder="Nomor Surat Ijin" floatLabelType="Always" ejs-for="@Model.nomorsuratijin"></ejs-textbox>
+            </div>
+            <div class="e-float-input e-control-wrapper">
+                <ejs-textbox id="barangmaterialdalam" cssClass="e-input" placeholder="Barang Material Dalam Negeri" floatLabelType="Always" ejs-for="@Model.barangmaterialdalam"></ejs-textbox>
+            </div>
+            <div class="e-float-input e-control-wrapper">
+                <ejs-textbox id="barangmaterialluar" cssClass="e-input" placeholder="Barang Material Luar Negeri" floatLabelType="Always" ejs-for="@Model.barangmaterialluar"></ejs-textbox>
+            </div>
+            <div class="e-float-input e-control-wrapper">
+                <ejs-textbox id="usahakecil" cssClass="e-input" placeholder="Dilaksanakan Usaha Kecil" floatLabelType="Always" ejs-for="@Model.usahakecil"></ejs-textbox>
+            </div>
+            <div class="e-float-input e-control-wrapper">
+                <ejs-textbox id="pembebasanlahan" cssClass="e-input" placeholder="Pembebasan Lahan" floatLabelType="Always" ejs-for="@Model.pembebasanlahan"></ejs-textbox>
+            </div>
+            <div class="e-float-input e-control-wrapper">
+                <ejs-textbox id="luaspembebasanlahan" cssClass="e-input" placeholder="Luas Pembebasan Lahan" floatLabelType="Always" ejs-for="@Model.luaspembebasanlahan"></ejs-textbox>
+            </div>
+            <div class="e-float-input e-control-wrapper">
+                <ejs-textbox id="pemanfaatantanah" cssClass="e-input" placeholder="Pemanfaatan Tanah" floatLabelType="Always" ejs-for="@Model.pemanfaatantanah"></ejs-textbox>
+            </div>
+            <div class="e-float-input e-control-wrapper">
+                <ejs-textbox id="lamawaktu" cssClass="e-input" placeholder="Lama Waktu" floatLabelType="Always" ejs-for="@Model.lamawaktu"></ejs-textbox>
+            </div>
+            <div class="e-float-input e-control-wrapper">
+                <ejs-textbox id="administrasipembayaran" cssClass="e-input" placeholder="Administrasi Pembayaran Ganti Rugi" floatLabelType="Always" ejs-for="@Model.administrasipembayaran"></ejs-textbox>
+            </div>
+            <div class="e-float-input e-control-wrapper">
+                <ejs-textbox id="terdapatpengadaan" cssClass="e-input" placeholder="Terdapat Pengadaan" floatLabelType="Always" ejs-for="@Model.terdapatpengadaan"></ejs-textbox>
+            </div>
+            <div class="e-float-input e-control-wrapper">
+                <ejs-textbox id="badanusaha" cssClass="e-input" placeholder="Badan Usaha" floatLabelType="Always" ejs-for="@Model.badanusaha"></ejs-textbox>
+            </div>
+            <div class="e-float-input e-control-wrapper">
+                <ejs-textbox id="targetsasaran" cssClass="e-input" placeholder="Target Sasaran" floatLabelType="Always" ejs-for="@Model.targetsasaran"></ejs-textbox>
+            </div>
+            <div class="e-float-input e-control-wrapper">
+                <ejs-textbox id="manfaat" cssClass="e-input" placeholder="Manfaat" floatLabelType="Always" ejs-for="@Model.manfaat"></ejs-textbox>
+            </div>
+            <div class="e-float-input e-control-wrapper">
+                <ejs-textbox id="kuantitas" cssClass="e-input" placeholder="Kuantitas" floatLabelType="Always" ejs-for="@Model.kuantitas"></ejs-textbox>
+            </div>
+            <div class="e-float-input e-control-wrapper">
+                <ejs-textbox id="spesifikasi" cssClass="e-input" placeholder="Spesifikasi" floatLabelType="Always" ejs-for="@Model.spesifikasi"></ejs-textbox>
+            </div>
+            <div class="e-float-input e-control-wrapper">
+                <ejs-textbox id="waktupenggunaan" cssClass="e-input" placeholder="Waktu Penggunaan" floatLabelType="Always" ejs-for="@Model.waktupenggunaan"></ejs-textbox>
+            </div>
+            <div class="e-float-input e-control-wrapper">
+                <ejs-textbox id="ketersediaanusaha" cssClass="e-input" placeholder="Ketersediaan Pelaku Usaha" floatLabelType="Always" ejs-for="@Model.ketersediaanusaha"></ejs-textbox>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ejs-scripts></ejs-scripts>
