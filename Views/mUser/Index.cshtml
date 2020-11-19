@@ -1,0 +1,135 @@
+﻿@{
+    ViewData["Title"] = ViewBag.Title;
+}
+<ejs-toast id="toast_default" created="createdToasObj">
+    <e-toast-position X="Right"></e-toast-position>
+</ejs-toast>
+
+<ejs-grid id="Grid" actionComplete="CompleteAction" height="490" allowPaging="true" allowResizing="true" allowSorting="true" allowReordering="true" allowGrouping="false" 
+          toolbar="@(new List<string>() { "Search", "Add", "Edit", "Delete","Update","Cancel" })" allowFiltering="true" allowSelection="true" created="createdGrid">
+    <e-grid-pagesettings pageSize="12" />
+    <e-grid-filterSettings type="Menu"></e-grid-filterSettings>
+    <e-grid-editSettings allowAdding="true" allowDeleting="true" allowEditing="true" mode="Dialog" template='#templatedialog' showDeleteConfirmDialog="true"></e-grid-editSettings>
+    <e-grid-selectionsettings type="Single"></e-grid-selectionsettings>
+    <e-grid-columns>
+        <e-grid-column field="IdUser" headerText="IdUser" isPrimaryKey="true" isIdentity="true" visible="false"></e-grid-column>
+        <e-grid-column field="NamaUser" width="150" headerText="Nama User"></e-grid-column>
+        <e-grid-column field="UserName" headerText="User Name" width="100"></e-grid-column>
+        <e-grid-column field="ListOpdUser" headerText="Opd"></e-grid-column>
+    </e-grid-columns>
+</ejs-grid>
+
+@section SectionControls{
+    <script id='templatedialog' type="text/x-template">
+        <div id="Tempdialog">
+        </div>
+    </script>
+
+    <script type="text/javascript">
+        var toastObj; 
+        function createdToasObj() {
+            toastObj = this;
+        }
+
+        function onfilteringOPD(e) {
+            var OPDObj = document.getElementById("ListIdOpdUser").ej2_instances[0];
+            if (e.text == '' && e.text.length < 3) {
+                e.updateData(OPDObj.dataSource);
+            }
+            let query = new ej.data.Query().select(['NamaOpd', 'IdOpd']).take(6);
+            query = (e.text !== '' && e.text.length >= 3) ? query.where('NamaOpd', 'contains', e.text, true) : query;
+            e.updateData(OPDObj.dataSource, query);
+        }
+
+        function CompleteAction(args) {
+            var grid = document.querySelector('#Grid').ej2_instances[0];
+
+            if (args.requestType === 'beginEdit' || args.requestType === 'add') {
+                var dialog = args.dialog;
+                dialog.height = 300;
+                // change the header of the dialog
+                dialog.header = args.requestType === 'beginEdit' ? 'Edit ' + args.rowData['NamaUser'] : 'New User';
+                args.form.ej2_instances[0].addRules('NamaUser', { required: [true, 'Silahkan Isi Nama User'], minLength: [3, 'Nama User Minimal 3 huruf'] });
+                args.form.ej2_instances[0].addRules('UserName', { required: [true, 'Silahkan Isi User Name'], minLength: [3, 'User Name Minimal 3 huruf'] });
+                args.form.ej2_instances[0].addRules('ListIdOpdUser', { required: [true, 'Silahkan Pilih OPD'] });
+
+                let spinner = ej.popups.createSpinner({ target: args.dialog.element });
+                ej.popups.showSpinner(args.dialog.element);
+                var ajax = new ej.base.Ajax({
+                    url: "@Url.Action("UserMasterTemplate", "UserMaster")", //render the partial view
+                    type: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify({ value: args.rowData })
+                });
+                ajax.send().then(function (data) {
+                    appendElement(data, args.form); //Render the edit form with selected record
+                    args.form.elements.namedItem('NamaUser').focus();
+                    if (typeof args.rowData['ListIdOpdUser'] != 'undefined') {
+                        var dropObject = document.getElementById("ListIdOpdUser").ej2_instances[0];
+                        dropObject.value = args.rowData['ListIdOpdUser'];
+                        dropObject.text = args.rowData['ListOpdUser'];
+                    }
+                    //$('#ListIdOpdUser_hidden').append($('<option selected>').val(args.rowData['ListIdOpdUser']).text(args.rowData['ListOpdUser']));
+                    //$('#ListIdOpdUser').val(args.rowData['ListOpdUser']);
+
+                    ej.popups.hideSpinner(args.dialog.element);
+                }).catch(function (xhr) {
+                    console.log(xhr);
+                    ej.popups.hideSpinner(args.dialog.element);
+                });
+            }
+            else if (args.requestType === 'save') {
+                grid.refresh();
+                grid.closeEdit();
+            }
+        }
+
+        function createdGrid(args) {
+            class CustomAdaptor extends ej.data.UrlAdaptor {
+                processResponse(data, ds, query, xhr, request, changes) {
+                    if (!ej.base.isNullOrUndefined(data.message)) {
+                        if ((data.message.indexOf('BERHASIL DISIMPAN') == -1) && (data.message.indexOf('BERHASIL DIHAPUS') == -1)) {
+                            paramToast('Error Master User', 'e-toast-danger', data.message);
+                        }
+                        else {
+                            paramToast('Master User', 'e-toast-success', data.message);
+                        }
+                    }
+
+                    if (!ej.base.isNullOrUndefined(data.data))
+                        return data.data;
+                    else
+                        return data;
+                }
+            }
+            var grid = document.querySelector('#Grid').ej2_instances[0];
+            grid.dataSource = new ej.data.DataManager({
+                url: "/UserMaster/UserMasterAll",
+                crudUrl: "/UserMaster/UserMasterCrud",
+                adaptor: new CustomAdaptor()
+            });
+        }
+
+        function appendElement(elementString, form) {
+            form.querySelector("#Tempdialog").innerHTML = elementString;
+            var script = document.createElement('script');
+            script.type = "text/javascript";
+            var serverScript = form.querySelector("#Tempdialog").querySelector('script');
+            script.textContent = serverScript.innerHTML;
+            document.head.appendChild(script);
+            serverScript.remove();
+        }
+
+        function paramToast(title, cssclass, message) {
+            setTimeout(
+                () => {
+                    var toastObj = document.getElementById('toast_default').ej2_instances[0];
+                    toastObj.title = title;
+                    toastObj.cssClass = cssclass;
+                    toastObj.content = message;
+                    toastObj.target = document.body;
+                    toastObj.show();
+                }, 500);
+        }
+    </script>
+}

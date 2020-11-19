@@ -1,0 +1,399 @@
+﻿@{
+    ViewData["Title"] = ViewBag.Title;
+    var Program = "#program";
+    var Kegiatan = "#kegiatan";
+    var SubKegiatan = "#subkegiatan";
+}
+<ejs-toast id="toast_default" created="createdToasObj">
+    <e-toast-position X="Right"></e-toast-position>
+</ejs-toast>
+
+<div id="program" style="display: none">
+    <ejs-grid id="GridProgram" actionComplete="CompleteActionProgram" height="490" allowPaging="true" allowResizing="true" allowSorting="true" allowReordering="true" allowGrouping="false"
+              toolbar="@(new List<string>() { "Search", "Add", "Edit", "Delete","Update","Cancel" , "ExcelExport" ,"PdfExport"})" allowFiltering="true" allowSelection="true"
+              allowExcelExport="true" allowPdfExport="true" toolbarClick="toolbarAction" created="createdGridProgram" query="@ViewBag.queryProgram">
+        <e-grid-pagesettings pageCount="5" pageSize="12" pageSizes="true"></e-grid-pagesettings>
+        <e-grid-filterSettings type="Menu"></e-grid-filterSettings>
+        <e-grid-editSettings allowAdding="true" allowDeleting="true" allowEditing="true" mode="Dialog" template='#templatedialog' showDeleteConfirmDialog="true"></e-grid-editSettings>
+        <e-grid-selectionsettings type="Single"></e-grid-selectionsettings>
+        <e-grid-columns>
+            <e-grid-column field="IdProgram" headerText="IdProgram" isPrimaryKey="true" isIdentity="true" visible="false"></e-grid-column>
+            <e-grid-column field="NamaOpd" width="50" headerText="Nama Opd"></e-grid-column>
+            <e-grid-column field="KodeSubkegiatan" width="50" headerText="Kode Program"></e-grid-column>
+            <e-grid-column field="NamaSubkegiatan" width="150" headerText="Nama Program"></e-grid-column>
+        </e-grid-columns>
+    </ejs-grid>
+</div>
+
+<div id="kegiatan" style="display: none">
+    <ejs-grid id="GridKegiatan" actionComplete="CompleteActionKegiatan" height="490" allowPaging="true" allowResizing="true" allowSorting="true" allowReordering="true" allowGrouping="false"
+              toolbar="@(new List<string>() { "Search", "Add", "Edit", "Delete","Update","Cancel" , "ExcelExport" ,"PdfExport"})" allowFiltering="true" allowSelection="true"
+              allowExcelExport="true" allowPdfExport="true" toolbarClick="toolbarAction" created="createdGridKegiatan" query="@ViewBag.queryKegiatan">
+        <e-grid-pagesettings pageCount="5" pageSize="12" pageSizes="true"></e-grid-pagesettings>
+        <e-grid-filterSettings type="Menu"></e-grid-filterSettings>
+        <e-grid-editSettings allowAdding="true" allowDeleting="true" allowEditing="true" mode="Dialog" template='#templatedialog' showDeleteConfirmDialog="true"></e-grid-editSettings>
+        <e-grid-selectionsettings type="Single"></e-grid-selectionsettings>
+        <e-grid-columns>
+            <e-grid-column field="IdProgram" headerText="IdProgram" isPrimaryKey="true" isIdentity="true" visible="false"></e-grid-column>
+            <e-grid-column field="NamaOpd" width="50" headerText="Nama Opd"></e-grid-column>
+            <e-grid-column field="KodeKegiatan" width="50" headerText="Kode Program"></e-grid-column>
+            <e-grid-column field="KodeSubkegiatan" width="50" headerText="Kode Kegiatan"></e-grid-column>
+            <e-grid-column field="NamaSubkegiatan" width="150" headerText="Nama Kegiatan"></e-grid-column>
+        </e-grid-columns>
+    </ejs-grid>
+</div>
+
+<div id="subkegiatan" style="display: none">
+    <ejs-grid id="GridSubKegiatan" actionComplete="CompleteActionSubKegiatan" height="490" allowPaging="true" allowResizing="true" allowSorting="true" allowReordering="true" allowGrouping="false"
+              toolbar="@(new List<string>() { "Search", "Add", "Edit", "Delete","Update","Cancel" , "ExcelExport" ,"PdfExport"})" allowFiltering="true" allowSelection="true"
+              allowExcelExport="true" allowPdfExport="true" toolbarClick="toolbarAction" created="createdGridSubKegiatan" query="@ViewBag.querySubKegiatan">
+        <e-grid-pagesettings pageCount="5" pageSize="12" pageSizes="true"></e-grid-pagesettings>
+        <e-grid-filterSettings type="Menu"></e-grid-filterSettings>
+        <e-grid-editSettings allowAdding="true" allowDeleting="true" allowEditing="true" mode="Dialog" template='#templatedialog' showDeleteConfirmDialog="true"></e-grid-editSettings>
+        <e-grid-selectionsettings type="Single"></e-grid-selectionsettings>
+        <e-grid-columns>
+            <e-grid-column field="IdProgram" headerText="IdProgram" isPrimaryKey="true" isIdentity="true" visible="false"></e-grid-column>
+            <e-grid-column field="NamaOpd" width="50" headerText="Nama Opd"></e-grid-column>
+            <e-grid-column field="KodeProgram" width="50" headerText="Kode Program"></e-grid-column>
+            <e-grid-column field="KodeKegiatan" width="50" headerText="Kode Kegiatan"></e-grid-column>
+            <e-grid-column field="KodeSubkegiatan" width="50" headerText="Kode Sub Kegiatan"></e-grid-column>
+            <e-grid-column field="NamaSubkegiatan" width="150" headerText="Nama Sub Kegiatan"></e-grid-column>
+        </e-grid-columns>
+    </ejs-grid>
+</div>
+
+<ejs-tab id="adaptiveTab" heightAdjustMode="None" height="250px" created="tabProgram">
+    <e-tab-tabitems>
+        <e-tab-tabitem header="ViewBag.headerProgram" content="@Program"></e-tab-tabitem>
+        <e-tab-tabitem header="ViewBag.headerKegiatan" content="@Kegiatan"></e-tab-tabitem>
+        <e-tab-tabitem header="ViewBag.headerSubKegiatan" content="@SubKegiatan"></e-tab-tabitem>
+    </e-tab-tabitems>
+</ejs-tab>
+
+@section SectionControls{
+    <script id='templatedialog' type="text/x-template">
+        <div id="Tempdialog">
+        </div>
+    </script>
+
+    <script type="text/javascript">
+        var toastObj;
+        var tabObj;
+
+        function createdToasObj() {
+            toastObj = this;
+        }
+
+        function tabProgram() {
+            tabObj = document.getElementById('adaptiveTab').ej2_instances[0];
+        }
+
+        function paramToast(title, cssclass, message) {
+            setTimeout(
+                () => {
+                    var toastObj = document.getElementById('toast_default').ej2_instances[0];
+                    toastObj.title = title;
+                    toastObj.cssClass = cssclass;
+                    toastObj.content = message;
+                    toastObj.target = document.body;
+                    toastObj.show();
+                }, 500);
+        }
+
+        //#region program
+        function CompleteActionProgram(args) {
+            var grid = document.querySelector('#GridProgram').ej2_instances[0];
+
+            if (args.requestType === 'beginEdit' || args.requestType === 'add') {
+                var dialog = args.dialog;
+                dialog.height = 320;
+                // change the header of the dialog
+                dialog.header = args.requestType === 'beginEdit' ? 'Edit ' + args.rowData['NamaSubkegiatan'] : 'New Program';
+                args.form.ej2_instances[0].addRules('IdOpd', { required: [true, 'Silahkan Pilih OPD'] });
+                args.form.ej2_instances[0].addRules('KodeSubkegiatan', { required: [true, 'Silahkan Isi Kode Program'], minLength: [1, 'Kode Program Minimal 1 huruf'] });
+                args.form.ej2_instances[0].addRules('NamaSubkegiatan', { required: [true, 'Silahkan Isi Nama Program'], minLength: [3, 'Nama Program Minimal 3 huruf'] });
+
+                let spinner = ej.popups.createSpinner({ target: args.dialog.element });
+                ej.popups.showSpinner(args.dialog.element);
+                var ajax = new ej.base.Ajax({
+                    url: "@Url.Action("ProgramMasterTemplateProgram", "ProgramMaster")", //render the partial view
+                    type: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify({ value: args.rowData })
+                });
+                ajax.send().then(function (data) {
+                    appendElement(data, args.form); //Render the edit form with selected record
+                    args.form.elements.namedItem('KodeSubkegiatan').focus();
+                    if (typeof args.rowData['IdOpd'] != 'undefined') {
+                        var dropObject = document.getElementById("IdOpd").ej2_instances[0];
+                        dropObject.value = args.rowData['IdOpd'];
+                        dropObject.text = args.rowData['NamaOpd'];
+                    }
+                    ej.popups.hideSpinner(args.dialog.element);
+                }).catch(function (xhr) {
+                    console.log(xhr);
+                    ej.popups.hideSpinner(args.dialog.element);
+                });
+            }
+            else if (args.requestType === 'save') {
+                grid.refresh();
+                grid.closeEdit();
+            }
+        }
+
+        function createdGridProgram(args) {
+            class CustomAdaptorUrusan extends ej.data.UrlAdaptor {
+                processResponse(data, ds, query, xhr, request, changes) {
+                    if (!ej.base.isNullOrUndefined(data.message)) {
+                        if ((data.message.indexOf('BERHASIL DISIMPAN') == -1) && (data.message.indexOf('BERHASIL DIHAPUS') == -1)) {
+                            paramToast('Error Master Program', 'e-toast-danger', data.message);
+                        }
+                        else {
+                            paramToast('Master Program', 'e-toast-success', data.message);
+                        }
+                    }
+
+                    if (!ej.base.isNullOrUndefined(data.data))
+                        return data.data;
+                    else
+                        return data;
+                }
+            }
+            var grid = document.querySelector('#GridProgram').ej2_instances[0];
+            grid.dataSource = new ej.data.DataManager({
+                url: "/ProgramMaster/ProgramMasterAll",
+                crudUrl: "/ProgramMaster/ProgramMasterCrud",
+                adaptor: new CustomAdaptorUrusan()
+            });
+        }
+
+        function onfilteringOPD(e) {
+            var OPDObj = document.getElementById("IdOpd").ej2_instances[0];
+            if (e.text == '' && e.text.length < 3) {
+                e.updateData(OPDObj.dataSource);
+            }
+            let query = new ej.data.Query().select(['NamaOpd', 'IdOpd']).take(6);
+            query = (e.text !== '' && e.text.length >= 3) ? query.where('NamaOpd', 'contains', e.text, true) : query;
+            e.updateData(OPDObj.dataSource, query);
+        }
+        //#endregion program
+
+        //#region kegiatan
+        function CompleteActionKegiatan(args) {
+            var grid = document.querySelector('#GridKegiatan').ej2_instances[0];
+
+            if (args.requestType === 'beginEdit' || args.requestType === 'add') {
+                var dialog = args.dialog;
+                dialog.height = 320;
+                // change the header of the dialog
+                dialog.header = args.requestType === 'beginEdit' ? 'Edit ' + args.rowData['NamaSubkegiatan'] : 'New Kegiatan';
+                args.form.ej2_instances[0].addRules('IdParentU', { required: [true, 'Silahkan Pilih Urusan'] });
+                args.form.ej2_instances[0].addRules('KodeSubkegiatan', { required: [true, 'Silahkan Isi Kode Kegiatan'], minLength: [1, 'Kode Kegiatan Minimal 1 huruf'] });
+                args.form.ej2_instances[0].addRules('NamaSubkegiatan', { required: [true, 'Silahkan Isi Nama Kegiatan'], minLength: [3, 'Nama Kegiatan Minimal 3 huruf'] });
+
+                let spinner = ej.popups.createSpinner({ target: args.dialog.element });
+                ej.popups.showSpinner(args.dialog.element);
+                var ajax = new ej.base.Ajax({
+                    url: "@Url.Action("ProgramMasterTemplateKegiatan", "ProgramMaster")", //render the partial view
+                    type: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify({ value: args.rowData })
+                });
+                ajax.send().then(function (data) {
+                    appendElement(data, args.form); //Render the edit form with selected record
+                    args.form.elements.namedItem('KodeSubkegiatan').focus();
+                    if (typeof args.rowData['IdParentU'] != 'undefined') {
+                        var dropObject = document.getElementById("IdParentU").ej2_instances[0];
+                        dropObject.value = args.rowData['IdParentU'];
+                        dropObject.text = args.rowData['NamaKegiatan'];
+                    }
+                    ej.popups.hideSpinner(args.dialog.element);
+                }).catch(function (xhr) {
+                    console.log(xhr);
+                    ej.popups.hideSpinner(args.dialog.element);
+                });
+            }
+            else if (args.requestType === 'save') {
+                grid.refresh();
+                grid.closeEdit();
+            }
+        }
+
+        function createdGridKegiatan(args) {
+            class CustomAdaptor extends ej.data.UrlAdaptor {
+                processResponse(data, ds, query, xhr, request, changes) {
+                    if (!ej.base.isNullOrUndefined(data.message)) {
+                        if ((data.message.indexOf('BERHASIL DISIMPAN') == -1) && (data.message.indexOf('BERHASIL DIHAPUS') == -1)) {
+                            paramToast('Error Master Kegiatan', 'e-toast-danger', data.message);
+                        }
+                        else {
+                            paramToast('Master Kegiatan', 'e-toast-success', data.message);
+                        }
+                    }
+
+                    if (!ej.base.isNullOrUndefined(data.data))
+                        return data.data;
+                    else
+                        return data;
+                }
+            }
+            var grid = document.querySelector('#GridKegiatan').ej2_instances[0];
+            grid.dataSource = new ej.data.DataManager({
+                url: "/ProgramMaster/ProgramMasterAll",
+                crudUrl: "/ProgramMaster/ProgramMasterCrud",
+                adaptor: new CustomAdaptor()
+            });
+        }
+
+        function onfilteringProgram(e) {
+            var KegiatanObj = document.getElementById("IdParentU").ej2_instances[0];
+            if (e.text == '' && e.text.length < 3) {
+                e.updateData(KegiatanObj.dataSource);
+            }
+            
+            let query = new ej.data.Query().select(['NamaSubkegiatan', 'IdProgram']).take(6).addParams('IdPosisi', 1);
+            query = (e.text !== '' && e.text.length >= 3) ? query.where('NamaSubkegiatan', 'contains', e.text, true) : query;
+
+            e.updateData(KegiatanObj.dataSource, query);
+        }
+        //#endregion kegiatan
+
+        //#region subkegiatan
+        function CompleteActionSubKegiatan(args) {
+            var grid = document.querySelector('#GridSubKegiatan').ej2_instances[0];
+
+            if (args.requestType === 'beginEdit' || args.requestType === 'add') {
+                var dialog = args.dialog;
+                dialog.height = 420;
+                // change the header of the dialog
+                dialog.header = args.requestType === 'beginEdit' ? 'Edit ' + args.rowData['NamaSubkegiatan'] : 'New Sub Kegiatan';
+                args.form.ej2_instances[0].addRules('IdParentU', { required: [true, 'Silahkan Pilih Program'] });
+                args.form.ej2_instances[0].addRules('IdParent', { required: [true, 'Silahkan Pilih Kegiatan'] });
+                args.form.ej2_instances[0].addRules('KodeSubkegiatan', { required: [true, 'Silahkan Isi Kode Sub Kegiatan'], minLength: [1, 'Kode Sub Kegiatan Minimal 1 huruf'] });
+                args.form.ej2_instances[0].addRules('NamaSubkegiatan', { required: [true, 'Silahkan Isi Nama Sub Kegiatan'], minLength: [3, 'Nama Sub Kegiatan Minimal 3 huruf'] });
+
+                let spinner = ej.popups.createSpinner({ target: args.dialog.element });
+                ej.popups.showSpinner(args.dialog.element);
+                var ajax = new ej.base.Ajax({
+                    url: "@Url.Action("ProgramMasterTemplateSubKegiatan", "ProgramMaster")", //render the partial view
+                    type: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify({ value: args.rowData })
+                });
+                ajax.send().then(function (data) {
+                    appendElement(data, args.form); //Render the edit form with selected record
+                    args.form.elements.namedItem('KodeSubkegiatan').focus();
+                    if (typeof args.rowData['IdParentU'] != 'undefined') {
+                        var dropObject = document.getElementById("IdParentU").ej2_instances[0];
+                        dropObject.value = args.rowData['IdParentU'];
+                        dropObject.text = args.rowData['NamaProgram'];
+                    }
+                    if (typeof args.rowData['IdParent'] != 'undefined') {
+                        var dropObject = document.getElementById("IdParent").ej2_instances[0];
+                        dropObject.value = args.rowData['IdParent'];
+                        dropObject.text = args.rowData['NamaKegiatan'];
+                    }
+                    ej.popups.hideSpinner(args.dialog.element);
+                }).catch(function (xhr) {
+                    console.log(xhr);
+                    ej.popups.hideSpinner(args.dialog.element);
+                });
+            }
+            else if (args.requestType === 'save') {
+                grid.refresh();
+                grid.closeEdit();
+            }
+        }
+
+        function createdGridSubKegiatan(args) {
+            class CustomAdaptor extends ej.data.UrlAdaptor {
+                processResponse(data, ds, query, xhr, request, changes) {
+                    if (!ej.base.isNullOrUndefined(data.message)) {
+                        if ((data.message.indexOf('BERHASIL DISIMPAN') == -1) && (data.message.indexOf('BERHASIL DIHAPUS') == -1)) {
+                            paramToast('Error Master Sub Kegiatan', 'e-toast-danger', data.message);
+                        }
+                        else {
+                            paramToast('Master Sub Kegiatan', 'e-toast-success', data.message);
+                        }
+                    }
+
+                    if (!ej.base.isNullOrUndefined(data.data))
+                        return data.data;
+                    else
+                        return data;
+                }
+            }
+            var grid = document.querySelector('#GridSubKegiatan').ej2_instances[0];
+            grid.dataSource = new ej.data.DataManager({
+                url: "/ProgramMaster/ProgramMasterAll",
+                crudUrl: "/ProgramMaster/ProgramMasterCrud",
+                adaptor: new CustomAdaptor()
+            });
+        }
+
+        function onfilteringKegiatan(e) {
+            var ProgramOBJ = document.getElementById('IdParentU').ej2_instances[0];
+            var KegiatanObj = document.getElementById("IdParent").ej2_instances[0];
+            if (e.text == '' && e.text.length < 3) {
+                e.updateData(KegiatanObj.dataSource);
+            }
+
+            let query = new ej.data.Query().select(['NamaSubkegiatan', 'IdProgram']).take(6).addParams('IdPosisi', 2);
+            query = (e.text !== '' && e.text.length >= 3) ? query.where(new ej.data.Predicate('NamaSubkegiatan', 'contains', e.text, true).and('IdParent', 'equal', ProgramOBJ.value, true)) : query.where('IdParent', 'equal', ProgramOBJ.value, true);
+
+            e.updateData(KegiatanObj.dataSource, query);
+        }
+
+        function onchangeUrusan() {
+            var ProgramOBJ = document.getElementById('IdParentU').ej2_instances[0];
+            var KegiatanObj = document.getElementById('IdParent').ej2_instances[0];
+            KegiatanObj.enabled = true;
+            var KegiatanObjQuery = new ej.data.Query().where('IdParent', 'equal', ProgramOBJ.value).addParams('IdPosisi', 2);
+            KegiatanObj.query = KegiatanObjQuery;
+            KegiatanObj.text = null;
+            KegiatanObj.dataBind();
+        }
+        //#endregion subkegiatan
+
+        function appendElement(elementString, form) {
+            form.querySelector("#Tempdialog").innerHTML = elementString;
+            var script = document.createElement('script');
+            script.type = "text/javascript";
+            var serverScript = form.querySelector("#Tempdialog").querySelector('script');
+            script.textContent = serverScript.innerHTML;
+            document.head.appendChild(script);
+            serverScript.remove();
+        }
+
+        function toolbarAction(args) {
+            var fileNameGrid = "";
+
+            if (this.element.id === "GridProgram") {
+                fileNameGrid = "Program";
+            }
+            else if (this.element.id === "GridKegiatan") {
+                fileNameGrid = "Kegiatan";
+            }
+            else if (this.element.id === "GridSubKegiatan") {
+                fileNameGrid = "Sub Kegiatan";
+            }
+
+            var fileName = "Master " + fileNameGrid;
+
+            if (args.item.id === this.element.id + '_pdfexport') {
+                var exportProperties = {
+                    fileName: fileName + ".pdf"
+                };
+
+                this.pdfExport(exportProperties);
+            }
+            if (args.item.id === this.element.id + '_excelexport') {
+                var exportProperties = {
+                    fileName: fileName + ".xlsx"
+                };
+
+                this.excelExport(exportProperties);
+            }
+        }
+    </script>
+}

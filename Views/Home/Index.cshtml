@@ -1,0 +1,216 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="control-section">
+    <div id="container" align='center'>
+        <ejs-chart id="lineContainer" load="window.onChartLoad" loaded="window.onChartLoaded" title="Persentase Pengadaan OPD"
+                   pointRender="window.pointRender" tooltipRender="window.tooltipRender">
+            <e-chart-primaryxaxis valueType="Category" interval="1" tickPosition="Inside" labelPosition="Inside">
+                <e-majorgridlines width="0"></e-majorgridlines>
+                <e-labelstyle color="#ffffff"></e-labelstyle>
+            </e-chart-primaryxaxis>
+            <e-chart-primaryyaxis minimum="0" maximum="300" interval="50">
+                <e-majorgridlines width="0"></e-majorgridlines>
+                <e-majorticklines width="0"></e-majorticklines>
+                <e-minorgridlines width="0"></e-minorgridlines>
+                <e-minorticklines width="0"></e-minorticklines>
+                <e-linestyle width="0"></e-linestyle>
+                <e-labelstyle color="transparent"></e-labelstyle>
+            </e-chart-primaryyaxis>
+            <e-chart-chartarea>
+                <e-chartarea-border width="0"></e-chartarea-border>
+            </e-chart-chartarea>
+            <e-series-collection>
+                <e-series dataSource="ViewBag.dataSource" xName="xValue" yName="yValue" name="Tiger" width=2 type="@Syncfusion.EJ2.Charts.ChartSeriesType.Column">
+                    <e-series-marker>
+                        <e-series-datalabel visible="true" position="Top">
+                            <e-font color="#ffffff" fontWeight="600"></e-font>
+                        </e-series-datalabel>
+                    </e-series-marker>
+                    <e-series-cornerradius bottomLeft="10" bottomRight="10" topLeft="10" topRight="10"></e-series-cornerradius>
+                </e-series>
+            </e-series-collection>
+            <e-chart-tooltipsettings enable="false"></e-chart-tooltipsettings>
+            <e-chart-legendsettings visible="false"></e-chart-legendsettings>
+        </ejs-chart>
+    </div>
+</div>
+<div class="control-section col-lg-9" align='center'>
+    <ejs-accumulationchart id="container" title="Penyerapan Anggaran" load="load" enableAnimation="false">
+        <e-accumulationchart-center x="50%" y="50%"></e-accumulationchart-center>
+        <e-accumulationchart-tooltipsettings enable="true"></e-accumulationchart-tooltipsettings>
+        <e-accumulationchart-legendsettings visible="false">
+        </e-accumulationchart-legendsettings>
+        <e-accumulation-series-collection>
+            <e-accumulation-series dataSource="ViewBag.dataSource" xName="xValue" yName="yValue" name="Browser" explodeIndex="0" explode="true" explodeOffset="10%">
+                <e-accumulationseries-datalabel name="text" visible="true">
+                    <e-font fontWeight="600" color="white"></e-font>
+                </e-accumulationseries-datalabel>
+            </e-accumulation-series>
+        </e-accumulation-series-collection>
+    </ejs-accumulationchart>
+</div>
+<script>
+    window.pointRender = function (args) {
+        var materialColors = ['#00bdae', '#404041', '#357cd2', '#e56590', '#f8b883', '#70ad47', '#dd8abd', '#7f84e8', '#7bb4eb',
+            '#ea7a57', '#404041', '#00bdae'];
+        var fabricColors = ['#4472c4', '#ed7d31', '#ffc000', '#70ad47', '#5b9bd5',
+            '#c1c1c1', '#6f6fe2', '#e269ae', '#9e480e', '#997300', '#4472c4', '#70ad47', '#ffc000', '#ed7d31'];
+        var bootstrapColors = ['#a16ee5', '#f7ce69', '#55a5c2', '#7ddf1e', '#ff6ea6',
+            '#7953ac', '#b99b4f', '#407c92', '#5ea716', '#b91c52'];
+        var highContrastColors = ['#79ECE4', '#E98272', '#DFE6B6', '#C6E773', '#BA98FF',
+            '#FA83C3', '#00C27A', '#43ACEF', '#D681EF', '#D8BC6E'];
+        var selectedTheme = location.hash.split('/')[1];
+        selectedTheme = selectedTheme ? selectedTheme : 'Material';
+        if (selectedTheme && selectedTheme.indexOf('fabric') > -1) {
+            args.fill = fabricColors[args.point.index % 10];
+        } else if (selectedTheme === 'material') {
+            args.fill = materialColors[args.point.index % 10];
+        } else if (selectedTheme === 'bootstrap') {
+            args.fill = bootstrapColors[args.point.index % 10];
+        } else {
+            args.fill = highContrastColors[args.point.index % 10];
+        }
+    }
+    window.onChartLoad = function (args) {
+        var selectedTheme = location.hash.split('/')[1];
+        selectedTheme = selectedTheme ? selectedTheme : 'Material';
+        args.chart.theme = (selectedTheme.charAt(0).toUpperCase() + selectedTheme.slice(1).replace(/dark/i, "Dark").replace(/light/i, "Light"));
+        args.chart.width = ej.base.Browser.isDevice ? "100%" : "80%";
+    }
+
+    window.onChartLoaded = function (args) {
+        var count = 0;
+        args.chart.loaded = null;
+        setInterval(
+            function () {
+                if (count === 0) {
+                    args.chart.series[0].dataSource = [
+                        { xValue: 'Satu', yValue: 206 },
+                        { xValue: 'Dua', yValue: 123 },
+                        { xValue: 'Tiga', yValue: 48 },
+                        { xValue: 'Empat', yValue: 240 },
+                        { xValue: 'Lima', yValue: 170 }
+
+                    ];
+                    args.chart.animate();
+                    count++;
+                }
+                else if (count === 1) {
+                    args.chart.series[0].dataSource = [
+                        { xValue: 'Satu', yValue: 86 },
+                        { xValue: 'Dua', yValue: 173 },
+                        { xValue: 'Tiga', yValue: 188 },
+                        { xValue: 'Empat', yValue: 109 },
+                        { xValue: 'Lima', yValue: 100 }
+
+                    ];
+                    args.chart.animate();
+                    count++;
+                }
+                else if (count === 2) {
+                    args.chart.series[0].dataSource = [
+                        { xValue: 'Satu', yValue: 156 },
+                        { xValue: 'Dua', yValue: 33 },
+                        { xValue: 'Tiga', yValue: 260 },
+                        { xValue: 'Empat', yValue: 200 },
+                        { xValue: 'Lima', yValue: 30 }
+
+                    ];
+                    args.chart.animate();
+                    count = 0;
+                }
+            }, 2000);
+    }
+
+    function anglechange(value) {
+        var pie = document.getElementById("container").ej2_instances[0];
+        if (pie.series[0].startAngle !== +value || pie.series[0].endAngle !== +value) {
+            pie.series[0].startAngle = +value;
+            pie.series[0].endAngle = +value;
+            document.getElementById('anglevalue').innerHTML = value.toString();
+            pie.removeSvg();
+            pie.refreshSeries();
+            pie.refreshChart();
+        }
+    }
+
+    document.getElementById('pieangle').onpointermove = document.getElementById('pieangle').ontouchmove =
+        document.getElementById('pieangle').onchange = (e) => {
+            anglechange(+(document.getElementById('pieangle')).value);
+        };
+    function radiuschange(value) {
+        var pie = document.getElementById("container").ej2_instances[0];
+        if (pie.series[0].radius !== value + '%') {
+            pie.series[0].radius = value + '%';
+            document.getElementById('radius').innerHTML = (value / 100).toFixed(2);
+            pie.removeSvg();
+            pie.refreshSeries();
+            pie.refreshChart();
+        }
+    }
+
+    document.getElementById('pieradius').onpointermove = document.getElementById('pieradius').ontouchmove =
+        document.getElementById('pieradius').onchange = (e) => {
+            radiuschange(+(document.getElementById('pieradius')).value);
+        };
+    function exploderadius(value) {
+        var pie = document.getElementById("container").ej2_instances[0];
+        if (pie.visibleSeries[0].explodeOffset !== value + '%') {
+            pie.visibleSeries[0].explodeOffset = value + '%';
+            document.getElementById('exploderadius').innerHTML = (value / 100).toFixed(2);
+            pie.removeSvg();
+            pie.refreshSeries();
+            pie.refreshChart();
+        }
+    }
+
+    document.getElementById('pieexploderadius').onpointermove = document.getElementById('pieexploderadius').ontouchmove =
+        document.getElementById('pieexploderadius').onchange = (e) => {
+            exploderadius(+(document.getElementById('pieexploderadius')).value);
+        };
+    function explodeIndex(value) {
+        var pie = document.getElementById("container").ej2_instances[0];
+        if (pie.visibleSeries[0].explodeIndex !== +value) {
+            pie.visibleSeries[0].explodeIndex = +value;
+            document.getElementById('explodeindex').innerHTML = value.toString();
+            pie.removeSvg();
+            pie.refreshSeries();
+            pie.refreshChart();
+        }
+    }
+
+    document.getElementById('pieexplodeindex').onpointermove = document.getElementById('pieexplodeindex').ontouchmove =
+        document.getElementById('pieexplodeindex').onchange = (e) => {
+            explodeIndex(+(document.getElementById('pieexplodeindex')).value);
+        };
+    function xchange(value) {
+        var pie = document.getElementById("container").ej2_instances[0];
+        pie.center.x = value + '%';
+        document.getElementById('xvalue').innerHTML = value + '%';
+        pie.removeSvg(); pie.refreshSeries(); pie.refreshChart();
+    }
+    document.getElementById('x').onpointermove = document.getElementById('x').ontouchmove =
+        document.getElementById('x').onchange = function (e) {
+            xchange(+(document.getElementById('x')).value);
+        };
+    function ychange(value) {
+        var pie = document.getElementById("container").ej2_instances[0];
+        pie.center.y = value + '%';
+        document.getElementById('yvalue').innerHTML = value + '%';
+        pie.removeSvg(); pie.refreshSeries(); pie.refreshChart();
+    }
+    document.getElementById('y').onpointermove = document.getElementById('y').ontouchmove =
+        document.getElementById('y').onchange = function (e) {
+            ychange(+(document.getElementById('y')).value);
+        };
+    function load(args) {
+        var indexedTheme = location.hash.split('/')[1];
+        indexedTheme = indexedTheme ? indexedTheme : 'Material';
+        args.accumulation.theme = (indexedTheme.charAt(0).toUpperCase() + indexedTheme.slice(1).replace(/dark/i, "Dark").replace(/light/i, "Light"));
+        args.accumulation.series[0].startAngle = 0;
+        args.accumulation.series[0].endAngle = 0;
+        args.accumulation.series[0].explodeIndex = 0;
+    }
+</script>
