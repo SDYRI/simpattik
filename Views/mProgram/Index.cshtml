@@ -184,10 +184,11 @@
 
             if (args.requestType === 'beginEdit' || args.requestType === 'add') {
                 var dialog = args.dialog;
-                dialog.height = 320;
+                dialog.height = 420;
                 // change the header of the dialog
                 dialog.header = args.requestType === 'beginEdit' ? 'Edit ' + args.rowData['NamaSubkegiatan'] : 'New Kegiatan';
-                args.form.ej2_instances[0].addRules('IdParentU', { required: [true, 'Silahkan Pilih Urusan'] });
+                args.form.ej2_instances[0].addRules('IdOpd', { required: [true, 'Silahkan Pilih OPD'] });
+                args.form.ej2_instances[0].addRules('IdParent', { required: [true, 'Silahkan Pilih Program'] });
                 args.form.ej2_instances[0].addRules('KodeSubkegiatan', { required: [true, 'Silahkan Isi Kode Kegiatan'], minLength: [1, 'Kode Kegiatan Minimal 1 huruf'] });
                 args.form.ej2_instances[0].addRules('NamaSubkegiatan', { required: [true, 'Silahkan Isi Nama Kegiatan'], minLength: [3, 'Nama Kegiatan Minimal 3 huruf'] });
 
@@ -202,9 +203,14 @@
                 ajax.send().then(function (data) {
                     appendElement(data, args.form); //Render the edit form with selected record
                     args.form.elements.namedItem('KodeSubkegiatan').focus();
-                    if (typeof args.rowData['IdParentU'] != 'undefined') {
-                        var dropObject = document.getElementById("IdParentU").ej2_instances[0];
-                        dropObject.value = args.rowData['IdParentU'];
+                    if (typeof args.rowData['IdOpd'] != 'undefined') {
+                        var dropObject = document.getElementById("IdOpd").ej2_instances[0];
+                        dropObject.value = args.rowData['IdOpd'];
+                        dropObject.text = args.rowData['NamaOpd'];
+                    }
+                    if (typeof args.rowData['IdParent'] != 'undefined') {
+                        var dropObject = document.getElementById("IdParent").ej2_instances[0];
+                        dropObject.value = args.rowData['IdParent'];
                         dropObject.text = args.rowData['NamaKegiatan'];
                     }
                     ej.popups.hideSpinner(args.dialog.element);
@@ -246,15 +252,26 @@
         }
 
         function onfilteringProgram(e) {
-            var KegiatanObj = document.getElementById("IdParentU").ej2_instances[0];
-            if (e.text == '' && e.text.length < 3) {
-                e.updateData(KegiatanObj.dataSource);
+            var OPDObj = document.getElementById('IdOpd').ej2_instances[0];
+            var ParentObj = document.getElementById("IdParent").ej2_instances[0];
+            if (e.text == '' && e.text.length < 1) {
+                e.updateData(ParentObj.dataSource);
             }
-            
-            let query = new ej.data.Query().select(['NamaSubkegiatan', 'IdProgram']).take(6).addParams('IdPosisi', 1);
-            query = (e.text !== '' && e.text.length >= 3) ? query.where('NamaSubkegiatan', 'contains', e.text, true) : query;
 
-            e.updateData(KegiatanObj.dataSource, query);
+            let query = new ej.data.Query().select(['NamaSubkegiatan', 'IdProgram']).take(6).addParams('IdPosisi', 1);
+            query = (e.text !== '' && e.text.length >= 3) ? query.where(new ej.data.Predicate('NamaSubkegiatan', 'contains', e.text, true).and('IdOpd', 'equal', OPDObj.value, true)) : query.where('IdOpd', 'equal', OPDObj.value, true);
+
+            e.updateData(ParentObj.dataSource, query);
+        }
+
+        function onblurOpd() {
+            var OPDObj = document.getElementById('IdOpd').ej2_instances[0];
+            var SelectObj = document.getElementById('IdParent').ej2_instances[0];
+            SelectObj.enabled = true;
+            var SelectObjQuery = new ej.data.Query().where('IdOpd', 'equal', OPDObj.value).addParams('IdPosisi', 1);
+            SelectObj.query = SelectObjQuery;
+            SelectObj.text = null;
+            SelectObj.dataBind();
         }
         //#endregion kegiatan
 
@@ -264,9 +281,10 @@
 
             if (args.requestType === 'beginEdit' || args.requestType === 'add') {
                 var dialog = args.dialog;
-                dialog.height = 420;
+                dialog.height = 520;
                 // change the header of the dialog
                 dialog.header = args.requestType === 'beginEdit' ? 'Edit ' + args.rowData['NamaSubkegiatan'] : 'New Sub Kegiatan';
+                args.form.ej2_instances[0].addRules('IdOpd', { required: [true, 'Silahkan Pilih OPD'] });
                 args.form.ej2_instances[0].addRules('IdParentU', { required: [true, 'Silahkan Pilih Program'] });
                 args.form.ej2_instances[0].addRules('IdParent', { required: [true, 'Silahkan Pilih Kegiatan'] });
                 args.form.ej2_instances[0].addRules('KodeSubkegiatan', { required: [true, 'Silahkan Isi Kode Sub Kegiatan'], minLength: [1, 'Kode Sub Kegiatan Minimal 1 huruf'] });
@@ -283,6 +301,11 @@
                 ajax.send().then(function (data) {
                     appendElement(data, args.form); //Render the edit form with selected record
                     args.form.elements.namedItem('KodeSubkegiatan').focus();
+                    if (typeof args.rowData['IdOpd'] != 'undefined') {
+                        var dropObject = document.getElementById("IdOpd").ej2_instances[0];
+                        dropObject.value = args.rowData['IdOpd'];
+                        dropObject.text = args.rowData['NamaOpd'];
+                    }
                     if (typeof args.rowData['IdParentU'] != 'undefined') {
                         var dropObject = document.getElementById("IdParentU").ej2_instances[0];
                         dropObject.value = args.rowData['IdParentU'];
@@ -331,6 +354,16 @@
             });
         }
 
+        function onblurOpdKegiatan() {
+            var OPDObj = document.getElementById('IdOpd').ej2_instances[0];
+            var SelectObj = document.getElementById('IdParentU').ej2_instances[0];
+            SelectObj.enabled = true;
+            var SelectObjQuery = new ej.data.Query().where('IdOpd', 'equal', OPDObj.value).addParams('IdPosisi', 1);
+            SelectObj.query = SelectObjQuery;
+            SelectObj.text = null;
+            SelectObj.dataBind();
+        }
+
         function onfilteringKegiatan(e) {
             var ProgramOBJ = document.getElementById('IdParentU').ej2_instances[0];
             var KegiatanObj = document.getElementById("IdParent").ej2_instances[0];
@@ -344,14 +377,15 @@
             e.updateData(KegiatanObj.dataSource, query);
         }
 
-        function onchangeUrusan() {
-            var ProgramOBJ = document.getElementById('IdParentU').ej2_instances[0];
-            var KegiatanObj = document.getElementById('IdParent').ej2_instances[0];
-            KegiatanObj.enabled = true;
-            var KegiatanObjQuery = new ej.data.Query().where('IdParent', 'equal', ProgramOBJ.value).addParams('IdPosisi', 2);
-            KegiatanObj.query = KegiatanObjQuery;
-            KegiatanObj.text = null;
-            KegiatanObj.dataBind();
+        function onchangeKegiatan() {
+            var OPDObj = document.getElementById('IdOpd').ej2_instances[0];
+            var ParentObj = document.getElementById('IdParentU').ej2_instances[0];
+            var SelectObj = document.getElementById('IdParent').ej2_instances[0];
+            SelectObj.enabled = true;
+            var SelectObjQuery = new ej.data.Query().where('IdParent', 'equal', ParentObj.value).addParams('IdPosisi', 2);
+            SelectObj.query = SelectObjQuery;
+            SelectObj.text = null;
+            SelectObj.dataBind();
         }
         //#endregion subkegiatan
 

@@ -156,7 +156,8 @@ namespace simpat1k.Controllers
             var valTemplate = _mProgram.GetAll(2);
             ViewBag.datasource = valTemplate;
             ViewBag.sortDropdown = "Ascending";
-            ViewBag.queryUrusan = "new ej.data.Query().select(['NamaSubOpd', 'IdOpd']).take(10).requiresCount().addParams('IdPosisi', 1)";
+            ViewBag.queryOPD = "new ej.data.Query().select(['NamaOpd', 'IdOpd']).take(10).requiresCount()";
+            ViewBag.queryProgram = "new ej.data.Query().select(['NamaSubkegiatan', 'IdProgram']).take(10).requiresCount().addParams('IdPosisi', 1)";
             ViewBag.Title = "Master Kegiatan " + value.Value.NamaProgram;
 
             return PartialView("_mProgramTemplateKegiatan", value.Value);
@@ -169,8 +170,9 @@ namespace simpat1k.Controllers
             var valTemplate = _mProgram.GetAll(3);
             ViewBag.datasource = valTemplate;
             ViewBag.sortDropdown = "Ascending";
-            ViewBag.queryUrusan = "new ej.data.Query().select(['NamaSubOpd', 'IdOpd']).take(10).requiresCount().addParams('IdPosisi', 1)";
-            ViewBag.queryOPD = "new ej.data.Query().select(['NamaSubOpd', 'IdOpd']).take(10).requiresCount().addParams('IdPosisi', 2)";
+            ViewBag.queryOPD = "new ej.data.Query().select(['NamaOpd', 'IdOpd']).take(10).requiresCount()";
+            ViewBag.queryProgram = "new ej.data.Query().select(['NamaSubkegiatan', 'IdProgram']).take(10).requiresCount().addParams('IdPosisi', 1)";
+            ViewBag.queryKegiatan = "new ej.data.Query().select(['NamaSubkegiatan', 'IdProgram']).take(10).requiresCount().addParams('IdPosisi', 2)";
             ViewBag.Title = "Master Sub Kegiatan " + value.Value.NamaProgram;
 
             return PartialView("_mProgramTemplateSubKegiatan", value.Value);
