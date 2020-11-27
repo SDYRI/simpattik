@@ -135,6 +135,8 @@ namespace simpat1k.Controllers
             value.Value.jeniskebutuhan = "1";
             value.Value.opd = _httpContextAccessor.HttpContext.Session.GetString("OpdName");
             value.Value.pejabat = _httpContextAccessor.HttpContext.Session.GetString("Nama");
+            ViewBag.sortDropdown = "Ascending";
+            ViewBag.queryKodeRekening = "new ej.data.Query().select(['NamaSubRincian', 'IdKodeRekening']).take(10).requiresCount().addParams('IdPosisi', 6)";
 
             return PartialView("_tsIdentifikasiBarangTemplate", value.Value);
         }
@@ -159,6 +161,8 @@ namespace simpat1k.Controllers
             value.Value.jeniskebutuhan = "2";
             value.Value.opd = _httpContextAccessor.HttpContext.Session.GetString("OpdName");
             value.Value.pejabat = _httpContextAccessor.HttpContext.Session.GetString("Nama");
+            ViewBag.sortDropdown = "Ascending";
+            ViewBag.queryKodeRekening = "new ej.data.Query().select(['NamaSubRincian', 'IdKodeRekening']).take(10).requiresCount().addParams('IdPosisi', 6)";
 
             return PartialView("_tsIdentifikasiBarangTemplate", value.Value);
         }
@@ -183,6 +187,8 @@ namespace simpat1k.Controllers
             value.Value.jeniskebutuhan = "3";
             value.Value.opd = _httpContextAccessor.HttpContext.Session.GetString("OpdName");
             value.Value.pejabat = _httpContextAccessor.HttpContext.Session.GetString("Nama");
+            ViewBag.sortDropdown = "Ascending";
+            ViewBag.queryKodeRekening = "new ej.data.Query().select(['NamaSubRincian', 'IdKodeRekening']).take(10).requiresCount().addParams('IdPosisi', 6)";
 
             return PartialView("_tsIdentifikasiBarangTemplate", value.Value);
         }
@@ -207,6 +213,8 @@ namespace simpat1k.Controllers
             value.Value.jeniskebutuhan = "4";
             value.Value.opd = _httpContextAccessor.HttpContext.Session.GetString("OpdName");
             value.Value.pejabat = _httpContextAccessor.HttpContext.Session.GetString("Nama");
+            ViewBag.sortDropdown = "Ascending";
+            ViewBag.queryKodeRekening = "new ej.data.Query().select(['NamaSubRincian', 'IdKodeRekening']).take(10).requiresCount().addParams('IdPosisi', 6)";
 
             return PartialView("_tsIdentifikasiBarangTemplate", value.Value);
         }

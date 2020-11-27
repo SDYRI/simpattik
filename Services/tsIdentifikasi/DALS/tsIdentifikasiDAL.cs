@@ -50,6 +50,7 @@ namespace TasikmalayaKota.Simpatik.Web.Services.tsIdentifikasi.DALS
                                 subkegiatan = (dataReader["rsubkegiatan"].GetType() != typeof(DBNull) ? (string)dataReader["rsubkegiatan"] : ""),
                                 outputidentifikasi = (dataReader["routputidentifikasi"].GetType() != typeof(DBNull) ? (string)dataReader["routputidentifikasi"] : ""),
                                 jeniskebutuhan = (dataReader["rjeniskebutuhan"].GetType() != typeof(DBNull) ? (string)dataReader["rjeniskebutuhan"] : ""),
+                                idbrgkerj = (dataReader["rnamabrgkerj"].GetType() != typeof(DBNull) ? (string)dataReader["ridbrgkerj"] : ""),
                                 namabrgkerj = (dataReader["rnamabrgkerj"].GetType() != typeof(DBNull) ? (string)dataReader["rnamabrgkerj"] : ""),
                                 fungsi = (dataReader["rfungsi"].GetType() != typeof(DBNull) ? (string)dataReader["rfungsi"] : ""),
                                 jumlahbarang = (dataReader["rjumlahbarang"].GetType() != typeof(DBNull) ? (string)dataReader["rjumlahbarang"] : ""),
@@ -147,6 +148,7 @@ namespace TasikmalayaKota.Simpatik.Web.Services.tsIdentifikasi.DALS
                                 subkegiatan = (dataReader["rsubkegiatan"].GetType() != typeof(DBNull) ? (string)dataReader["rsubkegiatan"] : ""),
                                 outputidentifikasi = (dataReader["routputidentifikasi"].GetType() != typeof(DBNull) ? (string)dataReader["routputidentifikasi"] : ""),
                                 jeniskebutuhan = (dataReader["rjeniskebutuhan"].GetType() != typeof(DBNull) ? (string)dataReader["rjeniskebutuhan"] : ""),
+                                idbrgkerj = (dataReader["rnamabrgkerj"].GetType() != typeof(DBNull) ? (string)dataReader["ridbrgkerj"] : ""),
                                 namabrgkerj = (dataReader["rnamabrgkerj"].GetType() != typeof(DBNull) ? (string)dataReader["rnamabrgkerj"] : ""),
                                 fungsi = (dataReader["rfungsi"].GetType() != typeof(DBNull) ? (string)dataReader["rfungsi"] : ""),
                                 jumlahbarang = (dataReader["rjumlahbarang"].GetType() != typeof(DBNull) ? (string)dataReader["rjumlahbarang"] : ""),
@@ -235,7 +237,7 @@ namespace TasikmalayaKota.Simpatik.Web.Services.tsIdentifikasi.DALS
                     sqlCommand.Parameters.AddWithValue("_subkegiatan", ParamD.subkegiatan == null ? string.Empty : ParamD.subkegiatan);
                     sqlCommand.Parameters.AddWithValue("_outputidentifikasi", ParamD.outputidentifikasi == null ? string.Empty : ParamD.outputidentifikasi);
                     sqlCommand.Parameters.AddWithValue("_jeniskebutuhan", ParamD.jeniskebutuhan == null ? string.Empty : ParamD.jeniskebutuhan);
-                    sqlCommand.Parameters.AddWithValue("_namabrgkerj", ParamD.namabrgkerj == null ? string.Empty : ParamD.namabrgkerj);
+                    sqlCommand.Parameters.AddWithValue("_namabrgkerj", ParamD.namabrgkerj == null ? string.Empty : ParamD.idbrgkerj);
                     sqlCommand.Parameters.AddWithValue("_fungsi", ParamD.fungsi == null ? string.Empty : ParamD.fungsi);
                     sqlCommand.Parameters.AddWithValue("_jumlahbarang", ParamD.jumlahbarang == null ? string.Empty : ParamD.jumlahbarang);
                     sqlCommand.Parameters.AddWithValue("_waktu", ParamD.waktu == null ? string.Empty : ParamD.waktu);
@@ -329,7 +331,7 @@ namespace TasikmalayaKota.Simpatik.Web.Services.tsIdentifikasi.DALS
                     sqlCommand.Parameters.AddWithValue("_subkegiatan", ParamD.subkegiatan == null ? string.Empty : ParamD.subkegiatan);
                     sqlCommand.Parameters.AddWithValue("_outputidentifikasi", ParamD.outputidentifikasi == null ? string.Empty : ParamD.outputidentifikasi);
                     sqlCommand.Parameters.AddWithValue("_jeniskebutuhan", ParamD.jeniskebutuhan == null ? string.Empty : ParamD.jeniskebutuhan);
-                    sqlCommand.Parameters.AddWithValue("_namabrgkerj", ParamD.namabrgkerj == null ? string.Empty : ParamD.namabrgkerj);
+                    sqlCommand.Parameters.AddWithValue("_namabrgkerj", ParamD.namabrgkerj == null ? string.Empty : ParamD.idbrgkerj);
                     sqlCommand.Parameters.AddWithValue("_fungsi", ParamD.fungsi == null ? string.Empty : ParamD.fungsi);
                     sqlCommand.Parameters.AddWithValue("_jumlahbarang", ParamD.jumlahbarang == null ? string.Empty : ParamD.jumlahbarang);
                     sqlCommand.Parameters.AddWithValue("_waktu", ParamD.waktu == null ? string.Empty : ParamD.waktu);

@@ -20,6 +20,7 @@ namespace TasikmalayaKota.Simpatik.Web.Services.tsIdentifikasi.Models
         public string subkegiatan { get; set; }
         public string outputidentifikasi { get; set; }
         public string jeniskebutuhan { get; set; }
+        public string idbrgkerj { get; set; }
         public string namabrgkerj { get; set; }
         public string fungsi { get; set; }
         public string jumlahbarang { get; set; }

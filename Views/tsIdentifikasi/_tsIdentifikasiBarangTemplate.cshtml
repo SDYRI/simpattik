@@ -41,8 +41,17 @@
                 </div>
             </div>*@
             <div class="e-float-input e-control-wrapper">
-                <ejs-textbox id="namabrgkerj" cssClass="e-input" placeholder="Nama/ Jenis" floatLabelType="Always" ejs-for="@Model.namabrgkerj"></ejs-textbox>
+                <ejs-dropdownlist id="idbrgkerj" placeholder="Nama/ Jenis" popupHeight="200px" allowFiltering="true" filtering="onfilteringKodeRekening" sortOrder="@ViewBag.sortDropdown"
+                                  query="@ViewBag.queryKodeRekening" floatLabelType="Always"
+                                  headerTemplate="@Html.Raw("<table><tr><th class=\"e-text-center\" style=\"width: 200px;\">Kode Rekening</th><th class=\"e-text-center\" style=\"width: 125px;\">Nama Rekening</th></tr></table>")"
+                                  itemTemplate="@Html.Raw("<table><tbody><tr><td class=\"e-text-center\" style=\"width: 200px;\">${KodeRekening}</td><td class=\"e-text-center\" style=\"width: 125px;\">${NamaSubRincian}</td></tr></tbody></table>")">
+                    <e-data-manager url="/KodeRekeningMaster/KodeRekeningMasterAll" adaptor="UrlAdaptor" crossDomain="true"></e-data-manager>
+                    <e-dropdownlist-fields text="NamaSubRincian" value="IdKodeRekening"></e-dropdownlist-fields>
+                </ejs-dropdownlist>
             </div>
+            @*<div class="e-float-input e-control-wrapper">
+                <ejs-textbox id="namabrgkerj" cssClass="e-input" placeholder="Nama/ Jenis" floatLabelType="Always" ejs-for="@Model.namabrgkerj"></ejs-textbox>
+            </div>*@
             <div class="e-float-input e-control-wrapper">
                 <ejs-textbox id="fungsi" cssClass="e-input" placeholder="Fungsi" floatLabelType="Always" ejs-for="@Model.fungsi"></ejs-textbox>
             </div>
