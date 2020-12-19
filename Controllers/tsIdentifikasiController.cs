@@ -8,6 +8,8 @@ using TasikmalayaKota.Simpatik.Web.Services.tsIdentifikasi.Interfaces;
 using TasikmalayaKota.Simpatik.Web.Services.tsIdentifikasi.Models;
 using Microsoft.AspNetCore.Http;
 using System;
+using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace simpat1k.Controllers
 {
@@ -65,7 +67,7 @@ namespace simpat1k.Controllers
         [Route("IdentifikasiBarangAll")]
         public IActionResult UrlDataBarangsource([FromBody] tsIdentifikasiModel dm)
         {
-            IEnumerable DataSource = _tsIdentifikasi.GetAll(Int32.Parse(dm.jeniskebutuhan));
+            IEnumerable DataSource = _tsIdentifikasi.GetAll(Int32.Parse(dm.jeniskebutuhan), dm.paket);
             DataOperations operation = new DataOperations();
             if (dm.Search != null && dm.Search.Count > 0)
             {
@@ -99,6 +101,18 @@ namespace simpat1k.Controllers
 
             if (value.Action == "insert")
             {
+                foreach (var param in value.Params)
+                {
+                    if (param.Key == "jeniskebutuhan")
+                    {
+                        value.Value.jeniskebutuhan = param.GetType().GetProperty("Value").GetValue(param).ToString();
+                    }
+                    if (param.Key == "paket")
+                    {
+                        value.Value.paket = Int32.Parse(param.GetType().GetProperty("Value").GetValue(param).ToString());
+                    }
+                }
+
                 DatabaseActionResultModel Result = _tsIdentifikasi.Create(value.Value);
                 msg = Result.Pesan;
             }
@@ -117,14 +131,15 @@ namespace simpat1k.Controllers
         #endregion Perencanaan Pengadaan
 
         #region Identifikasi Barang
-        [Route("IndexBarang")]
-        public ActionResult IndexBarang()
+        //[Route("IndexBarang")]
+        [Route("IndexBarang/{id?}")]
+        public ActionResult IndexBarang(int? id)
         {
             ViewBag.Title = "Identifikasi Kebutuhan Barang";
-            ViewBag.queryIdentifikasi = "new ej.data.Query().addParams('jeniskebutuhan', 1)";
+            ViewBag.queryIdentifikasi = "new ej.data.Query().addParams('jeniskebutuhan', 1).addParams('paket', "+ id +")";
             return View();
         }
-
+        
         [HttpPost]
         [Route("IdentifikasiBarangTemplate")]
         public IActionResult PartialTemplateIdentifikasiBarang([FromBody] CRUDModel<tsIdentifikasiModel> value)
@@ -132,11 +147,20 @@ namespace simpat1k.Controllers
             var valTemplate = _tsIdentifikasi.GetAll(1);
             ViewBag.datasource = valTemplate;
             ViewBag.Title = "Identifikasi Kebutuhan Barang " + value.Value.ididetifikasi;
-            value.Value.jeniskebutuhan = "1";
-            value.Value.opd = _httpContextAccessor.HttpContext.Session.GetString("OpdName");
-            value.Value.pejabat = _httpContextAccessor.HttpContext.Session.GetString("Nama");
+            //value.Value.jeniskebutuhan = "1";
+            //value.Value.opd = _httpContextAccessor.HttpContext.Session.GetString("OpdName");
+            //value.Value.pejabat = _httpContextAccessor.HttpContext.Session.GetString("Nama");
             ViewBag.sortDropdown = "Ascending";
             ViewBag.queryKodeRekening = "new ej.data.Query().select(['NamaSubRincian', 'IdKodeRekening']).take(10).requiresCount().addParams('IdPosisi', 6)";
+
+            #region Sumber Dana  
+            List<SelectListItem> sumberDana = new List<SelectListItem>()
+            {
+            new SelectListItem{ Text="APBN", Value = "APBN" },
+            new SelectListItem{ Text="APBD", Value = "APBD" },
+            };
+            ViewBag.SumberDana = sumberDana;
+            #endregion
 
             return PartialView("_tsIdentifikasiBarangTemplate", value.Value);
         }

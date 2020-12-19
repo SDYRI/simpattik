@@ -8,15 +8,16 @@
         <div class="form-group col-md-6">
             <div class="e-float-input e-control-wrapper">
                 <div class="e-float-input e-control-wrapper e-input e-valid-input">
-                    <input id="opd" data-val="true" class="e-control e-textbox e-lib" type="text" role="textbox" asp-for="@Model.opd" readonly>
-                    <input id="jeniskebutuhan" data-val="true" class="e-control e-textbox e-lib" type="text" role="textbox" asp-for="@Model.jeniskebutuhan" readonly hidden>
+                    @Html.TextBoxFor(x => Model.opd, new { @class = "e-control e-textbox e-lib", @readonly = "readonly" })
+                    @*@Html.TextBoxFor(x => Model.jeniskebutuhan, new { @class = "e-control e-textbox e-lib", @readonly = "readonly", @hidden = "hidden" })*@
+                    <input id="paket" data-val="true" class="e-control e-textbox e-lib" type="text" role="textbox" hidden>
                     <span class="e-float-line"></span>
                     <label class="e-float-text e-label-top" id="label_opd">OPD</label>
                 </div>
             </div>
             <div class="e-float-input e-control-wrapper">
                 <div class="e-float-input e-control-wrapper e-input e-valid-input">
-                    <input id="pejabat" data-val="true" class="e-control e-textbox e-lib" type="text" role="textbox" asp-for="@Model.pejabat" readonly>
+                    @Html.TextBoxFor(x => Model.pejabat, new { @class = "e-control e-textbox e-lib", @readonly = "readonly" })
                     <span class="e-float-line"></span>
                     <label class="e-float-text e-label-top" id="label_pejabat">Pejabat Pembuat Komitmen</label>
                 </div>
@@ -33,13 +34,6 @@
             <div class="e-float-input e-control-wrapper">
                 <ejs-textbox id="outputidentifikasi" cssClass="e-input" placeholder="Output" floatLabelType="Always" ejs-for="@Model.outputidentifikasi"></ejs-textbox>
             </div>
-            @*<div class="e-float-input e-control-wrapper">
-                <div class="e-float-input e-control-wrapper e-input e-valid-input">
-                    <input id="jeniskebutuhan" data-val="true" class="e-control e-textbox e-lib" type="text" role="textbox" asp-for="@Model.jeniskebutuhan" readonly>
-                    <span class="e-float-line"></span>
-                    <label class="e-float-text e-label-top" id="label_jeniskebutuhan">Jenis Kebutuhan</label>
-                </div>
-            </div>*@
             <div class="e-float-input e-control-wrapper">
                 <ejs-dropdownlist id="idbrgkerj" placeholder="Nama/ Jenis" popupHeight="200px" allowFiltering="true" filtering="onfilteringKodeRekening" sortOrder="@ViewBag.sortDropdown"
                                   query="@ViewBag.queryKodeRekening" floatLabelType="Always"
@@ -49,9 +43,6 @@
                     <e-dropdownlist-fields text="NamaSubRincian" value="IdKodeRekening"></e-dropdownlist-fields>
                 </ejs-dropdownlist>
             </div>
-            @*<div class="e-float-input e-control-wrapper">
-                <ejs-textbox id="namabrgkerj" cssClass="e-input" placeholder="Nama/ Jenis" floatLabelType="Always" ejs-for="@Model.namabrgkerj"></ejs-textbox>
-            </div>*@
             <div class="e-float-input e-control-wrapper">
                 <ejs-textbox id="fungsi" cssClass="e-input" placeholder="Fungsi" floatLabelType="Always" ejs-for="@Model.fungsi"></ejs-textbox>
             </div>
@@ -106,9 +97,43 @@
             <div class="e-float-input e-control-wrapper">
                 <ejs-textbox id="sumberdanaapbn" cssClass="e-input" placeholder="Sumber Dana APBN" floatLabelType="Always" ejs-for="@Model.sumberdanaapbn"></ejs-textbox>
             </div>
-            <div class="e-float-input e-control-wrapper">
-                <ejs-textbox id="sumberdanaapbd" cssClass="e-input" placeholder="Sumber Dana APBD" floatLabelType="Always" ejs-for="@Model.sumberdanaapbd"></ejs-textbox>
+            @*#region Sumber Dana*@
+            <div class="row" style="margin-bottom: 18px;margin-left: 0px;">
+                <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
+                    <label class="e-float-text e-label-top" id="label_sumberDana">Sumber Dana</label>
+                </div>
             </div>
+
+            <div id="fieldsSumberDana">
+                <input id="sumberdanaapbd" data-val="true" class="e-control e-textbox e-lib" type="text" role="textbox" hidden>
+                <table id="tblSumberDana" class="table table-hover mb-0 col-xs-12 col-sm-12 col-lg-12 col-md-12 e-float-input e-control-wrapper">
+                    <thead>
+                        <tr>
+                            <th class="col-xs-4 col-sm-4 col-lg-4 col-md-4">Sumber Dana</th>
+                            <th class="col-xs-12 col-sm-12 col-lg-12 col-md-12">Nilai</th>
+                            <th class="col-xs-2 col-sm-2 col-lg-2 col-md-2">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var sumberdana in Model.sumberdanal)
+                        {
+                            <tr>
+                                <td>@sumberdana.smbrdn</td>
+                                <td>@sumberdana.nilai.ToString("n0")</td>
+                                <td><button type="button" class="btn btn-icon rounded-circle btn-outline-primary" onclick="btnSumberDanaRemove(this)"><i class="feather icon-minus-circle"></i></button></td>
+                            </tr>
+                        }
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td>@Html.DropDownList("ddSmbrdn", new SelectList(ViewBag.SumberDana, "Value", "Text", null), "Pilih Sumber Dana", new { @class = "custom-select" })</td>
+                            <td><ejs-numerictextbox id="txtNilai" format="n0" min="0"></ejs-numerictextbox></td>
+                            <td><button type="button" class="btn btn-icon rounded-circle btn-outline-primary" onclick="btnSumberDana()"><i class="feather icon-plus-circle"></i></button></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+            @*#endregion Sumber Dana*@
             <div class="e-float-input e-control-wrapper">
                 <ejs-textbox id="kemudahan" cssClass="e-input" placeholder="Kemudahan Memperoleh" floatLabelType="Always" ejs-for="@Model.kemudahan"></ejs-textbox>
             </div>
@@ -224,6 +249,7 @@
             </div>
             <div class="e-float-input e-control-wrapper">
                 <ejs-textbox id="ketersediaanusaha" cssClass="e-input" placeholder="Ketersediaan Pelaku Usaha" floatLabelType="Always" ejs-for="@Model.ketersediaanusaha"></ejs-textbox>
+                
             </div>
         </div>
     </div>

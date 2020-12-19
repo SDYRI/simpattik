@@ -55,5 +55,18 @@
     <script src="~/lib/scripts/components.js"></script>
     <!-- END: Theme JS-->
 
+    <script type="text/javascript">
+        $(function () {
+            $("#showPass").change(function () {
+                var checked = $(this).is(":checked");
+                if (checked) {
+                    $("#user-password").attr("type", "text");
+                } else {
+                    $("#user-password").attr("type", "password");
+                }
+            });
+        });
+    </script>
+
 </body>
 </html>

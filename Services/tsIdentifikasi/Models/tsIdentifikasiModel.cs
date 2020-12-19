@@ -7,9 +7,18 @@ using TasikmalayaKota.Simpatik.Web.Models;
 
 namespace TasikmalayaKota.Simpatik.Web.Services.tsIdentifikasi.Models
 {
+    public class sumberDanaModel
+    {
+        public int nilai { get; set; }
+        public string smbrdn { get; set; }
+    }
+
     public class tsIdentifikasiModel : DefaultTableDBStructureModel
     {
-        public tsIdentifikasiModel(){}
+        public tsIdentifikasiModel()
+        {
+            sumberdanal = new List<sumberDanaModel>();
+        }
 
         public int ididetifikasi { get; set; }
         public string lembaga { get; set; }
@@ -79,5 +88,10 @@ namespace TasikmalayaKota.Simpatik.Web.Services.tsIdentifikasi.Models
         public string nomorsuratijin { get; set; }
         public string barangmaterialluar { get; set; }
         public string luaspembebasanlahan { get; set; }
+        public int paket { get; set; }
+
+        #region sumberDana
+        public IList<sumberDanaModel> sumberdanal { get; set; }
+        #endregion
     }
 }

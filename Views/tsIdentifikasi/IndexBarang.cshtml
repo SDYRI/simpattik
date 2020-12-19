@@ -1,13 +1,15 @@
 ﻿@{
     ViewData["Title"] = ViewBag.Title;
+    List<object> detailPaket = new List<object>();
+    detailPaket.Add(new { type = "userstatus", buttonOption = new { content = " Identifikasi", cssClass = "e-flat e-details feather icon-layers" } }); // custom
 }
 <ejs-toast id="toast_default" created="createdToasObj">
     <e-toast-position X="Right"></e-toast-position>
 </ejs-toast>
 
-<ejs-grid id="Grid" actionComplete="CompleteAction" height="490" allowPaging="true" allowResizing="true" allowSorting="true" allowReordering="true" allowGrouping="false"
+<ejs-grid id="Grid" actionComplete="CompleteAction" actionBegin="BeginAction" height="490" allowPaging="true" allowResizing="true" allowSorting="true" allowReordering="true" allowGrouping="false"
           toolbar="@(new List<string>() { "Search", "Add", "Edit", "Delete","Update","Cancel" , "ExcelExport" ,"PdfExport" })" allowFiltering="true" allowSelection="true" 
-          created="createdGrid" allowExcelExport="true" allowPdfExport="true" toolbarClick="toolbarAction" query="@ViewBag.queryIdentifikasi">
+          created="createdGrid" allowExcelExport="true" allowPdfExport="true" toolbarClick="toolbarAction" query="@ViewBag.queryIdentifikasi" commandClick="cmdDetail">
     <e-grid-pagesettings pageCount="5" pageSize="12" pageSizes="true"></e-grid-pagesettings>
     <e-grid-filterSettings type="Menu"></e-grid-filterSettings>
     <e-grid-editSettings allowAdding="true" allowDeleting="true" allowEditing="true" mode="Dialog" template='#templatedialog' showDeleteConfirmDialog="true"></e-grid-editSettings>
@@ -16,6 +18,7 @@
         <e-grid-column field="ididetifikasi" headerText="ididetifikasi" isPrimaryKey="true" isIdentity="true" visible="false"></e-grid-column>
         <e-grid-column field="namabrgkerj" headerText="Nama Barang" width="200"></e-grid-column>
         <e-grid-column field="jumlahbarang" headerText="Jumlah Barang" width="200"></e-grid-column>
+        <e-grid-column headerText="Manage Records" width="150" commands="detailPaket"></e-grid-column>
     </e-grid-columns>
 </ejs-grid>
 
@@ -27,8 +30,15 @@
 
     <script type="text/javascript">
         var toastObj;
+        var flag = true;
+        var dataStrngNew;
+
         function createdToasObj() {
             toastObj = this;
+        }
+
+        function cmdDetail(args) {
+            alert(JSON.parse(JSON.stringify(args.rowData)).ididetifikasi)
         }
 
         function onfilteringOPD(e) {
@@ -51,6 +61,22 @@
             query = (e.text !== '' && e.text.length >= 1) ? query.where(new ej.data.Predicate('NamaSubRincian', 'contains', e.text, true).or('KodeSubRincian', 'contains', e.text, true)) : query;
 
             e.updateData(SelectObj.dataSource, query);
+        }
+
+        function BeginAction(args) {
+            if (args.requestType === "save") {
+                // #region Sumber Dana
+                var sumberdanaapbds = new Array();
+                $("#tblSumberDana TBODY TR").each(function () {
+                    var row = $(this);
+                    var sumberdanaapbd = {};
+                    sumberdanaapbd.nilai = row.find("TD").eq(1).html().replace(/\./g, "");
+                    sumberdanaapbd.smbrdn = row.find("TD").eq(0).html();
+                    sumberdanaapbds.push(sumberdanaapbd);
+                });
+                $("#sumberdanaapbd").val(JSON.stringify(sumberdanaapbds));
+                // #endregion Sumber Dana
+            }
         }
 
         function CompleteAction(args) {
@@ -114,6 +140,22 @@
 
         function createdGrid(args) {
             class CustomAdaptor extends ej.data.UrlAdaptor {
+                beforeSend(dataManager, request, ajaxSettings) {
+                    var action = JSON.parse(ajaxSettings.data).action;
+
+                    if (action == 'update' || action == 'remove' || action == 'insert') {
+                        var dataStrng = ajaxSettings.data;
+                        // #region Sumber Dana
+                        var dataSumberdanaapbd = $("#sumberdanaapbd").val();
+                        var dataStrngNew = JSON.parse(dataStrng, (k, v) => k == 'sumberdanaapbd' ? dataSumberdanaapbd : v);
+                        // #endregion Sumber Dana
+
+                        var dataStrngNews = JSON.stringify(dataStrngNew);
+
+                        ajaxSettings.data = dataStrngNews;
+                        ajaxSettings.options.data = dataStrngNews;
+                    }
+                };
                 processResponse(data, ds, query, xhr, request, changes) {
                     if (!ej.base.isNullOrUndefined(data.message)) {
                         if ((data.message.indexOf('BERHASIL DISIMPAN') == -1) && (data.message.indexOf('BERHASIL DIHAPUS') == -1)) {
@@ -128,7 +170,7 @@
                         return data.data;
                     else
                         return data;
-                }
+                };
             }
             var grid = document.querySelector('#Grid').ej2_instances[0];
             grid.dataSource = new ej.data.DataManager({
@@ -156,5 +198,59 @@
                 this.excelExport(exportProperties);
             }
         }
+
+        // #region Sumber Dana
+        function btnSumberDana() {
+            var ddSmbrdn = $("#ddSmbrdn");
+            var txtNilai = $("#txtNilai");
+
+            if (ddSmbrdn.val() != "" && txtNilai.val() != "") {
+                //Get the reference of the Table's TBODY element.
+                var tBody = $("#tblSumberDana > TBODY")[0];
+
+                //Add Row.
+                var row = tBody.insertRow(-1);
+
+                //Add Sumberdana.
+                var cell = $(row.insertCell(-1));
+                cell.html(ddSmbrdn.val());
+
+                //Add Nilai.
+                cell = $(row.insertCell(-1));
+                cell.html(txtNilai.val().replace(/\,/g, "."));
+
+                //Add Remove.
+                cell = $(row.insertCell(-1));
+                var btnRemove = document.createElement("button");
+                btnRemove.setAttribute("type", "button");
+                btnRemove.setAttribute("class", "btn btn-icon rounded-circle btn-outline-primary");
+                btnRemove.setAttribute("onclick", "btnSumberDanaRemove(this)");
+                cell.append(btnRemove);
+
+                var btnIclass = document.createElement("i");
+                btnIclass.setAttribute("class", "feather icon-minus-circle");
+                btnRemove.appendChild(btnIclass);
+
+                //Clear the TextBoxes.
+                ddSmbrdn.val("");
+                txtNilai.val("");
+            }
+            else {
+                paramToast('Error Identifikasi Kebutuhan Barang', 'e-toast-danger', 'Harap lengkapi data sumber dana');
+            }
+        };
+
+        function btnSumberDanaRemove(button) {
+            //Determine the reference of the Row using the Button.
+            var row = $(button).closest("TR");
+            if (confirm("Apakah anda yakin akan menghapus sumber dana ini?")) {
+                //Get the reference of the Table.
+                var table = $("#tblSumberDana")[0];
+
+                //Delete the Table row using it's Index.
+                table.deleteRow(row[0].rowIndex);
+            }
+        };
+        // #endregion Sumber Dana
     </script>
 }
