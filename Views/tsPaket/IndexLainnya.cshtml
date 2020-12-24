@@ -1,0 +1,148 @@
+﻿@{
+    ViewData["Title"] = ViewBag.Title;
+    List<object> detailPaket = new List<object>();
+    detailPaket.Add(new { type = "userstatus", buttonOption = new { content = " Identifikasi", cssClass = "e-flat e-details feather icon-layers" } }); // custom
+}
+<ejs-toast id="toast_default" created="createdToasObj">
+    <e-toast-position X="Right"></e-toast-position>
+</ejs-toast>
+
+<ejs-grid id="Grid" actionComplete="CompleteAction" height="490" allowPaging="true" allowResizing="true" allowSorting="true" allowReordering="true" allowGrouping="false"
+          toolbar="@(new List<string>() { "Search", "Add", "Edit", "Delete","Update","Cancel" , "ExcelExport" ,"PdfExport" })" allowFiltering="true" allowSelection="true"
+          created="createdGrid" allowExcelExport="true" allowPdfExport="true" toolbarClick="toolbarAction" query="@ViewBag.queryPaket" commandClick="cmdDetail">
+    <e-grid-pagesettings pageCount="5" pageSize="12" pageSizes="true"></e-grid-pagesettings>
+    <e-grid-filterSettings type="Menu"></e-grid-filterSettings>
+    <e-grid-editSettings allowAdding="true" allowDeleting="true" allowEditing="true" mode="Dialog" template='#templatedialog' showDeleteConfirmDialog="true"></e-grid-editSettings>
+    <e-grid-selectionsettings type="Single"></e-grid-selectionsettings>
+    <e-grid-columns>
+        <e-grid-column field="idpaket" headerText="idpaket" isPrimaryKey="true" isIdentity="true" visible="false"></e-grid-column>
+        <e-grid-column field="nmpaket" headerText="Nama Paket"></e-grid-column>
+        <e-grid-column headerText="Manage Records" width="150" commands="detailPaket"></e-grid-column>
+    </e-grid-columns>
+</ejs-grid>
+
+@section SectionControls{
+    <script id='templatedialog' type="text/x-template">
+        <div id="Tempdialog">
+        </div>
+    </script>
+
+    <script type="text/javascript">
+        var toastObj;
+        var flag = true;
+        var dataStrngNew;
+
+        function createdToasObj() {
+            toastObj = this;
+        }
+
+        function cmdDetail(args) {
+            //alert(JSON.parse(JSON.stringify(args.rowData)).ididetifikasi)
+            window.location.href = "/Identifikasi/IndexBarang/" + JSON.parse(JSON.stringify(args.rowData)).idpaket;
+        }
+
+        function CompleteAction(args) {
+            var grid = document.querySelector('#Grid').ej2_instances[0];
+
+            if (args.requestType === 'beginEdit' || args.requestType === 'add') {
+                var dialog = args.dialog;
+                dialog.height = 750;
+                // change the header of the dialog
+                dialog.header = args.requestType === 'beginEdit' ? 'Edit Paket Kebutuhan Jasa Lainnya' : 'New Paket Kebutuhan Jasa Lainnya';
+
+                let spinner = ej.popups.createSpinner({ target: args.dialog.element });
+                ej.popups.showSpinner(args.dialog.element);
+                var ajax = new ej.base.Ajax({
+                    url: "@Url.Action("PaketBarangTemplate", "Paket")", //render the partial view
+                    type: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify({ value: args.rowData })
+                });
+                ajax.send().then(function (data) {
+                    appendElement(data, args.form); //Render the edit form with selected record
+                    args.form.elements.namedItem('nmpaket').focus();
+                    //if (typeof args.rowData['idbrgkerj'] != 'undefined') {
+                    //    var dropObject = document.getElementById("idbrgkerj").ej2_instances[0];
+                    //    dropObject.value = args.rowData['idbrgkerj'];
+                    //    dropObject.text = args.rowData['namabrgkerj'];
+                    //}
+                    ej.popups.hideSpinner(args.dialog.element);
+                }).catch(function (xhr) {
+                    console.log(xhr);
+                    ej.popups.hideSpinner(args.dialog.element);
+                });
+            }
+            else if (args.requestType === 'save') {
+                grid.refresh();
+                grid.closeEdit();
+            }
+        }
+
+        function appendElement(elementString, form) {
+            form.querySelector("#Tempdialog").innerHTML = elementString;
+            var script = document.createElement('script');
+            script.type = "text/javascript";
+            var serverScript = form.querySelector("#Tempdialog").querySelector('script');
+            script.textContent = serverScript.innerHTML;
+            document.head.appendChild(script);
+            serverScript.remove();
+        }
+
+        function paramToast(title, cssclass, message) {
+            setTimeout(
+                () => {
+                    var toastObj = document.getElementById('toast_default').ej2_instances[0];
+                    toastObj.title = title;
+                    toastObj.cssClass = cssclass;
+                    toastObj.content = message;
+                    toastObj.target = document.body;
+                    toastObj.show();
+                }, 500);
+        }
+
+        function createdGrid(args) {
+            class CustomAdaptor extends ej.data.UrlAdaptor {
+                processResponse(data, ds, query, xhr, request, changes) {
+                    if (!ej.base.isNullOrUndefined(data.message)) {
+                        if ((data.message.indexOf('BERHASIL DISIMPAN') == -1) && (data.message.indexOf('BERHASIL DIHAPUS') == -1)) {
+                            paramToast('Error Paket Kebutuhan Barang', 'e-toast-danger', data.message);
+                        }
+                        else {
+                            paramToast('Paket Kebutuhan Barang', 'e-toast-success', data.message);
+                        }
+                    }
+
+                    if (!ej.base.isNullOrUndefined(data.data))
+                        return data.data;
+                    else
+                        return data;
+                };
+            }
+            var grid = document.querySelector('#Grid').ej2_instances[0];
+            grid.dataSource = new ej.data.DataManager({
+                url: "/Paket/PaketAll",
+                crudUrl: "/Paket/PaketCrud",
+                adaptor: new CustomAdaptor()
+            });
+        }
+
+        function toolbarAction(args) {
+            var fileName = "Paket Kebutuhan Barang";
+
+            if (args.item.id === this.element.id + '_pdfexport') {
+                var exportProperties = {
+                    fileName: fileName + ".pdf"
+                };
+
+                this.pdfExport(exportProperties);
+            }
+            if (args.item.id === this.element.id + '_excelexport') {
+                var exportProperties = {
+                    fileName: fileName + ".xlsx"
+                };
+
+                this.excelExport(exportProperties);
+            }
+        }
+    </script>
+}

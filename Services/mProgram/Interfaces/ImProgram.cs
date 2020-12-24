@@ -9,7 +9,6 @@ namespace TasikmalayaKota.Simpatik.Web.Services.mProgram.Interfaces
 {
     public interface ImProgram
     {
-        IList<mProgramModel> GetAll();
         IList<mProgramModel> GetAll(int posisi);
         DatabaseActionResultModel Create(mProgramModel model);
         DatabaseActionResultModel Update(mProgramModel model);

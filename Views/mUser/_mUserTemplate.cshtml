@@ -12,6 +12,21 @@
         </div>
         <div class="form-group col-md-6">
             <div class="e-float-input e-control-wrapper">
+                <ejs-textbox id="NipUser" cssClass="e-input" placeholder="Nip User" floatLabelType="Always" ejs-for="@Model.NipUser"></ejs-textbox>
+            </div>
+        </div>
+        <div class="form-group col-md-6">
+            <div class="e-float-input e-control-wrapper">
+                <ejs-textbox id="JabatanUser" cssClass="e-input" placeholder="Jabatan User" floatLabelType="Always" ejs-for="@Model.JabatanUser"></ejs-textbox>
+            </div>
+        </div>
+        <div class="form-group col-md-6">
+            <div class="e-float-input e-control-wrapper">
+                <ejs-textbox id="GolonganUser" cssClass="e-input" placeholder="Golongan User" floatLabelType="Always" ejs-for="@Model.GolonganUser"></ejs-textbox>
+            </div>
+        </div>
+        <div class="form-group col-md-6">
+            <div class="e-float-input e-control-wrapper">
                 <ejs-textbox id="UserName" cssClass="e-input" placeholder="User Name" floatLabelType="Always" ejs-for="@Model.UserName"></ejs-textbox>
             </div>
         </div>
@@ -22,9 +37,25 @@
         </div>
         <div class="form-group col-md-6">
             <div class="e-float-input e-control-wrapper">
+                <ejs-dropdownlist id="ListIdOpdUser1" placeholder="Pilih PA/PPK" popupHeight="200px" allowFiltering="true" filtering="onfilteringOPD" sortOrder="@ViewBag.sortDropdown" query="@ViewBag.queryOPD" floatLabelType="Always">
+                    <e-data-manager url="/OpdMaster/OpdMasterSelect" adaptor="UrlAdaptor" crossDomain="true"></e-data-manager>
+                    <e-dropdownlist-fields text="NamaSubOpd" value="IdOpd"></e-dropdownlist-fields>
+                </ejs-dropdownlist>
+            </div>
+        </div>
+        <div class="form-group col-md-6">
+            <div class="e-float-input e-control-wrapper">
                 <ejs-dropdownlist id="ListIdOpdUser" placeholder="Pilih OPD" popupHeight="200px" allowFiltering="true" filtering="onfilteringOPD" sortOrder="@ViewBag.sortDropdown" query="@ViewBag.queryOPD" floatLabelType="Always">
                     <e-data-manager url="/OpdMaster/OpdMasterSelect" adaptor="UrlAdaptor" crossDomain="true"></e-data-manager>
-                    <e-dropdownlist-fields text="NamaOpd" value="IdOpd"></e-dropdownlist-fields>
+                    <e-dropdownlist-fields text="NamaSubOpd" value="IdOpd"></e-dropdownlist-fields>
+                </ejs-dropdownlist>
+            </div>
+        </div>
+        <div class="form-group col-md-6">
+            <div class="e-float-input e-control-wrapper">
+                <ejs-dropdownlist id="ListIdOpdUser2" placeholder="Pilih Tipe User" popupHeight="200px" allowFiltering="true" filtering="onfilteringOPD" sortOrder="@ViewBag.sortDropdown" query="@ViewBag.queryOPD" floatLabelType="Always">
+                    <e-data-manager url="/OpdMaster/OpdMasterSelect" adaptor="UrlAdaptor" crossDomain="true"></e-data-manager>
+                    <e-dropdownlist-fields text="NamaSubOpd" value="IdOpd"></e-dropdownlist-fields>
                 </ejs-dropdownlist>
             </div>
         </div>

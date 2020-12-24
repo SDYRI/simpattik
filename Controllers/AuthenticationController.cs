@@ -50,6 +50,9 @@ namespace TasikmalayaKota.Simpatik.Web.Controllers
                     HttpContext.Session.SetString("IDAkun", Result.IDAkun);
                     HttpContext.Session.SetInt32("Tipe", Result.Tipe);
                     HttpContext.Session.SetString("Nama", Result.Nama);
+                    HttpContext.Session.SetString("Nip", Result.Nip);
+                    HttpContext.Session.SetString("Jabatan", Result.Jabatan);
+                    HttpContext.Session.SetString("Golongan", Result.Golongan);
                     HttpContext.Session.SetString("Opd", Result.Opd);
                     HttpContext.Session.SetString("OpdName", Result.OpdName);
                     HttpContext.Session.SetString("TahunAktif", Result.TahunAktif);
@@ -70,6 +73,9 @@ namespace TasikmalayaKota.Simpatik.Web.Controllers
             {
                 IDAkun = HttpContext.Session.GetString("IDAkun"),
                 Nama = HttpContext.Session.GetString("Nama"),
+                Nip = HttpContext.Session.GetString("Nip"),
+                Jabatan = HttpContext.Session.GetString("Jabatan"),
+                Golongan = HttpContext.Session.GetString("Golongan"),
                 Tipe = HttpContext.Session.GetInt32("Tipe"),
             });
         }

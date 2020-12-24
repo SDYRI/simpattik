@@ -1,0 +1,48 @@
+﻿@model TasikmalayaKota.Simpatik.Web.Services.mProgram.Models.mProgramModel
+@{
+    ViewData["Title"] = ViewBag.Title;
+}
+
+<div>
+    <div class="form-row">
+        <div class="form-group col-md-12">
+            <div class="e-float-input e-control-wrapper">
+                <ejs-dropdownlist id="IdUrusan" placeholder="Pilih Urusan" popupHeight="200px" allowFiltering="true" filtering="onfilteringOPD" sortOrder="@ViewBag.sortDropdown"
+                                  query="@ViewBag.queryOPD" floatLabelType="Always" blur="onblurOpdKegiatan">
+                    <e-data-manager url="/UrusanMaster/UrusanMasterAll" adaptor="UrlAdaptor" crossDomain="true"></e-data-manager>
+                    <e-dropdownlist-fields text="NamaSubUrusan" value="IdUrusan"></e-dropdownlist-fields>
+                </ejs-dropdownlist>
+            </div>
+        </div>
+        <div class="form-group col-md-12">
+            <div class="e-float-input e-control-wrapper">
+                <ejs-dropdownlist id="IdParentU" placeholder="Pilih Program" popupHeight="200px" allowFiltering="true" filtering="onfilteringProgram" sortOrder="@ViewBag.sortDropdown"
+                                  query="@ViewBag.queryProgram" floatLabelType="Always" enabled="false" change="onchangeKegiatan">
+                    <e-data-manager url="/ProgramMaster/ProgramMasterAll" adaptor="UrlAdaptor" crossDomain="true"></e-data-manager>
+                    <e-dropdownlist-fields text="NamaSubkegiatan" value="IdProgram"></e-dropdownlist-fields>
+                </ejs-dropdownlist>
+            </div>
+        </div>
+        <div class="form-group col-md-12">
+            <div class="e-float-input e-control-wrapper">
+                <ejs-dropdownlist id="IdParent" placeholder="Pilih Kegiatan" popupHeight="200px" allowFiltering="true" filtering="onfilteringKegiatan" sortOrder="@ViewBag.sortDropdown"
+                                  query="@ViewBag.queryKegiatan" floatLabelType="Always" enabled="false">
+                    <e-data-manager url="/ProgramMaster/ProgramMasterAll" adaptor="UrlAdaptor" crossDomain="true"></e-data-manager>
+                    <e-dropdownlist-fields text="NamaSubkegiatan" value="IdProgram"></e-dropdownlist-fields>
+                </ejs-dropdownlist>
+            </div>
+        </div>
+        <div class="form-group col-md-6">
+            <div class="e-float-input e-control-wrapper">
+                <ejs-textbox id="KodeSubkegiatan" cssClass="e-input" placeholder="Kode Sub Kegiatan" floatLabelType="Always" ejs-for="@Model.KodeSubkegiatan"></ejs-textbox>
+            </div>
+        </div>
+        <div class="form-group col-md-6">
+            <div class="e-float-input e-control-wrapper">
+                <ejs-textbox id="NamaSubkegiatan" cssClass="e-input" placeholder="Nama Sub Kegiatan" floatLabelType="Always" ejs-for="@Model.NamaSubkegiatan"></ejs-textbox>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ejs-scripts></ejs-scripts>

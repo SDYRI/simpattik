@@ -9,7 +9,6 @@ namespace TasikmalayaKota.Simpatik.Web.Services.mOpd.Interfaces
 {
     public interface ImOpd
     {
-        IList<mOpdModel> GetAll();
         IList<mOpdModel> GetAll(int posisi);
         DatabaseActionResultModel Create(mOpdModel model);
         DatabaseActionResultModel Update(mOpdModel model);

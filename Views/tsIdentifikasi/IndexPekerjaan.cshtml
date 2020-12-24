@@ -41,12 +41,26 @@
             e.updateData(OPDObj.dataSource, query);
         }
 
+        function onfilteringKodeRekening(e) {
+            var SelectObj = document.getElementById("idbrgkerj").ej2_instances[0];
+            if (e.text == '' && e.text.length < 3) {
+                e.updateData(SelectObj.dataSource);
+            }
+
+            let query = new ej.data.Query().select(['NamaSubRincian', 'IdKodeRekening']).take(6).addParams('IdPosisi', 6);
+            query = (e.text !== '' && e.text.length >= 1) ? query.where(new ej.data.Predicate('NamaSubRincian', 'contains', e.text, true).or('KodeSubRincian', 'contains', e.text, true)) : query;
+
+            e.updateData(SelectObj.dataSource, query);
+        }
+
         function CompleteAction(args) {
+            var grid = document.querySelector('#Grid').ej2_instances[0];
+
             if (args.requestType === 'beginEdit' || args.requestType === 'add') {
                 var dialog = args.dialog;
                 dialog.height = 650;
                 // change the header of the dialog
-                dialog.header = args.requestType === 'beginEdit' ? 'Edit Identifikasi Kebutuhan' : 'New Identifikasi Kebutuhan';
+                dialog.header = args.requestType === 'beginEdit' ? 'Edit Identifikasi Kebutuhan Pekerjaan Kontruksi' : 'New Identifikasi Kebutuhan Pekerjaan Kontruksi';
 
                 let spinner = ej.popups.createSpinner({ target: args.dialog.element });
                 ej.popups.showSpinner(args.dialog.element);
@@ -59,11 +73,20 @@
                 ajax.send().then(function (data) {
                     appendElement(data, args.form); //Render the edit form with selected record
                     args.form.elements.namedItem('fungsi').focus();
+                    if (typeof args.rowData['idbrgkerj'] != 'undefined') {
+                        var dropObject = document.getElementById("idbrgkerj").ej2_instances[0];
+                        dropObject.value = args.rowData['idbrgkerj'];
+                        dropObject.text = args.rowData['namabrgkerj'];
+                    }
                     ej.popups.hideSpinner(args.dialog.element);
                 }).catch(function (xhr) {
                     console.log(xhr);
                     ej.popups.hideSpinner(args.dialog.element);
                 });
+            }
+            else if (args.requestType === 'save') {
+                grid.refresh();
+                grid.closeEdit();
             }
         }
 

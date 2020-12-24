@@ -26,12 +26,10 @@ namespace simpat1k.Controllers
         public ActionResult Index()
         {
             ViewBag.Title = "Master OPD";
-            ViewBag.headerUrusan = new TabHeader { Text = "Urusan" };
             ViewBag.headerOrganisasi = new TabHeader { Text = "Organisasi" };
             ViewBag.headerSubOrganisasi = new TabHeader { Text = "Sub Organisasi" };
-            ViewBag.queryUrusan = "new ej.data.Query().addParams('IdPosisi', 1)";
-            ViewBag.queryOpd = "new ej.data.Query().addParams('IdPosisi', 2)";
-            ViewBag.querySubOpd = "new ej.data.Query().addParams('IdPosisi', 3)";
+            ViewBag.queryOpd = "new ej.data.Query().addParams('IdPosisi', 1)";
+            ViewBag.querySubOpd = "new ej.data.Query().addParams('IdPosisi', 2)";
             return View();
         }
 
@@ -69,7 +67,7 @@ namespace simpat1k.Controllers
         [Route("OpdMasterSelect")]
         public IActionResult SelectDatasource([FromBody] mOpdModel dm)
         {
-            IEnumerable DataSource = _mOpd.GetAll();
+            IEnumerable DataSource = _mOpd.GetAll(0);
             DataOperations operation = new DataOperations();
             if (dm.Search != null && dm.Search.Count > 0)
             {
@@ -143,7 +141,7 @@ namespace simpat1k.Controllers
         {
             var valTemplate = _mOpd.GetAll(1);
             ViewBag.datasource = valTemplate;
-            ViewBag.Title = "Master Urusan " + value.Value.NamaOpd;
+            ViewBag.Title = "Master Opd " + value.Value.NamaOpd;
 
             return PartialView("_mOpdTemplateUrusan", value.Value);
         }
@@ -155,8 +153,8 @@ namespace simpat1k.Controllers
             var valTemplate = _mOpd.GetAll(2);
             ViewBag.datasource = valTemplate;
             ViewBag.sortDropdown = "Ascending";
-            ViewBag.queryUrusan = "new ej.data.Query().select(['NamaSubOpd', 'IdOpd']).take(10).requiresCount().addParams('IdPosisi', 1)";
-            ViewBag.Title = "Master Urusan " + value.Value.NamaOpd;
+            ViewBag.queryUrusan = "new ej.data.Query().select(['NamaSubUrusan', 'IdUrusan']).take(10).requiresCount().addParams('IdPosisi', 2)";
+            ViewBag.Title = "Master Opd " + value.Value.NamaOpd;
 
             return PartialView("_mOpdTemplateOpd", value.Value);
         }
@@ -168,9 +166,9 @@ namespace simpat1k.Controllers
             var valTemplate = _mOpd.GetAll(3);
             ViewBag.datasource = valTemplate;
             ViewBag.sortDropdown = "Ascending";
-            ViewBag.queryUrusan = "new ej.data.Query().select(['NamaSubOpd', 'IdOpd']).take(10).requiresCount().addParams('IdPosisi', 1)";
+            ViewBag.queryUrusan = "new ej.data.Query().select(['NamaSubOpd', 'IdOpd']).take(10).requiresCount().addParams('IdPosisi', 2)";
             ViewBag.queryOPD = "new ej.data.Query().select(['NamaSubOpd', 'IdOpd']).take(10).requiresCount().addParams('IdPosisi', 2)";
-            ViewBag.Title = "Master Urusan " + value.Value.NamaOpd;
+            ViewBag.Title = "Master Opd " + value.Value.NamaOpd;
 
             return PartialView("_mOpdTemplateSubOpd", value.Value);
         }
