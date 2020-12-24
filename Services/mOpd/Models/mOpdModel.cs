@@ -13,12 +13,12 @@ namespace TasikmalayaKota.Simpatik.Web.Services.mOpd.Models
 
         public int IdOpd { get; set; }
         public int IdLembaga { get; set; }
-        public string KodeUrusan { get; set; }
         public string KodeOpd { get; set; }
         public string KodeSubOpd { get; set; }
-        public string NamaUrusan { get; set; }
         public string NamaOpd { get; set; }
         public string NamaSubOpd { get; set; }
+        public string ListIdUrusan { get; set; }
+        public string ListUrusan { get; set; }
         public int IdParentU { get; set; }
         public int IdParent { get; set; }
         public int IdPosisi { get; set; }

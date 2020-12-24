@@ -21,52 +21,6 @@ namespace TasikmalayaKota.Simpatik.Web.Services.mKodeRekening.DALS
             UID = httpContextAccessor.HttpContext.Session.GetString("IDAkun");
         }
 
-        public IList<mKodeRekeningModel> GetAll()
-        {
-            List<mKodeRekeningModel> Result = new List<mKodeRekeningModel>();
-            try
-            {
-                using (NpgsqlConnection sqlConnection = new NpgsqlConnection(ConnectionString))
-                using (NpgsqlCommand sqlCommand = new NpgsqlCommand("public.stp_mrekeninggetall", sqlConnection))
-                {
-                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
-
-                    sqlConnection.Open();
-                    using (NpgsqlDataReader dataReader = sqlCommand.ExecuteReader())
-                    {
-                        while (dataReader.Read())
-                        {
-                            Result.Add(new mKodeRekeningModel()
-                            {
-                                IdKodeRekening = (dataReader["idrekening"].GetType() != typeof(DBNull) ? (int)dataReader["idrekening"] : 0),
-                                KodeAkun = (dataReader["kodeakun"].GetType() != typeof(DBNull) ? (string)dataReader["kodeakun"] : ""),
-                                KodeKelompok = (dataReader["kodekelompok"].GetType() != typeof(DBNull) ? (string)dataReader["kodekelompok"] : ""),
-                                KodeJenis = (dataReader["kodejenis"].GetType() != typeof(DBNull) ? (string)dataReader["kodejenis"] : ""),
-                                KodeObjek = (dataReader["kodeobjek"].GetType() != typeof(DBNull) ? (string)dataReader["kodeobjek"] : ""),
-                                KodeRincian = (dataReader["koderincian"].GetType() != typeof(DBNull) ? (string)dataReader["koderincian"] : ""),
-                                KodeSubRincian = (dataReader["kodesubrincian"].GetType() != typeof(DBNull) ? (string)dataReader["kodesubrincian"] : ""),
-                                KodeRekening = (dataReader["koderekening"].GetType() != typeof(DBNull) ? (string)dataReader["koderekening"] : ""),
-                                NamaAkun = (dataReader["namaakun"].GetType() != typeof(DBNull) ? (string)dataReader["namaakun"] : ""),
-                                NamaKelompok = (dataReader["namakelompok"].GetType() != typeof(DBNull) ? (string)dataReader["namakelompok"] : ""),
-                                NamaJenis = (dataReader["namajenis"].GetType() != typeof(DBNull) ? (string)dataReader["namajenis"] : ""),
-                                NamaObjek = (dataReader["namaobjek"].GetType() != typeof(DBNull) ? (string)dataReader["namaobjek"] : ""),
-                                NamaRincian = (dataReader["namarincian"].GetType() != typeof(DBNull) ? (string)dataReader["namarincian"] : ""),
-                                NamaSubRincian = (dataReader["namasubrincian"].GetType() != typeof(DBNull) ? (string)dataReader["namasubrincian"] : ""),
-                                IdParent = (dataReader["idparent"].GetType() != typeof(DBNull) ? (int)dataReader["idparent"] : 0),
-                                IdPosisi = (dataReader["idposisi"].GetType() != typeof(DBNull) ? (int)dataReader["idposisi"] : 0),
-                            });
-                        }
-                    }
-                }
-            }
-            catch (Exception Exception)
-            {
-                throw Exception;
-            }
-
-            return Result;
-        }
-
         public IList<mKodeRekeningModel> GetAll(int posisi)
         {
             List<mKodeRekeningModel> Result = new List<mKodeRekeningModel>();

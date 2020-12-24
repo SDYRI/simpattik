@@ -74,7 +74,7 @@ namespace simpat1k.Controllers
         [Route("KodeRekeningMasterSelect")]
         public IActionResult SelectDatasource([FromBody] mKodeRekeningModel dm)
         {
-            IEnumerable DataSource = _mKodeRekening.GetAll();
+            IEnumerable DataSource = _mKodeRekening.GetAll(0);
             DataOperations operation = new DataOperations();
             if (dm.Search != null && dm.Search.Count > 0)
             {

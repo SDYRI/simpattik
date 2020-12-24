@@ -36,8 +36,8 @@
             if (e.text == '' && e.text.length < 3) {
                 e.updateData(OPDObj.dataSource);
             }
-            let query = new ej.data.Query().select(['NamaOpd', 'IdOpd']).take(6);
-            query = (e.text !== '' && e.text.length >= 3) ? query.where('NamaOpd', 'contains', e.text, true) : query;
+            let query = new ej.data.Query().select(['NamaSubOpd', 'IdOpd']).take(6);
+            query = (e.text !== '' && e.text.length >= 3) ? query.where('NamaSubOpd', 'contains', e.text, true) : query;
             e.updateData(OPDObj.dataSource, query);
         }
 
@@ -46,7 +46,7 @@
 
             if (args.requestType === 'beginEdit' || args.requestType === 'add') {
                 var dialog = args.dialog;
-                dialog.height = 300;
+                dialog.height = 600;
                 // change the header of the dialog
                 dialog.header = args.requestType === 'beginEdit' ? 'Edit ' + args.rowData['NamaUser'] : 'New User';
                 args.form.ej2_instances[0].addRules('NamaUser', { required: [true, 'Silahkan Isi Nama User'], minLength: [3, 'Nama User Minimal 3 huruf'] });

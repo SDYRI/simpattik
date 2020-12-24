@@ -7,10 +7,10 @@
     <div class="form-row">
         <div class="form-group col-md-12">
             <div class="e-float-input e-control-wrapper">
-                <ejs-dropdownlist id="IdOpd" placeholder="Pilih OPD" popupHeight="200px" allowFiltering="true" filtering="onfilteringOPD" sortOrder="@ViewBag.sortDropdown"
+                <ejs-dropdownlist id="IdUrusan" placeholder="Pilih Urusan" popupHeight="200px" allowFiltering="true" filtering="onfilteringOPD" sortOrder="@ViewBag.sortDropdown"
                                   query="@ViewBag.queryOPD" floatLabelType="Always" blur="onblurOpd">
-                    <e-data-manager url="/OpdMaster/OpdMasterSelect" adaptor="UrlAdaptor" crossDomain="true"></e-data-manager>
-                    <e-dropdownlist-fields text="NamaOpd" value="IdOpd"></e-dropdownlist-fields>
+                    <e-data-manager url="/UrusanMaster/UrusanMasterAll" adaptor="UrlAdaptor" crossDomain="true"></e-data-manager>
+                    <e-dropdownlist-fields text="NamaSubUrusan" value="IdUrusan"></e-dropdownlist-fields>
                 </ejs-dropdownlist>
             </div>
         </div>

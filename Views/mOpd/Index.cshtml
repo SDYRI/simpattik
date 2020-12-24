@@ -1,28 +1,11 @@
 ﻿@{
     ViewData["Title"] = ViewBag.Title;
-    var Urusan = "#urusan";
     var Organisasi = "#organisasi";
     var SubOrganisasi = "#suborganisasi";
 }
 <ejs-toast id="toast_default" created="createdToasObj">
     <e-toast-position X="Right"></e-toast-position>
 </ejs-toast>
-
-<div id="urusan" style="display: none">
-    <ejs-grid id="GridUrusan" actionComplete="CompleteActionUrusan" height="490" allowPaging="true" allowResizing="true" allowSorting="true" allowReordering="true" allowGrouping="false"
-              toolbar="@(new List<string>() { "Search", "Add", "Edit", "Delete","Update","Cancel" , "ExcelExport" ,"PdfExport"})" allowFiltering="true" allowSelection="true"
-              allowExcelExport="true" allowPdfExport="true" toolbarClick="toolbarAction" created="createdGridUrusan" query="@ViewBag.queryUrusan">
-        <e-grid-pagesettings pageCount="5" pageSize="12" pageSizes="true"></e-grid-pagesettings>
-        <e-grid-filterSettings type="Menu"></e-grid-filterSettings>
-        <e-grid-editSettings allowAdding="true" allowDeleting="true" allowEditing="true" mode="Dialog" template='#templatedialog' showDeleteConfirmDialog="true"></e-grid-editSettings>
-        <e-grid-selectionsettings type="Single"></e-grid-selectionsettings>
-        <e-grid-columns>
-            <e-grid-column field="IdOpd" headerText="IdOpd" isPrimaryKey="true" isIdentity="true" visible="false"></e-grid-column>
-            <e-grid-column field="KodeSubOpd" width="50" headerText="Kode Urusan"></e-grid-column>
-            <e-grid-column field="NamaSubOpd" width="150" headerText="Nama Urusan"></e-grid-column>
-        </e-grid-columns>
-    </ejs-grid>
-</div>
 
 <div id="organisasi" style="display: none">
     <ejs-grid id="GridOpd" actionComplete="CompleteActionOpd" height="490" allowPaging="true" allowResizing="true" allowSorting="true" allowReordering="true" allowGrouping="false"
@@ -34,9 +17,8 @@
         <e-grid-selectionsettings type="Single"></e-grid-selectionsettings>
         <e-grid-columns>
             <e-grid-column field="IdOpd" headerText="IdOpd" isPrimaryKey="true" isIdentity="true" visible="false"></e-grid-column>
-            <e-grid-column field="KodeOpd" width="50" headerText="Kode Urusan"></e-grid-column>
+            <e-grid-column field="ListUrusan" width="150" headerText="Nama Urusan"></e-grid-column>
             <e-grid-column field="KodeSubOpd" width="50" headerText="Kode OPD"></e-grid-column>
-            @*<e-grid-column field="NamaOpd" width="150" headerText="Nama Urusan"></e-grid-column>*@
             <e-grid-column field="NamaSubOpd" width="150" headerText="Nama OPD"></e-grid-column>
         </e-grid-columns>
     </ejs-grid>
@@ -52,11 +34,9 @@
         <e-grid-selectionsettings type="Single"></e-grid-selectionsettings>
         <e-grid-columns>
             <e-grid-column field="IdOpd" headerText="IdOpd" isPrimaryKey="true" isIdentity="true" visible="false"></e-grid-column>
-            <e-grid-column field="KodeUrusan" width="50" headerText="Kode Urusan"></e-grid-column>
+            <e-grid-column field="ListUrusan" width="150" headerText="Nama Urusan"></e-grid-column>
             <e-grid-column field="KodeOpd" width="50" headerText="Kode OPD"></e-grid-column>
             <e-grid-column field="KodeSubOpd" width="50" headerText="Kode Sub OPD"></e-grid-column>
-            @*<e-grid-column field="NamaUrusan" width="150" headerText="Nama Urusan"></e-grid-column>
-            <e-grid-column field="NamaOpd" width="150" headerText="Nama OPD"></e-grid-column>*@
             <e-grid-column field="NamaSubOpd" width="150" headerText="Nama Sub OPD"></e-grid-column>
         </e-grid-columns>
     </ejs-grid>
@@ -64,7 +44,6 @@
 
 <ejs-tab id="adaptiveTab" heightAdjustMode="None" height="250px" created="tabOPD">
     <e-tab-tabitems>
-        <e-tab-tabitem header="ViewBag.headerUrusan" content="@Urusan"></e-tab-tabitem>
         <e-tab-tabitem header="ViewBag.headerOrganisasi" content="@Organisasi"></e-tab-tabitem>
         <e-tab-tabitem header="ViewBag.headerSubOrganisasi" content="@SubOrganisasi"></e-tab-tabitem>
     </e-tab-tabitems>
@@ -100,68 +79,6 @@
                 }, 500);
         }
 
-        //#region urusan
-        function CompleteActionUrusan(args) {
-            var grid = document.querySelector('#GridUrusan').ej2_instances[0];
-
-            if (args.requestType === 'beginEdit' || args.requestType === 'add') {
-                var dialog = args.dialog;
-                dialog.height = 220;
-                // change the header of the dialog
-                dialog.header = args.requestType === 'beginEdit' ? 'Edit ' + args.rowData['NamaSubOpd'] : 'New Urusan';
-                args.form.ej2_instances[0].addRules('KodeSubOpd', { required: [true, 'Silahkan Isi Kode Urusan'], minLength: [1, 'Kode Urusan Minimal 1 huruf'] });
-                args.form.ej2_instances[0].addRules('NamaSubOpd', { required: [true, 'Silahkan Isi Nama Urusan'], minLength: [3, 'Nama Urusan Minimal 3 huruf'] });
-
-                let spinner = ej.popups.createSpinner({ target: args.dialog.element });
-                ej.popups.showSpinner(args.dialog.element);
-                var ajax = new ej.base.Ajax({
-                    url: "@Url.Action("OpdMasterTemplateUrusan", "OpdMaster")", //render the partial view
-                    type: "POST",
-                    contentType: "application/json",
-                    data: JSON.stringify({ value: args.rowData })
-                });
-                ajax.send().then(function (data) {
-                    appendElement(data, args.form); //Render the edit form with selected record
-                    args.form.elements.namedItem('KodeSubOpd').focus();
-                    ej.popups.hideSpinner(args.dialog.element);
-                }).catch(function (xhr) {
-                    console.log(xhr);
-                    ej.popups.hideSpinner(args.dialog.element);
-                });
-            }
-            else if (args.requestType === 'save') {
-                grid.refresh();
-                grid.closeEdit();
-            }
-        }
-
-        function createdGridUrusan(args) {
-            class CustomAdaptorUrusan extends ej.data.UrlAdaptor {
-                processResponse(data, ds, query, xhr, request, changes) {
-                    if (!ej.base.isNullOrUndefined(data.message)) {
-                        if ((data.message.indexOf('BERHASIL DISIMPAN') == -1) && (data.message.indexOf('BERHASIL DIHAPUS') == -1)) {
-                            paramToast('Error Master Urusan', 'e-toast-danger', data.message);
-                        }
-                        else {
-                            paramToast('Master Urusan', 'e-toast-success', data.message);
-                        }
-                    }
-
-                    if (!ej.base.isNullOrUndefined(data.data))
-                        return data.data;
-                    else
-                        return data;
-                }
-            }
-            var grid = document.querySelector('#GridUrusan').ej2_instances[0];
-            grid.dataSource = new ej.data.DataManager({
-                url: "/OpdMaster/OpdMasterAll",
-                crudUrl: "/OpdMaster/OpdMasterCrud",
-                adaptor: new CustomAdaptorUrusan()
-            });
-        }
-        //#endregion urusan
-
         //#region opd
         function CompleteActionOpd(args) {
             var grid = document.querySelector('#GridOpd').ej2_instances[0];
@@ -171,7 +88,7 @@
                 dialog.height = 320;
                 // change the header of the dialog
                 dialog.header = args.requestType === 'beginEdit' ? 'Edit ' + args.rowData['NamaSubOpd'] : 'New OPD';
-                args.form.ej2_instances[0].addRules('IdParent', { required: [true, 'Silahkan Pilih Urusan'] });
+                args.form.ej2_instances[0].addRules('ListIdUrusan', { required: [true, 'Silahkan Pilih Urusan'] });
                 args.form.ej2_instances[0].addRules('KodeSubOpd', { required: [true, 'Silahkan Isi Kode OPD'], minLength: [1, 'Kode OPD Minimal 1 huruf'] });
                 args.form.ej2_instances[0].addRules('NamaSubOpd', { required: [true, 'Silahkan Isi Nama OPD'], minLength: [3, 'Nama OPD Minimal 3 huruf'] });
 
@@ -186,10 +103,11 @@
                 ajax.send().then(function (data) {
                     appendElement(data, args.form); //Render the edit form with selected record
                     args.form.elements.namedItem('KodeSubOpd').focus();
-                    if (typeof args.rowData['IdParent'] != 'undefined') {
-                        var dropObject = document.getElementById("IdParent").ej2_instances[0];
-                        dropObject.value = args.rowData['IdParent'];
-                        dropObject.text = args.rowData['NamaOpd'];
+
+                    if (typeof args.rowData['ListIdUrusan'] != 'undefined') {
+                        var dropObject = document.getElementById("ListIdUrusan").ej2_instances[0];
+                        dropObject.value = args.rowData['ListIdUrusan'];
+                        dropObject.text = args.rowData['ListUrusan'];
                     }
                     ej.popups.hideSpinner(args.dialog.element);
                 }).catch(function (xhr) {
@@ -230,18 +148,13 @@
         }
 
         function onfilteringUrusan(e) {
-            var OPDObj = document.getElementById("IdParent").ej2_instances[0];
+            var OPDObj = document.getElementById("ListIdUrusan").ej2_instances[0];
             if (e.text == '' && e.text.length < 3) {
                 e.updateData(OPDObj.dataSource);
             }
-            //let predicateQuery = new ej.data.Predicate('NamaSubOpd', 'contains', e.text, true);
-            //predicateQuery = predicateQuery.and('IdPosisi', 'contains', 1);
-
-            let query = new ej.data.Query().select(['NamaSubOpd', 'IdOpd']).take(6).addParams('IdPosisi', 1);
-            query = (e.text !== '' && e.text.length >= 3) ? query.where('NamaSubOpd', 'contains', e.text, true) : query;
-
-            //query = (e.text !== '' && e.text.length >= 3) ? query.where(predicateQuery) : query;
-            //query = query.where(predicateQuery);
+            
+            let query = new ej.data.Query().select(['NamaSubUrusan', 'IdUrusan']).take(6).addParams('IdPosisi', 2);
+            query = (e.text !== '' && e.text.length >= 3) ? query.where('NamaSubUrusan', 'contains', e.text, true) : query;
 
             e.updateData(OPDObj.dataSource, query);
         }
@@ -256,7 +169,7 @@
                 dialog.height = 420;
                 // change the header of the dialog
                 dialog.header = args.requestType === 'beginEdit' ? 'Edit ' + args.rowData['NamaSubOpd'] : 'New Sub Opd';
-                args.form.ej2_instances[0].addRules('IdParentU', { required: [true, 'Silahkan Pilih Urusan'] });
+                args.form.ej2_instances[0].addRules('ListIdUrusan', { required: [true, 'Silahkan Pilih Urusan'] });
                 args.form.ej2_instances[0].addRules('IdParent', { required: [true, 'Silahkan Pilih OPD'] });
                 args.form.ej2_instances[0].addRules('KodeSubOpd', { required: [true, 'Silahkan Isi Kode Sub Opd'], minLength: [1, 'Kode Sub OPD Minimal 1 huruf'] });
                 args.form.ej2_instances[0].addRules('NamaSubOpd', { required: [true, 'Silahkan Isi Nama Sub Opd'], minLength: [3, 'Nama Sub OPD Minimal 3 huruf'] });
@@ -272,10 +185,10 @@
                 ajax.send().then(function (data) {
                     appendElement(data, args.form); //Render the edit form with selected record
                     args.form.elements.namedItem('KodeSubOpd').focus();
-                    if (typeof args.rowData['IdParentU'] != 'undefined') {
-                        var dropObject = document.getElementById("IdParentU").ej2_instances[0];
-                        dropObject.value = args.rowData['IdParentU'];
-                        dropObject.text = args.rowData['NamaUrusan'];
+                    if (typeof args.rowData['ListIdUrusan'] != 'undefined') {
+                        var dropObject = document.getElementById("ListIdUrusan").ej2_instances[0];
+                        dropObject.value = args.rowData['ListIdUrusan'];
+                        dropObject.text = args.rowData['ListUrusan'];
                     }
                     if (typeof args.rowData['IdParent'] != 'undefined') {
                         var dropObject = document.getElementById("IdParent").ej2_instances[0];
@@ -321,23 +234,23 @@
         }
 
         function onfilteringOpd(e) {
-            var UrusanOBJ = document.getElementById('IdParentU').ej2_instances[0];
+            var UrusanOBJ = document.getElementById('ListIdUrusan').ej2_instances[0];
             var OPDObj = document.getElementById("IdParent").ej2_instances[0];
             if (e.text == '' && e.text.length < 3) {
                 e.updateData(OPDObj.dataSource);
             }
 
-            let query = new ej.data.Query().select(['NamaSubOpd', 'IdOpd']).take(6).addParams('IdPosisi', 2);
-            query = (e.text !== '' && e.text.length >= 3) ? query.where(new ej.data.Predicate('NamaSubOpd', 'contains', e.text, true).and('IdParent', 'equal', UrusanOBJ.value, true)) : query.where('IdParent', 'equal', UrusanOBJ.value, true);
+            let query = new ej.data.Query().select(['NamaSubOpd', 'IdOpd']).take(6).addParams('IdPosisi', 1);
+            query = (e.text !== '' && e.text.length >= 3) ? query.where(new ej.data.Predicate('NamaSubOpd', 'contains', e.text, true).and('ListIdUrusan', 'equal', UrusanOBJ.value, true)) : query.where('ListIdUrusan', 'equal', UrusanOBJ.value, true);
 
             e.updateData(OPDObj.dataSource, query);
         }
 
         function onchangeUrusan() {
-            var UrusanOBJ = document.getElementById('IdParentU').ej2_instances[0];
+            var UrusanOBJ = document.getElementById('ListIdUrusan').ej2_instances[0];
             var OPDObj = document.getElementById('IdParent').ej2_instances[0];
             OPDObj.enabled = true;
-            var OPDObjQuery = new ej.data.Query().where('IdParent', 'equal', UrusanOBJ.value).addParams('IdPosisi', 2);
+            var OPDObjQuery = new ej.data.Query().where('ListIdUrusan', 'equal', UrusanOBJ.value).addParams('IdPosisi', 1);
             OPDObj.query = OPDObjQuery;
             OPDObj.text = null;
             OPDObj.dataBind();
@@ -357,10 +270,7 @@
         function toolbarAction(args) {
             var fileNameGrid = "";
 
-            if (this.element.id === "GridUrusan") {
-                fileNameGrid = "Urusan";
-            }
-            else if (this.element.id === "GridOpd") {
+            if (this.element.id === "GridOpd") {
                 fileNameGrid = "Organisasi";
             }
             else if (this.element.id === "GridSubOpd") {

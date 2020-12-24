@@ -9,7 +9,6 @@ namespace TasikmalayaKota.Simpatik.Web.Services.mKodeRekening.Interfaces
 {
     public interface ImKodeRekening
     {
-        IList<mKodeRekeningModel> GetAll();
         IList<mKodeRekeningModel> GetAll(int posisi);
         DatabaseActionResultModel Create(mKodeRekeningModel model);
         DatabaseActionResultModel Update(mKodeRekeningModel model);

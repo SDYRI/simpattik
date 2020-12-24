@@ -68,7 +68,7 @@ namespace simpat1k.Controllers
         [Route("ProgramMasterSelect")]
         public IActionResult SelectDatasource([FromBody] mProgramModel dm)
         {
-            IEnumerable DataSource = _mProgram.GetAll();
+            IEnumerable DataSource = _mProgram.GetAll(0);
             DataOperations operation = new DataOperations();
             if (dm.Search != null && dm.Search.Count > 0)
             {

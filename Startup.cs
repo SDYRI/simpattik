@@ -33,6 +33,10 @@ using TasikmalayaKota.Simpatik.Web.Services.mProgram.Interfaces;
 using TasikmalayaKota.Simpatik.Web.Services.mProgram.DALS;
 using TasikmalayaKota.Simpatik.Web.Services.mKodeRekening.DALS;
 using TasikmalayaKota.Simpatik.Web.Services.mKodeRekening.Interfaces;
+using TasikmalayaKota.Simpatik.Web.Services.mUrusan.Interfaces;
+using TasikmalayaKota.Simpatik.Web.Services.mUrusan.DALS;
+using TasikmalayaKota.Simpatik.Web.Services.tsPaket.Interfaces;
+using TasikmalayaKota.Simpatik.Web.Services.tsPaket.DALS;
 
 namespace TasikmalayaKota.Simpatik.Web
 {
@@ -98,6 +102,8 @@ namespace TasikmalayaKota.Simpatik.Web
                 .AddTransient<ItsIdentifikasi, tsIdentifikasiDAL>()
                 .AddTransient<ImProgram, mProgramDAL>()
                 .AddTransient<ImKodeRekening, mKodeRekeningDAL>()
+                .AddTransient<ImUrusan, mUrusanDAL>()
+                .AddTransient<ItsPaket, tsPaketDAL>()
             ;
         }
 

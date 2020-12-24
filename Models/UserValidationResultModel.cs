@@ -16,6 +16,9 @@ namespace TasikmalayaKota.Simpatik.Web.Models
         public string IDReff { get; set; }
         public string IDMor { get; set; }
         public string Nama { get; set; }
+        public string Nip { get; set; }
+        public string Jabatan { get; set; }
+        public string Golongan { get; set; }
         public int Tipe { get; set; }
         public string Username { get; set; }
         public string UserIdUsman { get; set; }

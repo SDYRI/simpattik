@@ -1,0 +1,51 @@
+﻿@model TasikmalayaKota.Simpatik.Web.Services.tsPaket.Models.tsPaketModel
+@{
+    ViewData["Title"] = ViewBag.Title;
+}
+
+<div>
+    <div class="form-row">
+        <div class="form-group col-md-12">
+            <div class="e-float-input e-control-wrapper">
+                <div class="e-float-input e-control-wrapper e-input e-valid-input">
+                    @Html.TextBoxFor(x => Model.opd, new { @class = "e-control e-textbox e-lib", @readonly = "readonly" })
+                    @*@Html.TextBoxFor(x => Model.jeniskebutuhan, new { @class = "e-control e-textbox e-lib", @readonly = "readonly", @hidden = "hidden" })*@
+                    <input id="paket" data-val="true" class="e-control e-textbox e-lib" type="text" role="textbox" hidden>
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text e-label-top" id="label_opd">OPD</label>
+                </div>
+            </div>
+            <div class="e-float-input e-control-wrapper">
+                <div class="e-float-input e-control-wrapper e-input e-valid-input">
+                    @Html.TextBoxFor(x => Model.pejabat, new { @class = "e-control e-textbox e-lib", @readonly = "readonly" })
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text e-label-top" id="label_pejabat">Pejabat Pembuat Komitmen</label>
+                </div>
+            </div>
+            <div class="e-float-input e-control-wrapper">
+                <ejs-textbox id="nmpaket" cssClass="e-input" placeholder="Nama Paket" floatLabelType="Always" ejs-for="@Model.nmpaket"></ejs-textbox>
+            </div>
+            <div class="e-float-input e-control-wrapper">
+                <ejs-textbox id="uraiankrj" cssClass="e-input" placeholder="Uraian Pekerjaan" floatLabelType="Always" ejs-for="@Model.uraiankrj"></ejs-textbox>
+            </div>
+            <div class="e-float-input e-control-wrapper">
+                <ejs-textbox id="spesifikasi" cssClass="e-input" placeholder="Spesifikasi Pekerjaan" floatLabelType="Always" ejs-for="@Model.spesifikasi"></ejs-textbox>
+            </div>
+            <div class="e-float-input e-control-wrapper">
+                <ejs-combobox id="krtbrg" dataSource="@ViewBag.yatidak" cssClass="e-input" placeholder="Produk Dalam Negeri" floatLabelType="Always" ejs-for="@Model.krtbrg">
+                    <e-combobox-fields text="Text" value="Value"></e-combobox-fields>
+                </ejs-combobox>
+            </div>
+            <div class="e-float-input e-control-wrapper">
+                <ejs-combobox id="krtpelaku" dataSource="@ViewBag.yatidak" cssClass="e-input" placeholder="Usaha Kecil" floatLabelType="Always" ejs-for="@Model.krtpelaku">
+                    <e-combobox-fields text="Text" value="Value"></e-combobox-fields>
+                </ejs-combobox>
+            </div>
+            <div class="e-float-input e-control-wrapper">
+                <ejs-textbox id="mtdpemilihan" cssClass="e-input" placeholder="Metode Pemilihan" floatLabelType="Always" ejs-for="@Model.mtdpemilihan"></ejs-textbox>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ejs-scripts></ejs-scripts>

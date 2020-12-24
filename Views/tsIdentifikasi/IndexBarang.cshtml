@@ -18,7 +18,7 @@
         <e-grid-column field="ididetifikasi" headerText="ididetifikasi" isPrimaryKey="true" isIdentity="true" visible="false"></e-grid-column>
         <e-grid-column field="namabrgkerj" headerText="Nama Barang" width="200"></e-grid-column>
         <e-grid-column field="jumlahbarang" headerText="Jumlah Barang" width="200"></e-grid-column>
-        <e-grid-column headerText="Manage Records" width="150" commands="detailPaket"></e-grid-column>
+        @*<e-grid-column headerText="Manage Records" width="150" commands="detailPaket"></e-grid-column>*@
     </e-grid-columns>
 </ejs-grid>
 
@@ -66,15 +66,15 @@
         function BeginAction(args) {
             if (args.requestType === "save") {
                 // #region Sumber Dana
-                var sumberdanaapbds = new Array();
+                var sumberdanas = new Array();
                 $("#tblSumberDana TBODY TR").each(function () {
                     var row = $(this);
-                    var sumberdanaapbd = {};
-                    sumberdanaapbd.nilai = row.find("TD").eq(1).html().replace(/\./g, "");
-                    sumberdanaapbd.smbrdn = row.find("TD").eq(0).html();
-                    sumberdanaapbds.push(sumberdanaapbd);
+                    var sumberdana = {};
+                    sumberdana.nilai = row.find("TD").eq(1).html().replace(/\./g, "");
+                    sumberdana.smbrdn = row.find("TD").eq(0).html();
+                    sumberdanas.push(sumberdana);
                 });
-                $("#sumberdanaapbd").val(JSON.stringify(sumberdanaapbds));
+                $("#sumberdana").val(JSON.stringify(sumberdanas));
                 // #endregion Sumber Dana
             }
         }
@@ -146,8 +146,8 @@
                     if (action == 'update' || action == 'remove' || action == 'insert') {
                         var dataStrng = ajaxSettings.data;
                         // #region Sumber Dana
-                        var dataSumberdanaapbd = $("#sumberdanaapbd").val();
-                        var dataStrngNew = JSON.parse(dataStrng, (k, v) => k == 'sumberdanaapbd' ? dataSumberdanaapbd : v);
+                        var dataSumberdana = $("#sumberdana").val();
+                        var dataStrngNew = JSON.parse(dataStrng, (k, v) => k == 'sumberdana' ? dataSumberdana : v);
                         // #endregion Sumber Dana
 
                         var dataStrngNews = JSON.stringify(dataStrngNew);

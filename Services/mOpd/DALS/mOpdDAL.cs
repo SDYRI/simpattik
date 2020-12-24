@@ -23,46 +23,7 @@ namespace TasikmalayaKota.Simpatik.Web.Services.mOpd.DALS
             OPD = httpContextAccessor.HttpContext.Session.GetString("Opd");
         }
 
-        public IList<mOpdModel> GetAll()
-        {
-            List<mOpdModel> Result = new List<mOpdModel>();
-            try
-            {
-                using (NpgsqlConnection sqlConnection = new NpgsqlConnection(ConnectionString))
-                using (NpgsqlCommand sqlCommand = new NpgsqlCommand("public.stp_mopdgetall", sqlConnection))
-                {
-                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
-
-                    sqlConnection.Open();
-                    using (NpgsqlDataReader dataReader = sqlCommand.ExecuteReader())
-                    {
-                        while (dataReader.Read())
-                        {
-                            Result.Add(new mOpdModel()
-                            {
-                                IdOpd = (dataReader["idopd"].GetType() != typeof(DBNull) ? (int)dataReader["idopd"] : 0),
-                                KodeUrusan = (dataReader["kodeurusan"].GetType() != typeof(DBNull) ? (string)dataReader["kodeurusan"] : ""),
-                                KodeOpd = (dataReader["kodeopd"].GetType() != typeof(DBNull) ? (string)dataReader["kodeopd"] : ""),
-                                KodeSubOpd = (dataReader["kodesubopd"].GetType() != typeof(DBNull) ? (string)dataReader["kodesubopd"] : ""),
-                                NamaUrusan = (dataReader["namaurusan"].GetType() != typeof(DBNull) ? (string)dataReader["namaurusan"] : ""),
-                                NamaOpd = (dataReader["namaopd"].GetType() != typeof(DBNull) ? (string)dataReader["namaopd"] : ""),
-                                NamaSubOpd = (dataReader["namasubopd"].GetType() != typeof(DBNull) ? (string)dataReader["namasubopd"] : ""),
-                                IdParent = (dataReader["idparent"].GetType() != typeof(DBNull) ? (int)dataReader["idparent"] : 0),
-                                IdPosisi = (dataReader["idposisi"].GetType() != typeof(DBNull) ? (int)dataReader["idposisi"] : 0),
-                            });
-                        }
-                    }
-                }
-            }
-            catch (Exception Exception)
-            {
-                throw Exception;
-            }
-
-            return Result;
-        }
-
-        public IList<mOpdModel> GetAll(int posisi)
+       public IList<mOpdModel> GetAll(int posisi)
         {
             List<mOpdModel> Result = new List<mOpdModel>();
             try
@@ -81,12 +42,12 @@ namespace TasikmalayaKota.Simpatik.Web.Services.mOpd.DALS
                             Result.Add(new mOpdModel()
                             {
                                 IdOpd = (dataReader["idopd"].GetType() != typeof(DBNull) ? (int)dataReader["idopd"] : 0),
-                                KodeUrusan = (dataReader["kodeurusan"].GetType() != typeof(DBNull) ? (string)dataReader["kodeurusan"] : ""),
                                 KodeOpd = (dataReader["kodeopd"].GetType() != typeof(DBNull) ? (string)dataReader["kodeopd"] : ""),
                                 KodeSubOpd = (dataReader["kodesubopd"].GetType() != typeof(DBNull) ? (string)dataReader["kodesubopd"] : ""),
-                                NamaUrusan = (dataReader["namaurusan"].GetType() != typeof(DBNull) ? (string)dataReader["namaurusan"] : ""),
                                 NamaOpd = (dataReader["namaopd"].GetType() != typeof(DBNull) ? (string)dataReader["namaopd"] : ""),
                                 NamaSubOpd = (dataReader["namasubopd"].GetType() != typeof(DBNull) ? (string)dataReader["namasubopd"] : ""),
+                                ListIdUrusan = (dataReader["listidurusanopd"].GetType() != typeof(DBNull) ? (string)dataReader["listidurusanopd"] : ""),
+                                ListUrusan = (dataReader["listurusanopd"].GetType() != typeof(DBNull) ? (string)dataReader["listurusanopd"] : ""),
                                 IdParent = (dataReader["idparent"].GetType() != typeof(DBNull) ? (int)dataReader["idparent"] : 0),
                                 IdPosisi = (dataReader["idposisi"].GetType() != typeof(DBNull) ? (int)dataReader["idposisi"] : 0),
                             });
@@ -115,6 +76,7 @@ namespace TasikmalayaKota.Simpatik.Web.Services.mOpd.DALS
                     sqlCommand.Parameters.AddWithValue("_idpropd", ParamD.IdParent == 0 ? ParamD.IdParentU : ParamD.IdParent);
                     sqlCommand.Parameters.AddWithValue("_ktkdopd", ParamD.KodeSubOpd);
                     sqlCommand.Parameters.AddWithValue("_posisi", ParamD.IdPosisi);
+                    sqlCommand.Parameters.AddWithValue("_idurusan", ParamD.ListIdUrusan);
                     sqlCommand.Parameters.AddWithValue("_uid", UID);
                     sqlConnection.Open();
                     using (NpgsqlDataReader dataReader = sqlCommand.ExecuteReader())
@@ -149,6 +111,7 @@ namespace TasikmalayaKota.Simpatik.Web.Services.mOpd.DALS
                     sqlCommand.Parameters.AddWithValue("_idpropd", ParamD.IdParent);
                     sqlCommand.Parameters.AddWithValue("_ktkdopd", ParamD.KodeSubOpd);
                     sqlCommand.Parameters.AddWithValue("_posisi", ParamD.IdPosisi);
+                    sqlCommand.Parameters.AddWithValue("_idurusan", ParamD.ListIdUrusan);
                     sqlCommand.Parameters.AddWithValue("_uid", UID);
                     sqlConnection.Open();
                     using (NpgsqlDataReader dataReader = sqlCommand.ExecuteReader())
