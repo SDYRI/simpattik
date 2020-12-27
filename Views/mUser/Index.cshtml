@@ -69,6 +69,12 @@
                         dropObject.value = args.rowData['ListIdOpdUser'];
                         dropObject.text = args.rowData['ListOpdUser'];
                     }
+                    var dropObjectPappk = document.getElementById("PappkIdUser").ej2_instances[0];
+                    dropObjectPappk.value = args.rowData['PappkIdUser'];
+                    dropObjectPappk.text = args.rowData['PappkUser'];
+                    var dropObjectTipe = document.getElementById("TipeIdUser").ej2_instances[0];
+                    dropObjectTipe.value = args.rowData['TipeIdUser'];
+                    dropObjectTipe.text = args.rowData['TipeUser'];
                     //$('#ListIdOpdUser_hidden').append($('<option selected>').val(args.rowData['ListIdOpdUser']).text(args.rowData['ListOpdUser']));
                     //$('#ListIdOpdUser').val(args.rowData['ListOpdUser']);
 

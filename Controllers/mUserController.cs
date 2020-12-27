@@ -9,6 +9,7 @@ using System.Dynamic;
 using TasikmalayaKota.Simpatik.Web.Services.mOpd.Interfaces;
 using TasikmalayaKota.Simpatik.Web.Models;
 using System;
+using TasikmalayaKota.Simpatik.Web.Services.Middleware.Models;
 
 namespace simpat1k.Controllers
 {
@@ -110,6 +111,11 @@ namespace simpat1k.Controllers
             ViewBag.queryOPD = "new ej.data.Query().select(['NamaOpd', 'IdOpd']).take(10).requiresCount()";
             ViewBag.Title = "Master User " + value.Value.NamaUser;
             ViewBag.id = 2; //value.Value.ListIdOpdUser;
+
+            #region Combobox
+            ViewBag.pappk = new enumDataModel().PaPpk();
+            ViewBag.tipeuser = new enumDataModel().TipeUser();
+            #endregion Combobox
 
             return PartialView("_mUserTemplate", value.Value);
         }

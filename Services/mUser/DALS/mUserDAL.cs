@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using TasikmalayaKota.Simpatik.Web.Models;
 using TasikmalayaKota.Simpatik.Web.Services.mUser.Interfaces;
 using TasikmalayaKota.Simpatik.Web.Services.mUser.Models;
+using TasikmalayaKota.Simpatik.Web.Services.Middleware.Models;
 
 namespace TasikmalayaKota.Simpatik.Web.Services.mUser.DALS
 {
@@ -24,6 +25,8 @@ namespace TasikmalayaKota.Simpatik.Web.Services.mUser.DALS
         public IList<mUserModel> GetAll()
         {
             List<mUserModel> Result = new List<mUserModel>();
+            List<enumDataModel> tipeUser = new enumDataModel().TipeUser();
+            List<enumDataModel> pappkUser = new enumDataModel().PaPpk();
             try
             {
                 using (NpgsqlConnection sqlConnection = new NpgsqlConnection(ConnectionString))
@@ -42,6 +45,10 @@ namespace TasikmalayaKota.Simpatik.Web.Services.mUser.DALS
                                 IdUser = (dataReader["iduser"].GetType() != typeof(DBNull) ? (string)dataReader["iduser"] : ""),
                                 NamaUser = (dataReader["namauser"].GetType() != typeof(DBNull) ? (string)dataReader["namauser"] : ""),
                                 NipUser = (dataReader["nipuser"].GetType() != typeof(DBNull) ? (string)dataReader["nipuser"] : ""),
+                                TipeIdUser = (dataReader["typeuser"].GetType() != typeof(DBNull) ? (int)dataReader["typeuser"] : 0),
+                                TipeUser = tipeUser.FirstOrDefault(x => x.Value == ((int)dataReader["typeuser"]).ToString())?.Text,
+                                PappkIdUser = (dataReader["pappkuser"].GetType() != typeof(DBNull) ? (int)dataReader["pappkuser"] : 0),
+                                PappkUser = pappkUser.FirstOrDefault(x => x.Value == ((int)dataReader["pappkuser"]).ToString())?.Text,
                                 JabatanUser = (dataReader["jabatanuser"].GetType() != typeof(DBNull) ? (string)dataReader["jabatanuser"] : ""),
                                 GolonganUser = (dataReader["golonganuser"].GetType() != typeof(DBNull) ? (string)dataReader["golonganuser"] : ""),
                                 UserName = (dataReader["username"].GetType() != typeof(DBNull) ? (string)dataReader["username"] : ""),
@@ -118,7 +125,8 @@ namespace TasikmalayaKota.Simpatik.Web.Services.mUser.DALS
                     sqlCommand.Parameters.AddWithValue("_golonganuser", ParamD.GolonganUser);
                     sqlCommand.Parameters.AddWithValue("_passworduser", ParamD.PasswordUser == null ? "BPBJ123" : ParamD.PasswordUser);
                     sqlCommand.Parameters.AddWithValue("_idopd", ParamD.ListIdOpdUser);
-                    sqlCommand.Parameters.AddWithValue("_tipe", 4);
+                    sqlCommand.Parameters.AddWithValue("_tipe", ParamD.TipeIdUser);
+                    sqlCommand.Parameters.AddWithValue("_pappk", ParamD.PappkIdUser);
                     sqlCommand.Parameters.AddWithValue("_uid", UID);
                     sqlConnection.Open();
                     using (NpgsqlDataReader dataReader = sqlCommand.ExecuteReader())
@@ -157,6 +165,8 @@ namespace TasikmalayaKota.Simpatik.Web.Services.mUser.DALS
                     sqlCommand.Parameters.AddWithValue("_golonganuser", ParamD.GolonganUser);
                     sqlCommand.Parameters.AddWithValue("_passworduser", ParamD.PasswordUser == null ? "BPBJ123" : ParamD.PasswordUser);
                     sqlCommand.Parameters.AddWithValue("_idopd", ParamD.ListIdOpdUser);
+                    sqlCommand.Parameters.AddWithValue("_tipe", ParamD.TipeIdUser);
+                    sqlCommand.Parameters.AddWithValue("_pappk", ParamD.PappkIdUser);
                     sqlCommand.Parameters.AddWithValue("_uid", UID);
                     sqlConnection.Open();
                     using (NpgsqlDataReader dataReader = sqlCommand.ExecuteReader())

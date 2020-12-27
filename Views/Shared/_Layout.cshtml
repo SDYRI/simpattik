@@ -65,7 +65,7 @@
                             <a class="dropdown-toggle nav-link dropdown-user-link" href="#" data-toggle="dropdown">
                                 <div class="user-nav d-sm-flex d-none">
                                     <span class="user-name text-bold-600">@HttpContextAccessor.HttpContext.Session.GetString("Nama")</span>
-                                    @if ((@HttpContextAccessor.HttpContext.Session.GetInt32("Tipe") != 1) && (@HttpContextAccessor.HttpContext.Session.GetInt32("Tipe") != 2))
+                                    @if ((@HttpContextAccessor.HttpContext.Session.GetInt32("Tipe") != 1) && (@HttpContextAccessor.HttpContext.Session.GetInt32("Tipe") != 0))
                                     {
                                         <span class="user-status">@HttpContextAccessor.HttpContext.Session.GetString("OpdName")</span>
                                     }
@@ -136,7 +136,7 @@
                         </li>
                     </ul>
                 </li>
-                @if ((HttpContextAccessor.HttpContext.Session.GetInt32("Tipe") == 1) || (HttpContextAccessor.HttpContext.Session.GetInt32("Tipe") == 2))
+                @if ((HttpContextAccessor.HttpContext.Session.GetInt32("Tipe") == 1) || (HttpContextAccessor.HttpContext.Session.GetInt32("Tipe") == 0))
                 {
                     <li class="nav-item">
                         <a href="#"><i class="feather icon-folder"></i><span class="menu-title">Pemrograman</span></a>
