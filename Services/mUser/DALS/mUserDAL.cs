@@ -8,28 +8,43 @@ using System.Threading.Tasks;
 using TasikmalayaKota.Simpatik.Web.Models;
 using TasikmalayaKota.Simpatik.Web.Services.mUser.Interfaces;
 using TasikmalayaKota.Simpatik.Web.Services.mUser.Models;
+using TasikmalayaKota.Simpatik.Web.Services.Middleware.Models;
+using System.Text;
+using System.Security.Cryptography;
 
 namespace TasikmalayaKota.Simpatik.Web.Services.mUser.DALS
 {
     public class mUserDAL : ImUser
     {
         private readonly string ConnectionString;
+        private readonly string PAPPK;
         private readonly string UID;
+        private readonly string OPD;
+        private readonly string TAHUN;
         public mUserDAL(IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
         {
             ConnectionString = configuration.GetConnectionString("SimpatikConnection");
+            PAPPK = httpContextAccessor.HttpContext.Session.GetString("Pappk");
             UID = httpContextAccessor.HttpContext.Session.GetString("IDAkun");
+            OPD = httpContextAccessor.HttpContext.Session.GetString("Opd");
+            TAHUN = httpContextAccessor.HttpContext.Session.GetString("TahunAktif");
         }
 
         public IList<mUserModel> GetAll()
         {
             List<mUserModel> Result = new List<mUserModel>();
+            List<enumDataModel> tipeUser = new enumDataModel().TipeUser();
+            List<enumDataModel> pappkUser = new enumDataModel().PaPpk();
+
+            Int32 _pappk = 3;
             try
             {
                 using (NpgsqlConnection sqlConnection = new NpgsqlConnection(ConnectionString))
                 using (NpgsqlCommand sqlCommand = new NpgsqlCommand("public.stp_musergetall", sqlConnection))
                 {
                     sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                    sqlCommand.Parameters.AddWithValue("_iddtopd", PAPPK == "0" ? "0" : OPD);
+                    sqlCommand.Parameters.AddWithValue("_pappk", Int32.Parse(PAPPK) == 0 ? 0 : _pappk);
 
                     sqlConnection.Open();
                     using (NpgsqlDataReader dataReader = sqlCommand.ExecuteReader())
@@ -42,6 +57,10 @@ namespace TasikmalayaKota.Simpatik.Web.Services.mUser.DALS
                                 IdUser = (dataReader["iduser"].GetType() != typeof(DBNull) ? (string)dataReader["iduser"] : ""),
                                 NamaUser = (dataReader["namauser"].GetType() != typeof(DBNull) ? (string)dataReader["namauser"] : ""),
                                 NipUser = (dataReader["nipuser"].GetType() != typeof(DBNull) ? (string)dataReader["nipuser"] : ""),
+                                TipeIdUser = (dataReader["typeuser"].GetType() != typeof(DBNull) ? (int)dataReader["typeuser"] : 0),
+                                TipeUser = tipeUser.FirstOrDefault(x => x.Value == ((int)dataReader["typeuser"]).ToString())?.Text,
+                                PappkIdUser = (dataReader["pappkuser"].GetType() != typeof(DBNull) ? (int)dataReader["pappkuser"] : 0),
+                                PappkUser = pappkUser.FirstOrDefault(x => x.Value == ((int)dataReader["pappkuser"]).ToString())?.Text,
                                 JabatanUser = (dataReader["jabatanuser"].GetType() != typeof(DBNull) ? (string)dataReader["jabatanuser"] : ""),
                                 GolonganUser = (dataReader["golonganuser"].GetType() != typeof(DBNull) ? (string)dataReader["golonganuser"] : ""),
                                 UserName = (dataReader["username"].GetType() != typeof(DBNull) ? (string)dataReader["username"] : ""),
@@ -67,14 +86,34 @@ namespace TasikmalayaKota.Simpatik.Web.Services.mUser.DALS
         public UserValidationResultModel UserValidation(UserValidationArgsModel ParamD)
         {
             UserValidationResultModel Result = new UserValidationResultModel();
+            var _value = string.Empty;
+            string hash = string.Empty;
+
             try
             {
+                using (NpgsqlConnection sqlConnection = new NpgsqlConnection(ConnectionString))
+                using (NpgsqlCommand sqlCommand = new NpgsqlCommand("public.stp_saltuser", sqlConnection))
+                {
+                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                    sqlCommand.Parameters.AddWithValue("_uid", ParamD.UserName);
+                    sqlConnection.Open();
+                    _value = sqlCommand.ExecuteScalar().ToString();
+                }
+
+                using (SHA256 sha256Hash = SHA256.Create())
+                {
+                    //From String to byte array
+                    byte[] sourceBytes = Encoding.UTF8.GetBytes("simpattik" + ParamD.UserName + "tasikmalayakota" + ParamD.Password + "bethasolution" + _value);
+                    byte[] hashBytes = sha256Hash.ComputeHash(sourceBytes);
+                    hash = BitConverter.ToString(hashBytes).Replace("-", String.Empty);
+                }
+
                 using (NpgsqlConnection sqlConnection = new NpgsqlConnection(ConnectionString))
                 using (NpgsqlCommand sqlCommand = new NpgsqlCommand("public.stp_validasiuser", sqlConnection))
                 {
                     sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
                     sqlCommand.Parameters.AddWithValue("_username", ParamD.UserName);
-                    sqlCommand.Parameters.AddWithValue("_password", ParamD.Password);
+                    sqlCommand.Parameters.AddWithValue("_password", hash);
                     sqlConnection.Open();
                     using (NpgsqlDataReader dataReader = sqlCommand.ExecuteReader())
                     {
@@ -87,9 +126,11 @@ namespace TasikmalayaKota.Simpatik.Web.Services.mUser.DALS
                             Result.Jabatan = dataReader["jabatanuser"].ToString();
                             Result.Golongan = dataReader["golonganuser"].ToString();
                             Result.Tipe = Int16.Parse(dataReader["type"].ToString());
+                            Result.Urusan = dataReader["listurusanuser"].ToString();
                             Result.Opd = dataReader["listidopduser"].ToString();
                             Result.OpdName = dataReader["listopduser"].ToString();
                             Result.TahunAktif = dataReader["tahunaktif"].ToString();
+                            Result.PaPpk = dataReader["pappkuser"].ToString();
                             Result.Success = Result.IDAkun != string.Empty ? true : false;
                         }
                     }
@@ -105,8 +146,28 @@ namespace TasikmalayaKota.Simpatik.Web.Services.mUser.DALS
         public DatabaseActionResultModel Create(mUserModel ParamD)
         {
             DatabaseActionResultModel Result = new DatabaseActionResultModel();
+            var _value = string.Empty;
+            string hash = string.Empty;
+
             try
             {
+                using (NpgsqlConnection sqlConnection = new NpgsqlConnection(ConnectionString))
+                using (NpgsqlCommand sqlCommand = new NpgsqlCommand("public.stp_saltuser", sqlConnection))
+                {
+                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                    sqlCommand.Parameters.AddWithValue("_uid", "0");
+                    sqlConnection.Open();
+                    _value = sqlCommand.ExecuteScalar().ToString();
+                }
+
+                using (SHA256 sha256Hash = SHA256.Create())
+                {
+                    //From String to byte array
+                    byte[] sourceBytes = Encoding.UTF8.GetBytes("simpattik" + ParamD.UserName + "tasikmalayakota" + ParamD.PasswordUser + "bethasolution" + _value);
+                    byte[] hashBytes = sha256Hash.ComputeHash(sourceBytes);
+                    hash = BitConverter.ToString(hashBytes).Replace("-", String.Empty);
+                }
+
                 using (NpgsqlConnection sqlConnection = new NpgsqlConnection(ConnectionString))
                 using (NpgsqlCommand sqlCommand = new NpgsqlCommand("public.stp_muserinsert", sqlConnection))
                 {
@@ -116,9 +177,11 @@ namespace TasikmalayaKota.Simpatik.Web.Services.mUser.DALS
                     sqlCommand.Parameters.AddWithValue("_nipuser", ParamD.NipUser);
                     sqlCommand.Parameters.AddWithValue("_jabatanuser", ParamD.JabatanUser);
                     sqlCommand.Parameters.AddWithValue("_golonganuser", ParamD.GolonganUser);
-                    sqlCommand.Parameters.AddWithValue("_passworduser", ParamD.PasswordUser == null ? "BPBJ123" : ParamD.PasswordUser);
+                    sqlCommand.Parameters.AddWithValue("_saltuser", _value);
+                    sqlCommand.Parameters.AddWithValue("_passworduser", ParamD.PasswordUser == null ? "BPBJ123" : hash);
                     sqlCommand.Parameters.AddWithValue("_idopd", ParamD.ListIdOpdUser);
-                    sqlCommand.Parameters.AddWithValue("_tipe", 4);
+                    sqlCommand.Parameters.AddWithValue("_tipe", ParamD.TipeIdUser);
+                    sqlCommand.Parameters.AddWithValue("_pappk", ParamD.PappkIdUser);
                     sqlCommand.Parameters.AddWithValue("_uid", UID);
                     sqlConnection.Open();
                     using (NpgsqlDataReader dataReader = sqlCommand.ExecuteReader())
@@ -143,8 +206,28 @@ namespace TasikmalayaKota.Simpatik.Web.Services.mUser.DALS
         public DatabaseActionResultModel Update(mUserModel ParamD)
         {
             DatabaseActionResultModel Result = new DatabaseActionResultModel();
+            var _value = string.Empty;
+            string hash = string.Empty;
+
             try
             {
+                using (NpgsqlConnection sqlConnection = new NpgsqlConnection(ConnectionString))
+                using (NpgsqlCommand sqlCommand = new NpgsqlCommand("public.stp_saltuser", sqlConnection))
+                {
+                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                    sqlCommand.Parameters.AddWithValue("_uid", "0");
+                    sqlConnection.Open();
+                    _value = sqlCommand.ExecuteScalar().ToString();
+                }
+
+                using (SHA256 sha256Hash = SHA256.Create())
+                {
+                    //From String to byte array
+                    byte[] sourceBytes = Encoding.UTF8.GetBytes("simpattik" + ParamD.UserName + "tasikmalayakota" + ParamD.PasswordUser + "bethasolution" + _value);
+                    byte[] hashBytes = sha256Hash.ComputeHash(sourceBytes);
+                    hash = BitConverter.ToString(hashBytes).Replace("-", String.Empty);
+                }
+
                 using (NpgsqlConnection sqlConnection = new NpgsqlConnection(ConnectionString))
                 using (NpgsqlCommand sqlCommand = new NpgsqlCommand("public.stp_muserupdate", sqlConnection))
                 {
@@ -155,8 +238,11 @@ namespace TasikmalayaKota.Simpatik.Web.Services.mUser.DALS
                     sqlCommand.Parameters.AddWithValue("_nipuser", ParamD.NipUser);
                     sqlCommand.Parameters.AddWithValue("_jabatanuser", ParamD.JabatanUser);
                     sqlCommand.Parameters.AddWithValue("_golonganuser", ParamD.GolonganUser);
-                    sqlCommand.Parameters.AddWithValue("_passworduser", ParamD.PasswordUser == null ? "BPBJ123" : ParamD.PasswordUser);
+                    sqlCommand.Parameters.AddWithValue("_saltuser", ParamD.PasswordUser == null ? "BPBJ123" : _value);
+                    sqlCommand.Parameters.AddWithValue("_passworduser", ParamD.PasswordUser == null ? "BPBJ123" : hash);
                     sqlCommand.Parameters.AddWithValue("_idopd", ParamD.ListIdOpdUser);
+                    sqlCommand.Parameters.AddWithValue("_tipe", ParamD.TipeIdUser);
+                    sqlCommand.Parameters.AddWithValue("_pappk", ParamD.PappkIdUser);
                     sqlCommand.Parameters.AddWithValue("_uid", UID);
                     sqlConnection.Open();
                     using (NpgsqlDataReader dataReader = sqlCommand.ExecuteReader())

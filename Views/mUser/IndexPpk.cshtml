@@ -5,7 +5,7 @@
     <e-toast-position X="Right"></e-toast-position>
 </ejs-toast>
 
-<ejs-grid id="Grid" actionComplete="CompleteAction" height="490" allowPaging="true" allowResizing="true" allowSorting="true" allowReordering="true" allowGrouping="false" 
+<ejs-grid id="Grid" actionComplete="CompleteAction" height="490" allowPaging="true" allowResizing="true" allowSorting="true" allowReordering="true" allowGrouping="false"
           toolbar="@(new List<string>() { "Search", "Add", "Edit", "Delete","Update","Cancel" })" allowFiltering="true" allowSelection="true" created="createdGrid">
     <e-grid-pagesettings pageSize="12" />
     <e-grid-filterSettings type="Menu"></e-grid-filterSettings>
@@ -15,7 +15,6 @@
         <e-grid-column field="IdUser" headerText="IdUser" isPrimaryKey="true" isIdentity="true" visible="false"></e-grid-column>
         <e-grid-column field="NamaUser" width="150" headerText="Nama User"></e-grid-column>
         <e-grid-column field="UserName" headerText="User Name" width="100"></e-grid-column>
-        <e-grid-column field="PappkUser" headerText="PA/ PPK" width="100"></e-grid-column>
         <e-grid-column field="ListOpdUser" headerText="Opd"></e-grid-column>
     </e-grid-columns>
 </ejs-grid>
@@ -27,19 +26,9 @@
     </script>
 
     <script type="text/javascript">
-        var toastObj; 
+        var toastObj;
         function createdToasObj() {
             toastObj = this;
-        }
-
-        function onfilteringOPD(e) {
-            var OPDObj = document.getElementById("ListIdOpdUser").ej2_instances[0];
-            if (e.text == '' && e.text.length < 3) {
-                e.updateData(OPDObj.dataSource);
-            }
-            let query = new ej.data.Query().select(['NamaSubOpd', 'IdOpd']).take(6);
-            query = (e.text !== '' && e.text.length >= 3) ? query.where('NamaSubOpd', 'contains', e.text, true) : query;
-            e.updateData(OPDObj.dataSource, query);
         }
 
         function CompleteAction(args) {
@@ -47,17 +36,16 @@
 
             if (args.requestType === 'beginEdit' || args.requestType === 'add') {
                 var dialog = args.dialog;
-                dialog.height = 600;
+                dialog.height = 400;
                 // change the header of the dialog
                 dialog.header = args.requestType === 'beginEdit' ? 'Edit ' + args.rowData['NamaUser'] : 'New User';
                 args.form.ej2_instances[0].addRules('NamaUser', { required: [true, 'Silahkan Isi Nama User'], minLength: [3, 'Nama User Minimal 3 huruf'] });
                 args.form.ej2_instances[0].addRules('UserName', { required: [true, 'Silahkan Isi User Name'], minLength: [3, 'User Name Minimal 3 huruf'] });
-                args.form.ej2_instances[0].addRules('ListIdOpdUser', { required: [true, 'Silahkan Pilih OPD'] });
 
                 let spinner = ej.popups.createSpinner({ target: args.dialog.element });
                 ej.popups.showSpinner(args.dialog.element);
                 var ajax = new ej.base.Ajax({
-                    url: "@Url.Action("UserMasterTemplate", "UserMaster")", //render the partial view
+                    url: "@Url.Action("UserMasterTemplatePpk", "UserMaster")", //render the partial view
                     type: "POST",
                     contentType: "application/json",
                     data: JSON.stringify({ value: args.rowData })
@@ -65,19 +53,6 @@
                 ajax.send().then(function (data) {
                     appendElement(data, args.form); //Render the edit form with selected record
                     args.form.elements.namedItem('NamaUser').focus();
-                    if (typeof args.rowData['ListIdOpdUser'] != 'undefined') {
-                        var dropObject = document.getElementById("ListIdOpdUser").ej2_instances[0];
-                        dropObject.value = args.rowData['ListIdOpdUser'];
-                        dropObject.text = args.rowData['ListOpdUser'];
-                    }
-                    var dropObjectPappk = document.getElementById("PappkIdUser").ej2_instances[0];
-                    dropObjectPappk.value = args.rowData['PappkIdUser'];
-                    dropObjectPappk.text = args.rowData['PappkUser'];
-                    var dropObjectTipe = document.getElementById("TipeIdUser").ej2_instances[0];
-                    dropObjectTipe.value = args.rowData['TipeIdUser'];
-                    dropObjectTipe.text = args.rowData['TipeUser'];
-                    //$('#ListIdOpdUser_hidden').append($('<option selected>').val(args.rowData['ListIdOpdUser']).text(args.rowData['ListOpdUser']));
-                    //$('#ListIdOpdUser').val(args.rowData['ListOpdUser']);
 
                     ej.popups.hideSpinner(args.dialog.element);
                 }).catch(function (xhr) {

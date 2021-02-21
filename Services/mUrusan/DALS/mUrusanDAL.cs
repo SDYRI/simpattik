@@ -14,12 +14,16 @@ namespace TasikmalayaKota.Simpatik.Web.Services.mUrusan.DALS
     {
         private readonly string ConnectionString;
         private readonly string UID;
+        private readonly string URUSAN;
         private readonly string OPD;
+        private readonly string TAHUN;
         public mUrusanDAL(IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
         {
             ConnectionString = configuration.GetConnectionString("SimpatikConnection");
             UID = httpContextAccessor.HttpContext.Session.GetString("IDAkun");
+            URUSAN = httpContextAccessor.HttpContext.Session.GetString("Urusan");
             OPD = httpContextAccessor.HttpContext.Session.GetString("Opd");
+            TAHUN = httpContextAccessor.HttpContext.Session.GetString("TahunAktif");
         }
 
         public IList<mUrusanModel> GetAll(int posisi)
@@ -31,6 +35,7 @@ namespace TasikmalayaKota.Simpatik.Web.Services.mUrusan.DALS
                 using (NpgsqlCommand sqlCommand = new NpgsqlCommand("public.stp_murusangetall", sqlConnection))
                 {
                     sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                    sqlCommand.Parameters.AddWithValue("_iddtursn", URUSAN);
                     sqlCommand.Parameters.AddWithValue("_posisi", posisi);
 
                     sqlConnection.Open();

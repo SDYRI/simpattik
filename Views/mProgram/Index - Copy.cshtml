@@ -18,7 +18,7 @@
         <e-grid-selectionsettings type="Single"></e-grid-selectionsettings>
         <e-grid-columns>
             <e-grid-column field="IdProgram" headerText="IdProgram" isPrimaryKey="true" isIdentity="true" visible="false"></e-grid-column>
-            <e-grid-column field="NamaUrusan" width="50" headerText="Nama Urusan"></e-grid-column>
+            <e-grid-column field="NamaOpd" width="50" headerText="Nama Opd"></e-grid-column>
             <e-grid-column field="KodeSubkegiatan" width="50" headerText="Kode Program"></e-grid-column>
             <e-grid-column field="NamaSubkegiatan" width="150" headerText="Nama Program"></e-grid-column>
         </e-grid-columns>
@@ -35,7 +35,7 @@
         <e-grid-selectionsettings type="Single"></e-grid-selectionsettings>
         <e-grid-columns>
             <e-grid-column field="IdProgram" headerText="IdProgram" isPrimaryKey="true" isIdentity="true" visible="false"></e-grid-column>
-            <e-grid-column field="NamaUrusan" width="50" headerText="Nama Urusan"></e-grid-column>
+            <e-grid-column field="NamaOpd" width="50" headerText="Nama Opd"></e-grid-column>
             <e-grid-column field="KodeKegiatan" width="50" headerText="Kode Program"></e-grid-column>
             <e-grid-column field="KodeSubkegiatan" width="50" headerText="Kode Kegiatan"></e-grid-column>
             <e-grid-column field="NamaSubkegiatan" width="150" headerText="Nama Kegiatan"></e-grid-column>
@@ -53,12 +53,11 @@
         <e-grid-selectionsettings type="Single"></e-grid-selectionsettings>
         <e-grid-columns>
             <e-grid-column field="IdProgram" headerText="IdProgram" isPrimaryKey="true" isIdentity="true" visible="false"></e-grid-column>
-            <e-grid-column field="NamaUrusan" width="50" headerText="Nama Urusan"></e-grid-column>
+            <e-grid-column field="NamaOpd" width="50" headerText="Nama Opd"></e-grid-column>
             <e-grid-column field="KodeProgram" width="50" headerText="Kode Program"></e-grid-column>
             <e-grid-column field="KodeKegiatan" width="50" headerText="Kode Kegiatan"></e-grid-column>
             <e-grid-column field="KodeSubkegiatan" width="50" headerText="Kode Sub Kegiatan"></e-grid-column>
             <e-grid-column field="NamaSubkegiatan" width="150" headerText="Nama Sub Kegiatan"></e-grid-column>
-            <e-grid-column field="NamaUserPPK" width="150" headerText="Nama PPK"></e-grid-column>
         </e-grid-columns>
     </ejs-grid>
 </div>
@@ -110,7 +109,7 @@
                 dialog.height = 320;
                 // change the header of the dialog
                 dialog.header = args.requestType === 'beginEdit' ? 'Edit ' + args.rowData['NamaSubkegiatan'] : 'New Program';
-                args.form.ej2_instances[0].addRules('IdUrusan', { required: [true, 'Silahkan Pilih Urusan'] });
+                args.form.ej2_instances[0].addRules('IdOpd', { required: [true, 'Silahkan Pilih OPD'] });
                 args.form.ej2_instances[0].addRules('KodeSubkegiatan', { required: [true, 'Silahkan Isi Kode Program'], minLength: [1, 'Kode Program Minimal 1 huruf'] });
                 args.form.ej2_instances[0].addRules('NamaSubkegiatan', { required: [true, 'Silahkan Isi Nama Program'], minLength: [3, 'Nama Program Minimal 3 huruf'] });
 
@@ -125,10 +124,10 @@
                 ajax.send().then(function (data) {
                     appendElement(data, args.form); //Render the edit form with selected record
                     args.form.elements.namedItem('KodeSubkegiatan').focus();
-                    if (typeof args.rowData['IdUrusan'] != 'undefined') {
-                        var dropObject = document.getElementById("IdUrusan").ej2_instances[0];
-                        dropObject.value = args.rowData['IdUrusan'];
-                        dropObject.text = args.rowData['NamaUrusan'];
+                    if (typeof args.rowData['IdOpd'] != 'undefined') {
+                        var dropObject = document.getElementById("IdOpd").ej2_instances[0];
+                        dropObject.value = args.rowData['IdOpd'];
+                        dropObject.text = args.rowData['NamaOpd'];
                     }
                     ej.popups.hideSpinner(args.dialog.element);
                 }).catch(function (xhr) {
@@ -168,16 +167,14 @@
             });
         }
 
-        function onfilteringUrusan(e) {
-            var SelectObj = document.getElementById("IdUrusan").ej2_instances[0];
+        function onfilteringOPD(e) {
+            var OPDObj = document.getElementById("IdOpd").ej2_instances[0];
             if (e.text == '' && e.text.length < 3) {
-                e.updateData(SelectObj.dataSource);
+                e.updateData(OPDObj.dataSource);
             }
-
-            let query = new ej.data.Query().select(['NamaSubUrusan', 'IdUrusan']).take(6).addParams('IdPosisi', 2);
-            query = (e.text !== '' && e.text.length >= 3) ? query.where('NamaSubUrusan', 'contains', e.text, true) : query;
-
-            e.updateData(SelectObj.dataSource, query);
+            let query = new ej.data.Query().select(['NamaOpd', 'IdOpd']).take(6);
+            query = (e.text !== '' && e.text.length >= 3) ? query.where('NamaOpd', 'contains', e.text, true) : query;
+            e.updateData(OPDObj.dataSource, query);
         }
         //#endregion program
 
@@ -190,7 +187,7 @@
                 dialog.height = 420;
                 // change the header of the dialog
                 dialog.header = args.requestType === 'beginEdit' ? 'Edit ' + args.rowData['NamaSubkegiatan'] : 'New Kegiatan';
-                args.form.ej2_instances[0].addRules('IdUrusan', { required: [true, 'Silahkan Pilih Urusan'] });
+                args.form.ej2_instances[0].addRules('IdOpd', { required: [true, 'Silahkan Pilih OPD'] });
                 args.form.ej2_instances[0].addRules('IdParent', { required: [true, 'Silahkan Pilih Program'] });
                 args.form.ej2_instances[0].addRules('KodeSubkegiatan', { required: [true, 'Silahkan Isi Kode Kegiatan'], minLength: [1, 'Kode Kegiatan Minimal 1 huruf'] });
                 args.form.ej2_instances[0].addRules('NamaSubkegiatan', { required: [true, 'Silahkan Isi Nama Kegiatan'], minLength: [3, 'Nama Kegiatan Minimal 3 huruf'] });
@@ -206,10 +203,11 @@
                 ajax.send().then(function (data) {
                     appendElement(data, args.form); //Render the edit form with selected record
                     args.form.elements.namedItem('KodeSubkegiatan').focus();
-                    if (typeof args.rowData['IdUrusan'] != 'undefined') {
-                        var dropObject = document.getElementById("IdUrusan").ej2_instances[0];
-                        dropObject.value = args.rowData['IdUrusan'];
-                        dropObject.text = args.rowData['NamaUrusan'];
+                    
+                    if (typeof args.rowData['IdOpd'] != 'undefined') {
+                        var dropObject = document.getElementById("IdOpd").ej2_instances[0];
+                        dropObject.value = args.rowData['IdOpd'];
+                        dropObject.text = args.rowData['NamaOpd'];
                     }
                     if (typeof args.rowData['IdParent'] != 'undefined') {
                         var dropObject = document.getElementById("IdParent").ej2_instances[0];
@@ -255,23 +253,25 @@
         }
 
         function onfilteringProgram(e) {
-            var SelectParentObj = document.getElementById('IdUrusan').ej2_instances[0];
+            var OPDObj = document.getElementById('IdOpd').ej2_instances[0];
             var ParentObj = document.getElementById("IdParent").ej2_instances[0];
             if (e.text == '' && e.text.length < 1) {
                 e.updateData(ParentObj.dataSource);
             }
 
             let query = new ej.data.Query().select(['NamaSubkegiatan', 'IdProgram']).take(6).addParams('IdPosisi', 1);
-            query = (e.text !== '' && e.text.length >= 3) ? query.where(new ej.data.Predicate('NamaSubkegiatan', 'contains', e.text, true).and('IdUrusan', 'equal', SelectParentObj.value, true)) : query.where('IdUrusan', 'equal', SelectParentObj.value, true);
+            query = (e.text !== '' && e.text.length >= 3) ? query.where(new ej.data.Predicate('NamaSubkegiatan', 'contains', e.text, true).and('IdOpd', 'equal', OPDObj.value, true)) : query.where('IdOpd', 'equal', OPDObj.value, true);
+
+            //query = (e.text !== '' && e.text.length >= 3) ? query.where('NamaSubkegiatan', 'contains', e.text, true) : query;
 
             e.updateData(ParentObj.dataSource, query);
         }
 
-        function onchangeUrusan() {
-            var SelectParentObj = document.getElementById('IdUrusan').ej2_instances[0];
+        function onchangeProgram() {
+            var OPDObj = document.getElementById('IdOpd').ej2_instances[0];
             var SelectObj = document.getElementById('IdParent').ej2_instances[0];
             SelectObj.enabled = true;
-            var SelectObjQuery = new ej.data.Query().where('IdUrusan', 'equal', SelectParentObj.value).addParams('IdPosisi', 1);
+            var SelectObjQuery = new ej.data.Query().where('IdOpd', 'equal', OPDObj.value).addParams('IdPosisi', 1);
             SelectObj.query = SelectObjQuery;
             SelectObj.text = null;
             SelectObj.dataBind();
@@ -284,10 +284,9 @@
 
             if (args.requestType === 'beginEdit' || args.requestType === 'add') {
                 var dialog = args.dialog;
-                dialog.height = 580;
+                dialog.height = 420;
                 // change the header of the dialog
                 dialog.header = args.requestType === 'beginEdit' ? 'Edit ' + args.rowData['NamaSubkegiatan'] : 'New Sub Kegiatan';
-                args.form.ej2_instances[0].addRules('IdUrusan', { required: [true, 'Silahkan Pilih Urusan'] });
                 args.form.ej2_instances[0].addRules('IdParentU', { required: [true, 'Silahkan Pilih Program'] });
                 args.form.ej2_instances[0].addRules('IdParent', { required: [true, 'Silahkan Pilih Kegiatan'] });
                 args.form.ej2_instances[0].addRules('KodeSubkegiatan', { required: [true, 'Silahkan Isi Kode Sub Kegiatan'], minLength: [1, 'Kode Sub Kegiatan Minimal 1 huruf'] });
@@ -304,11 +303,6 @@
                 ajax.send().then(function (data) {
                     appendElement(data, args.form); //Render the edit form with selected record
                     args.form.elements.namedItem('KodeSubkegiatan').focus();
-                    if (typeof args.rowData['IdUrusan'] != 'undefined') {
-                        var dropObject = document.getElementById("IdUrusan").ej2_instances[0];
-                        dropObject.value = args.rowData['IdUrusan'];
-                        dropObject.text = args.rowData['NamaUrusan'];
-                    }
                     if (typeof args.rowData['IdParentU'] != 'undefined') {
                         var dropObject = document.getElementById("IdParentU").ej2_instances[0];
                         dropObject.value = args.rowData['IdParentU'];
@@ -357,16 +351,6 @@
             });
         }
 
-        function onchangeUrusanKegiatan() {
-            var SelectParentObj = document.getElementById('IdUrusan').ej2_instances[0];
-            var SelectObj = document.getElementById('IdParentU').ej2_instances[0];
-            SelectObj.enabled = true;
-            var SelectObjQuery = new ej.data.Query().where('IdUrusan', 'equal', SelectParentObj.value).addParams('IdPosisi', 1);
-            SelectObj.query = SelectObjQuery;
-            SelectObj.text = null;
-            SelectObj.dataBind();
-        }
-
         function onfilteringKegiatan(e) {
             var ProgramOBJ = document.getElementById('IdParentU').ej2_instances[0];
             var KegiatanObj = document.getElementById("IdParent").ej2_instances[0];
@@ -380,26 +364,14 @@
             e.updateData(KegiatanObj.dataSource, query);
         }
 
-        function onfilteringPpk(e) {
-            var SelectObj = document.getElementById("IdUserPPK").ej2_instances[0];
-            if (e.text == '' && e.text.length < 3) {
-                e.updateData(SelectObj.dataSource);
-            }
-
-            let query = new ej.data.Query().select(['NamaUser', 'IdUser']).take(6).addParams('PappkIdUser', 3);
-            query = (e.text !== '' && e.text.length >= 3) ? query.where('NamaUser', 'contains', e.text, true) : query;
-
-            e.updateData(SelectObj.dataSource, query);
-        }
-
-        function onchangeKegiatan() {
-            var ParentObj = document.getElementById('IdParentU').ej2_instances[0];
-            var SelectObj = document.getElementById('IdParent').ej2_instances[0];
-            SelectObj.enabled = true;
-            var SelectObjQuery = new ej.data.Query().where('IdParent', 'equal', ParentObj.value).addParams('IdPosisi', 2);
-            SelectObj.query = SelectObjQuery;
-            SelectObj.text = null;
-            SelectObj.dataBind();
+        function onchangeUrusan() {
+            var ProgramOBJ = document.getElementById('IdParentU').ej2_instances[0];
+            var KegiatanObj = document.getElementById('IdParent').ej2_instances[0];
+            KegiatanObj.enabled = true;
+            var KegiatanObjQuery = new ej.data.Query().where('IdParent', 'equal', ProgramOBJ.value).addParams('IdPosisi', 2);
+            KegiatanObj.query = KegiatanObjQuery;
+            KegiatanObj.text = null;
+            KegiatanObj.dataBind();
         }
         //#endregion subkegiatan
 

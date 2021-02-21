@@ -37,6 +37,7 @@ using TasikmalayaKota.Simpatik.Web.Services.mUrusan.Interfaces;
 using TasikmalayaKota.Simpatik.Web.Services.mUrusan.DALS;
 using TasikmalayaKota.Simpatik.Web.Services.tsPaket.Interfaces;
 using TasikmalayaKota.Simpatik.Web.Services.tsPaket.DALS;
+using Microsoft.AspNetCore.Antiforgery;
 
 namespace TasikmalayaKota.Simpatik.Web
 {
@@ -52,6 +53,8 @@ namespace TasikmalayaKota.Simpatik.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddAntiforgery(options => options.HeaderName = "SIMPATTIK-TOKEN");
+
             services.AddControllers().AddNewtonsoftJson(options => {
               options.SerializerSettings.ContractResolver = new Newtonsoft.Json.Serialization.DefaultContractResolver();
             });
@@ -108,8 +111,26 @@ namespace TasikmalayaKota.Simpatik.Web
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IAntiforgery antiforgery)
         {
+            //app.Use(next => context =>
+            //{
+            //    string path = context.Request.Path.Value;
+
+            //    if (
+            //        string.Equals(path, "/", StringComparison.OrdinalIgnoreCase) ||
+            //        string.Equals(path, "/index.html", StringComparison.OrdinalIgnoreCase))
+            //    {
+            //        // The request token can be sent as a JavaScript-readable cookie, 
+            //        // and Angular uses it by default.
+            //        var tokens = antiforgery.GetAndStoreTokens(context);
+            //        context.Response.Cookies.Append("XSRF-TOKEN", tokens.RequestToken,
+            //            new CookieOptions() { HttpOnly = false });
+            //    }
+
+            //    return next(context);
+            //});
+
             app.UseForwardedHeaders(new ForwardedHeadersOptions
             {
                 ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Syncfusion.EJ2.Base;
+using Syncfusion.EJ2.Navigations;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -29,7 +30,7 @@ namespace simpat1k.Controllers
         public IActionResult Index()
         {
             ViewBag.Title = "Paket";
-            ViewBag.queryPaket = "new ej.data.Query().addParams('jeniskebutuhan', 1)";
+            ViewBag.queryPenyedia = "new ej.data.Query().addParams('jeniskebutuhan', 1).addParams('tipePaket', 1)";
             return View();
         }
 
@@ -37,7 +38,7 @@ namespace simpat1k.Controllers
         [Route("PaketAll")]
         public IActionResult UrlDataBarangsource([FromBody] tsPaketModel dm)
         {
-            IEnumerable DataSource = _tsPaket.GetAll(Int32.Parse(dm.jeniskebutuhan));
+            IEnumerable DataSource = _tsPaket.GetAll(Int32.Parse(dm.jeniskebutuhan), dm.tipePaket);
             DataOperations operation = new DataOperations();
             if (dm.Search != null && dm.Search.Count > 0)
             {
@@ -69,16 +70,25 @@ namespace simpat1k.Controllers
         {
             string msg = string.Empty;
 
-            if (value.Action == "insert")
+            foreach (var param in value.Params)
             {
-                foreach (var param in value.Params)
+                if ((value.Action == "insert") || (value.Action == "update"))
                 {
                     if (param.Key == "jeniskebutuhan")
                     {
                         value.Value.jeniskebutuhan = param.GetType().GetProperty("Value").GetValue(param).ToString();
                     }
-                }
+                    if (param.Key == "tipePaket")
+                    {
+                        value.Value.tipePaket = Int32.Parse(param.GetType().GetProperty("Value").GetValue(param).ToString());
+                    }
 
+                    value.Value.thanggrn = _httpContextAccessor.HttpContext.Session.GetString("TahunAktif");
+                }
+            }
+
+            if (value.Action == "insert")
+            {
                 DatabaseActionResultModel Result = _tsPaket.Create(value.Value);
                 msg = Result.Pesan;
             }
@@ -89,7 +99,7 @@ namespace simpat1k.Controllers
             }
             else if (value.Action == "remove")
             {
-                DatabaseActionResultModel Result = _tsPaket.Remove(Int32.Parse(value.Key.ToString()));
+                DatabaseActionResultModel Result = _tsPaket.Remove(value.Key.ToString());
                 msg = Result.Pesan;
             }
             return Json(new { data = value.Value, message = msg });
@@ -99,8 +109,12 @@ namespace simpat1k.Controllers
         [Route("IndexBarang")]
         public ActionResult IndexBarang()
         {
-            ViewBag.Title = "Paket Kebutuhan Barang";
-            ViewBag.queryPaket = "new ej.data.Query().addParams('jeniskebutuhan', 1)";
+            ViewBag.Title = "Kebutuhan Barang";
+            ViewBag.headerPenyedia = new TabHeader { Text = "Penyedia" };
+            ViewBag.headerSwakelola = new TabHeader { Text = "Swakelola" };
+            ViewBag.queryPenyedia = "new ej.data.Query().addParams('jeniskebutuhan', 1).addParams('tipePaket', 1)";
+            ViewBag.querySwakelola = "new ej.data.Query().addParams('jeniskebutuhan', 1).addParams('tipePaket', 2)";
+            ViewBag.identifikasi = "/Identifikasi/IndexBarang/";
             return View();
         }
 
@@ -108,15 +122,41 @@ namespace simpat1k.Controllers
         [Route("PaketBarangTemplate")]
         public IActionResult PartialTemplatePaketBarang([FromBody] CRUDModel<tsPaketModel> value)
         {
-            var valTemplate = _tsPaket.GetAll(1);
+            var valTemplate = _tsPaket.GetAll(1, 1);
             ViewBag.datasource = valTemplate;
-            ViewBag.Title = "Paket Kebutuhan Barang " + value.Value.idpaket;
+            ViewBag.Title = "Paket Penyedia Kebutuhan Barang " + value.Value.idpaket;
+            value.Value.jeniskebutuhan = "1";
+            value.Value.tipePaket = 1;
+            value.Value.opd = _httpContextAccessor.HttpContext.Session.GetString("OpdName");
+            value.Value.pejabat = _httpContextAccessor.HttpContext.Session.GetString("Nama");
 
             #region Combobox
             ViewBag.yatidak = new enumDataModel().YaTidak();
+            ViewBag.metodepemilihan = new enumDataModel().MetodePemilihan();
             #endregion Combobox
 
             return PartialView("_tsPaketBarangTemplate", value.Value);
+        }
+
+        [HttpPost]
+        [Route("PaketSwakelolaBarangTemplate")]
+        public IActionResult PartialTemplatePaketSwakelolaBarang([FromBody] CRUDModel<tsPaketModel> value)
+        {
+            var valTemplate = _tsPaket.GetAll(1, 1);
+            ViewBag.datasource = valTemplate;
+            ViewBag.Title = "Paket Swakelola Kebutuhan Barang " + value.Value.idpaket;
+            value.Value.jeniskebutuhan = "1";
+            value.Value.tipePaket = 1;
+            value.Value.opd = _httpContextAccessor.HttpContext.Session.GetString("OpdName");
+            value.Value.pejabat = _httpContextAccessor.HttpContext.Session.GetString("Nama");
+
+            #region Combobox
+            ViewBag.yatidak = new enumDataModel().YaTidak();
+            ViewBag.metodepemilihan = new enumDataModel().MetodePemilihan();
+            ViewBag.tipeswakelola = new enumDataModel().TipeSwakelola();
+            #endregion Combobox
+
+            return PartialView("_tsPaketSwakelolaBarangTemplate", value.Value);
         }
         #endregion Paket Barang
 
@@ -124,21 +164,29 @@ namespace simpat1k.Controllers
         [Route("IndexPekerjaan")]
         public ActionResult IndexPekerjaan()
         {
-            ViewBag.Title = "Paket Kebutuhan Pekerjaan";
-            ViewBag.queryPaket = "new ej.data.Query().addParams('jeniskebutuhan', 1)";
-            return View();
+            ViewBag.Title = "Kebutuhan Pekerjaan";
+            ViewBag.headerPenyedia = new TabHeader { Text = "Penyedia" };
+            ViewBag.headerSwakelola = new TabHeader { Text = "Swakelola" };
+            ViewBag.queryPenyedia = "new ej.data.Query().addParams('jeniskebutuhan', 2).addParams('tipePaket', 1)";
+            ViewBag.querySwakelola = "new ej.data.Query().addParams('jeniskebutuhan', 2).addParams('tipePaket', 2)";
+            ViewBag.identifikasi = "/Identifikasi/IndexBarang/";
+            return View("IndexBarang");
         }
 
         [HttpPost]
         [Route("PaketPekerjaanTemplate")]
         public IActionResult PartialTemplatePaketPekerjaan([FromBody] CRUDModel<tsPaketModel> value)
         {
-            var valTemplate = _tsPaket.GetAll(1);
+            var valTemplate = _tsPaket.GetAll(1, 1);
             ViewBag.datasource = valTemplate;
             ViewBag.Title = "Paket Kebutuhan Pekerjaan " + value.Value.idpaket;
+            value.Value.jeniskebutuhan = "2";
+            value.Value.opd = _httpContextAccessor.HttpContext.Session.GetString("OpdName");
+            value.Value.pejabat = _httpContextAccessor.HttpContext.Session.GetString("Nama");
 
             #region Combobox
             ViewBag.yatidak = new enumDataModel().YaTidak();
+            ViewBag.metodepemilihan = new enumDataModel().MetodePemilihan();
             #endregion Combobox
 
             return PartialView("_tsPaketBarangTemplate", value.Value);
@@ -150,7 +198,7 @@ namespace simpat1k.Controllers
         public ActionResult IndexKonsultasi()
         {
             ViewBag.Title = "Paket Kebutuhan Jasa Konsultasi";
-            ViewBag.queryPaket = "new ej.data.Query().addParams('jeniskebutuhan', 1)";
+            ViewBag.queryPenyedia = "new ej.data.Query().addParams('jeniskebutuhan', 3).addParams('tipePaket', 1)";
             return View();
         }
 
@@ -158,12 +206,16 @@ namespace simpat1k.Controllers
         [Route("PaketKonsultasiTemplate")]
         public IActionResult PartialTemplatePaketKonsultasi([FromBody] CRUDModel<tsPaketModel> value)
         {
-            var valTemplate = _tsPaket.GetAll(1);
+            var valTemplate = _tsPaket.GetAll(1, 1);
             ViewBag.datasource = valTemplate;
             ViewBag.Title = "Paket Kebutuhan Jasa Konsultasi " + value.Value.idpaket;
+            value.Value.jeniskebutuhan = "3";
+            value.Value.opd = _httpContextAccessor.HttpContext.Session.GetString("OpdName");
+            value.Value.pejabat = _httpContextAccessor.HttpContext.Session.GetString("Nama");
 
             #region Combobox
             ViewBag.yatidak = new enumDataModel().YaTidak();
+            ViewBag.metodepemilihan = new enumDataModel().MetodePemilihan();
             #endregion Combobox
 
             return PartialView("_tsPaketBarangTemplate", value.Value);
@@ -175,7 +227,7 @@ namespace simpat1k.Controllers
         public ActionResult IndexLainnya()
         {
             ViewBag.Title = "Paket Kebutuhan Jasa Lainnya";
-            ViewBag.queryPaket = "new ej.data.Query().addParams('jeniskebutuhan', 1)";
+            ViewBag.queryPenyedia = "new ej.data.Query().addParams('jeniskebutuhan', 4).addParams('tipePaket', 1)";
             return View();
         }
 
@@ -183,12 +235,16 @@ namespace simpat1k.Controllers
         [Route("PaketLainnyaTemplate")]
         public IActionResult PartialTemplatePaketLainnya([FromBody] CRUDModel<tsPaketModel> value)
         {
-            var valTemplate = _tsPaket.GetAll(1);
+            var valTemplate = _tsPaket.GetAll(1, 1);
             ViewBag.datasource = valTemplate;
             ViewBag.Title = "Paket Kebutuhan Jasa Lainnya " + value.Value.idpaket;
+            value.Value.jeniskebutuhan = "4";
+            value.Value.opd = _httpContextAccessor.HttpContext.Session.GetString("OpdName");
+            value.Value.pejabat = _httpContextAccessor.HttpContext.Session.GetString("Nama");
 
             #region Combobox
             ViewBag.yatidak = new enumDataModel().YaTidak();
+            ViewBag.metodepemilihan = new enumDataModel().MetodePemilihan();
             #endregion Combobox
 
             return PartialView("_tsPaketBarangTemplate", value.Value);

@@ -65,7 +65,7 @@
                             <a class="dropdown-toggle nav-link dropdown-user-link" href="#" data-toggle="dropdown">
                                 <div class="user-nav d-sm-flex d-none">
                                     <span class="user-name text-bold-600">@HttpContextAccessor.HttpContext.Session.GetString("Nama")</span>
-                                    @if ((@HttpContextAccessor.HttpContext.Session.GetInt32("Tipe") != 1) && (@HttpContextAccessor.HttpContext.Session.GetInt32("Tipe") != 2))
+                                    @if ((@HttpContextAccessor.HttpContext.Session.GetInt32("Tipe") != 1) && (@HttpContextAccessor.HttpContext.Session.GetInt32("Tipe") != 0))
                                     {
                                         <span class="user-status">@HttpContextAccessor.HttpContext.Session.GetString("OpdName")</span>
                                     }
@@ -131,12 +131,15 @@
                                 </li>
                             </ul>
                         </li>
-                        <li class="@Html.IsSelected(controller: "tsIdentifikasi", action: "Index")">
-                            <a asp-area="" asp-controller="Identifikasi" asp-action="IndexMe"><i class="feather icon-copy"></i><span class="menu-item">Penetapan Perencanaan Pengadaan</span></a>
-                        </li>
+                        @if (HttpContextAccessor.HttpContext.Session.GetString("Pappk") != "3")
+                        {
+                            <li class="@Html.IsSelected(controller: "tsIdentifikasi", action: "Index")">
+                                <a asp-area="" asp-controller="Identifikasi" asp-action="IndexMe"><i class="feather icon-copy"></i><span class="menu-item">Penetapan Perencanaan Pengadaan</span></a>
+                            </li>
+                        }
                     </ul>
                 </li>
-                @if ((HttpContextAccessor.HttpContext.Session.GetInt32("Tipe") == 1) || (HttpContextAccessor.HttpContext.Session.GetInt32("Tipe") == 2))
+                @if ((HttpContextAccessor.HttpContext.Session.GetInt32("Tipe") == 1) || (HttpContextAccessor.HttpContext.Session.GetInt32("Tipe") == 0))
                 {
                     <li class="nav-item">
                         <a href="#"><i class="feather icon-folder"></i><span class="menu-title">Pemrograman</span></a>
@@ -233,6 +236,20 @@
                             </li>
                             <li class="@Html.IsSelected(controller: "mKodeRekening", action: "Index")">
                                 <a asp-area="" asp-controller="KodeRekeningMaster" asp-action="IndexMe"><i class="feather icon-copy"></i><span class="menu-item">Kode Rekening</span></a>
+                            </li>
+                        </ul>
+                    </li>
+                }
+                else if (HttpContextAccessor.HttpContext.Session.GetString("Pappk") != "3")
+                {
+                    <li class="nav-item">
+                        <a href="#"><i class="feather icon-command"></i><span class="menu-title">Master</span></a>
+                        <ul class="menu-content">
+                            <li class="@Html.IsSelected(controller: "mUser", action: "IndexPpk")">
+                                <a asp-area="" asp-controller="UserMaster" asp-action="IndexPpkMe"><i class="feather icon-copy"></i><span class="menu-item">User PPK</span></a>
+                            </li>
+                            <li class="@Html.IsSelected(controller: "mProgram", action: "Index")">
+                                <a asp-area="" asp-controller="ProgramMaster" asp-action="IndexMe"><i class="feather icon-copy"></i><span class="menu-item">Sub Kegiatan</span></a>
                             </li>
                         </ul>
                     </li>

@@ -43,10 +43,15 @@
         </div>
         <div class="form-group col-md-12">
             <div class="e-float-input e-control-wrapper">
+                @*<ejs-dropdownlist id="IdParent" placeholder="Pilih Rincian" popupHeight="200px" allowFiltering="true" filtering="onfilteringRincian" sortOrder="@ViewBag.sortDropdown"
+                          query="@ViewBag.queryRincian" floatLabelType="Always" enabled="false"
+                          headerTemplate="@Html.Raw("<table><tr><th class=\"e-text-center\" style=\"width: 200px;\">Kode Rekening</th><th class=\"e-text-center\" style=\"width: 125px;\">Nama Rekening</th></tr></table>")"
+                      itemTemplate="@Html.Raw("<table><tbody><tr><td class=\"e-text-center\" style=\"width: 200px;\">${KodeRekening}</td><td class=\"e-text-center\" style=\"width: 125px;\">${NamaSubRincian}</td></tr></tbody></table>")">
+            <e-data-manager url="/KodeRekeningMaster/KodeRekeningMasterAll" adaptor="UrlAdaptor" crossDomain="true"></e-data-manager>
+            <e-dropdownlist-fields text="NamaSubRincian" value="IdKodeRekening"></e-dropdownlist-fields>
+        </ejs-dropdownlist>*@
                 <ejs-dropdownlist id="IdParent" placeholder="Pilih Rincian" popupHeight="200px" allowFiltering="true" filtering="onfilteringRincian" sortOrder="@ViewBag.sortDropdown"
-                                  query="@ViewBag.queryRincian" floatLabelType="Always" enabled="false"
-                                  headerTemplate="@Html.Raw("<table><tr><th class=\"e-text-center\" style=\"width: 200px;\">Kode Rekening</th><th class=\"e-text-center\" style=\"width: 125px;\">Nama Rekening</th></tr></table>")"
-                              itemTemplate="@Html.Raw("<table><tbody><tr><td class=\"e-text-center\" style=\"width: 200px;\">${KodeRekening}</td><td class=\"e-text-center\" style=\"width: 125px;\">${NamaSubRincian}</td></tr></tbody></table>")">
+                                  query="@ViewBag.queryRincian" floatLabelType="Always" enabled="false">
                     <e-data-manager url="/KodeRekeningMaster/KodeRekeningMasterAll" adaptor="UrlAdaptor" crossDomain="true"></e-data-manager>
                     <e-dropdownlist-fields text="NamaSubRincian" value="IdKodeRekening"></e-dropdownlist-fields>
                 </ejs-dropdownlist>

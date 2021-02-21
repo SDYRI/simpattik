@@ -14,6 +14,6 @@ namespace TasikmalayaKota.Simpatik.Web.Services.tsIdentifikasi.Interfaces
         IList<tsIdentifikasiModel> GetAll();
         DatabaseActionResultModel Create(tsIdentifikasiModel model);
         DatabaseActionResultModel Update(tsIdentifikasiModel model);
-        DatabaseActionResultModel Remove(int model);
+        DatabaseActionResultModel Remove(int identifikasi, string paket);
     }
 }

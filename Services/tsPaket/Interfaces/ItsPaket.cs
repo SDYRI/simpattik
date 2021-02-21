@@ -9,9 +9,9 @@ namespace TasikmalayaKota.Simpatik.Web.Services.tsPaket.Interfaces
 {
     public interface ItsPaket
     {
-        IList<tsPaketModel> GetAll(int spesifikasi);
+        IList<tsPaketModel> GetAll(int spesifikasi, int tipePaket);
         DatabaseActionResultModel Create(tsPaketModel model);
         DatabaseActionResultModel Update(tsPaketModel model);
-        DatabaseActionResultModel Remove(int model);
+        DatabaseActionResultModel Remove(string model);
     }
 }

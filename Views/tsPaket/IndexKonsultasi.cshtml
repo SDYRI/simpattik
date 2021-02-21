@@ -9,7 +9,7 @@
 
 <ejs-grid id="Grid" actionComplete="CompleteAction" height="490" allowPaging="true" allowResizing="true" allowSorting="true" allowReordering="true" allowGrouping="false"
           toolbar="@(new List<string>() { "Search", "Add", "Edit", "Delete","Update","Cancel" , "ExcelExport" ,"PdfExport" })" allowFiltering="true" allowSelection="true"
-          created="createdGrid" allowExcelExport="true" allowPdfExport="true" toolbarClick="toolbarAction" query="@ViewBag.queryPaket" commandClick="cmdDetail">
+          created="createdGrid" allowExcelExport="true" allowPdfExport="true" toolbarClick="toolbarAction" query="@ViewBag.queryPenyedia" commandClick="cmdDetail">
     <e-grid-pagesettings pageCount="5" pageSize="12" pageSizes="true"></e-grid-pagesettings>
     <e-grid-filterSettings type="Menu"></e-grid-filterSettings>
     <e-grid-editSettings allowAdding="true" allowDeleting="true" allowEditing="true" mode="Dialog" template='#templatedialog' showDeleteConfirmDialog="true"></e-grid-editSettings>
@@ -38,7 +38,7 @@
 
         function cmdDetail(args) {
             //alert(JSON.parse(JSON.stringify(args.rowData)).ididetifikasi)
-            window.location.href = "/Identifikasi/IndexBarang/" + JSON.parse(JSON.stringify(args.rowData)).idpaket;
+            window.location.href = "/Identifikasi/IndexKonsultasi/" + JSON.parse(JSON.stringify(args.rowData)).idpaket;
         }
 
         function CompleteAction(args) {
@@ -49,6 +49,12 @@
                 dialog.height = 750;
                 // change the header of the dialog
                 dialog.header = args.requestType === 'beginEdit' ? 'Edit Paket Kebutuhan Jasa Konsultasi' : 'New Paket Kebutuhan Jasa Konsultasi';
+                args.form.ej2_instances[0].addRules('pemanfaatanmulai', { required: [true, 'Silahkan Pilih Waktu Pemanfaatan'] });
+                args.form.ej2_instances[0].addRules('pemanfaatanakhir', { required: [true, 'Silahkan Pilih Waktu Pemanfaatan'] });
+                args.form.ej2_instances[0].addRules('pelaksanaanmulai', { required: [true, 'Silahkan Pilih Waktu Pelaksanaan'] });
+                args.form.ej2_instances[0].addRules('pelaksanaanakhir', { required: [true, 'Silahkan Pilih Waktu Pelaksanaan'] });
+                args.form.ej2_instances[0].addRules('pemilihanmulai', { required: [true, 'Silahkan Pilih Waktu Pemilihan'] });
+                args.form.ej2_instances[0].addRules('pemilihanakhir', { required: [true, 'Silahkan Pilih Waktu Pemilihan'] });
 
                 let spinner = ej.popups.createSpinner({ target: args.dialog.element });
                 ej.popups.showSpinner(args.dialog.element);
@@ -68,7 +74,7 @@
                     //}
                     ej.popups.hideSpinner(args.dialog.element);
                 }).catch(function (xhr) {
-                    console.log(xhr);
+                    
                     ej.popups.hideSpinner(args.dialog.element);
                 });
             }

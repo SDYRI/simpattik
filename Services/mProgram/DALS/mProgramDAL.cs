@@ -15,12 +15,16 @@ namespace TasikmalayaKota.Simpatik.Web.Services.mProgram.DALS
     {
         private readonly string ConnectionString;
         private readonly string UID;
+        private readonly string URUSAN;
         private readonly string OPD;
+        private readonly string TAHUN;
         public mProgramDAL(IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
         {
             ConnectionString = configuration.GetConnectionString("SimpatikConnection");
             UID = httpContextAccessor.HttpContext.Session.GetString("IDAkun");
+            URUSAN = httpContextAccessor.HttpContext.Session.GetString("Urusan");
             OPD = httpContextAccessor.HttpContext.Session.GetString("Opd");
+            TAHUN = httpContextAccessor.HttpContext.Session.GetString("TahunAktif");
         }
 
         public IList<mProgramModel> GetAll(int posisi)
@@ -32,9 +36,10 @@ namespace TasikmalayaKota.Simpatik.Web.Services.mProgram.DALS
                 using (NpgsqlCommand sqlCommand = new NpgsqlCommand("public.stp_mprogramgetall", sqlConnection))
                 {
                     sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
-                    sqlCommand.Parameters.AddWithValue("_iddtursn", "0");
+                    sqlCommand.Parameters.AddWithValue("_iddtursn", URUSAN);
                     sqlCommand.Parameters.AddWithValue("_posisi", posisi);
-
+                    sqlCommand.Parameters.AddWithValue("_tahun", Int16.Parse(TAHUN));
+                    sqlCommand.Parameters.AddWithValue("_uid", UID);
                     sqlConnection.Open();
                     using (NpgsqlDataReader dataReader = sqlCommand.ExecuteReader())
                     {
@@ -53,6 +58,8 @@ namespace TasikmalayaKota.Simpatik.Web.Services.mProgram.DALS
                                 NamaSubkegiatan = (dataReader["namasubkegiatan"].GetType() != typeof(DBNull) ? (string)dataReader["namasubkegiatan"] : ""),
                                 IdParent = (dataReader["idparent"].GetType() != typeof(DBNull) ? (int)dataReader["idparent"] : 0),
                                 IdPosisi = (dataReader["idposisi"].GetType() != typeof(DBNull) ? (int)dataReader["idposisi"] : 0),
+                                IdUserPPK = (dataReader["iduserppk"].GetType() != typeof(DBNull) ? (string)dataReader["iduserppk"] : ""),
+                                NamaUserPPK = (dataReader["namauserppk"].GetType() != typeof(DBNull) ? (string)dataReader["namauserppk"] : ""),
                             });
                         }
                     }
@@ -75,11 +82,13 @@ namespace TasikmalayaKota.Simpatik.Web.Services.mProgram.DALS
                 using (NpgsqlCommand sqlCommand = new NpgsqlCommand("public.stp_mprograminsert", sqlConnection))
                 {
                     sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
-                    sqlCommand.Parameters.AddWithValue("_iddtopd", ParamD.IdUrusan);
+                    sqlCommand.Parameters.AddWithValue("_iddturs", ParamD.IdUrusan);
                     sqlCommand.Parameters.AddWithValue("_nmdtprg", ParamD.NamaSubkegiatan);
                     sqlCommand.Parameters.AddWithValue("_idpdtpg", ParamD.IdParent == 0 ? ParamD.IdParentU : ParamD.IdParent);
                     sqlCommand.Parameters.AddWithValue("_kddtprg", ParamD.KodeSubkegiatan);
                     sqlCommand.Parameters.AddWithValue("_posisi", ParamD.IdPosisi);
+                    sqlCommand.Parameters.AddWithValue("_idppk", ParamD.IdUserPPK);
+                    sqlCommand.Parameters.AddWithValue("_tahun", Int16.Parse(TAHUN));
                     sqlCommand.Parameters.AddWithValue("_uid", UID);
                     sqlConnection.Open();
                     using (NpgsqlDataReader dataReader = sqlCommand.ExecuteReader())
@@ -110,11 +119,13 @@ namespace TasikmalayaKota.Simpatik.Web.Services.mProgram.DALS
                 {
                     sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
                     sqlCommand.Parameters.AddWithValue("_iddtprg", ParamD.IdProgram);
-                    sqlCommand.Parameters.AddWithValue("_iddtopd", ParamD.IdUrusan);
+                    sqlCommand.Parameters.AddWithValue("_iddturs", ParamD.IdUrusan);
                     sqlCommand.Parameters.AddWithValue("_nmdtprg", ParamD.NamaSubkegiatan);
                     sqlCommand.Parameters.AddWithValue("_idpdtpg", ParamD.IdParent);
                     sqlCommand.Parameters.AddWithValue("_kddtprg", ParamD.KodeSubkegiatan);
                     sqlCommand.Parameters.AddWithValue("_posisi", ParamD.IdPosisi);
+                    sqlCommand.Parameters.AddWithValue("_idppk", ParamD.IdUserPPK); 
+                    sqlCommand.Parameters.AddWithValue("_tahun", Int16.Parse(TAHUN));
                     sqlCommand.Parameters.AddWithValue("_uid", UID);
                     sqlConnection.Open();
                     using (NpgsqlDataReader dataReader = sqlCommand.ExecuteReader())

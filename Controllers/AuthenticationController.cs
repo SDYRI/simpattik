@@ -53,9 +53,11 @@ namespace TasikmalayaKota.Simpatik.Web.Controllers
                     HttpContext.Session.SetString("Nip", Result.Nip);
                     HttpContext.Session.SetString("Jabatan", Result.Jabatan);
                     HttpContext.Session.SetString("Golongan", Result.Golongan);
+                    HttpContext.Session.SetString("Urusan", Result.Urusan);
                     HttpContext.Session.SetString("Opd", Result.Opd);
                     HttpContext.Session.SetString("OpdName", Result.OpdName);
                     HttpContext.Session.SetString("TahunAktif", Result.TahunAktif);
+                    HttpContext.Session.SetString("Pappk", Result.PaPpk);
                 }
 
                 return RedirectToAction("Index", "Authentication");

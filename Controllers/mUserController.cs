@@ -9,6 +9,7 @@ using System.Dynamic;
 using TasikmalayaKota.Simpatik.Web.Services.mOpd.Interfaces;
 using TasikmalayaKota.Simpatik.Web.Models;
 using System;
+using TasikmalayaKota.Simpatik.Web.Services.Middleware.Models;
 
 namespace simpat1k.Controllers
 {
@@ -28,6 +29,13 @@ namespace simpat1k.Controllers
         public IActionResult Index()
         {
             ViewBag.Title = "Master User";
+            return View();
+        }
+
+        [Route("IndexPpkMe")]
+        public IActionResult IndexPpk()
+        {
+            ViewBag.Title = "Master User PPK";
             return View();
         }
 
@@ -111,7 +119,28 @@ namespace simpat1k.Controllers
             ViewBag.Title = "Master User " + value.Value.NamaUser;
             ViewBag.id = 2; //value.Value.ListIdOpdUser;
 
+            #region Combobox
+            ViewBag.pappk = new enumDataModel().PaPpk();
+            ViewBag.tipeuser = new enumDataModel().TipeUser();
+            #endregion Combobox
+
             return PartialView("_mUserTemplate", value.Value);
+        }
+
+        [HttpPost]
+        [Route("UserMasterTemplatePpk")]
+        public IActionResult PartialTemplateUserPpk([FromBody] CRUDModel<mUserModel> value)
+        {
+            var valTemplate = _mUser.GetAll();
+            ViewBag.datasource = valTemplate;
+            //ViewBag.dataOPD = _mOpd.GetAll().ToList();
+            ViewBag.sortDropdown = "Ascending";
+            ViewBag.queryOPD = "new ej.data.Query().select(['NamaOpd', 'IdOpd']).take(10).requiresCount()";
+            ViewBag.Title = "Master User " + value.Value.NamaUser;
+            ViewBag.id = 2;
+            ViewBag.idOPD = HttpContext.Session.GetString("Opd");
+
+            return PartialView("_mUserTemplatePpk", value.Value);
         }
     }
 }
