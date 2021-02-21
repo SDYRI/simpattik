@@ -9,12 +9,17 @@
             <div class="e-float-input e-control-wrapper">
                 <div class="e-float-input e-control-wrapper e-input e-valid-input">
                     <input id="opd" data-val="true" class="e-control e-textbox e-lib" type="text" role="textbox" asp-for="@Model.opd" readonly>
+                    <input id="jeniskebutuhan" data-val="true" class="e-control e-textbox e-lib" type="text" role="textbox" asp-for="@Model.jeniskebutuhan" readonly hidden>
                     <span class="e-float-line"></span>
                     <label class="e-float-text e-label-top" id="label_opd">OPD</label>
                 </div>
             </div>
             <div class="e-float-input e-control-wrapper">
-                <ejs-textbox id="pejabat" cssClass="e-input" placeholder="Pejabat Pembuat Komitmen" floatLabelType="Always" ejs-for="@Model.pejabat"></ejs-textbox>
+                <div class="e-float-input e-control-wrapper e-input e-valid-input">
+                    <input id="pejabat" data-val="true" class="e-control e-textbox e-lib" type="text" role="textbox" asp-for="@Model.pejabat" readonly>
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text e-label-top" id="label_pejabat">Pejabat Pembuat Komitmen</label>
+                </div>
             </div>
             <div class="e-float-input e-control-wrapper">
                 <ejs-textbox id="program" cssClass="e-input" placeholder="Program" floatLabelType="Always" ejs-for="@Model.program"></ejs-textbox>
@@ -28,13 +33,13 @@
             <div class="e-float-input e-control-wrapper">
                 <ejs-textbox id="outputidentifikasi" cssClass="e-input" placeholder="Output" floatLabelType="Always" ejs-for="@Model.outputidentifikasi"></ejs-textbox>
             </div>
-            <div class="e-float-input e-control-wrapper">
+            @*<div class="e-float-input e-control-wrapper">
                 <div class="e-float-input e-control-wrapper e-input e-valid-input">
                     <input id="jeniskebutuhan" data-val="true" class="e-control e-textbox e-lib" type="text" role="textbox" asp-for="@Model.jeniskebutuhan" readonly>
                     <span class="e-float-line"></span>
                     <label class="e-float-text e-label-top" id="label_jeniskebutuhan">Jenis Kebutuhan</label>
                 </div>
-            </div>
+            </div>*@
             <div class="e-float-input e-control-wrapper">
                 <ejs-textbox id="namabrgkerj" cssClass="e-input" placeholder="Nama/ Jenis" floatLabelType="Always" ejs-for="@Model.namabrgkerj"></ejs-textbox>
             </div>

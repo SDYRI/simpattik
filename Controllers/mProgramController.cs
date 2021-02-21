@@ -173,6 +173,8 @@ namespace simpat1k.Controllers
             ViewBag.queryOPD = "new ej.data.Query().select(['NamaOpd', 'IdOpd']).take(10).requiresCount()";
             ViewBag.queryProgram = "new ej.data.Query().select(['NamaSubkegiatan', 'IdProgram']).take(10).requiresCount().addParams('IdPosisi', 1)";
             ViewBag.queryKegiatan = "new ej.data.Query().select(['NamaSubkegiatan', 'IdProgram']).take(10).requiresCount().addParams('IdPosisi', 2)";
+            //ViewBag.queryPPK = "new ej.data.Query().select(['NamaUser', 'IdUser']).take(10).requiresCount().addParams('PappkIdUser', 3)";
+            ViewBag.queryPPK = "new ej.data.Query().select(['NamaUser', 'IdUser']).take(10).requiresCount()";
             ViewBag.Title = "Master Sub Kegiatan " + value.Value.NamaProgram;
 
             return PartialView("_mProgramTemplateSubKegiatan", value.Value);

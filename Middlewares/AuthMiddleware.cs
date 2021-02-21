@@ -24,7 +24,7 @@ namespace TasikmalayaKota.Simpatik.Web.Middlewares
         {
             //httpContext.Response.Redirect("http://www.bing.com", false);
 
-            //httpContext.Response.Redirect("/simelon/login");
+            //httpContext.Response.Redirect("/simpattik/login");
 
             //var currentPath = httpContext.Request.Path.ToString().Split("/")[1].ToLower();
 
@@ -55,7 +55,7 @@ namespace TasikmalayaKota.Simpatik.Web.Middlewares
                     }
                     //else if ((httpContext.Request.Path.ToString() == "/") && httpContext.Session.GetString("IDAkun") == null)
                     //{
-                    //    httpContext.Response.Redirect("/simelon/login");
+                    //    httpContext.Response.Redirect("/simpattik/login");
                     //}
                     //else
                     //{

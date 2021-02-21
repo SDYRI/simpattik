@@ -9,7 +9,7 @@
 
 <ejs-grid id="Grid" actionComplete="CompleteAction" height="490" allowPaging="true" allowResizing="true" allowSorting="true" allowReordering="true" allowGrouping="false"
           toolbar="@(new List<string>() { "Search", "Add", "Edit", "Delete","Update","Cancel" , "ExcelExport" ,"PdfExport" })" allowFiltering="true" allowSelection="true"
-          created="createdGrid" allowExcelExport="true" allowPdfExport="true" toolbarClick="toolbarAction" query="@ViewBag.queryPaket" commandClick="cmdDetail">
+          created="createdGrid" allowExcelExport="true" allowPdfExport="true" toolbarClick="toolbarAction" query="@ViewBag.queryPenyedia" commandClick="cmdDetail">
     <e-grid-pagesettings pageCount="5" pageSize="12" pageSizes="true"></e-grid-pagesettings>
     <e-grid-filterSettings type="Menu"></e-grid-filterSettings>
     <e-grid-editSettings allowAdding="true" allowDeleting="true" allowEditing="true" mode="Dialog" template='#templatedialog' showDeleteConfirmDialog="true"></e-grid-editSettings>
@@ -90,7 +90,7 @@
                     }
                     ej.popups.hideSpinner(args.dialog.element);
                 }).catch(function (xhr) {
-                    console.log(xhr);
+                    
                     ej.popups.hideSpinner(args.dialog.element);
                 });
             }
@@ -158,7 +158,7 @@
             }
             var grid = document.querySelector('#Grid').ej2_instances[0];
             grid.dataSource = new ej.data.DataManager({
-                url: "/Identifikasi/IdentifikasiBarangAll",
+                url: "/Identifikasi/IdentifikasiPengadaanAll",
                 crudUrl: "/Identifikasi/PerencanaanPengadaanCrud",
                 adaptor: new CustomAdaptor()
             });

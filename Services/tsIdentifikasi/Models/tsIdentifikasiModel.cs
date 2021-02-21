@@ -13,11 +13,25 @@ namespace TasikmalayaKota.Simpatik.Web.Services.tsIdentifikasi.Models
         public string smbrdn { get; set; }
     }
 
+    public class kondisiModel
+    {
+        public int nilai { get; set; }
+        public string kondisi { get; set; }
+    }
+
+    public class barangmaterialModel
+    {
+        public int nilai { get; set; }
+        public string material { get; set; }
+    }
+
     public class tsIdentifikasiModel : DefaultTableDBStructureModel
     {
         public tsIdentifikasiModel()
         {
             sumberdanal = new List<sumberDanaModel>();
+            kondisil = new List<kondisiModel>();
+            barangmateriall = new List<barangmaterialModel>();
         }
 
         public int ididetifikasi { get; set; }
@@ -28,12 +42,14 @@ namespace TasikmalayaKota.Simpatik.Web.Services.tsIdentifikasi.Models
         public string opd { get; set; }
         public string pejabat { get; set; }
         public string program { get; set; }
+        public string namaprogram { get; set; }
         public string kegiatan { get; set; }
+        public string namakegiatan { get; set; }
         public string subkegiatan { get; set; }
-        public int koderekening { get; set; }
+        public string namasubkegiatan { get; set; }
+        public int idbrgkerj { get; set; }
         public string outputidentifikasi { get; set; }
         public string jeniskebutuhan { get; set; }
-        public string idbrgkerj { get; set; }
         public string namabrgkerj { get; set; }
         public string fungsi { get; set; }
         public string jumlahbarang { get; set; }
@@ -89,12 +105,30 @@ namespace TasikmalayaKota.Simpatik.Web.Services.tsIdentifikasi.Models
         public string ketersediaanusaha { get; set; }
         public string ukurankapasitas { get; set; }
         public string koderup { get; set; }
+        public bool hpsflag { get; set; }
         public string crtbyus { get; set; }
+        public string crpengdaan { get; set; }
+        public string uraian { get; set; }
+        public string kbki { get; set; }
+        public string tipeswakelola { get; set; }
+        public string pnyswakelola { get; set; }
+        public int nilaisirup { get; set; }
         public DateTime crtdate { get; set; }
         public DateTime mdfdate { get; set; }
 
         #region sumberDana
+        public string txtsumberdana { get; set; }
         public IList<sumberDanaModel> sumberdanal { get; set; }
+        #endregion
+
+        #region kondisi
+        public string txtkondisi { get; set; }
+        public IList<kondisiModel> kondisil { get; set; }
+        #endregion
+
+        #region barangmaterial
+        public string txtbarangmaterial { get; set; }
+        public IList<barangmaterialModel> barangmateriall { get; set; }
         #endregion
     }
 }

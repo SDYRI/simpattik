@@ -1,5 +1,7 @@
 ﻿@{
     ViewData["Title"] = ViewBag.Title;
+    var Penyedia = "#penyedia";
+    var Swakelola = "#swakelola";
     List<object> detailPaket = new List<object>();
     detailPaket.Add(new { type = "userstatus", buttonOption = new { content = " Identifikasi", cssClass = "e-flat e-details feather icon-layers" } }); // custom
 }
@@ -7,19 +9,44 @@
     <e-toast-position X="Right"></e-toast-position>
 </ejs-toast>
 
-<ejs-grid id="Grid" actionComplete="CompleteAction" height="490" allowPaging="true" allowResizing="true" allowSorting="true" allowReordering="true" allowGrouping="false"
-          toolbar="@(new List<string>() { "Search", "Add", "Edit", "Delete","Update","Cancel" , "ExcelExport" ,"PdfExport" })" allowFiltering="true" allowSelection="true"
-          created="createdGrid" allowExcelExport="true" allowPdfExport="true" toolbarClick="toolbarAction" query="@ViewBag.queryPaket" commandClick="cmdDetail">
-    <e-grid-pagesettings pageCount="5" pageSize="12" pageSizes="true"></e-grid-pagesettings>
-    <e-grid-filterSettings type="Menu"></e-grid-filterSettings>
-    <e-grid-editSettings allowAdding="true" allowDeleting="true" allowEditing="true" mode="Dialog" template='#templatedialog' showDeleteConfirmDialog="true"></e-grid-editSettings>
-    <e-grid-selectionsettings type="Single"></e-grid-selectionsettings>
-    <e-grid-columns>
-        <e-grid-column field="idpaket" headerText="idpaket" isPrimaryKey="true" isIdentity="true" visible="false"></e-grid-column>
-        <e-grid-column field="nmpaket" headerText="Nama Paket"></e-grid-column>
-        <e-grid-column headerText="Manage Records" width="150" commands="detailPaket"></e-grid-column>
-    </e-grid-columns>
-</ejs-grid>
+<div id="penyedia" style="display: none">
+    <ejs-grid id="GridPenyedia" actionComplete="CompleteActionPenyedia" height="490" allowPaging="true" allowResizing="true" allowSorting="true" allowReordering="true" allowGrouping="false"
+              toolbar="@(new List<string>() { "Search", "Add", "Edit", "Delete","Update","Cancel" , "ExcelExport" ,"PdfExport" })" allowFiltering="true" allowSelection="true"
+              created="createdGridPenyedia" allowExcelExport="true" allowPdfExport="true" toolbarClick="toolbarAction" query="@ViewBag.queryPenyedia" commandClick="cmdDetail">
+        <e-grid-pagesettings pageCount="5" pageSize="12" pageSizes="true"></e-grid-pagesettings>
+        <e-grid-filterSettings type="Menu"></e-grid-filterSettings>
+        <e-grid-editSettings allowAdding="true" allowDeleting="true" allowEditing="true" mode="Dialog" template='#templatedialog' showDeleteConfirmDialog="true"></e-grid-editSettings>
+        <e-grid-selectionsettings type="Single"></e-grid-selectionsettings>
+        <e-grid-columns>
+            <e-grid-column field="idpaket" headerText="idpaket" isPrimaryKey="true" isIdentity="true" visible="false"></e-grid-column>
+            <e-grid-column field="nmpaket" headerText="Nama Paket"></e-grid-column>
+            <e-grid-column headerText="Manage Records" width="150" commands="detailPaket"></e-grid-column>
+        </e-grid-columns>
+    </ejs-grid>
+</div>
+
+<div id="swakelola" style="display: none">
+    <ejs-grid id="GridSwakelola" actionComplete="CompleteActionSwakelola" height="490" allowPaging="true" allowResizing="true" allowSorting="true" allowReordering="true" allowGrouping="false"
+              toolbar="@(new List<string>() { "Search", "Add", "Edit", "Delete","Update","Cancel" , "ExcelExport" ,"PdfExport" })" allowFiltering="true" allowSelection="true"
+              created="createdGridSwakelola" allowExcelExport="true" allowPdfExport="true" toolbarClick="toolbarAction" query="@ViewBag.querySwakelola" commandClick="cmdDetail">
+        <e-grid-pagesettings pageCount="5" pageSize="12" pageSizes="true"></e-grid-pagesettings>
+        <e-grid-filterSettings type="Menu"></e-grid-filterSettings>
+        <e-grid-editSettings allowAdding="true" allowDeleting="true" allowEditing="true" mode="Dialog" template='#templatedialog' showDeleteConfirmDialog="true"></e-grid-editSettings>
+        <e-grid-selectionsettings type="Single"></e-grid-selectionsettings>
+        <e-grid-columns>
+            <e-grid-column field="idpaket" headerText="idpaket" isPrimaryKey="true" isIdentity="true" visible="false"></e-grid-column>
+            <e-grid-column field="nmpaket" headerText="Nama Paket"></e-grid-column>
+            <e-grid-column headerText="Manage Records" width="150" commands="detailPaket"></e-grid-column>
+        </e-grid-columns>
+    </ejs-grid>
+</div>
+
+<ejs-tab id="adaptiveTab" heightAdjustMode="None" height="250px" created="tabPaket">
+    <e-tab-tabitems>
+        <e-tab-tabitem header="ViewBag.headerPenyedia" content="@Penyedia"></e-tab-tabitem>
+        <e-tab-tabitem header="ViewBag.headerSwakelola" content="@Swakelola"></e-tab-tabitem>
+    </e-tab-tabitems>
+</ejs-tab>
 
 @section SectionControls{
     <script id='templatedialog' type="text/x-template">
@@ -36,19 +63,42 @@
             toastObj = this;
         }
 
-        function cmdDetail(args) {
-            //alert(JSON.parse(JSON.stringify(args.rowData)).ididetifikasi)
-            window.location.href = "/Identifikasi/IndexBarang/" + JSON.parse(JSON.stringify(args.rowData)).idpaket;
+        function tabPaket() {
+            tabObj = document.getElementById('adaptiveTab').ej2_instances[0];
         }
 
-        function CompleteAction(args) {
-            var grid = document.querySelector('#Grid').ej2_instances[0];
+        function paramToast(title, cssclass, message) {
+            setTimeout(
+                () => {
+                    var toastObj = document.getElementById('toast_default').ej2_instances[0];
+                    toastObj.title = title;
+                    toastObj.cssClass = cssclass;
+                    toastObj.content = message;
+                    toastObj.target = document.body;
+                    toastObj.show();
+                }, 500);
+        }
+
+        function cmdDetail(args) {
+            //alert(JSON.parse(JSON.stringify(args.rowData)).ididetifikasi)
+            window.location.href = "@ViewBag.identifikasi" + JSON.parse(JSON.stringify(args.rowData)).idpaket;
+        }
+
+        //#region penyedia
+        function CompleteActionPenyedia(args) {
+            var grid = document.querySelector('#GridPenyedia').ej2_instances[0];
 
             if (args.requestType === 'beginEdit' || args.requestType === 'add') {
                 var dialog = args.dialog;
                 dialog.height = 750;
                 // change the header of the dialog
-                dialog.header = args.requestType === 'beginEdit' ? 'Edit Paket Kebutuhan Barang' : 'New Paket Kebutuhan Barang';
+                dialog.header = args.requestType === 'beginEdit' ? 'Edit Paket Penyedia @ViewBag.Title' : 'New Paket Penyedia @ViewBag.Title';
+                args.form.ej2_instances[0].addRules('pemanfaatanmulai', { required: [true, 'Silahkan Pilih Waktu Pemanfaatan'] });
+                args.form.ej2_instances[0].addRules('pemanfaatanakhir', { required: [true, 'Silahkan Pilih Waktu Pemanfaatan'] });
+                args.form.ej2_instances[0].addRules('pelaksanaanmulai', { required: [true, 'Silahkan Pilih Waktu Pelaksanaan'] });
+                args.form.ej2_instances[0].addRules('pelaksanaanakhir', { required: [true, 'Silahkan Pilih Waktu Pelaksanaan'] });
+                args.form.ej2_instances[0].addRules('pemilihanmulai', { required: [true, 'Silahkan Pilih Waktu Pemilihan'] });
+                args.form.ej2_instances[0].addRules('pemilihanakhir', { required: [true, 'Silahkan Pilih Waktu Pemilihan'] });
 
                 let spinner = ej.popups.createSpinner({ target: args.dialog.element });
                 ej.popups.showSpinner(args.dialog.element);
@@ -68,7 +118,7 @@
                     //}
                     ej.popups.hideSpinner(args.dialog.element);
                 }).catch(function (xhr) {
-                    console.log(xhr);
+
                     ej.popups.hideSpinner(args.dialog.element);
                 });
             }
@@ -77,6 +127,95 @@
                 grid.closeEdit();
             }
         }
+
+        function createdGridPenyedia(args) {
+            class CustomAdaptor extends ej.data.UrlAdaptor {
+                processResponse(data, ds, query, xhr, request, changes) {
+                    if (!ej.base.isNullOrUndefined(data.message)) {
+                        if ((data.message.indexOf('BERHASIL DISIMPAN') == -1) && (data.message.indexOf('BERHASIL DIHAPUS') == -1)) {
+                            paramToast('Error Paket Penyedia @ViewBag.Title', 'e-toast-danger', data.message);
+                        }
+                        else {
+                            paramToast('Paket Penyedia @ViewBag.Title', 'e-toast-success', data.message);
+                        }
+                    }
+
+                    if (!ej.base.isNullOrUndefined(data.data))
+                        return data.data;
+                    else
+                        return data;
+                };
+            }
+            var grid = document.querySelector('#GridPenyedia').ej2_instances[0];
+            grid.dataSource = new ej.data.DataManager({
+                url: "/Paket/PaketAll",
+                crudUrl: "/Paket/PaketCrud",
+                adaptor: new CustomAdaptor()
+            });
+        }
+        //#endregion penyedia
+
+        //#region swakelola
+        function CompleteActionSwakelola(args) {
+            var grid = document.querySelector('#GridSwakelola').ej2_instances[0];
+
+            if (args.requestType === 'beginEdit' || args.requestType === 'add') {
+                var dialog = args.dialog;
+                dialog.height = 750;
+                // change the header of the dialog
+                dialog.header = args.requestType === 'beginEdit' ? 'Edit Paket Swakelola @ViewBag.Title' : 'New Paket Swakelola @ViewBag.Title' ;
+                args.form.ej2_instances[0].addRules('pelaksanaanmulai', { required: [true, 'Silahkan Pilih Waktu Pelaksanaan'] });
+                args.form.ej2_instances[0].addRules('pelaksanaanakhir', { required: [true, 'Silahkan Pilih Waktu Pelaksanaan'] });
+
+                let spinner = ej.popups.createSpinner({ target: args.dialog.element });
+                ej.popups.showSpinner(args.dialog.element);
+                var ajax = new ej.base.Ajax({
+                    url: "@Url.Action("PaketSwakelolaBarangTemplate", "Paket")", //render the partial view
+                    type: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify({ value: args.rowData })
+                });
+                ajax.send().then(function (data) {
+                    appendElement(data, args.form); //Render the edit form with selected record
+                    args.form.elements.namedItem('nmpaket').focus();
+                    ej.popups.hideSpinner(args.dialog.element);
+                }).catch(function (xhr) {
+
+                    ej.popups.hideSpinner(args.dialog.element);
+                });
+            }
+            else if (args.requestType === 'save') {
+                grid.refresh();
+                grid.closeEdit();
+            }
+        }
+
+        function createdGridSwakelola(args) {
+            class CustomAdaptor extends ej.data.UrlAdaptor {
+                processResponse(data, ds, query, xhr, request, changes) {
+                    if (!ej.base.isNullOrUndefined(data.message)) {
+                        if ((data.message.indexOf('BERHASIL DISIMPAN') == -1) && (data.message.indexOf('BERHASIL DIHAPUS') == -1)) {
+                            paramToast('Error Paket Swakelola @ViewBag.Title', 'e-toast-danger', data.message);
+                        }
+                        else {
+                            paramToast('Paket Swakelola @ViewBag.Title', 'e-toast-success', data.message);
+                        }
+                    }
+
+                    if (!ej.base.isNullOrUndefined(data.data))
+                        return data.data;
+                    else
+                        return data;
+                };
+            }
+            var grid = document.querySelector('#GridSwakelola').ej2_instances[0];
+            grid.dataSource = new ej.data.DataManager({
+                url: "/Paket/PaketAll",
+                crudUrl: "/Paket/PaketCrud",
+                adaptor: new CustomAdaptor()
+            });
+        }
+        //#endregion swakelola
 
         function appendElement(elementString, form) {
             form.querySelector("#Tempdialog").innerHTML = elementString;
@@ -88,46 +227,17 @@
             serverScript.remove();
         }
 
-        function paramToast(title, cssclass, message) {
-            setTimeout(
-                () => {
-                    var toastObj = document.getElementById('toast_default').ej2_instances[0];
-                    toastObj.title = title;
-                    toastObj.cssClass = cssclass;
-                    toastObj.content = message;
-                    toastObj.target = document.body;
-                    toastObj.show();
-                }, 500);
-        }
-
-        function createdGrid(args) {
-            class CustomAdaptor extends ej.data.UrlAdaptor {
-                processResponse(data, ds, query, xhr, request, changes) {
-                    if (!ej.base.isNullOrUndefined(data.message)) {
-                        if ((data.message.indexOf('BERHASIL DISIMPAN') == -1) && (data.message.indexOf('BERHASIL DIHAPUS') == -1)) {
-                            paramToast('Error Paket Kebutuhan Barang', 'e-toast-danger', data.message);
-                        }
-                        else {
-                            paramToast('Paket Kebutuhan Barang', 'e-toast-success', data.message);
-                        }
-                    }
-
-                    if (!ej.base.isNullOrUndefined(data.data))
-                        return data.data;
-                    else
-                        return data;
-                };
-            }
-            var grid = document.querySelector('#Grid').ej2_instances[0];
-            grid.dataSource = new ej.data.DataManager({
-                url: "/Paket/PaketAll",
-                crudUrl: "/Paket/PaketCrud",
-                adaptor: new CustomAdaptor()
-            });
-        }
-
         function toolbarAction(args) {
-            var fileName = "Paket Kebutuhan Barang";
+            var fileNameGrid = "";
+
+            if (this.element.id === "GridPenyedia") {
+                fileNameGrid = "Penyedia";
+            }
+            else if (this.element.id === "GridSwakelola") {
+                fileNameGrid = "Swakelola";
+            }
+
+            var fileName = "Paket " + fileNameGrid + " @ViewBag.Title";
 
             if (args.item.id === this.element.id + '_pdfexport') {
                 var exportProperties = {

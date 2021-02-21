@@ -25,8 +25,10 @@ namespace TasikmalayaKota.Simpatik.Web.Models
         public bool UbahPasswordFlag { get; set; }
         public List<MenuValidationResultModel> UserMenuValidation { get; set; }
         public string AksiUsman { get; set; }
+        public string Urusan { get; set; }
         public string Opd { get; set; }
         public string OpdName { get; set; }
         public string TahunAktif { get; set; }
+        public string PaPpk { get; set; }
     }
 }

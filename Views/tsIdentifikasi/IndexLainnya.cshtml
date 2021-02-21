@@ -80,7 +80,7 @@
                     }
                     ej.popups.hideSpinner(args.dialog.element);
                 }).catch(function (xhr) {
-                    console.log(xhr);
+                    
                     ej.popups.hideSpinner(args.dialog.element);
                 });
             }
@@ -132,7 +132,7 @@
             }
             var grid = document.querySelector('#Grid').ej2_instances[0];
             grid.dataSource = new ej.data.DataManager({
-                url: "/Identifikasi/IdentifikasiBarangAll",
+                url: "/Identifikasi/IdentifikasiPengadaanAll",
                 crudUrl: "/Identifikasi/PerencanaanPengadaanCrud",
                 adaptor: new CustomAdaptor()
             });

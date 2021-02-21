@@ -7,8 +7,8 @@
     <div class="form-row">
         <div class="form-group col-md-12">
             <div class="e-float-input e-control-wrapper">
-                <ejs-dropdownlist id="IdUrusan" placeholder="Pilih Urusan" popupHeight="200px" allowFiltering="true" filtering="onfilteringOPD" sortOrder="@ViewBag.sortDropdown"
-                                  query="@ViewBag.queryOPD" floatLabelType="Always" blur="onblurOpdKegiatan">
+                <ejs-dropdownlist id="IdUrusan" placeholder="Pilih Urusan" popupHeight="200px" allowFiltering="true" filtering="onfilteringUrusan" sortOrder="@ViewBag.sortDropdown"
+                                  query="@ViewBag.queryOPD" floatLabelType="Always" change="onchangeUrusanKegiatan">
                     <e-data-manager url="/UrusanMaster/UrusanMasterAll" adaptor="UrlAdaptor" crossDomain="true"></e-data-manager>
                     <e-dropdownlist-fields text="NamaSubUrusan" value="IdUrusan"></e-dropdownlist-fields>
                 </ejs-dropdownlist>
@@ -40,6 +40,15 @@
         <div class="form-group col-md-6">
             <div class="e-float-input e-control-wrapper">
                 <ejs-textbox id="NamaSubkegiatan" cssClass="e-input" placeholder="Nama Sub Kegiatan" floatLabelType="Always" ejs-for="@Model.NamaSubkegiatan"></ejs-textbox>
+            </div>
+        </div>
+        <div class="form-group col-md-12">
+            <div class="e-float-input e-control-wrapper">
+                <ejs-dropdownlist id="IdUserPPK" placeholder="Pilih PPK" popupHeight="200px" allowFiltering="true" filtering="onfilteringPpk" sortOrder="@ViewBag.sortDropdown"
+                                  query="@ViewBag.queryPPK" floatLabelType="Always" enabled="true">
+                    <e-data-manager url="/UserMaster/UserMasterAll" adaptor="UrlAdaptor" crossDomain="true"></e-data-manager>
+                    <e-dropdownlist-fields text="NamaUser" value="IdUser"></e-dropdownlist-fields>
+                </ejs-dropdownlist>
             </div>
         </div>
     </div>

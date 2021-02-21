@@ -32,30 +32,35 @@
                 <ejs-textbox id="uraian" cssClass="e-input" placeholder="Uraian Pekerjaan" floatLabelType="Always" ejs-for="@Model.uraian"></ejs-textbox>
             </div>
             <div class="e-float-input e-control-wrapper">
-                <ejs-textbox id="spesifikasi" cssClass="e-input" placeholder="Spesifikasi Pekerjaan" floatLabelType="Always" ejs-for="@Model.spesifikasi"></ejs-textbox>
-            </div>
-            <div class="e-float-input e-control-wrapper">
-                <ejs-combobox id="prodlmnegeri" dataSource="@ViewBag.yatidak" cssClass="e-input" placeholder="Produk Dalam Negeri" floatLabelType="Always" ejs-for="@Model.prodlmnegeri">
+                <ejs-combobox id="tipeswakelola" dataSource="@ViewBag.tipeswakelola" cssClass="e-input" placeholder="Tipe Swakelola" floatLabelType="Always" ejs-for="@Model.tipeswakelola">
                     <e-combobox-fields text="Text" value="Value"></e-combobox-fields>
                 </ejs-combobox>
             </div>
-            <div class="e-float-input e-control-wrapper">
-                <ejs-combobox id="ushkecil" dataSource="@ViewBag.yatidak" cssClass="e-input" placeholder="Usaha Kecil" floatLabelType="Always" ejs-for="@Model.ushkecil">
-                    <e-combobox-fields text="Text" value="Value"></e-combobox-fields>
-                </ejs-combobox>
-            </div>
+            @*<div class="e-float-input e-control-wrapper">
+            <ejs-textbox id="spesifikasi" cssClass="e-input" placeholder="Spesifikasi Pekerjaan" floatLabelType="Always" ejs-for="@Model.spesifikasi"></ejs-textbox>
+        </div>
+        <div class="e-float-input e-control-wrapper">
+            <ejs-combobox id="prodlmnegeri" dataSource="@ViewBag.yatidak" cssClass="e-input" placeholder="Produk Dalam Negeri" floatLabelType="Always" ejs-for="@Model.prodlmnegeri">
+                <e-combobox-fields text="Text" value="Value"></e-combobox-fields>
+            </ejs-combobox>
+        </div>
+        <div class="e-float-input e-control-wrapper">
+            <ejs-combobox id="ushkecil" dataSource="@ViewBag.yatidak" cssClass="e-input" placeholder="Usaha Kecil" floatLabelType="Always" ejs-for="@Model.ushkecil">
+                <e-combobox-fields text="Text" value="Value"></e-combobox-fields>
+            </ejs-combobox>
+        </div>*@
             <div class="e-float-input e-control-wrapper">
                 <ejs-combobox id="pradpa" dataSource="@ViewBag.yatidak" cssClass="e-input" placeholder="Pra DIPA/ DPA" floatLabelType="Always" ejs-for="@Model.pradpa">
                     <e-combobox-fields text="Text" value="Value"></e-combobox-fields>
                 </ejs-combobox>
             </div>
-            <div class="e-float-input e-control-wrapper">
-                <ejs-combobox id="mtdpemilihanstlh" dataSource="@ViewBag.metodepemilihan" cssClass="e-input" placeholder="Metode Pemilihan" floatLabelType="Always" ejs-for="@Model.mtdpemilihanstlh">
-                    <e-combobox-fields text="Text" value="Value"></e-combobox-fields>
-                </ejs-combobox>
-            </div>
+            @*<div class="e-float-input e-control-wrapper">
+            <ejs-combobox id="mtdpemilihanstlh" dataSource="@ViewBag.metodepemilihan" cssClass="e-input" placeholder="Metode Pemilihan" floatLabelType="Always" ejs-for="@Model.mtdpemilihanstlh">
+                <e-combobox-fields text="Text" value="Value"></e-combobox-fields>
+            </ejs-combobox>
+        </div>*@
         </div>
-        <div class="form-group col-md-6">
+        @*<div class="form-group col-md-6">
             <div class="e-float-input e-control-wrapper">
                 <ejs-datepicker id="pemanfaatanmulai" value=DateTime.Now format="MMMM y" start="Year" depth="Year" cssClass="e-input" placeholder="Pemanfaatan Barang Mulai" floatLabelType="Always" ejs-for="@Model.pemanfaatanmulai"></ejs-datepicker>
             </div>
@@ -64,18 +69,18 @@
             <div class="e-float-input e-control-wrapper">
                 <ejs-datepicker id="pemanfaatanakhir" value=DateTime.Now format="MMMM y" start="Year" depth="Year" cssClass="e-input" placeholder="Pemanfaatan Barang Akhir" floatLabelType="Always" ejs-for="@Model.pemanfaatanakhir"></ejs-datepicker>
             </div>
-        </div>
+        </div>*@
         <div class="form-group col-md-6">
             <div class="e-float-input e-control-wrapper">
-                <ejs-datepicker id="pelaksanaanmulai" value=DateTime.Now format="MMMM y" start="Year" depth="Year" cssClass="e-input" placeholder="Jadwal Pelaksanaan Kontrak Mulai" floatLabelType="Always" ejs-for="@Model.pelaksanaanmulai"></ejs-datepicker>
+                <ejs-datepicker id="pelaksanaanmulai" value=DateTime.Now format="MMMM y" start="Year" depth="Year" cssClass="e-input" placeholder="Jadwal Pelaksanaan Pekerjaan Mulai" floatLabelType="Always" ejs-for="@Model.pelaksanaanmulai"></ejs-datepicker>
             </div>
         </div>
         <div class="form-group col-md-6">
             <div class="e-float-input e-control-wrapper">
-                <ejs-datepicker id="pelaksanaanakhir" value=DateTime.Now format="MMMM y" start="Year" depth="Year" cssClass="e-input" placeholder="Jadwal Pelaksanaan Kontrak Akhir" floatLabelType="Always" ejs-for="@Model.pelaksanaanakhir"></ejs-datepicker>
+                <ejs-datepicker id="pelaksanaanakhir" value=DateTime.Now format="MMMM y" start="Year" depth="Year" cssClass="e-input" placeholder="Jadwal Pelaksanaan Pekerjaan Akhir" floatLabelType="Always" ejs-for="@Model.pelaksanaanakhir"></ejs-datepicker>
             </div>
         </div>
-        <div class="form-group col-md-6">
+        @*<div class="form-group col-md-6">
             <div class="e-float-input e-control-wrapper">
                 <ejs-datepicker id="pemilihanmulai" value=DateTime.Now format="MMMM y" start="Year" depth="Year" cssClass="e-input" placeholder="Jadwal Pemilihan Penyedia Mulai" floatLabelType="Always" ejs-for="@Model.pemilihanmulai"></ejs-datepicker>
             </div>
@@ -84,7 +89,7 @@
             <div class="e-float-input e-control-wrapper">
                 <ejs-datepicker id="pemilihanakhir" value=DateTime.Now format="MMMM y" start="Year" depth="Year" cssClass="e-input" placeholder="Jadwal Pemilihan Penyedia Akhir" floatLabelType="Always" ejs-for="@Model.pemilihanakhir"></ejs-datepicker>
             </div>
-        </div>
+        </div>*@
     </div>
 </div>
 
