@@ -122,7 +122,7 @@
                 });
                 ajax.send().then(function (data) {
                     appendElement(data, args.form); //Render the edit form with selected record
-                    args.form.elements.namedItem('fungsi').focus();
+                    args.form.elements.namedItem('namabrgkerj').focus();
                     if (typeof args.rowData['program'] != 'undefined') {
                         var dropObject = document.getElementById("program").ej2_instances[0];
                         dropObject.value = args.rowData['program'];

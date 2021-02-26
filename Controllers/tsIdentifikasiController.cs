@@ -171,11 +171,12 @@ namespace simpat1k.Controllers
             value.Value.jeniskebutuhan = "2";
             value.Value.opd = _httpContextAccessor.HttpContext.Session.GetString("OpdName");
             value.Value.pejabat = _httpContextAccessor.HttpContext.Session.GetString("Nama");
+
             ViewBag.sortDropdown = "Ascending";
             ViewBag.queryKodeRekening = "new ej.data.Query().select(['NamaSubRincian', 'IdKodeRekening']).take(10).requiresCount().addParams('IdPosisi', 6)";
-            ViewBag.queryProgram = "new ej.data.Query().addParams('IdPosisi', 1)";
-            ViewBag.queryKegiatan = "new ej.data.Query().addParams('IdPosisi', 2)";
-            ViewBag.querySubKegiatan = "new ej.data.Query().addParams('IdPosisi', 3)";
+            ViewBag.queryProgram = "new ej.data.Query().select(['NamaSubkegiatan', 'IdProgram']).take(10).requiresCount().addParams('IdPosisi', 1)";
+            ViewBag.queryKegiatan = "new ej.data.Query().select(['NamaSubkegiatan', 'IdProgram']).take(10).requiresCount().addParams('IdPosisi', 2)";
+            ViewBag.querySubKegiatan = "new ej.data.Query().select(['NamaSubkegiatan', 'IdProgram']).take(10).requiresCount().addParams('IdPosisi', 3)";
 
             #region Combobox
             ViewBag.yatidak = new enumDataModel().YaTidak();
@@ -185,6 +186,9 @@ namespace simpat1k.Controllers
             ViewBag.rekomendasi = new enumDataModel().Rekomendasi();
             ViewBag.sumberDana = new enumDataModel().SumberDana();
             ViewBag.kelayakan = new enumDataModel().Kelayakan();
+            ViewBag.sudahbelum = new enumDataModel().SudahBelum();
+            ViewBag.komplekssederhana = new enumDataModel().KompleksSederhana();
+            ViewBag.barangmaterial = new enumDataModel().BarangMaterial();
             #endregion Combobox
 
             return PartialView("_tsIdentifikasiPekerjaanTemplate", value.Value);
@@ -208,11 +212,12 @@ namespace simpat1k.Controllers
             value.Value.jeniskebutuhan = "3";
             value.Value.opd = _httpContextAccessor.HttpContext.Session.GetString("OpdName");
             value.Value.pejabat = _httpContextAccessor.HttpContext.Session.GetString("Nama");
+
             ViewBag.sortDropdown = "Ascending";
             ViewBag.queryKodeRekening = "new ej.data.Query().select(['NamaSubRincian', 'IdKodeRekening']).take(10).requiresCount().addParams('IdPosisi', 6)";
-            ViewBag.queryProgram = "new ej.data.Query().addParams('IdPosisi', 1)";
-            ViewBag.queryKegiatan = "new ej.data.Query().addParams('IdPosisi', 2)";
-            ViewBag.querySubKegiatan = "new ej.data.Query().addParams('IdPosisi', 3)";
+            ViewBag.queryProgram = "new ej.data.Query().select(['NamaSubkegiatan', 'IdProgram']).take(10).requiresCount().addParams('IdPosisi', 1)";
+            ViewBag.queryKegiatan = "new ej.data.Query().select(['NamaSubkegiatan', 'IdProgram']).take(10).requiresCount().addParams('IdPosisi', 2)";
+            ViewBag.querySubKegiatan = "new ej.data.Query().select(['NamaSubkegiatan', 'IdProgram']).take(10).requiresCount().addParams('IdPosisi', 3)";
 
             #region Combobox
             ViewBag.yatidak = new enumDataModel().YaTidak();
@@ -245,11 +250,12 @@ namespace simpat1k.Controllers
             value.Value.jeniskebutuhan = "4";
             value.Value.opd = _httpContextAccessor.HttpContext.Session.GetString("OpdName");
             value.Value.pejabat = _httpContextAccessor.HttpContext.Session.GetString("Nama");
+
             ViewBag.sortDropdown = "Ascending";
             ViewBag.queryKodeRekening = "new ej.data.Query().select(['NamaSubRincian', 'IdKodeRekening']).take(10).requiresCount().addParams('IdPosisi', 6)";
-            ViewBag.queryProgram = "new ej.data.Query().addParams('IdPosisi', 1)";
-            ViewBag.queryKegiatan = "new ej.data.Query().addParams('IdPosisi', 2)";
-            ViewBag.querySubKegiatan = "new ej.data.Query().addParams('IdPosisi', 3)";
+            ViewBag.queryProgram = "new ej.data.Query().select(['NamaSubkegiatan', 'IdProgram']).take(10).requiresCount().addParams('IdPosisi', 1)";
+            ViewBag.queryKegiatan = "new ej.data.Query().select(['NamaSubkegiatan', 'IdProgram']).take(10).requiresCount().addParams('IdPosisi', 2)";
+            ViewBag.querySubKegiatan = "new ej.data.Query().select(['NamaSubkegiatan', 'IdProgram']).take(10).requiresCount().addParams('IdPosisi', 3)";
 
             #region Combobox
             ViewBag.yatidak = new enumDataModel().YaTidak();

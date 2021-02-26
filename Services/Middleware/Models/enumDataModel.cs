@@ -52,6 +52,27 @@ namespace TasikmalayaKota.Simpatik.Web.Services.Middleware.Models
             rekomendasi.Add(new enumDataModel { Text = "Tidak Direkomendasikan", Value = "2" });
             return rekomendasi;
         }
+        public List<enumDataModel> BarangMaterial()
+        {
+            List<enumDataModel> barangmaterial = new List<enumDataModel>();
+            barangmaterial.Add(new enumDataModel { Text = "Dalam Negeri", Value = "Dalam Negeri" });
+            barangmaterial.Add(new enumDataModel { Text = "Luar Negeri", Value = "Luar Negeri" });
+            return barangmaterial;
+        }
+        public List<enumDataModel> SudahBelum()
+        {
+            List<enumDataModel> sudahbelum = new List<enumDataModel>();
+            sudahbelum.Add(new enumDataModel { Text = "Sudah dilakukan", Value = "1" });
+            sudahbelum.Add(new enumDataModel { Text = "Belum dilakukan", Value = "2" });
+            return sudahbelum;
+        }
+        public List<enumDataModel> KompleksSederhana()
+        {
+            List<enumDataModel> komplekssederhana = new List<enumDataModel>();
+            komplekssederhana.Add(new enumDataModel { Text = "Kompleks", Value = "1" });
+            komplekssederhana.Add(new enumDataModel { Text = "Sederhana", Value = "2" });
+            return komplekssederhana;
+        }
         public List<enumDataModel> Kelayakan()
         {
             List<enumDataModel> tipeuser = new List<enumDataModel>();
