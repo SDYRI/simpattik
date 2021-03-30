@@ -11,6 +11,7 @@ using TasikmalayaKota.Simpatik.Web.Services.mUser.Models;
 using TasikmalayaKota.Simpatik.Web.Services.Middleware.Models;
 using System.Text;
 using System.Security.Cryptography;
+using Syncfusion.EJ2.Navigations;
 
 namespace TasikmalayaKota.Simpatik.Web.Services.mUser.DALS
 {

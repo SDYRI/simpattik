@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Syncfusion.EJ2.Navigations;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,6 +11,9 @@ namespace TasikmalayaKota.Simpatik.Web.Models
         public UserValidationResultModel()
         {
             UserMenuValidation = new List<MenuValidationResultModel>();
+            Toolbar = new List<string>();
+            ToolbarTahun = new List<string>();
+            ToolbarMaster = new List<string>();
         }
 
         public string IDAkun { get; set; }
@@ -30,5 +34,8 @@ namespace TasikmalayaKota.Simpatik.Web.Models
         public string OpdName { get; set; }
         public string TahunAktif { get; set; }
         public string PaPpk { get; set; }
+        public List<string> Toolbar { get; set; }
+        public List<string> ToolbarTahun { get; set; }
+        public List<string> ToolbarMaster { get; set; }
     }
 }

@@ -1,12 +1,16 @@
 ﻿@{
     ViewData["Title"] = ViewBag.Title;
+    List<string> Toolbar = HttpContextAccessor.HttpContext.Session.GetComplexData<List<string>>("Toolbar");
 }
+@Html.AntiForgeryToken()
+@Html.ValidationSummary(true)
+
 <ejs-toast id="toast_default" created="createdToasObj">
     <e-toast-position X="Right"></e-toast-position>
 </ejs-toast>
 
-<ejs-grid id="Grid" actionComplete="CompleteAction" height="490" allowPaging="true" allowResizing="true" allowSorting="true" allowReordering="true" allowGrouping="false"
-          toolbar="@(new List<string>() { "Search", "Add", "Edit", "Delete","Update","Cancel" , "ExcelExport" ,"PdfExport" })" allowFiltering="true" allowSelection="true"
+<ejs-grid id="Grid" actionComplete="CompleteAction" actionBegin="BeginAction" height="490" allowPaging="true" allowResizing="true" allowSorting="true" allowReordering="true" allowGrouping="false"
+          toolbar="@Toolbar" allowFiltering="true" allowSelection="true"
           created="createdGrid" allowExcelExport="true" allowPdfExport="true" toolbarClick="toolbarAction" query="@ViewBag.queryIdentifikasi">
     <e-grid-pagesettings pageCount="5" pageSize="12" pageSizes="true"></e-grid-pagesettings>
     <e-grid-filterSettings type="Menu"></e-grid-filterSettings>
@@ -27,6 +31,9 @@
 
     <script type="text/javascript">
         var toastObj;
+        var flag = true;
+        var dataStrngNew;
+
         function createdToasObj() {
             toastObj = this;
         }
@@ -53,14 +60,36 @@
             e.updateData(SelectObj.dataSource, query);
         }
 
+        function BeginAction(args) {
+            if (args.requestType === "save") {
+                // #region Sumber Dana
+                var sumberdanas = new Array();
+                $("#tblSumberDana TBODY TR").each(function () {
+                    var row = $(this);
+                    var sumberdana = {};
+                    sumberdana.nilai = row.find("TD").eq(1).html().replace(/\./g, "");
+                    sumberdana.smbrdn = row.find("TD").eq(0).html();
+                    sumberdanas.push(sumberdana);
+                });
+                $("#txtsumberdana").val(sumberdanas.length != 0 ? JSON.stringify(sumberdanas) : "[0]");
+                // #endregion Sumber Dana
+            }
+        }
+
         function CompleteAction(args) {
             var grid = document.querySelector('#Grid').ej2_instances[0];
 
             if (args.requestType === 'beginEdit' || args.requestType === 'add') {
                 var dialog = args.dialog;
                 dialog.height = 650;
+                dialog.width = "1024px";
                 // change the header of the dialog
-                dialog.header = args.requestType === 'beginEdit' ? 'Edit Identifikasi Kebutuhan Konsultasi' : 'New Identifikasi Kebutuhan Konsultasi';
+                dialog.header = args.requestType === 'beginEdit' ? 'Edit Identifikasi Kebutuhan Jasa Konsultasi' : 'New Identifikasi Kebutuhan Jasa Konsultasi';
+                args.form.ej2_instances[0].addRules('program', { required: [true, 'Silahkan Pilih Program'] });
+                args.form.ej2_instances[0].addRules('kegiatan', { required: [true, 'Silahkan Pilih Kegiatan'] });
+                args.form.ej2_instances[0].addRules('subkegiatan', { required: [true, 'Silahkan Pilih Sub Kegiatan'] });
+                args.form.ej2_instances[0].addRules('idbrgkerj', { required: [true, 'Silahkan Pilih Kode Rekening'] });
+                args.form.ej2_instances[0].addRules('namabrgkerj', { required: [true, 'Silahkan Isi Nama Barang'], minLength: [3, 'Nama Barang Minimal 3 huruf'] });
 
                 let spinner = ej.popups.createSpinner({ target: args.dialog.element });
                 ej.popups.showSpinner(args.dialog.element);
@@ -72,15 +101,28 @@
                 });
                 ajax.send().then(function (data) {
                     appendElement(data, args.form); //Render the edit form with selected record
-                    args.form.elements.namedItem('fungsi').focus();
+                    args.form.elements.namedItem('namabrgkerj').focus();
+                    if (typeof args.rowData['program'] != 'undefined') {
+                        var dropObject = document.getElementById("program").ej2_instances[0];
+                        dropObject.value = args.rowData['program'];
+                        dropObject.text = args.rowData['namaprogram'];
+                    }
+                    if (typeof args.rowData['kegiatan'] != 'undefined') {
+                        var dropObject = document.getElementById("kegiatan").ej2_instances[0];
+                        dropObject.value = args.rowData['kegiatan'];
+                        dropObject.text = args.rowData['namakegiatan'];
+                    }
+                    if (typeof args.rowData['subkegiatan'] != 'undefined') {
+                        var dropObject = document.getElementById("subkegiatan").ej2_instances[0];
+                        dropObject.value = args.rowData['subkegiatan'];
+                        dropObject.text = args.rowData['namasubkegiatan'];
+                    }
                     if (typeof args.rowData['idbrgkerj'] != 'undefined') {
                         var dropObject = document.getElementById("idbrgkerj").ej2_instances[0];
                         dropObject.value = args.rowData['idbrgkerj'];
-                        dropObject.text = args.rowData['namabrgkerj'];
                     }
                     ej.popups.hideSpinner(args.dialog.element);
                 }).catch(function (xhr) {
-                    
                     ej.popups.hideSpinner(args.dialog.element);
                 });
             }
@@ -88,6 +130,26 @@
                 grid.refresh();
                 grid.closeEdit();
             }
+        }
+
+        function onchangeKegiatan() {
+            var ParentObj = document.getElementById('program').ej2_instances[0];
+            var SelectObj = document.getElementById('kegiatan').ej2_instances[0];
+            SelectObj.enabled = true;
+            var SelectObjQuery = new ej.data.Query().where('IdParent', 'equal', ParentObj.value).addParams('IdPosisi', 2);
+            SelectObj.query = SelectObjQuery;
+            SelectObj.text = null;
+            SelectObj.dataBind();
+        }
+
+        function onchangeSubKegiatan() {
+            var ParentObj = document.getElementById('kegiatan').ej2_instances[0];
+            var SelectObj = document.getElementById('subkegiatan').ej2_instances[0];
+            SelectObj.enabled = true;
+            var SelectObjQuery = new ej.data.Query().where('IdParent', 'equal', ParentObj.value).addParams('IdPosisi', 3);
+            SelectObj.query = SelectObjQuery;
+            SelectObj.text = null;
+            SelectObj.dataBind();
         }
 
         function appendElement(elementString, form) {
@@ -114,13 +176,37 @@
 
         function createdGrid(args) {
             class CustomAdaptor extends ej.data.UrlAdaptor {
+                beforeSend(dataManager, request, ajaxSettings) {
+                    //xhr.setRequestHeader("XSRF-TOKEN", $('input:hidden[name="__RequestVerificationToken"]').val());
+                    var action = JSON.parse(ajaxSettings.data).action;
+
+                    if (action == 'update' || action == 'remove' || action == 'insert') {
+                        var dataStrng = ajaxSettings.data;
+                        // #region Sumber Dana
+                        var dataSumberdana = $("#txtsumberdana").val();
+                        var dataStrngNew = JSON.parse(dataStrng, (k, v) => k == 'sumberdana' ? dataSumberdana : v);
+                        var dataStrng = JSON.stringify(dataStrngNew);
+                        // #endregion Sumber Dana
+                        // #region Kondisi
+                        var dataStrngNew = JSON.parse(dataStrng, (k, v) => k == 'kondisilayak' ? '[0]' : v);
+                        var dataStrng = JSON.stringify(dataStrngNew);
+                        // #endregion Kondisi
+                        // #region Barang Material
+                        var dataStrngNew = JSON.parse(dataStrng, (k, v) => k == 'barangmaterial' ? '[0]' : v);
+                        var dataStrng = JSON.stringify(dataStrngNew);
+                        // #endregion Barang Material
+
+                        ajaxSettings.data = dataStrng;
+                        ajaxSettings.options.data = dataStrng;
+                    }
+                };
                 processResponse(data, ds, query, xhr, request, changes) {
                     if (!ej.base.isNullOrUndefined(data.message)) {
                         if ((data.message.indexOf('BERHASIL DISIMPAN') == -1) && (data.message.indexOf('BERHASIL DIHAPUS') == -1)) {
-                            paramToast('Error Identifikasi Kebutuhan', 'e-toast-danger', data.message);
+                            paramToast('Error Identifikasi Kebutuhan Jasa Konsultasi', 'e-toast-danger', data.message);
                         }
                         else {
-                            paramToast('Identifikasi Kebutuhan', 'e-toast-success', data.message);
+                            paramToast('Identifikasi Kebutuhan Jasa Konsultasi', 'e-toast-success', data.message);
                         }
                     }
 
@@ -128,18 +214,19 @@
                         return data.data;
                     else
                         return data;
-                }
+                };
             }
             var grid = document.querySelector('#Grid').ej2_instances[0];
             grid.dataSource = new ej.data.DataManager({
                 url: "/Identifikasi/IdentifikasiPengadaanAll",
-                crudUrl: "/Identifikasi/PerencanaanPengadaanCrud",
-                adaptor: new CustomAdaptor()
+                crudUrl: "/Identifikasi/IdentifikasiPengadaanCrud",
+                adaptor: new CustomAdaptor(),
+                headers: [{'SIMPATTIK-TOKEN': $('input:hidden[name="__RequestVerificationToken"]').val()}]
             });
         }
 
         function toolbarAction(args) {
-            var fileName = "Identifikasi Kebutuhan";
+            var fileName = "Identifikasi Kebutuhan Barang";
 
             if (args.item.id === this.element.id + '_pdfexport') {
                 var exportProperties = {
@@ -156,5 +243,59 @@
                 this.excelExport(exportProperties);
             }
         }
+
+        // #region Sumber Dana
+        function btnSumberDana() {
+            var ddSmbrdn = $("#ddSmbrdn");
+            var txtNilai = $("#sumberdana");
+
+            if (ddSmbrdn.val() != "" && txtNilai.val() != "") {
+                //Get the reference of the Table's TBODY element.
+                var tBody = $("#tblSumberDana > TBODY")[0];
+
+                //Add Row.
+                var row = tBody.insertRow(-1);
+
+                //Add Sumberdana.
+                var cell = $(row.insertCell(-1));
+                cell.html(ddSmbrdn.val());
+
+                //Add Nilai.
+                cell = $(row.insertCell(-1));
+                cell.html(txtNilai.val().replace(/\,/g, "."));
+
+                //Add Remove.
+                cell = $(row.insertCell(-1));
+                var btnRemove = document.createElement("button");
+                btnRemove.setAttribute("type", "button");
+                btnRemove.setAttribute("class", "btn btn-icon rounded-circle btn-outline-primary");
+                btnRemove.setAttribute("onclick", "btnSumberDanaRemove(this)");
+                cell.append(btnRemove);
+
+                var btnIclass = document.createElement("i");
+                btnIclass.setAttribute("class", "feather icon-minus-circle");
+                btnRemove.appendChild(btnIclass);
+
+                //Clear the TextBoxes.
+                ddSmbrdn.val("");
+                txtNilai.val("");
+            }
+            else {
+                paramToast('Error Identifikasi Kebutuhan Jasa Konsultasi', 'e-toast-danger', 'Harap lengkapi data sumber dana');
+            }
+        };
+
+        function btnSumberDanaRemove(button) {
+            //Determine the reference of the Row using the Button.
+            var row = $(button).closest("TR");
+            if (confirm("Apakah anda yakin akan menghapus sumber dana ini?")) {
+                //Get the reference of the Table.
+                var table = $("#tblSumberDana")[0];
+
+                //Delete the Table row using it's Index.
+                table.deleteRow(row[0].rowIndex);
+            }
+        };
+        // #endregion Sumber Dana
     </script>
 }

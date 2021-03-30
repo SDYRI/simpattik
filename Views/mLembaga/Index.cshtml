@@ -1,16 +1,19 @@
-﻿<ejs-grid id="Grid" dataSource="@ViewBag.datasource" height="490" allowPaging="true" allowResizing="true" allowSorting="true" allowReordering="true" allowGrouping="false" toolbar="@(new List<string>() { "Search", "Add", "Edit", "Delete","Update","Cancel" })" allowFiltering="true" allowSelection="true">
- <e-grid-pagesettings pageSize="12"/> 
-<e-grid-filterSettings type="Excel"></e-grid-filterSettings> 
-<e-grid-editSettings allowAdding="true" allowDeleting="true" allowEditing="true" mode="Dialog"></e-grid-editSettings> 
-<e-grid-selectionsettings type="Single"></e-grid-selectionsettings>
-  <e-grid-columns>
-	<e-grid-column field="IdUser"  headerText="IdUser" isPrimaryKey="true" isIdentity="true"></e-grid-column>
-	<e-grid-column field="NamaUser"  headerText="NamaUser"></e-grid-column>
-	<e-grid-column field="SaltUser"  headerText="SaltUser"></e-grid-column>
-	<e-grid-column field="PasswordUser"  headerText="PasswordUser"></e-grid-column>
-	<e-grid-column field="UserNameUser"  headerText="UserNameUser"></e-grid-column>
-	<e-grid-column field="ListOpdUser"  headerText="ListOpdUser"></e-grid-column>
-  </e-grid-columns>
+﻿@{
+    List<string> Toolbar = HttpContextAccessor.HttpContext.Session.GetComplexData<List<string>>("Toolbar");
+}
+<ejs-grid id="Grid" dataSource="@ViewBag.datasource" height="490" allowPaging="true" allowResizing="true" allowSorting="true" allowReordering="true" allowGrouping="false" toolbar="@Toolbar" allowFiltering="true" allowSelection="true">
+    <e-grid-pagesettings pageSize="12" />
+    <e-grid-filterSettings type="Excel"></e-grid-filterSettings>
+    <e-grid-editSettings allowAdding="true" allowDeleting="true" allowEditing="true" mode="Dialog"></e-grid-editSettings>
+    <e-grid-selectionsettings type="Single"></e-grid-selectionsettings>
+    <e-grid-columns>
+        <e-grid-column field="IdUser" headerText="IdUser" isPrimaryKey="true" isIdentity="true"></e-grid-column>
+        <e-grid-column field="NamaUser" headerText="NamaUser"></e-grid-column>
+        <e-grid-column field="SaltUser" headerText="SaltUser"></e-grid-column>
+        <e-grid-column field="PasswordUser" headerText="PasswordUser"></e-grid-column>
+        <e-grid-column field="UserNameUser" headerText="UserNameUser"></e-grid-column>
+        <e-grid-column field="ListOpdUser" headerText="ListOpdUser"></e-grid-column>
+    </e-grid-columns>
 </ejs-grid>
 
 

@@ -1,12 +1,13 @@
 ﻿@{
     ViewData["Title"] = ViewBag.Title;
+    List<string> Toolbar = HttpContextAccessor.HttpContext.Session.GetComplexData<List<string>>("ToolbarTahun");
 }
 <ejs-toast id="toast_default" created="createdToasObj">
     <e-toast-position X="Right"></e-toast-position>
 </ejs-toast>
 
 <ejs-grid id="Grid" actionComplete="CompleteAction" height="490" allowPaging="true" allowResizing="true" allowSorting="true" allowReordering="true" allowGrouping="false"
-          toolbar="@(new List<string>() { "Search", "Add", "Edit", "ExcelExport" ,"PdfExport"})" allowFiltering="true" allowSelection="true" allowExcelExport="true" allowPdfExport="true"
+          toolbar="@Toolbar" allowFiltering="true" allowSelection="true" allowExcelExport="true" allowPdfExport="true"
           toolbarClick="toolbarAction" created="createdGrid">
     <e-grid-pagesettings pageSize="12" />
     <e-grid-filterSettings type="Menu"></e-grid-filterSettings>
@@ -54,7 +55,7 @@
                     args.form.elements.namedItem('TahunAnggaran').focus();
                     ej.popups.hideSpinner(args.dialog.element);
                 }).catch(function (xhr) {
-                    
+
                     ej.popups.hideSpinner(args.dialog.element);
                 });
             }

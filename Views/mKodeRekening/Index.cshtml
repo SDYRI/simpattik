@@ -6,6 +6,7 @@
     var Objek = "#objek";
     var Rincian = "#rincian";
     var SubRincian = "#subrincian";
+    List<string> Toolbar = HttpContextAccessor.HttpContext.Session.GetComplexData<List<string>>("ToolbarMaster");
 }
 <ejs-toast id="toast_default" created="createdToasObj">
     <e-toast-position X="Right"></e-toast-position>
@@ -13,7 +14,7 @@
 
 <div id="akun" style="display: none">
     <ejs-grid id="GridAkun" actionComplete="CompleteActionAkun" height="490" allowPaging="true" allowResizing="true" allowSorting="true" allowReordering="true" allowGrouping="false"
-              toolbar="@(new List<string>() { "Search", "Add", "Edit", "Delete","Update","Cancel" , "ExcelExport" ,"PdfExport"})" allowFiltering="true" allowSelection="true"
+              toolbar="@Toolbar" allowFiltering="true" allowSelection="true"
               allowExcelExport="true" allowPdfExport="true" toolbarClick="toolbarAction" created="createdGridAkun" query="@ViewBag.queryAkun">
         <e-grid-pagesettings pageCount="5" pageSize="12" pageSizes="true"></e-grid-pagesettings>
         <e-grid-filterSettings type="Menu"></e-grid-filterSettings>
@@ -29,7 +30,7 @@
 
 <div id="kelompok" style="display: none">
     <ejs-grid id="GridKelompok" actionComplete="CompleteActionKelompok" height="490" allowPaging="true" allowResizing="true" allowSorting="true" allowReordering="true" allowGrouping="false"
-              toolbar="@(new List<string>() { "Search", "Add", "Edit", "Delete","Update","Cancel" , "ExcelExport" ,"PdfExport"})" allowFiltering="true" allowSelection="true"
+              toolbar="@Toolbar" allowFiltering="true" allowSelection="true"
               allowExcelExport="true" allowPdfExport="true" toolbarClick="toolbarAction" created="createdGridKelompok" query="@ViewBag.queryKelompok">
         <e-grid-pagesettings pageCount="5" pageSize="12" pageSizes="true"></e-grid-pagesettings>
         <e-grid-filterSettings type="Menu"></e-grid-filterSettings>
@@ -46,7 +47,7 @@
 
 <div id="jenis" style="display: none">
     <ejs-grid id="GridJenis" actionComplete="CompleteActionJenis" height="490" allowPaging="true" allowResizing="true" allowSorting="true" allowReordering="true" allowGrouping="false"
-              toolbar="@(new List<string>() { "Search", "Add", "Edit", "Delete","Update","Cancel" , "ExcelExport" ,"PdfExport"})" allowFiltering="true" allowSelection="true"
+              toolbar="@Toolbar" allowFiltering="true" allowSelection="true"
               allowExcelExport="true" allowPdfExport="true" toolbarClick="toolbarAction" created="createdGridJenis" query="@ViewBag.queryJenis">
         <e-grid-pagesettings pageCount="5" pageSize="12" pageSizes="true"></e-grid-pagesettings>
         <e-grid-filterSettings type="Menu"></e-grid-filterSettings>
@@ -64,7 +65,7 @@
 
 <div id="objek" style="display: none">
     <ejs-grid id="GridObjek" actionComplete="CompleteActionObjek" height="490" allowPaging="true" allowResizing="true" allowSorting="true" allowReordering="true" allowGrouping="false"
-              toolbar="@(new List<string>() { "Search", "Add", "Edit", "Delete","Update","Cancel" , "ExcelExport" ,"PdfExport"})" allowFiltering="true" allowSelection="true"
+              toolbar="@Toolbar" allowFiltering="true" allowSelection="true"
               allowExcelExport="true" allowPdfExport="true" toolbarClick="toolbarAction" created="createdGridObjek" query="@ViewBag.queryObjek">
         <e-grid-pagesettings pageCount="5" pageSize="12" pageSizes="true"></e-grid-pagesettings>
         <e-grid-filterSettings type="Menu"></e-grid-filterSettings>
@@ -83,7 +84,7 @@
 
 <div id="rincian" style="display: none">
     <ejs-grid id="GridRincian" actionComplete="CompleteActionRincian" height="490" allowPaging="true" allowResizing="true" allowSorting="true" allowReordering="true" allowGrouping="false"
-              toolbar="@(new List<string>() { "Search", "Add", "Edit", "Delete","Update","Cancel" , "ExcelExport" ,"PdfExport"})" allowFiltering="true" allowSelection="true"
+              toolbar="@Toolbar" allowFiltering="true" allowSelection="true"
               allowExcelExport="true" allowPdfExport="true" toolbarClick="toolbarAction" created="createdGridRincian" query="@ViewBag.queryRincian">
         <e-grid-pagesettings pageCount="5" pageSize="12" pageSizes="true"></e-grid-pagesettings>
         <e-grid-filterSettings type="Menu"></e-grid-filterSettings>
@@ -103,8 +104,8 @@
 
 <div id="subrincian" style="display: none">
     <ejs-grid id="GridSubRincian" actionComplete="CompleteActionSubRincian" height="490" allowPaging="true" allowResizing="true" allowSorting="true" allowReordering="true" allowGrouping="false"
-                toolbar="@(new List<string>() { "Search", "Add", "Edit", "Delete","Update","Cancel" , "ExcelExport" ,"PdfExport"})" allowFiltering="true" allowSelection="true"
-                allowExcelExport="true" allowPdfExport="true" toolbarClick="toolbarAction" created="createdGridSubRincian" query="@ViewBag.querySubRincian">
+              toolbar="@Toolbar" allowFiltering="true" allowSelection="true"
+              allowExcelExport="true" allowPdfExport="true" toolbarClick="toolbarAction" created="createdGridSubRincian" query="@ViewBag.querySubRincian">
         <e-grid-pagesettings pageCount="5" pageSize="12" pageSizes="true"></e-grid-pagesettings>
         <e-grid-filterSettings type="Menu"></e-grid-filterSettings>
         <e-grid-editSettings allowAdding="true" allowDeleting="true" allowEditing="true" mode="Dialog" template='#templatedialog' showDeleteConfirmDialog="true"></e-grid-editSettings>
@@ -170,6 +171,7 @@
             if (args.requestType === 'beginEdit' || args.requestType === 'add') {
                 var dialog = args.dialog;
                 dialog.height = 220;
+                dialog.width = "750px";
                 // change the header of the dialog
                 dialog.header = args.requestType === 'beginEdit' ? 'Edit ' + args.rowData['NamaSubRincian'] : 'New Akun';
                 args.form.ej2_instances[0].addRules('KodeSubRincian', { required: [true, 'Silahkan Isi Kode Akun'], minLength: [1, 'Kode Akun Minimal 1 huruf'] });
@@ -188,7 +190,7 @@
                     args.form.elements.namedItem('KodeSubRincian').focus();
                     ej.popups.hideSpinner(args.dialog.element);
                 }).catch(function (xhr) {
-                    
+
                     ej.popups.hideSpinner(args.dialog.element);
                 });
             }
@@ -232,6 +234,7 @@
             if (args.requestType === 'beginEdit' || args.requestType === 'add') {
                 var dialog = args.dialog;
                 dialog.height = 320;
+                dialog.width = "750px";
                 // change the header of the dialog
                 dialog.header = args.requestType === 'beginEdit' ? 'Edit ' + args.rowData['NamaSubRincian'] : 'New Kelompok';
                 args.form.ej2_instances[0].addRules('IdParent', { required: [true, 'Silahkan Pilih Akun'] });
@@ -256,7 +259,7 @@
                     }
                     ej.popups.hideSpinner(args.dialog.element);
                 }).catch(function (xhr) {
-                    
+
                     ej.popups.hideSpinner(args.dialog.element);
                 });
             }
@@ -312,6 +315,7 @@
             if (args.requestType === 'beginEdit' || args.requestType === 'add') {
                 var dialog = args.dialog;
                 dialog.height = 420;
+                dialog.width = "750px";
                 // change the header of the dialog
                 dialog.header = args.requestType === 'beginEdit' ? 'Edit ' + args.rowData['NamaSubRincian'] : 'New Jenis';
                 args.form.ej2_instances[0].addRules('IdParentA', { required: [true, 'Silahkan Pilih Akun'] });
@@ -342,7 +346,7 @@
                     }
                     ej.popups.hideSpinner(args.dialog.element);
                 }).catch(function (xhr) {
-                    
+
                     ej.popups.hideSpinner(args.dialog.element);
                 });
             }
@@ -409,6 +413,7 @@
             if (args.requestType === 'beginEdit' || args.requestType === 'add') {
                 var dialog = args.dialog;
                 dialog.height = 520;
+                dialog.width = "750px";
                 // change the header of the dialog
                 dialog.header = args.requestType === 'beginEdit' ? 'Edit ' + args.rowData['NamaSubRincian'] : 'New Objek';
                 args.form.ej2_instances[0].addRules('IdParentA', { required: [true, 'Silahkan Pilih Akun'] });
@@ -445,7 +450,7 @@
                     }
                     ej.popups.hideSpinner(args.dialog.element);
                 }).catch(function (xhr) {
-                    
+
                     ej.popups.hideSpinner(args.dialog.element);
                 });
             }
@@ -522,6 +527,7 @@
             if (args.requestType === 'beginEdit' || args.requestType === 'add') {
                 var dialog = args.dialog;
                 dialog.height = 620;
+                dialog.width = "750px";
                 // change the header of the dialog
                 dialog.header = args.requestType === 'beginEdit' ? 'Edit ' + args.rowData['NamaSubRincian'] : 'New Rincian';
                 args.form.ej2_instances[0].addRules('IdParentA', { required: [true, 'Silahkan Pilih Akun'] });
@@ -564,7 +570,7 @@
                     }
                     ej.popups.hideSpinner(args.dialog.element);
                 }).catch(function (xhr) {
-                    
+
                     ej.popups.hideSpinner(args.dialog.element);
                 });
             }
@@ -641,6 +647,7 @@
             if (args.requestType === 'beginEdit' || args.requestType === 'add') {
                 var dialog = args.dialog;
                 dialog.height = 720;
+                dialog.width = "750px";
                 // change the header of the dialog
                 dialog.header = args.requestType === 'beginEdit' ? 'Edit ' + args.rowData['NamaSubRincian'] : 'New Sub Rincian';
                 args.form.ej2_instances[0].addRules('IdParentA', { required: [true, 'Silahkan Pilih Akun'] });
@@ -689,7 +696,7 @@
                     }
                     ej.popups.hideSpinner(args.dialog.element);
                 }).catch(function (xhr) {
-                    
+
                     ej.popups.hideSpinner(args.dialog.element);
                 });
             }

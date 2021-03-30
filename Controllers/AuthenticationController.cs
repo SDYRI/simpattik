@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using TasikmalayaKota.Simpatik.Web.Extensions;
 using TasikmalayaKota.Simpatik.Web.Models;
 using TasikmalayaKota.Simpatik.Web.Services.mUser.Interfaces;
 
@@ -43,7 +44,13 @@ namespace TasikmalayaKota.Simpatik.Web.Controllers
             {
                 Args.Action = "login";
                 UserValidationResultModel Result = Users.UserValidation(Args);
-                List<MenuValidationResultModel> dataMenu = new List<MenuValidationResultModel>();
+                //List<MenuValidationResultModel> dataMenu = new List<MenuValidationResultModel>();
+
+                #region toolbar
+                List<string> toolbar = SetToolbar(Result.Tipe);
+                List<string> toolbarTahun = SetToolbarTahun(Result.Tipe);
+                List<string> toolbarMaster = SetToolbarMaster(Result.Tipe, Result.PaPpk);
+                #endregion toolbar
 
                 if (Result.Success && Result.IDAkun != string.Empty)
                 {
@@ -58,6 +65,11 @@ namespace TasikmalayaKota.Simpatik.Web.Controllers
                     HttpContext.Session.SetString("OpdName", Result.OpdName);
                     HttpContext.Session.SetString("TahunAktif", Result.TahunAktif);
                     HttpContext.Session.SetString("Pappk", Result.PaPpk);
+                    HttpContext.Session.SetComplexData("Toolbar", toolbar);
+                    HttpContext.Session.SetComplexData("ToolbarTahun", toolbarTahun);
+                    HttpContext.Session.SetComplexData("ToolbarMaster", toolbarMaster);
+
+                    SimpattikGlobals.SetPengumuman(Result.Tipe);
                 }
 
                 return RedirectToAction("Index", "Authentication");
@@ -67,6 +79,86 @@ namespace TasikmalayaKota.Simpatik.Web.Controllers
                 return BadRequest(exception.Message);
             }
         }
+
+        private List<string> SetToolbarTahun(int typeUser)
+        {
+            List<string> setToolbarTahun = new List<string>();
+            if (typeUser == 0)
+            {
+                setToolbarTahun.Add("Search");
+                setToolbarTahun.Add("Add");
+                setToolbarTahun.Add("Edit");
+                setToolbarTahun.Add("ExcelExport");
+                setToolbarTahun.Add("PdfExport");
+            }
+            else
+            {
+                setToolbarTahun.Add("Search");
+            }
+
+            return setToolbarTahun;
+        }
+
+        private List<string> SetToolbar(int typeUser)
+        {
+            List<string> setToolbar = new List<string>();
+            if ((typeUser == 0) || (typeUser == 3))
+            {
+                setToolbar.Add("Search");
+                setToolbar.Add("Add");
+                setToolbar.Add("Edit");
+                setToolbar.Add("Delete");
+                setToolbar.Add("Update");
+                setToolbar.Add("Cancel");
+                setToolbar.Add("ExcelExport");
+                setToolbar.Add("PdfExport");
+            }
+            else if (typeUser == 2)
+            {
+                setToolbar.Add("Search");
+                setToolbar.Add("ExcelExport");
+                setToolbar.Add("PdfExport");
+            }
+            else
+            {
+                setToolbar.Add("Search");
+            }
+
+            return setToolbar;
+        }
+
+        private List<string> SetToolbarMaster(int typeUser, string pappkUser)
+        {
+            List<string> setToolbarMaster = new List<string>();
+            if (typeUser == 0)
+            {
+                setToolbarMaster.Add("Search");
+                setToolbarMaster.Add("Add");
+                setToolbarMaster.Add("Edit");
+                setToolbarMaster.Add("Delete");
+                setToolbarMaster.Add("Update");
+                setToolbarMaster.Add("Cancel");
+                setToolbarMaster.Add("ExcelExport");
+                setToolbarMaster.Add("PdfExport");
+            }
+            else if ((typeUser == 2) && (pappkUser == "1"))
+            {
+                setToolbarMaster.Add("Search");
+                setToolbarMaster.Add("Add");
+                setToolbarMaster.Add("Edit");
+                setToolbarMaster.Add("Update");
+                setToolbarMaster.Add("Cancel");
+                setToolbarMaster.Add("ExcelExport");
+                setToolbarMaster.Add("PdfExport");
+            }
+            else
+            {
+                setToolbarMaster.Add("Search");
+            }
+
+            return setToolbarMaster;
+        }
+
         [HttpGet]
         [Route("login/get-data-login")]
         public JsonResult GetDataUser()

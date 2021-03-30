@@ -17,7 +17,7 @@
 
   $(window).on("load", function () {
     var rtl;
-    var compactMenu = false; // Set it to true, if you want default menu to be compact
+      var compactMenu = false; // Set it to true, if you want default menu to be compact
 
     if ($body.hasClass("menu-collapsed")) {
       compactMenu = true;

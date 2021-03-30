@@ -119,6 +119,8 @@ namespace TasikmalayaKota.Simpatik.Web.Services.tsIdentifikasi.Models
         #region sumberDana
         public string txtsumberdana { get; set; }
         public IList<sumberDanaModel> sumberdanal { get; set; }
+        public string nilaisumberdana { get; set; }
+        public string valuesumberdana { get; set; }
         #endregion
 
         #region kondisi

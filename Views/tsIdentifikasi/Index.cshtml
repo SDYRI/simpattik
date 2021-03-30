@@ -6,15 +6,17 @@
 }
 <ejs-grid id="Grid" height="490" allowPaging="true" allowResizing="true" allowSorting="true" allowReordering="true" allowGrouping="false"
           toolbar="toolbarItems" allowFiltering="true" allowSelection="true" toolbarClick="toolbarAction">
-    <e-data-manager url="/Identifikasi/IdentifikasiPengadaanAll" adaptor="UrlAdaptor"></e-data-manager>
+    <e-data-manager url="/Identifikasi/IdentifikasiPengadaanPenetapan" adaptor="UrlAdaptor"></e-data-manager>
     <e-grid-pagesettings pageSize="12" />
     <e-grid-filterSettings type="Menu"></e-grid-filterSettings>
     <e-grid-selectionsettings type="Single"></e-grid-selectionsettings>
     <e-grid-columns>
         <e-grid-column field="ididetifikasi" headerText="ididetifikasi" isPrimaryKey="true" isIdentity="true" visible="false"></e-grid-column>
+        <e-grid-column field="opd" headerText="OPD"></e-grid-column>
         <e-grid-column field="jeniskebutuhan" headerText="Jenis Kebutuhan"></e-grid-column>
         <e-grid-column field="namabrgkerj" headerText="Nama"></e-grid-column>
-        <e-grid-column field="jumlahbarang" headerText="Jumlah Barang" width="200"></e-grid-column>
+        <e-grid-column field="nilaisumberdana" headerText="Nilai" width="200"></e-grid-column>
+        <e-grid-column field="valuesumberdana" headerText="Sumberdana" width="200"></e-grid-column>
     </e-grid-columns>
 </ejs-grid>
 

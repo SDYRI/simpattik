@@ -10,7 +10,7 @@
                 <div class="e-float-input e-control-wrapper e-input e-valid-input">
                     @Html.TextBoxFor(x => Model.opd, new { @class = "e-control e-textbox e-lib", @readonly = "readonly" })
                     @*@Html.TextBoxFor(x => Model.jeniskebutuhan, new { @class = "e-control e-textbox e-lib", @readonly = "readonly", @hidden = "hidden" })*@
-                    <input id="paket" data-val="true" class="e-control e-textbox e-lib" type="text" role="textbox" hidden>
+                    @*<input id="paket" data-val="true" class="e-control e-textbox e-lib" type="text" role="textbox" hidden>*@
                     <span class="e-float-line"></span>
                     <label class="e-float-text e-label-top" id="label_opd">OPD</label>
                 </div>
@@ -24,31 +24,31 @@
             </div>
             <div class="e-float-input e-control-wrapper">
                 <ejs-dropdownlist id="program" placeholder="Pilih Program" popupHeight="200px" allowFiltering="true" sortOrder="@ViewBag.sortDropdown"
-                                  query="@ViewBag.queryProgram" floatLabelType="Always">
+                                  query="@ViewBag.queryProgram" floatLabelType="Always" change="onchangeKegiatan" enabled="@ViewBag.truefalse">
                     <e-data-manager url="/ProgramMaster/ProgramMasterAll" adaptor="UrlAdaptor" crossDomain="true"></e-data-manager>
                     <e-dropdownlist-fields text="NamaSubkegiatan" value="IdProgram"></e-dropdownlist-fields>
                 </ejs-dropdownlist>
             </div>
             <div class="e-float-input e-control-wrapper">
                 <ejs-dropdownlist id="kegiatan" placeholder="Pilih Kegiatan" popupHeight="200px" allowFiltering="true" sortOrder="@ViewBag.sortDropdown"
-                                  query="@ViewBag.queryKegiatan" floatLabelType="Always">
+                                  query="@ViewBag.queryKegiatan" floatLabelType="Always" enabled="false" change="onchangeSubKegiatan">
                     <e-data-manager url="/ProgramMaster/ProgramMasterAll" adaptor="UrlAdaptor" crossDomain="true"></e-data-manager>
                     <e-dropdownlist-fields text="NamaSubkegiatan" value="IdProgram"></e-dropdownlist-fields>
                 </ejs-dropdownlist>
             </div>
             <div class="e-float-input e-control-wrapper">
                 <ejs-dropdownlist id="subkegiatan" placeholder="Pilih Sub Kegiatan" popupHeight="200px" allowFiltering="true" sortOrder="@ViewBag.sortDropdown"
-                                  query="@ViewBag.querySubKegiatan" floatLabelType="Always">
+                                  query="@ViewBag.querySubKegiatan" floatLabelType="Always" enabled="false">
                     <e-data-manager url="/ProgramMaster/ProgramMasterAll" adaptor="UrlAdaptor" crossDomain="true"></e-data-manager>
                     <e-dropdownlist-fields text="NamaSubkegiatan" value="IdProgram"></e-dropdownlist-fields>
                 </ejs-dropdownlist>
             </div>
             <div class="e-float-input e-control-wrapper">
-                <ejs-textbox id="outputidentifikasi" cssClass="e-input" placeholder="Output" floatLabelType="Always" ejs-for="@Model.outputidentifikasi"></ejs-textbox>
+                <ejs-textbox id="outputidentifikasi" cssClass="e-input" placeholder="Output" floatLabelType="Always" ejs-for="@Model.outputidentifikasi" enabled="@ViewBag.truefalse"></ejs-textbox>
             </div>
             <div class="e-float-input e-control-wrapper">
                 <ejs-dropdownlist id="idbrgkerj" placeholder="Kode Rekening" popupHeight="200px" allowFiltering="true" filtering="onfilteringKodeRekening" sortOrder="@ViewBag.sortDropdown"
-                                  query="@ViewBag.queryKodeRekening" floatLabelType="Always"
+                                  query="@ViewBag.queryKodeRekening" floatLabelType="Always" enabled="@ViewBag.truefalse"
                                   headerTemplate="@Html.Raw("<table><tr><th class=\"e-text-center\" style=\"width: 200px;\">Kode Rekening</th><th class=\"e-text-center\" style=\"width: 125px;\">Nama Rekening</th></tr></table>")"
                                   itemTemplate="@Html.Raw("<table><tbody><tr><td class=\"e-text-center\" style=\"width: 200px;\">${KodeRekening}</td><td class=\"e-text-center\" style=\"width: 125px;\">${NamaSubRincian}</td></tr></tbody></table>")">
                     <e-data-manager url="/KodeRekeningMaster/KodeRekeningMasterAll" adaptor="UrlAdaptor" crossDomain="true"></e-data-manager>
@@ -56,178 +56,182 @@
                 </ejs-dropdownlist>
             </div>
             <div class="e-float-input e-control-wrapper">
-                <ejs-textbox id="namabrgkerj" cssClass="e-input" placeholder="Nama/ Jenis Pekerjaan Konstruksi" floatLabelType="Always" ejs-for="@Model.namabrgkerj"></ejs-textbox>
+                <ejs-textbox id="namabrgkerj" cssClass="e-input" placeholder="Nama/Jenis Barang" floatLabelType="Always" ejs-for="@Model.namabrgkerj" enabled="@ViewBag.truefalse"></ejs-textbox>
             </div>
             <div class="e-float-input e-control-wrapper">
-                <ejs-textbox id="fungsi" cssClass="e-input" placeholder="Fungsi/ Kegunaan" floatLabelType="Always" ejs-for="@Model.fungsi"></ejs-textbox>
+                <ejs-textbox id="fungsi" cssClass="e-input" placeholder="Fungsi/ Kegunaan" floatLabelType="Always" ejs-for="@Model.fungsi" enabled="@ViewBag.truefalse"></ejs-textbox>
             </div>
             <div class="e-float-input e-control-wrapper">
-                <ejs-textbox id="target" cssClass="e-input" placeholder="Target/ Sasaran yang akan dicapai" floatLabelType="Always" ejs-for="@Model.target"></ejs-textbox>
+                <ejs-textbox id="targetsasaran" cssClass="e-input" placeholder="Target Sasaran Yang Diharapkan" floatLabelType="Always" ejs-for="@Model.targetsasaran" enabled="@ViewBag.truefalse"></ejs-textbox>
             </div>
             <div class="e-float-input e-control-wrapper">
-                <ejs-textbox id="waktu" cssClass="e-input" placeholder="Waktu Pemanfaatan hasil pekerjaan konstruksi" floatLabelType="Always" ejs-for="@Model.waktu"></ejs-textbox>
+                <ejs-textbox id="waktu" cssClass="e-input" placeholder="Waktu Pemanfaatan Barang" floatLabelType="Always" ejs-for="@Model.waktu" enabled="@ViewBag.truefalse"></ejs-textbox>
             </div>
             <div class="e-float-input e-control-wrapper">
-                @*<label id="label_opd">Bagaimana tingkat prioritas kebutuhan</label>
-            @Html.DropDownList("prioritas", new SelectList(ViewBag.prioritas, "Value", "Text", null), "Pilih Prioritas", new { @class = "custom-select" })*@
-                <ejs-combobox id="prioritas" dataSource="@ViewBag.yatidak" cssClass="e-input" placeholder="Bagaimana tingkat prioritas kebutuhan" floatLabelType="Always" ejs-for="@Model.ekatalog">
+                <ejs-combobox id="prioritas" dataSource="@ViewBag.prioritas" cssClass="e-input" placeholder="Tingkat Prioritas Kebutuhan" floatLabelType="Always" ejs-for="@Model.prioritas" enabled="@ViewBag.truefalse">
                     <e-combobox-fields text="Text" value="Value"></e-combobox-fields>
                 </ejs-combobox>
             </div>
             <div class="e-float-input e-control-wrapper">
-                @*<label id="label_opd">Studi kelayakan pekerjaan konstruksi sebelum pelaksanaan desain</label>
-            @Html.DropDownList("studikelayakan", new SelectList(ViewBag.Dilakukan, "Value", "Text", null), "Pilih Prioritas", new { @class = "custom-select" })*@
-                <ejs-combobox id="studikelayakan" dataSource="@ViewBag.yatidak" cssClass="e-input" placeholder="Studi kelayakan pekerjaan konstruksi sebelum pelaksanaan desain" floatLabelType="Always" ejs-for="@Model.ekatalog">
+                <ejs-combobox id="studikelayakan" dataSource="@ViewBag.sudahbelum" cssClass="e-input" placeholder="Studi kelayakan Pekerjaan Konstruksi dilaksanakan sebelum pelaksanaan desain" floatLabelType="Always" ejs-for="@Model.studikelayakan" enabled="@ViewBag.truefalse">
                     <e-combobox-fields text="Text" value="Value"></e-combobox-fields>
                 </ejs-combobox>
             </div>
             <div class="e-float-input e-control-wrapper">
-                @*<label id="label_opd">Penyusunan dokumen DED</label>
-            @Html.DropDownList("ded", new SelectList(ViewBag.Dilakukan, "Value", "Text", null), "Pilih Prioritas", new { @class = "custom-select" })*@
-                <ejs-combobox id="ded" dataSource="@ViewBag.yatidak" cssClass="e-input" placeholder="Penyusunan dokumen DED" floatLabelType="Always" ejs-for="@Model.ekatalog">
+                <ejs-combobox id="ded" dataSource="@ViewBag.sudahbelum" cssClass="e-input" placeholder="Penyusunan dokumen Detailed Engineering Design (DED)" floatLabelType="Always" ejs-for="@Model.ded" enabled="@ViewBag.truefalse">
                     <e-combobox-fields text="Text" value="Value"></e-combobox-fields>
                 </ejs-combobox>
             </div>
             <div class="e-float-input e-control-wrapper">
-                @*<label id="label_opd">komplektifitas pekerjaan</label>
-            @Html.DropDownList("komplektifitas", new SelectList(ViewBag.Komplek, "Value", "Text", null), "Pilih Prioritas", new { @class = "custom-select" })*@
-                <ejs-combobox id="komplektifitas" dataSource="@ViewBag.yatidak" cssClass="e-input" placeholder="komplektifitas pekerjaan" floatLabelType="Always" ejs-for="@Model.ekatalog">
+                <ejs-combobox id="komplektifitas" dataSource="@ViewBag.komplekssederhana" cssClass="e-input" placeholder="Kompleksitas pekerjaan" floatLabelType="Always" ejs-for="@Model.komplektifitas" enabled="@ViewBag.truefalse">
                     <e-combobox-fields text="Text" value="Value"></e-combobox-fields>
                 </ejs-combobox>
             </div>
             <div class="e-float-input e-control-wrapper">
-                @*<label id="label_opd">Pekerjaan Kontruksi Dilaksanakan dengan Kontrak Tahun Jamak</label>
-            @Html.DropDownList("tahunpelaksanaan", new SelectList(ViewBag.yatidak, "Value", "Text", null), "Pilih Prioritas", new { @class = "custom-select" })*@
-                <ejs-combobox id="tahunpelaksanaan" dataSource="@ViewBag.yatidak" cssClass="e-input" placeholder="Pekerjaan Kontruksi Dilaksanakan dengan Kontrak Tahun Jamak" floatLabelType="Always" ejs-for="@Model.ekatalog">
+                <ejs-combobox id="tahunpelaksanaan" dataSource="@ViewBag.yatidak" cssClass="e-input" placeholder="Pekerjaan Kontruksi Dilaksanakan dengan Kontrak Tahun Jamak" floatLabelType="Always" ejs-for="@Model.tahunpelaksanaan" enabled="@ViewBag.truefalse">
                     <e-combobox-fields text="Text" value="Value"></e-combobox-fields>
                 </ejs-combobox>
             </div>
             <div class="e-float-input e-control-wrapper">
-                <ejs-textbox id="jumlahtahunpelaksanaan" cssClass="e-input" placeholder="Jumlah Tahun Pelaksanaan" floatLabelType="Always" ejs-for="@Model.jumlahtahunpelaksanaan"></ejs-textbox>
+                <ejs-numerictextbox id="jumlahtahunpelaksanaan" cssClass="e-input" placeholder="Jumlah tahun pelaksanaan" floatLabelType="Always" ejs-for="@Model.jumlahtahunpelaksanaan" format="n0" min="0" enabled="@ViewBag.truefalse"></ejs-numerictextbox>
             </div>
             <div class="e-float-input e-control-wrapper">
-                @*<label id="label_opd">Telah Memiliki izin tertulis/ persetujuan dari pejabat</label>
-            @Html.DropDownList("suratijin", new SelectList(ViewBag.yatidak, "Value", "Text", null), "Pilih Prioritas", new { @class = "custom-select" })*@
-                <ejs-combobox id="suratijin" dataSource="@ViewBag.yatidak" cssClass="e-input" placeholder="Telah Memiliki izin tertulis/ persetujuan dari pejabat" floatLabelType="Always" ejs-for="@Model.ekatalog">
+                <ejs-combobox id="suratijin" dataSource="@ViewBag.sudahbelum" cssClass="e-input" placeholder="Telah memiliki izin tertulis/persetujuan dari pejabat yang berwenang" floatLabelType="Always" ejs-for="@Model.suratijin" enabled="@ViewBag.truefalse">
                     <e-combobox-fields text="Text" value="Value"></e-combobox-fields>
                 </ejs-combobox>
             </div>
             <div class="e-float-input e-control-wrapper">
-                <ejs-textbox id="nomorsuratijin" cssClass="e-input" placeholder="Nomor Surat Ijin" floatLabelType="Always" ejs-for="@Model.nomorsuratijin"></ejs-textbox>
+                <ejs-textbox id="nomorsuratijin" cssClass="e-input" placeholder="Nomor surat izin" floatLabelType="Always" ejs-for="@Model.nomorsuratijin" enabled="@ViewBag.truefalse"></ejs-textbox>
             </div>
         </div>
         <div class="form-group col-md-6">
-            @*#region kondisilayak*@
+            @*#region barang material*@
             <div class="row" style="margin-bottom: 18px;margin-left: 0px;">
                 <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
-                    <label class="e-float-text e-label-top" id="label_sumberDana">Penggunaan barang/ Material</label>
+                    <label class="e-float-text e-label-top" id="label_barangMaterial">Penggunaan barang/material</label>
                 </div>
             </div>
 
-            <div id="fieldsSumberDana">
-                <input id="sumberdanaapbd" data-val="true" class="e-control e-textbox e-lib" type="text" role="textbox" hidden>
+            <div id="fieldsBarangMaterial">
+                <input id="txtbarangmaterial" data-val="true" class="e-control e-textbox e-lib" type="text" role="textbox" value="@Model.barangmaterial" hidden>
                 <table id="tblMaterial" class="table table-hover mb-0 col-xs-12 col-sm-12 col-lg-12 col-md-12 e-float-input e-control-wrapper">
                     <thead>
                         <tr>
-                            <th class="col-xs-4 col-sm-4 col-lg-4 col-md-4">Material Barang</th>
-                            <th class="col-xs-12 col-sm-12 col-lg-12 col-md-12">Nilai (%)</th>
-                            <th class="col-xs-2 col-sm-2 col-lg-2 col-md-2">Aksi</th>
+                            <th class="col-xs-4 col-sm-4 col-lg-4 col-md-4">Penggunaan Barang</th>
+                            <th class="col-xs-12 col-sm-12 col-lg-12 col-md-12">Nilai</th>
+                            @if (ViewBag.truefalse)
+                            {
+                                <th class="col-xs-2 col-sm-2 col-lg-2 col-md-2">Aksi</th>
+                            }
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var sumberdana in Model.sumberdanal)
+                        @foreach (var kondisi in Model.barangmateriall)
                         {
                             <tr>
-                                <td>@sumberdana.smbrdn</td>
-                                <td>@sumberdana.nilai.ToString("n0")</td>
-                                <td><button type="button" class="btn btn-icon rounded-circle btn-outline-primary" onclick="btnSumberDanaRemove(this)"><i class="feather icon-minus-circle"></i></button></td>
+                                <td>@kondisi.material</td>
+                                <td>@kondisi.nilai.ToString("n0")</td>
+                                @if (ViewBag.truefalse)
+                                {
+                                    <td><button type="button" class="btn btn-icon rounded-circle btn-outline-primary" onclick="btnMaterialRemove(this)"><i class="feather icon-minus-circle"></i></button></td>
+                                }
                             </tr>
                         }
                     </tbody>
-                    <tfoot>
-                        <tr>
-                            <td>@Html.DropDownList("ddMaterial", new SelectList(ViewBag.Material, "Value", "Text", null), "Pilih Material", new { @class = "custom-select" })</td>
-                            <td><ejs-numerictextbox id="txtNilai" format="n0" min="0"></ejs-numerictextbox></td>
-                            <td><button type="button" class="btn btn-icon rounded-circle btn-outline-primary" onclick="btnSumberDana()"><i class="feather icon-plus-circle"></i></button></td>
-                        </tr>
-                    </tfoot>
+                    @if (ViewBag.truefalse)
+                    {
+                        <tfoot>
+                            <tr>
+                                <td>@Html.DropDownList("ddMaterial", new SelectList(ViewBag.barangmaterial, "Value", "Text", null), "Pilih Penggunaan Barang", new { @class = "custom-select" })</td>
+                                <td><ejs-numerictextbox id="barangmaterial" format="n0" min="0" value="0" width="200"></ejs-numerictextbox></td>
+                                <td><button type="button" class="btn btn-icon rounded-circle btn-outline-primary" onclick="btnBarangMaterial()"><i class="feather icon-plus-circle"></i></button></td>
+                            </tr>
+                        </tfoot>
+                    }
                 </table>
             </div>
-            @*#endregion kondisilayak*@
+            @*#endregion barang material*@
             <div class="e-float-input e-control-wrapper">
-                <ejs-combobox id="ekatalog1" dataSource="@ViewBag.yatidak" cssClass="e-input" placeholder="Terdapat barang/ material Pekerjaan Kontruksi yang sudah masuk e-katalog" floatLabelType="Always" ejs-for="@Model.ekatalog">
+                <ejs-combobox id="ekatalog" dataSource="@ViewBag.yatidak" cssClass="e-input" placeholder="Terdapat barang/material Pekerjaan Konstruksi yang sudah masuk pada list produk di ekatalog" floatLabelType="Always" ejs-for="@Model.ekatalog" enabled="@ViewBag.truefalse">
                     <e-combobox-fields text="Text" value="Value"></e-combobox-fields>
                 </ejs-combobox>
             </div>
             <div class="e-float-input e-control-wrapper">
-                <ejs-combobox id="ekatalog2" dataSource="@ViewBag.yatidak" cssClass="e-input" placeholder="Pekerjaan Kontruksi dapat dilaksanakan oleh usaha kecil" floatLabelType="Always" ejs-for="@Model.ekatalog">
+                <ejs-combobox id="usahakecil" dataSource="@ViewBag.yatidak" cssClass="e-input" placeholder="Pekerjaan Konstruksi dapat dilaksanakan oleh usaha keci" floatLabelType="Always" ejs-for="@Model.usahakecil" enabled="@ViewBag.truefalse">
                     <e-combobox-fields text="Text" value="Value"></e-combobox-fields>
                 </ejs-combobox>
             </div>
             <div class="e-float-input e-control-wrapper">
-                <ejs-numerictextbox id="perkiraanbiaya1" cssClass="e-input" placeholder="Perkiraan Biaya" floatLabelType="Always" ejs-for="@Model.perkiraanbiaya" format="n0" min="0"></ejs-numerictextbox>
+                <ejs-numerictextbox id="perkiraanbiaya" cssClass="e-input" placeholder="Perkiraan Biaya" floatLabelType="Always" ejs-for="@Model.perkiraanbiaya" format="n0" min="0" enabled="@ViewBag.truefalse"></ejs-numerictextbox>
             </div>
             <div class="e-float-input e-control-wrapper">
-                <ejs-combobox id="ekatalog3" dataSource="@ViewBag.yatidak" cssClass="e-input" placeholder="Kebutuhan Pembebasan Lahan" floatLabelType="Always" ejs-for="@Model.ekatalog">
+                <ejs-combobox id="pembebasanlahan" dataSource="@ViewBag.yatidak" cssClass="e-input" placeholder="Kebutuhan pembebasan lahan untuk menunjang pelaksanaan Pekerjaan Konstruksi" floatLabelType="Always" ejs-for="@Model.pembebasanlahan" enabled="@ViewBag.truefalse">
                     <e-combobox-fields text="Text" value="Value"></e-combobox-fields>
                 </ejs-combobox>
             </div>
             <div class="e-float-input e-control-wrapper">
-                <ejs-textbox id="lokasi" cssClass="e-input" placeholder="Luas lahan pembebasan" floatLabelType="Always" ejs-for="@Model.lokasi"></ejs-textbox>
+                <ejs-numerictextbox id="luaspembebasanlahan" cssClass="e-input" placeholder="Perkiraan Biaya" floatLabelType="Always" ejs-for="@Model.luaspembebasanlahan" format="n0" min="0" enabled="@ViewBag.truefalse"></ejs-numerictextbox>
             </div>
             <div class="e-float-input e-control-wrapper">
-                <ejs-combobox id="ekatalog4" dataSource="@ViewBag.yatidak" cssClass="e-input" placeholder="Kebutuhan Izin Pemanfaatan Tanah termasuk untuk akses Menuju ke Lokasi Pekerjaan" floatLabelType="Always" ejs-for="@Model.ekatalog">
+                <ejs-combobox id="pemanfaatantanah" dataSource="@ViewBag.yatidak" cssClass="e-input" placeholder="Kebutuhan pembebasan lahan untuk menunjang pelaksanaan Pekerjaan Konstruksi" floatLabelType="Always" ejs-for="@Model.pemanfaatantanah" enabled="@ViewBag.truefalse">
                     <e-combobox-fields text="Text" value="Value"></e-combobox-fields>
                 </ejs-combobox>
             </div>
             <div class="e-float-input e-control-wrapper">
-                <ejs-textbox id="lokasi2" cssClass="e-input" placeholder="Lama waktu yang dibutuhkan untuk melakukan pembebasan lahan" floatLabelType="Always" ejs-for="@Model.lokasi"></ejs-textbox>
+                <ejs-textbox id="lamawaktu" cssClass="e-input" placeholder="Lama waktu yang dibutuhkan untuk melakukan pembebasan lahan/pengurusan izin pemanfaatan tanah" floatLabelType="Always" ejs-for="@Model.lamawaktu" enabled="@ViewBag.truefalse"></ejs-textbox>
             </div>
             <div class="e-float-input e-control-wrapper">
-                <ejs-combobox id="ekatalog5" dataSource="@ViewBag.yatidak" cssClass="e-input" placeholder="Administrasi pembayaran ganti rugi" floatLabelType="Always" ejs-for="@Model.ekatalog">
-                    <e-combobox-fields text="Text" value="Value"></e-combobox-fields>
-                </ejs-combobox>
+                <ejs-textbox id="administrasipembayaran" cssClass="e-input" placeholder="Administrasi pembayaran ganti rugi" floatLabelType="Always" ejs-for="@Model.administrasipembayaran" enabled="@ViewBag.truefalse"></ejs-textbox>
             </div>
             <div class="e-float-input e-control-wrapper">
-                <ejs-textbox id="lokasi3" cssClass="e-input" placeholder="Lokasi Pekerjaan Kontruksi" floatLabelType="Always" ejs-for="@Model.lokasi"></ejs-textbox>
+                <ejs-textbox id="lokasi" cssClass="e-input" placeholder="Lokasi" floatLabelType="Always" ejs-for="@Model.lokasi" enabled="@ViewBag.truefalse"></ejs-textbox>
             </div>
             <div class="e-float-input e-control-wrapper">
-                <ejs-textbox id="lokasi4" cssClass="e-input" placeholder="Jumlah Pekerjaan Kontruksi sejenis" floatLabelType="Always" ejs-for="@Model.lokasi"></ejs-textbox>
+                <ejs-numerictextbox id="jumlahbarangsejenis" cssClass="e-input" placeholder="Jumlah Pekerjaan Konstruksi sejenis yang telah tersedia/dimiliki/dikuasai" floatLabelType="Always" ejs-for="@Model.jumlahbarangsejenis" format="n0" min="0" enabled="@ViewBag.truefalse"></ejs-numerictextbox>
             </div>
             @*#region kondisilayak*@
             <div class="row" style="margin-bottom: 18px;margin-left: 0px;">
                 <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
-                    <label class="e-float-text e-label-top" id="label_sumberDana">Kondisi Kelayaan hasil Pekerjaa Kontruksi</label>
+                    <label class="e-float-text e-label-top" id="label_sumberDana">Kondisi Barang</label>
                 </div>
             </div>
 
-            <div id="fieldsSumberDana">
-                <input id="sumberdana" data-val="true" class="e-control e-textbox e-lib" type="text" role="textbox" hidden>
+            <div id="fieldsKondisi">
+                <input id="txtkondisilayak" data-val="true" class="e-control e-textbox e-lib" type="text" role="textbox" value="@Model.kondisilayak" hidden>
                 <table id="tblKondisi" class="table table-hover mb-0 col-xs-12 col-sm-12 col-lg-12 col-md-12 e-float-input e-control-wrapper">
                     <thead>
                         <tr>
                             <th class="col-xs-4 col-sm-4 col-lg-4 col-md-4">Kondisi</th>
                             <th class="col-xs-12 col-sm-12 col-lg-12 col-md-12">Nilai</th>
-                            <th class="col-xs-2 col-sm-2 col-lg-2 col-md-2">Aksi</th>
+                            @if (ViewBag.truefalse)
+                            {
+                                <th class="col-xs-2 col-sm-2 col-lg-2 col-md-2">Aksi</th>
+                            }
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var sumberdana in Model.sumberdanal)
+                        @foreach (var kondisi in Model.kondisil)
                         {
                             <tr>
-                                <td>@sumberdana.smbrdn</td>
-                                <td>@sumberdana.nilai.ToString("n0")</td>
-                                <td><button type="button" class="btn btn-icon rounded-circle btn-outline-primary" onclick="btnSumberDanaRemove(this)"><i class="feather icon-minus-circle"></i></button></td>
+                                <td>@kondisi.kondisi</td>
+                                <td>@kondisi.nilai.ToString("n0")</td>
+                                @if (ViewBag.truefalse)
+                                {
+                                    <td><button type="button" class="btn btn-icon rounded-circle btn-outline-primary" onclick="btnKondisiRemove(this)"><i class="feather icon-minus-circle"></i></button></td>
+                                }
                             </tr>
                         }
                     </tbody>
-                    <tfoot>
-                        <tr>
-                            <td>@Html.DropDownList("ddKondisi", new SelectList(ViewBag.Kelayakan, "Value", "Text", null), "Pilih Kondisi", new { @class = "custom-select" })</td>
-                            <td><ejs-numerictextbox id="txtNilai" format="n0" min="0"></ejs-numerictextbox></td>
-                            <td><button type="button" class="btn btn-icon rounded-circle btn-outline-primary" onclick="btnSumberDana()"><i class="feather icon-plus-circle"></i></button></td>
-                        </tr>
-                    </tfoot>
+                    @if (ViewBag.truefalse)
+                    {
+                        <tfoot>
+                            <tr>
+                                <td>@Html.DropDownList("ddKondisi", new SelectList(ViewBag.Kelayakan, "Value", "Text", null), "Pilih Kondisi", new { @class = "custom-select" })</td>
+                                <td><ejs-numerictextbox id="kondisilayak" format="n0" min="0" value="0" width="200"></ejs-numerictextbox></td>
+                                <td><button type="button" class="btn btn-icon rounded-circle btn-outline-primary" onclick="btnKondisi()"><i class="feather icon-plus-circle"></i></button></td>
+                            </tr>
+                        </tfoot>
+                    }
                 </table>
             </div>
             @*#endregion kondisilayak*@
@@ -239,13 +243,16 @@
             </div>
 
             <div id="fieldsSumberDana">
-                <input id="sumberdanaapbd" data-val="true" class="e-control e-textbox e-lib" type="text" role="textbox" hidden>
+                <input id="txtsumberdana" data-val="true" class="e-control e-textbox e-lib" type="text" role="textbox" value="@Model.sumberdana" hidden>
                 <table id="tblSumberDana" class="table table-hover mb-0 col-xs-12 col-sm-12 col-lg-12 col-md-12 e-float-input e-control-wrapper">
                     <thead>
                         <tr>
                             <th class="col-xs-4 col-sm-4 col-lg-4 col-md-4">Sumber Dana</th>
                             <th class="col-xs-12 col-sm-12 col-lg-12 col-md-12">Nilai</th>
-                            <th class="col-xs-2 col-sm-2 col-lg-2 col-md-2">Aksi</th>
+                            @if (ViewBag.truefalse)
+                            {
+                                <th class="col-xs-2 col-sm-2 col-lg-2 col-md-2">Aksi</th>
+                            }
                         </tr>
                     </thead>
                     <tbody>
@@ -254,27 +261,33 @@
                             <tr>
                                 <td>@sumberdana.smbrdn</td>
                                 <td>@sumberdana.nilai.ToString("n0")</td>
-                                <td><button type="button" class="btn btn-icon rounded-circle btn-outline-primary" onclick="btnSumberDanaRemove(this)"><i class="feather icon-minus-circle"></i></button></td>
+                                @if (ViewBag.truefalse)
+                                {
+                                    <td><button type="button" class="btn btn-icon rounded-circle btn-outline-primary" onclick="btnSumberDanaRemove(this)"><i class="feather icon-minus-circle"></i></button></td>
+                                }
                             </tr>
                         }
                     </tbody>
-                    <tfoot>
-                        <tr>
-                            <td>@Html.DropDownList("ddSmbrdn", new SelectList(ViewBag.SumberDana, "Value", "Text", null), "Pilih Sumber Dana", new { @class = "custom-select" })</td>
-                            <td><ejs-numerictextbox id="txtNilai" format="n0" min="0"></ejs-numerictextbox></td>
-                            <td><button type="button" class="btn btn-icon rounded-circle btn-outline-primary" onclick="btnSumberDana()"><i class="feather icon-plus-circle"></i></button></td>
-                        </tr>
-                    </tfoot>
+                    @if (ViewBag.truefalse)
+                    {
+                        <tfoot>
+                            <tr>
+                                <td>@Html.DropDownList("ddSmbrdn", new SelectList(ViewBag.SumberDana, "Value", "Text", null), "Pilih Sumber Dana", new { @class = "custom-select" })</td>
+                                <td><ejs-numerictextbox id="sumberdana" format="n0" min="0" value="0" width="200"></ejs-numerictextbox></td>
+                                <td><button type="button" class="btn btn-icon rounded-circle btn-outline-primary" onclick="btnSumberDana()"><i class="feather icon-plus-circle"></i></button></td>
+                            </tr>
+                        </tfoot>
+                    }
                 </table>
             </div>
             @*#endregion Sumber Dana*@
             <div class="e-float-input e-control-wrapper">
-                <ejs-combobox id="ekatalog6" dataSource="@ViewBag.yatidak" cssClass="e-input" placeholder="Terdapat pengadaan Pekerjaan Kontruksi sejenis pada kegiatan lainnya" floatLabelType="Always" ejs-for="@Model.ekatalog">
+                <ejs-combobox id="barangsejenis" dataSource="@ViewBag.yatidak" cssClass="e-input" placeholder="Jumlah Pekerjaan Konstruksi sejenis yang telah tersedia/dimiliki/dikuasai" floatLabelType="Always" ejs-for="@Model.barangsejenis" enabled="@ViewBag.truefalse">
                     <e-combobox-fields text="Text" value="Value"></e-combobox-fields>
                 </ejs-combobox>
             </div>
             <div class="e-float-input e-control-wrapper">
-                <ejs-combobox id="ekatalog7" dataSource="@ViewBag.yatidak" cssClass="e-input" placeholder="Indikasi konsolidasi atas pengadaan Pekerjaan Kontruksi" floatLabelType="Always" ejs-for="@Model.ekatalog">
+                <ejs-combobox id="indikasikonsolidasi" dataSource="@ViewBag.rekomendasi" cssClass="e-input" placeholder="Indikasi Kondsolidasi atas pengadaan barang" floatLabelType="Always" ejs-for="@Model.indikasikonsolidasi" enabled="@ViewBag.truefalse">
                     <e-combobox-fields text="Text" value="Value"></e-combobox-fields>
                 </ejs-combobox>
             </div>

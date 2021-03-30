@@ -38,7 +38,7 @@ namespace TasikmalayaKota.Simpatik.Web.Services.mProgram.DALS
                     sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
                     sqlCommand.Parameters.AddWithValue("_iddtursn", URUSAN);
                     sqlCommand.Parameters.AddWithValue("_posisi", posisi);
-                    sqlCommand.Parameters.AddWithValue("_tahun", Int16.Parse(TAHUN));
+                    sqlCommand.Parameters.AddWithValue("_tahun", int.Parse(TAHUN));
                     sqlCommand.Parameters.AddWithValue("_uid", UID);
                     sqlConnection.Open();
                     using (NpgsqlDataReader dataReader = sqlCommand.ExecuteReader())
@@ -88,7 +88,7 @@ namespace TasikmalayaKota.Simpatik.Web.Services.mProgram.DALS
                     sqlCommand.Parameters.AddWithValue("_kddtprg", ParamD.KodeSubkegiatan);
                     sqlCommand.Parameters.AddWithValue("_posisi", ParamD.IdPosisi);
                     sqlCommand.Parameters.AddWithValue("_idppk", ParamD.IdUserPPK);
-                    sqlCommand.Parameters.AddWithValue("_tahun", Int16.Parse(TAHUN));
+                    sqlCommand.Parameters.AddWithValue("_tahun", int.Parse(TAHUN));
                     sqlCommand.Parameters.AddWithValue("_uid", UID);
                     sqlConnection.Open();
                     using (NpgsqlDataReader dataReader = sqlCommand.ExecuteReader())
@@ -125,7 +125,7 @@ namespace TasikmalayaKota.Simpatik.Web.Services.mProgram.DALS
                     sqlCommand.Parameters.AddWithValue("_kddtprg", ParamD.KodeSubkegiatan);
                     sqlCommand.Parameters.AddWithValue("_posisi", ParamD.IdPosisi);
                     sqlCommand.Parameters.AddWithValue("_idppk", ParamD.IdUserPPK); 
-                    sqlCommand.Parameters.AddWithValue("_tahun", Int16.Parse(TAHUN));
+                    sqlCommand.Parameters.AddWithValue("_tahun", int.Parse(TAHUN));
                     sqlCommand.Parameters.AddWithValue("_uid", UID);
                     sqlConnection.Open();
                     using (NpgsqlDataReader dataReader = sqlCommand.ExecuteReader())
