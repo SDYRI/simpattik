@@ -4,6 +4,7 @@
     var Swakelola = "#swakelola";
     List<object> detailPaket = new List<object>();
     detailPaket.Add(new { type = "userstatus", buttonOption = new { content = " Identifikasi", cssClass = "e-flat e-details feather icon-layers" } }); // custom
+    List<string> Toolbar = HttpContextAccessor.HttpContext.Session.GetComplexData<List<string>>("Toolbar");
 }
 <ejs-toast id="toast_default" created="createdToasObj">
     <e-toast-position X="Right"></e-toast-position>
@@ -11,7 +12,7 @@
 
 <div id="penyedia" style="display: none">
     <ejs-grid id="GridPenyedia" actionComplete="CompleteActionPenyedia" height="490" allowPaging="true" allowResizing="true" allowSorting="true" allowReordering="true" allowGrouping="false"
-              toolbar="@(new List<string>() { "Search", "Add", "Edit", "Delete","Update","Cancel" , "ExcelExport" ,"PdfExport" })" allowFiltering="true" allowSelection="true"
+              toolbar="@Toolbar" allowFiltering="true" allowSelection="true"
               created="createdGridPenyedia" allowExcelExport="true" allowPdfExport="true" toolbarClick="toolbarAction" query="@ViewBag.queryPenyedia" commandClick="cmdDetail">
         <e-grid-pagesettings pageCount="5" pageSize="12" pageSizes="true"></e-grid-pagesettings>
         <e-grid-filterSettings type="Menu"></e-grid-filterSettings>
@@ -27,7 +28,7 @@
 
 <div id="swakelola" style="display: none">
     <ejs-grid id="GridSwakelola" actionComplete="CompleteActionSwakelola" height="490" allowPaging="true" allowResizing="true" allowSorting="true" allowReordering="true" allowGrouping="false"
-              toolbar="@(new List<string>() { "Search", "Add", "Edit", "Delete","Update","Cancel" , "ExcelExport" ,"PdfExport" })" allowFiltering="true" allowSelection="true"
+              toolbar="@Toolbar" allowFiltering="true" allowSelection="true"
               created="createdGridSwakelola" allowExcelExport="true" allowPdfExport="true" toolbarClick="toolbarAction" query="@ViewBag.querySwakelola" commandClick="cmdDetail">
         <e-grid-pagesettings pageCount="5" pageSize="12" pageSizes="true"></e-grid-pagesettings>
         <e-grid-filterSettings type="Menu"></e-grid-filterSettings>
@@ -91,6 +92,7 @@
             if (args.requestType === 'beginEdit' || args.requestType === 'add') {
                 var dialog = args.dialog;
                 dialog.height = 750;
+                dialog.width = "1024px";
                 // change the header of the dialog
                 dialog.header = args.requestType === 'beginEdit' ? 'Edit Paket Penyedia @ViewBag.Title' : 'New Paket Penyedia @ViewBag.Title';
                 args.form.ej2_instances[0].addRules('pemanfaatanmulai', { required: [true, 'Silahkan Pilih Waktu Pemanfaatan'] });
@@ -162,6 +164,7 @@
             if (args.requestType === 'beginEdit' || args.requestType === 'add') {
                 var dialog = args.dialog;
                 dialog.height = 750;
+                dialog.width = "1024px";
                 // change the header of the dialog
                 dialog.header = args.requestType === 'beginEdit' ? 'Edit Paket Swakelola @ViewBag.Title' : 'New Paket Swakelola @ViewBag.Title' ;
                 args.form.ej2_instances[0].addRules('pelaksanaanmulai', { required: [true, 'Silahkan Pilih Waktu Pelaksanaan'] });

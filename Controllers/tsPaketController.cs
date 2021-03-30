@@ -18,12 +18,10 @@ namespace simpat1k.Controllers
     public class tsPaketController : Controller
     {
         private readonly ItsPaket _tsPaket;
-        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public tsPaketController(ItsPaket tsPaket, IHttpContextAccessor httpContextAccessor)
+        public tsPaketController(ItsPaket tsPaket)
         {
             _tsPaket = tsPaket;
-            _httpContextAccessor = httpContextAccessor;
         }
 
         [Route("IndexMe")]
@@ -39,6 +37,66 @@ namespace simpat1k.Controllers
         public IActionResult UrlDataBarangsource([FromBody] tsPaketModel dm)
         {
             IEnumerable DataSource = _tsPaket.GetAll(Int32.Parse(dm.jeniskebutuhan), dm.tipePaket);
+            DataOperations operation = new DataOperations();
+            if (dm.Search != null && dm.Search.Count > 0)
+            {
+                DataSource = operation.PerformSearching(DataSource, dm.Search);  //Search
+            }
+            if (dm.Sorted != null && dm.Sorted.Count > 0) //Sorting
+            {
+                DataSource = operation.PerformSorting(DataSource, dm.Sorted);
+            }
+            if (dm.Where != null && dm.Where.Count > 0) //Filtering
+            {
+                DataSource = operation.PerformFiltering(DataSource, dm.Where, dm.Where[0].Operator);
+            }
+            int count = DataSource.Cast<tsPaketModel>().Count();
+            if (dm.Skip != 0)
+            {
+                DataSource = operation.PerformSkip(DataSource, dm.Skip);   //Paging
+            }
+            if (dm.Take != 0)
+            {
+                DataSource = operation.PerformTake(DataSource, dm.Take);
+            }
+            return dm.RequiresCounts ? Json(new { result = DataSource, count = count }) : Json(DataSource);
+        }
+
+        [HttpPost]
+        [Route("PaketReview")]
+        public IActionResult UrlPaketReview([FromBody] tsPaketModel dm)
+        {
+            IEnumerable DataSource = _tsPaket.GetAll(0, 0);
+            DataOperations operation = new DataOperations();
+            if (dm.Search != null && dm.Search.Count > 0)
+            {
+                DataSource = operation.PerformSearching(DataSource, dm.Search);  //Search
+            }
+            if (dm.Sorted != null && dm.Sorted.Count > 0) //Sorting
+            {
+                DataSource = operation.PerformSorting(DataSource, dm.Sorted);
+            }
+            if (dm.Where != null && dm.Where.Count > 0) //Filtering
+            {
+                DataSource = operation.PerformFiltering(DataSource, dm.Where, dm.Where[0].Operator);
+            }
+            int count = DataSource.Cast<tsPaketModel>().Count();
+            if (dm.Skip != 0)
+            {
+                DataSource = operation.PerformSkip(DataSource, dm.Skip);   //Paging
+            }
+            if (dm.Take != 0)
+            {
+                DataSource = operation.PerformTake(DataSource, dm.Take);
+            }
+            return dm.RequiresCounts ? Json(new { result = DataSource, count = count }) : Json(DataSource);
+        }
+
+        [HttpPost]
+        [Route("PaketStrategis")]
+        public IActionResult UrlPaketStrategis([FromBody] tsPaketModel dm)
+        {
+            IEnumerable DataSource = _tsPaket.GetAllStrategis(0, 0);
             DataOperations operation = new DataOperations();
             if (dm.Search != null && dm.Search.Count > 0)
             {
@@ -83,25 +141,33 @@ namespace simpat1k.Controllers
                         value.Value.tipePaket = Int32.Parse(param.GetType().GetProperty("Value").GetValue(param).ToString());
                     }
 
-                    value.Value.thanggrn = _httpContextAccessor.HttpContext.Session.GetString("TahunAktif");
+                    value.Value.thanggrn = HttpContext.Session.GetString("TahunAktif");
                 }
             }
 
-            if (value.Action == "insert")
+            if (HttpContext.Session.GetInt32("Tipe") == 3)
             {
-                DatabaseActionResultModel Result = _tsPaket.Create(value.Value);
-                msg = Result.Pesan;
+                if (value.Action == "insert")
+                {
+                    DatabaseActionResultModel Result = _tsPaket.Create(value.Value);
+                    msg = Result.Pesan;
+                }
+                else if (value.Action == "update")
+                {
+                    DatabaseActionResultModel Result = _tsPaket.Update(value.Value);
+                    msg = Result.Pesan;
+                }
+                else if (value.Action == "remove")
+                {
+                    DatabaseActionResultModel Result = _tsPaket.Remove(value.Key.ToString());
+                    msg = Result.Pesan;
+                }
             }
-            else if (value.Action == "update")
+            else
             {
-                DatabaseActionResultModel Result = _tsPaket.Update(value.Value);
-                msg = Result.Pesan;
+                msg = "BERHASIL DISIMPAN";
             }
-            else if (value.Action == "remove")
-            {
-                DatabaseActionResultModel Result = _tsPaket.Remove(value.Key.ToString());
-                msg = Result.Pesan;
-            }
+
             return Json(new { data = value.Value, message = msg });
         }
 
@@ -127,8 +193,8 @@ namespace simpat1k.Controllers
             ViewBag.Title = "Paket Penyedia Kebutuhan Barang " + value.Value.idpaket;
             value.Value.jeniskebutuhan = "1";
             value.Value.tipePaket = 1;
-            value.Value.opd = _httpContextAccessor.HttpContext.Session.GetString("OpdName");
-            value.Value.pejabat = _httpContextAccessor.HttpContext.Session.GetString("Nama");
+            value.Value.opd = value.Value.opd == null ? HttpContext.Session.GetString("OpdName") : value.Value.namaopd;
+            value.Value.pejabat = value.Value.pejabat == null ? HttpContext.Session.GetString("Nama") : value.Value.pejabat;
 
             #region Combobox
             ViewBag.yatidak = new enumDataModel().YaTidak();
@@ -147,8 +213,8 @@ namespace simpat1k.Controllers
             ViewBag.Title = "Paket Swakelola Kebutuhan Barang " + value.Value.idpaket;
             value.Value.jeniskebutuhan = "1";
             value.Value.tipePaket = 1;
-            value.Value.opd = _httpContextAccessor.HttpContext.Session.GetString("OpdName");
-            value.Value.pejabat = _httpContextAccessor.HttpContext.Session.GetString("Nama");
+            value.Value.opd = value.Value.opd == null ? HttpContext.Session.GetString("OpdName") : value.Value.namaopd;
+            value.Value.pejabat = value.Value.pejabat == null ? HttpContext.Session.GetString("Nama") : value.Value.pejabat;
 
             #region Combobox
             ViewBag.yatidak = new enumDataModel().YaTidak();

@@ -10,33 +10,33 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     @*<link rel="stylesheet" href="~/css/ej2/bootstrap4.css" />*@
     <link rel="stylesheet" href="~/css/ej2/material.css" />
+    <link rel="stylesheet" href="~/css/ej2/material-simpattik.css" />
     <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600" rel="stylesheet">
 
     <!-- BEGIN: Vendor CSS-->
     <link rel="stylesheet" type="text/css" href="~/vendors/css/vendors.min.css">
-    <link rel="stylesheet" type="text/css" href="~/vendors/css/charts/apexcharts.css">
-    <link rel="stylesheet" type="text/css" href="~/vendors/css/extensions/tether-theme-arrows.css">
-    <link rel="stylesheet" type="text/css" href="~/vendors/css/extensions/tether.min.css">
-    <link rel="stylesheet" type="text/css" href="~/vendors/css/extensions/shepherd-theme-default.css">
+    @*<link rel="stylesheet" type="text/css" href="~/vendors/css/charts/apexcharts.css">
+        <link rel="stylesheet" type="text/css" href="~/vendors/css/extensions/tether-theme-arrows.css">
+        <link rel="stylesheet" type="text/css" href="~/vendors/css/extensions/tether.min.css">
+        <link rel="stylesheet" type="text/css" href="~/vendors/css/extensions/shepherd-theme-default.css">*@
     <!-- END: Vendor CSS-->
     <!-- BEGIN: Theme CSS-->
     <link rel="stylesheet" type="text/css" href="~/css/bootstrap-vuexy.css">
     <link rel="stylesheet" type="text/css" href="~/css/bootstrap-extended.css">
     <link rel="stylesheet" type="text/css" href="~/css/colors.css">
     <link rel="stylesheet" type="text/css" href="~/css/components.css">
-    <link rel="stylesheet" type="text/css" href="~/css/themes/dark-layout.css">
-    <link rel="stylesheet" type="text/css" href="~/css/themes/semi-dark-layout.css">
+    @*<link rel="stylesheet" type="text/css" href="~/css/themes/dark-layout.css">
+        <link rel="stylesheet" type="text/css" href="~/css/themes/semi-dark-layout.css">*@
 
     <!-- BEGIN: Page CSS-->
     <link rel="stylesheet" type="text/css" href="~/css/core/menu/menu-types/vertical-menu.css">
-    <link rel="stylesheet" type="text/css" href="~/css/core/colors/palette-gradient.css">
-    <link rel="stylesheet" type="text/css" href="~/css/pages/dashboard-analytics.css">
-    <link rel="stylesheet" type="text/css" href="~/css/pages/card-analytics.css">
-    <link rel="stylesheet" type="text/css" href="~/css/plugins/tour/tour.css">
+    @*<link rel="stylesheet" type="text/css" href="~/css/core/colors/palette-gradient.css">
+        <link rel="stylesheet" type="text/css" href="~/css/pages/dashboard-analytics.css">
+        <link rel="stylesheet" type="text/css" href="~/css/pages/card-analytics.css">
+        <link rel="stylesheet" type="text/css" href="~/css/plugins/tour/tour.css">*@
     <!-- END: Page CSS-->
 
     <script src="~/js/ej2/ej2.min.js" asp-append-version="true"></script>
-    <script src="~/js/vue/vue.min.js" asp-append-version="true"></script>
 </head>
 <body class="vertical-layout vertical-menu-modern 2-columns  navbar-floating footer-static  " data-open="click" data-menu="vertical-menu-modern" data-col="2-columns">
 
@@ -50,8 +50,8 @@
                             <li class="nav-item mobile-menu d-xl-none mr-auto"><a class="nav-link nav-menu-main menu-toggle hidden-xs" href="#"><i class="ficon feather icon-menu"></i></a></li>
                         </ul>
                         <ul class="nav navbar-nav bookmark-icons">
-                                <li class="nav-item d-none d-lg-block">Perencanaan <b>@HttpContextAccessor.HttpContext.Session.GetString("TahunAktif")</b></li>
-                            </ul>
+                            <li class="nav-item d-none d-lg-block">Perencanaan <b>@HttpContextAccessor.HttpContext.Session.GetString("TahunAktif")</b></li>
+                        </ul>
                         @*<ul class="nav navbar-nav bookmark-icons">
                                 <li class="nav-item d-none d-lg-block"><a class="nav-link" href="app-todo.html" data-toggle="tooltip" data-placement="top" title="Todo"><i class="ficon feather icon-check-square"></i></a></li>
                                 <li class="nav-item d-none d-lg-block"><a class="nav-link" href="app-chat.html" data-toggle="tooltip" data-placement="top" title="Chat"><i class="ficon feather icon-message-square"></i></a></li>
@@ -288,26 +288,27 @@
 
 
     <script src="~/lib/jquery/dist/jquery.min.js" asp-append-version="true"></script>
-    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js" asp-append-version="true"></script>
-    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js" asp-append-version="true"></script>
+    @*<script src="~/lib/jquery-validation/dist/jquery.validate.min.js" asp-append-version="true"></script>
+        <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js" asp-append-version="true"></script>*@
 
     <!-- BEGIN: Vendor JS-->
     <script src="~/vendors/js/vendors.min.js"></script>
     <!-- BEGIN Vendor JS-->
     <!-- BEGIN: Page Vendor JS-->
-    <script src="~/vendors/js/ui/jquery.sticky.js"></script>
-    <script src="~/vendors/js/charts/apexcharts.min.js"></script>
-    <script src="~/vendors/js/extensions/tether.min.js"></script>
-    <script src="~/vendors/js/extensions/shepherd.min.js"></script>
+    @*<script src="~/vendors/js/ui/jquery.sticky.js"></script>
+        <script src="~/vendors/js/charts/apexcharts.min.js"></script>
+        <script src="~/vendors/js/extensions/tether.min.js"></script>
+        <script src="~/vendors/js/extensions/shepherd.min.js"></script>*@
     <!-- END: Page Vendor JS-->
     <!-- BEGIN: Theme JS-->
     <script src="~/lib/core/app-menu.js"></script>
     <script src="~/lib/core/app.js"></script>
-    <script src="~/lib/scripts/components.js"></script>
+    @*<script src="~/lib/scripts/components.js"></script>*@
     <!-- END: Theme JS-->
 
-    @RenderSection("Scripts", required: false)
-    @RenderSection("SectionControls", required: false)
+
+    @await RenderSectionAsync("Scripts", required: false)
+    @await RenderSectionAsync("SectionControls", required: false)
     <ejs-scripts></ejs-scripts>
 
 </body>

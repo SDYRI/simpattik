@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TasikmalayaKota.Simpatik.Web.Models;
+using TasikmalayaKota.Simpatik.Web.Services.Middleware.Models;
 using TasikmalayaKota.Simpatik.Web.Services.tsIdentifikasi.Interfaces;
 using TasikmalayaKota.Simpatik.Web.Services.tsIdentifikasi.Models;
 
@@ -18,14 +19,14 @@ namespace TasikmalayaKota.Simpatik.Web.Services.tsIdentifikasi.DALS
         private readonly string UID;
         private readonly string OPD;
         private readonly string TIPE;
-        private readonly int TA;
+        private readonly string TA;
         public tsIdentifikasiDAL(IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
         {
             ConnectionString = configuration.GetConnectionString("SimpatikConnection");
             UID = httpContextAccessor.HttpContext.Session.GetString("IDAkun");
             OPD = httpContextAccessor.HttpContext.Session.GetString("Opd");
             TIPE = httpContextAccessor.HttpContext.Session.GetInt32("Tipe").ToString();
-            TA = int.Parse(httpContextAccessor.HttpContext.Session.GetString("TahunAktif"));
+            TA = httpContextAccessor.HttpContext.Session.GetString("TahunAktif");
         }
 
         public IList<tsIdentifikasiModel> GetAll(int spesifikasi)
@@ -46,7 +47,7 @@ namespace TasikmalayaKota.Simpatik.Web.Services.tsIdentifikasi.DALS
                     sqlCommand.Parameters.AddWithValue("_opd", OPD);
                     sqlCommand.Parameters.AddWithValue("_kebutuhan", spesifikasi);
                     sqlCommand.Parameters.AddWithValue("_paket", paket);
-                    sqlCommand.Parameters.AddWithValue("_tahun", TA);
+                    sqlCommand.Parameters.AddWithValue("_tahun", int.Parse(TA));
                     sqlCommand.Parameters.AddWithValue("_uid", UID);
                     sqlConnection.Open();
                     using (NpgsqlDataReader dataReader = sqlCommand.ExecuteReader())
@@ -182,7 +183,7 @@ namespace TasikmalayaKota.Simpatik.Web.Services.tsIdentifikasi.DALS
                     sqlCommand.Parameters.AddWithValue("_opd", OPD);
                     sqlCommand.Parameters.AddWithValue("_kebutuhan", spesifikasi);
                     sqlCommand.Parameters.AddWithValue("_paket", paket);
-                    sqlCommand.Parameters.AddWithValue("_tahun", TA);
+                    sqlCommand.Parameters.AddWithValue("_tahun", int.Parse(TA));
                     sqlCommand.Parameters.AddWithValue("_uid", UID);
                     sqlConnection.Open();
                     using (NpgsqlDataReader dataReader = sqlCommand.ExecuteReader())
@@ -297,16 +298,17 @@ namespace TasikmalayaKota.Simpatik.Web.Services.tsIdentifikasi.DALS
         public IList<tsIdentifikasiModel> GetAll()
         {
             List<tsIdentifikasiModel> Result = new List<tsIdentifikasiModel>();
+            List<enumDataModel> jenisKebutuhan = new enumDataModel().JenisKebutuhan();
             try
             {
                 using (NpgsqlConnection sqlConnection = new NpgsqlConnection(ConnectionString))
-                using (NpgsqlCommand sqlCommand = new NpgsqlCommand("public.stp_tsidentifikasigetall", sqlConnection))
+                using (NpgsqlCommand sqlCommand = new NpgsqlCommand("public.stp_tsidentifikasigetallpenetapan", sqlConnection))
                 {
                     sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
                     sqlCommand.Parameters.AddWithValue("_opd", OPD);
                     sqlCommand.Parameters.AddWithValue("_kebutuhan", 0);
                     sqlCommand.Parameters.AddWithValue("_paket", "");
-                    sqlCommand.Parameters.AddWithValue("_tahun", TA);
+                    sqlCommand.Parameters.AddWithValue("_tahun", int.Parse(TA));
                     sqlCommand.Parameters.AddWithValue("_uid", UID);
                     sqlConnection.Open();
                     using (NpgsqlDataReader dataReader = sqlCommand.ExecuteReader())
@@ -334,7 +336,7 @@ namespace TasikmalayaKota.Simpatik.Web.Services.tsIdentifikasi.DALS
                                 namasubkegiatan = (dataReader["rnamasubkegiatan"].GetType() != typeof(DBNull) ? (string)dataReader["rnamasubkegiatan"] : ""),
                                 idbrgkerj = (dataReader["rkoderekening"].GetType() != typeof(DBNull) ? (int)dataReader["rkoderekening"] : 0),
                                 outputidentifikasi = (dataReader["routputidentifikasi"].GetType() != typeof(DBNull) ? (string)dataReader["routputidentifikasi"] : ""),
-                                jeniskebutuhan = (dataReader["rjeniskebutuhan"].GetType() != typeof(DBNull) ? (string)dataReader["rjeniskebutuhan"] : ""),
+                                jeniskebutuhan = jenisKebutuhan.FirstOrDefault(x => x.Value == (string)dataReader["rjeniskebutuhan"]).Text,
                                 namabrgkerj = (dataReader["rnamabrgkerj"].GetType() != typeof(DBNull) ? (string)dataReader["rnamabrgkerj"] : ""),
                                 fungsi = (dataReader["rfungsi"].GetType() != typeof(DBNull) ? (string)dataReader["rfungsi"] : ""),
                                 jumlahbarang = (dataReader["rjumlahbarang"].GetType() != typeof(DBNull) ? (string)dataReader["rjumlahbarang"] : ""),
@@ -405,6 +407,8 @@ namespace TasikmalayaKota.Simpatik.Web.Services.tsIdentifikasi.DALS
                                 txtsumberdana = (dataReader["rsumberdana"].GetType() != typeof(DBNull) ? (string)dataReader["rsumberdana"] != "[]" ? (string)dataReader["rsumberdana"] : "[0]" : "[0]"),
                                 txtkondisi = (dataReader["rkondisilayak"].GetType() != typeof(DBNull) ? (string)dataReader["rkondisilayak"] != "[]" ? (string)dataReader["rkondisilayak"] : "[0]" : "[0]"),
                                 txtbarangmaterial = (dataReader["rbarangmaterial"].GetType() != typeof(DBNull) ? (string)dataReader["rbarangmaterial"] != "[]" ? (string)dataReader["rbarangmaterial"] : "[0]" : "[0]"),
+                                nilaisumberdana = (dataReader["rnilaisumberdana"].GetType() != typeof(DBNull) ? string.Format("{0:#,0}", Convert.ToInt32(dataReader["rnilaisumberdana"])) : ""),
+                                valuesumberdana = (dataReader["rvaluesumberdana"].GetType() != typeof(DBNull) ? (string)dataReader["rvaluesumberdana"] : ""),
                             });
                         }
                     }
@@ -429,7 +433,7 @@ namespace TasikmalayaKota.Simpatik.Web.Services.tsIdentifikasi.DALS
                     sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
                     sqlCommand.Parameters.AddWithValue("_lembaga", "1");
                     sqlCommand.Parameters.AddWithValue("_opd", OPD);
-                    sqlCommand.Parameters.AddWithValue("_thanggrn", ParamD.thanggrn == 0 ? TA : ParamD.thanggrn);
+                    sqlCommand.Parameters.AddWithValue("_thanggrn", ParamD.thanggrn == 0 ? int.Parse(TA) : ParamD.thanggrn);
                     sqlCommand.Parameters.AddWithValue("_idpaket", ParamD.idpaket == null ? string.Empty : ParamD.idpaket);
                     sqlCommand.Parameters.AddWithValue("_koderekening", ParamD.idbrgkerj == 0 ? 0 : ParamD.idbrgkerj);
                     sqlCommand.Parameters.AddWithValue("_jeniskebutuhan", ParamD.jeniskebutuhan == null ? string.Empty : ParamD.jeniskebutuhan);

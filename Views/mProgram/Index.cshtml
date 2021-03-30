@@ -3,6 +3,7 @@
     var Program = "#program";
     var Kegiatan = "#kegiatan";
     var SubKegiatan = "#subkegiatan";
+    List<string> Toolbar = HttpContextAccessor.HttpContext.Session.GetComplexData<List<string>>("ToolbarMaster");
 }
 <ejs-toast id="toast_default" created="createdToasObj">
     <e-toast-position X="Right"></e-toast-position>
@@ -10,7 +11,7 @@
 
 <div id="program" style="display: none">
     <ejs-grid id="GridProgram" actionComplete="CompleteActionProgram" height="490" allowPaging="true" allowResizing="true" allowSorting="true" allowReordering="true" allowGrouping="false"
-              toolbar="@(new List<string>() { "Search", "Add", "Edit", "Delete","Update","Cancel" , "ExcelExport" ,"PdfExport"})" allowFiltering="true" allowSelection="true"
+              toolbar="@Toolbar" allowFiltering="true" allowSelection="true"
               allowExcelExport="true" allowPdfExport="true" toolbarClick="toolbarAction" created="createdGridProgram" query="@ViewBag.queryProgram">
         <e-grid-pagesettings pageCount="5" pageSize="12" pageSizes="true"></e-grid-pagesettings>
         <e-grid-filterSettings type="Menu"></e-grid-filterSettings>
@@ -27,7 +28,7 @@
 
 <div id="kegiatan" style="display: none">
     <ejs-grid id="GridKegiatan" actionComplete="CompleteActionKegiatan" height="490" allowPaging="true" allowResizing="true" allowSorting="true" allowReordering="true" allowGrouping="false"
-              toolbar="@(new List<string>() { "Search", "Add", "Edit", "Delete","Update","Cancel" , "ExcelExport" ,"PdfExport"})" allowFiltering="true" allowSelection="true"
+              toolbar="@Toolbar" allowFiltering="true" allowSelection="true"
               allowExcelExport="true" allowPdfExport="true" toolbarClick="toolbarAction" created="createdGridKegiatan" query="@ViewBag.queryKegiatan">
         <e-grid-pagesettings pageCount="5" pageSize="12" pageSizes="true"></e-grid-pagesettings>
         <e-grid-filterSettings type="Menu"></e-grid-filterSettings>
@@ -45,7 +46,7 @@
 
 <div id="subkegiatan" style="display: none">
     <ejs-grid id="GridSubKegiatan" actionComplete="CompleteActionSubKegiatan" height="490" allowPaging="true" allowResizing="true" allowSorting="true" allowReordering="true" allowGrouping="false"
-              toolbar="@(new List<string>() { "Search", "Add", "Edit", "Delete","Update","Cancel" , "ExcelExport" ,"PdfExport"})" allowFiltering="true" allowSelection="true"
+              toolbar="@Toolbar" allowFiltering="true" allowSelection="true"
               allowExcelExport="true" allowPdfExport="true" toolbarClick="toolbarAction" created="createdGridSubKegiatan" query="@ViewBag.querySubKegiatan">
         <e-grid-pagesettings pageCount="5" pageSize="12" pageSizes="true"></e-grid-pagesettings>
         <e-grid-filterSettings type="Menu"></e-grid-filterSettings>
@@ -108,6 +109,7 @@
             if (args.requestType === 'beginEdit' || args.requestType === 'add') {
                 var dialog = args.dialog;
                 dialog.height = 320;
+                dialog.width = "750px";
                 // change the header of the dialog
                 dialog.header = args.requestType === 'beginEdit' ? 'Edit ' + args.rowData['NamaSubkegiatan'] : 'New Program';
                 args.form.ej2_instances[0].addRules('IdUrusan', { required: [true, 'Silahkan Pilih Urusan'] });
@@ -188,6 +190,7 @@
             if (args.requestType === 'beginEdit' || args.requestType === 'add') {
                 var dialog = args.dialog;
                 dialog.height = 420;
+                dialog.width = "750px";
                 // change the header of the dialog
                 dialog.header = args.requestType === 'beginEdit' ? 'Edit ' + args.rowData['NamaSubkegiatan'] : 'New Kegiatan';
                 args.form.ej2_instances[0].addRules('IdUrusan', { required: [true, 'Silahkan Pilih Urusan'] });
@@ -285,6 +288,7 @@
             if (args.requestType === 'beginEdit' || args.requestType === 'add') {
                 var dialog = args.dialog;
                 dialog.height = 580;
+                dialog.width = "750px";
                 // change the header of the dialog
                 dialog.header = args.requestType === 'beginEdit' ? 'Edit ' + args.rowData['NamaSubkegiatan'] : 'New Sub Kegiatan';
                 args.form.ej2_instances[0].addRules('IdUrusan', { required: [true, 'Silahkan Pilih Urusan'] });

@@ -2,10 +2,9 @@
   "version": "1.0.0",
   "name": "asp.net",
   "private": true,
-  "devDependencies": {
-    "@syncfusion/ej2-js-es5": "^18.3.35"
-  },
   "dependencies": {
+    "@syncfusion/ej2": "^18.4.39",
+    "turbolinks": "^5.2.0",
     "vue": "^2.6.12"
   }
 }

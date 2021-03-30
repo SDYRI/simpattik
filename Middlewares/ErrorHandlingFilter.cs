@@ -14,7 +14,7 @@ namespace TasikmalayaKota.Simpatik.Web.Middlewares
             context.ExceptionHandled = true;
             context.Result = new ViewResult
             {
-                ViewName = "~/Views/Error/HandlePageNotFound.cshtml"
+                ViewName = "~/Views/ErrorExecute/HandleError.cshtml"
             };
         }
     }

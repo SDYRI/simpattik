@@ -19,12 +19,10 @@ namespace simpat1k.Controllers
     public class tsIdentifikasiController : Controller
     {
         private readonly ItsIdentifikasi _tsIdentifikasi;
-        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public tsIdentifikasiController(ItsIdentifikasi tsIdentifikasi, IHttpContextAccessor httpContextAccessor)
+        public tsIdentifikasiController(ItsIdentifikasi tsIdentifikasi)
         {
             _tsIdentifikasi = tsIdentifikasi;
-            _httpContextAccessor = httpContextAccessor;
         }
 
         #region Perencanaan Pengadaan
@@ -40,6 +38,36 @@ namespace simpat1k.Controllers
         public IActionResult UrlDataIdentiifikasi([FromBody] tsIdentifikasiModel dm)
         {
             IEnumerable DataSource = _tsIdentifikasi.GetAll(Int32.Parse(dm.jeniskebutuhan), dm.idpaket);
+            DataOperations operation = new DataOperations();
+            if (dm.Search != null && dm.Search.Count > 0)
+            {
+                DataSource = operation.PerformSearching(DataSource, dm.Search);  //Search
+            }
+            if (dm.Sorted != null && dm.Sorted.Count > 0) //Sorting
+            {
+                DataSource = operation.PerformSorting(DataSource, dm.Sorted);
+            }
+            if (dm.Where != null && dm.Where.Count > 0) //Filtering
+            {
+                DataSource = operation.PerformFiltering(DataSource, dm.Where, dm.Where[0].Operator);
+            }
+            int count = DataSource.Cast<tsIdentifikasiModel>().Count();
+            if (dm.Skip != 0)
+            {
+                DataSource = operation.PerformSkip(DataSource, dm.Skip);   //Paging
+            }
+            if (dm.Take != 0)
+            {
+                DataSource = operation.PerformTake(DataSource, dm.Take);
+            }
+            return dm.RequiresCounts ? Json(new { result = DataSource, count = count }) : Json(DataSource);
+        }
+
+        [HttpPost]
+        [Route("IdentifikasiPengadaanPenetapan")]
+        public IActionResult UrlDataIdentiifikasiPenetapan([FromBody] tsIdentifikasiModel dm)
+        {
+            IEnumerable DataSource = _tsIdentifikasi.GetAll();
             DataOperations operation = new DataOperations();
             if (dm.Search != null && dm.Search.Count > 0)
             {
@@ -87,30 +115,35 @@ namespace simpat1k.Controllers
                         idpaket = value.Value.idpaket;
                     }
                 }
-                else if (value.Action == "remove")
+                else if ((value.Action == "remove") && param.Key == "idpaket")
                 {
-                    if (param.Key == "idpaket")
-                    {
-                        idpaket = param.Value.ToString();
-                    }
+                    idpaket = param.Value.ToString();
                 }
             }
 
-            if (value.Action == "insert")
+            if (HttpContext.Session.GetInt32("Tipe") == 3)
             {
-                DatabaseActionResultModel Result = _tsIdentifikasi.Create(value.Value);
-                msg = Result.Pesan;
+                if (value.Action == "insert")
+                {
+                    DatabaseActionResultModel Result = _tsIdentifikasi.Create(value.Value);
+                    msg = Result.Pesan;
+                }
+                else if (value.Action == "update")
+                {
+                    DatabaseActionResultModel Result = _tsIdentifikasi.Update(value.Value);
+                    msg = Result.Pesan;
+                }
+                else if (value.Action == "remove")
+                {
+                    DatabaseActionResultModel Result = _tsIdentifikasi.Remove(Int32.Parse(value.Key.ToString()), idpaket);
+                    msg = Result.Pesan;
+                }
             }
-            else if (value.Action == "update")
+            else
             {
-                DatabaseActionResultModel Result = _tsIdentifikasi.Update(value.Value);
-                msg = Result.Pesan;
+                msg = "BERHASIL DISIMPAN";
             }
-            else if (value.Action == "remove")
-            {
-                DatabaseActionResultModel Result = _tsIdentifikasi.Remove(Int32.Parse(value.Key.ToString()), idpaket);
-                msg = Result.Pesan;
-            }
+
             return Json(new { data = value.Value, message = msg });
         }
         #endregion Perencanaan Pengadaan
@@ -131,14 +164,25 @@ namespace simpat1k.Controllers
         {
             ViewBag.Title = "Identifikasi Kebutuhan Barang " + value.Value.ididetifikasi;
             value.Value.jeniskebutuhan = "1";
-            value.Value.opd = _httpContextAccessor.HttpContext.Session.GetString("OpdName");
-            value.Value.pejabat = _httpContextAccessor.HttpContext.Session.GetString("Nama");
+            value.Value.opd = value.Value.opd == null ? HttpContext.Session.GetString("OpdName") : value.Value.opd;
+            value.Value.pejabat = value.Value.pejabat == null ? HttpContext.Session.GetString("Nama") : value.Value.pejabat;
             
             ViewBag.sortDropdown = "Ascending";
             ViewBag.queryKodeRekening = "new ej.data.Query().select(['NamaSubRincian', 'IdKodeRekening']).take(10).requiresCount().addParams('IdPosisi', 6)";
             ViewBag.queryProgram = "new ej.data.Query().select(['NamaSubkegiatan', 'IdProgram']).take(10).requiresCount().addParams('IdPosisi', 1)";
             ViewBag.queryKegiatan = "new ej.data.Query().select(['NamaSubkegiatan', 'IdProgram']).take(10).requiresCount().addParams('IdPosisi', 2)";
             ViewBag.querySubKegiatan = "new ej.data.Query().select(['NamaSubkegiatan', 'IdProgram']).take(10).requiresCount().addParams('IdPosisi', 3)";
+
+            #region Enable
+            if (HttpContext.Session.GetInt32("Tipe") == 2)
+            {
+                ViewBag.truefalse = false;
+            }
+            else
+            {
+                ViewBag.truefalse = true;
+            }            
+            #endregion Enable
 
             #region Combobox
             ViewBag.yatidak = new enumDataModel().YaTidak();
@@ -169,14 +213,25 @@ namespace simpat1k.Controllers
         {
             ViewBag.Title = "Identifikasi Kebutuhan Pekerjaan Kontruksi" + value.Value.ididetifikasi;
             value.Value.jeniskebutuhan = "2";
-            value.Value.opd = _httpContextAccessor.HttpContext.Session.GetString("OpdName");
-            value.Value.pejabat = _httpContextAccessor.HttpContext.Session.GetString("Nama");
+            value.Value.opd = value.Value.opd == null ? HttpContext.Session.GetString("OpdName") : value.Value.opd;
+            value.Value.pejabat = value.Value.pejabat == null ? HttpContext.Session.GetString("Nama") : value.Value.pejabat;
 
             ViewBag.sortDropdown = "Ascending";
             ViewBag.queryKodeRekening = "new ej.data.Query().select(['NamaSubRincian', 'IdKodeRekening']).take(10).requiresCount().addParams('IdPosisi', 6)";
             ViewBag.queryProgram = "new ej.data.Query().select(['NamaSubkegiatan', 'IdProgram']).take(10).requiresCount().addParams('IdPosisi', 1)";
             ViewBag.queryKegiatan = "new ej.data.Query().select(['NamaSubkegiatan', 'IdProgram']).take(10).requiresCount().addParams('IdPosisi', 2)";
             ViewBag.querySubKegiatan = "new ej.data.Query().select(['NamaSubkegiatan', 'IdProgram']).take(10).requiresCount().addParams('IdPosisi', 3)";
+
+            #region Enable
+            if (HttpContext.Session.GetInt32("Tipe") == 2)
+            {
+                ViewBag.truefalse = false;
+            }
+            else
+            {
+                ViewBag.truefalse = true;
+            }
+            #endregion Enable
 
             #region Combobox
             ViewBag.yatidak = new enumDataModel().YaTidak();
@@ -210,14 +265,25 @@ namespace simpat1k.Controllers
         {
             ViewBag.Title = "Identifikasi Kebutuhan Jasa Konsultasi" + value.Value.ididetifikasi;
             value.Value.jeniskebutuhan = "3";
-            value.Value.opd = _httpContextAccessor.HttpContext.Session.GetString("OpdName");
-            value.Value.pejabat = _httpContextAccessor.HttpContext.Session.GetString("Nama");
+            value.Value.opd = value.Value.opd == null ? HttpContext.Session.GetString("OpdName") : value.Value.opd;
+            value.Value.pejabat = value.Value.pejabat == null ? HttpContext.Session.GetString("Nama") : value.Value.pejabat;
 
             ViewBag.sortDropdown = "Ascending";
             ViewBag.queryKodeRekening = "new ej.data.Query().select(['NamaSubRincian', 'IdKodeRekening']).take(10).requiresCount().addParams('IdPosisi', 6)";
             ViewBag.queryProgram = "new ej.data.Query().select(['NamaSubkegiatan', 'IdProgram']).take(10).requiresCount().addParams('IdPosisi', 1)";
             ViewBag.queryKegiatan = "new ej.data.Query().select(['NamaSubkegiatan', 'IdProgram']).take(10).requiresCount().addParams('IdPosisi', 2)";
             ViewBag.querySubKegiatan = "new ej.data.Query().select(['NamaSubkegiatan', 'IdProgram']).take(10).requiresCount().addParams('IdPosisi', 3)";
+
+            #region Enable
+            if (HttpContext.Session.GetInt32("Tipe") == 2)
+            {
+                ViewBag.truefalse = false;
+            }
+            else
+            {
+                ViewBag.truefalse = true;
+            }
+            #endregion Enable
 
             #region Combobox
             ViewBag.yatidak = new enumDataModel().YaTidak();
@@ -248,14 +314,25 @@ namespace simpat1k.Controllers
         {
             ViewBag.Title = "Identifikasi Kebutuhan Jasa Lainnya" + value.Value.ididetifikasi;
             value.Value.jeniskebutuhan = "4";
-            value.Value.opd = _httpContextAccessor.HttpContext.Session.GetString("OpdName");
-            value.Value.pejabat = _httpContextAccessor.HttpContext.Session.GetString("Nama");
+            value.Value.opd = value.Value.opd == null ? HttpContext.Session.GetString("OpdName") : value.Value.opd;
+            value.Value.pejabat = value.Value.pejabat == null ? HttpContext.Session.GetString("Nama") : value.Value.pejabat;
 
             ViewBag.sortDropdown = "Ascending";
             ViewBag.queryKodeRekening = "new ej.data.Query().select(['NamaSubRincian', 'IdKodeRekening']).take(10).requiresCount().addParams('IdPosisi', 6)";
             ViewBag.queryProgram = "new ej.data.Query().select(['NamaSubkegiatan', 'IdProgram']).take(10).requiresCount().addParams('IdPosisi', 1)";
             ViewBag.queryKegiatan = "new ej.data.Query().select(['NamaSubkegiatan', 'IdProgram']).take(10).requiresCount().addParams('IdPosisi', 2)";
             ViewBag.querySubKegiatan = "new ej.data.Query().select(['NamaSubkegiatan', 'IdProgram']).take(10).requiresCount().addParams('IdPosisi', 3)";
+
+            #region Enable
+            if (HttpContext.Session.GetInt32("Tipe") == 2)
+            {
+                ViewBag.truefalse = false;
+            }
+            else
+            {
+                ViewBag.truefalse = true;
+            }
+            #endregion Enable
 
             #region Combobox
             ViewBag.yatidak = new enumDataModel().YaTidak();
@@ -276,8 +353,8 @@ namespace simpat1k.Controllers
         public IActionResult SuratPenetapan()
         {
             ViewBag.Title = "Surat Penetapan";
-            ViewBag.opd = _httpContextAccessor.HttpContext.Session.GetString("OpdName");
-            ViewBag.pejabat = _httpContextAccessor.HttpContext.Session.GetString("Nama");
+            ViewBag.opd = HttpContext.Session.GetString("OpdName");
+            ViewBag.pejabat = HttpContext.Session.GetString("Nama");
             return PartialView("_tsIdentifikasiSuratPenetapan");
         }
         #endregion Surat Penetapan

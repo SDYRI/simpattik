@@ -1,19 +1,16 @@
-﻿<button type="button" class="btn btn-flat-primary border-primary text-primary mr-1 mb-1">
-    Upload RUP
-</button>
-<ejs-grid id="Grid" height="490" allowPaging="true" allowResizing="true" allowSorting="true" allowReordering="true" allowGrouping="false"
+﻿<ejs-grid id="Grid" height="490" allowPaging="true" allowResizing="true" allowSorting="true" allowReordering="true" allowGrouping="false"
           allowFiltering="true" allowSelection="true">
-    <e-data-manager url="/Identifikasi/PerencanaanPengadaanAll" adaptor="UrlAdaptor"></e-data-manager>
+    <e-data-manager url="/Paket/PaketReview" adaptor="UrlAdaptor"></e-data-manager>
     <e-grid-pagesettings pageSize="12" />
     <e-grid-filterSettings type="Menu"></e-grid-filterSettings>
     <e-grid-editSettings allowAdding="true" allowEditing="true" mode="Dialog"></e-grid-editSettings>
     <e-grid-selectionsettings type="Single"></e-grid-selectionsettings>
     <e-grid-columns>
-        <e-grid-column field="ididetifikasi" headerText="ididetifikasi" isPrimaryKey="true" isIdentity="true" visible="false"></e-grid-column>
-        <e-grid-column field="opd" headerText="OPD" width="200"></e-grid-column>
-        <e-grid-column field="perkiraanbiaya" headerText="Nilai Belanja Langsung" width="200"></e-grid-column>
-        <e-grid-column field="perkiraanbiaya" headerText="Nilai Belanja Sirup" width="200"></e-grid-column>
-        <e-grid-column field="nomorsuratijin" headerText="Selisih" width="200"></e-grid-column>
+        <e-grid-column field="idpaket" headerText="idpaket" isPrimaryKey="true" isIdentity="true" visible="false"></e-grid-column>
+        <e-grid-column field="nmpaket" headerText="OPD" width="200"></e-grid-column>
+        <e-grid-column field="nilaibelanjalangsung" headerText="Nilai Belanja Langsung" width="200"></e-grid-column>
+        <e-grid-column field="nilaisirup" headerText="Nilai Belanja Sirup" width="200"></e-grid-column>
+        <e-grid-column field="nilaiselisih" headerText="Selisih" width="200"></e-grid-column>
     </e-grid-columns>
 </ejs-grid>
 

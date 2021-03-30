@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TasikmalayaKota.Simpatik.Web.Models;
+using TasikmalayaKota.Simpatik.Web.Services.Middleware.Models;
 using TasikmalayaKota.Simpatik.Web.Services.tsPaket.Interfaces;
 using TasikmalayaKota.Simpatik.Web.Services.tsPaket.Models;
 
@@ -48,6 +49,7 @@ namespace TasikmalayaKota.Simpatik.Web.Services.tsPaket.DALS
                                 idpaket = (dataReader["ridpaket"].GetType() != typeof(DBNull) ? (string)dataReader["ridpaket"] : ""),
                                 lembaga = (dataReader["rlembaga"].GetType() != typeof(DBNull) ? ((int)dataReader["rlembaga"]).ToString() : ""),
                                 opd = (dataReader["ropd"].GetType() != typeof(DBNull) ? ((int)dataReader["ropd"]).ToString() : ""),
+                                namaopd = (dataReader["rnamaopd"].GetType() != typeof(DBNull) ? (string)dataReader["rnamaopd"] : ""),
                                 pejabat = (dataReader["rpejabat"].GetType() != typeof(DBNull) ? (string)dataReader["rpejabat"] : ""),
                                 thanggrn = (dataReader["rthanggrn"].GetType() != typeof(DBNull) ? ((int)dataReader["rthanggrn"]).ToString() : ""),
                                 nmpaket = (dataReader["rnmpaket"].GetType() != typeof(DBNull) ? (string)dataReader["rnmpaket"] : ""),
@@ -67,8 +69,82 @@ namespace TasikmalayaKota.Simpatik.Web.Services.tsPaket.DALS
                                 pemilihanakhir = (dataReader["rpemilihanakhir"].GetType() != typeof(DBNull) ? (DateTime)dataReader["rpemilihanakhir"] : new DateTime()),
                                 mtdpemilihanstblm = (dataReader["rmtdpemilihanstblm"].GetType() != typeof(DBNull) ? (string)dataReader["rmtdpemilihanstblm"] : ""),
                                 tipeswakelola = (dataReader["rtipeswakelola"].GetType() != typeof(DBNull) ? (string)dataReader["rtipeswakelola"] : ""),
+                                paketstrategis = (dataReader["rpaketstrategis"].GetType() != typeof(DBNull) ? (string)dataReader["rpaketstrategis"] : ""),
                                 penyelengaraswakelola = (dataReader["rpenyelengaraswakelola"].GetType() != typeof(DBNull) ? (int)dataReader["rpenyelengaraswakelola"] : 0),
+                                pagusblm = (dataReader["rpagusblm"].GetType() != typeof(DBNull) ? (int)dataReader["rpagusblm"] : 0),
+                                pagustlh = (dataReader["rpagustlh"].GetType() != typeof(DBNull) ? (int)dataReader["rpagustlh"] : 0),
+                                nilaibelanjalangsung = (!(dataReader["rnilaibelanjalangsung"] is DBNull) ? (int)dataReader["rnilaibelanjalangsung"] : 0),
+                                nilaisirup = (!(dataReader["rnilaisirup"] is DBNull) ? (int)dataReader["rnilaisirup"] : 0),
                                 idkonsolidasi = (dataReader["ridkonsolidasi"].GetType() != typeof(DBNull) ? (string)dataReader["ridkonsolidasi"] : ""),
+                                keteranganmetode = (dataReader["rketeranganmetode"].GetType() != typeof(DBNull) ? (string)dataReader["rketeranganmetode"] : ""),
+                                keteranganpagu = (dataReader["rketeranganpagu"].GetType() != typeof(DBNull) ? (string)dataReader["rketeranganpagu"] : ""),
+                                mdfdate = (dataReader["rmdfdate"].GetType() != typeof(DBNull) ? (DateTime)dataReader["rmdfdate"] : new DateTime()),
+                                nilaiselisih = (!(dataReader["rnilaibelanjalangsung"] is DBNull) ? (int)dataReader["rnilaibelanjalangsung"] : 0) - (!(dataReader["rnilaisirup"] is DBNull) ? (int)dataReader["rnilaisirup"] : 0),
+                            });
+                        }
+                    }
+                }
+            }
+            catch (Exception Exception)
+            {
+                throw Exception;
+            }
+
+            return Result;
+        }
+
+        public IList<tsPaketModel> GetAllStrategis(int spesifikasi, int tipePaket)
+        {
+            List<tsPaketModel> Result = new List<tsPaketModel>();
+            try
+            {
+                using (NpgsqlConnection sqlConnection = new NpgsqlConnection(ConnectionString))
+                using (NpgsqlCommand sqlCommand = new NpgsqlCommand("public.stp_tspaketgetallstrategis", sqlConnection))
+                {
+                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                    sqlCommand.Parameters.AddWithValue("_opd", OPD);
+                    sqlCommand.Parameters.AddWithValue("_kebutuhan", spesifikasi);
+                    sqlCommand.Parameters.AddWithValue("_tipe", tipePaket);
+                    sqlConnection.Open();
+                    using (NpgsqlDataReader dataReader = sqlCommand.ExecuteReader())
+                    {
+                        while (dataReader.Read())
+                        {
+                            Result.Add(new tsPaketModel()
+                            {
+                                //ididetifikasi = (dataReader["rididetifikasi"].GetType() != typeof(DBNull) ? (int)dataReader["rididetifikasi"] : 0),
+                                idpaket = (dataReader["ridpaket"].GetType() != typeof(DBNull) ? (string)dataReader["ridpaket"] : ""),
+                                lembaga = (dataReader["rlembaga"].GetType() != typeof(DBNull) ? ((int)dataReader["rlembaga"]).ToString() : ""),
+                                opd = (dataReader["ropd"].GetType() != typeof(DBNull) ? ((int)dataReader["ropd"]).ToString() : ""),
+                                namaopd = (dataReader["rnamaopd"].GetType() != typeof(DBNull) ? (string)dataReader["rnamaopd"] : ""),
+                                pejabat = (dataReader["rpejabat"].GetType() != typeof(DBNull) ? (string)dataReader["rpejabat"] : ""),
+                                thanggrn = (dataReader["rthanggrn"].GetType() != typeof(DBNull) ? ((int)dataReader["rthanggrn"]).ToString() : ""),
+                                nmpaket = (dataReader["rnmpaket"].GetType() != typeof(DBNull) ? (string)dataReader["rnmpaket"] : ""),
+                                volume = (dataReader["rvolume"].GetType() != typeof(DBNull) ? (string)dataReader["rvolume"] : ""),
+                                uraian = (dataReader["ruraianpaket"].GetType() != typeof(DBNull) ? (string)dataReader["ruraianpaket"] : ""),
+                                spesifikasi = (dataReader["rspesifikasipaket"].GetType() != typeof(DBNull) ? (string)dataReader["rspesifikasipaket"] : ""),
+                                prodlmnegeri = (dataReader["rprodlmnegeri"].GetType() != typeof(DBNull) ? (string)dataReader["rprodlmnegeri"] : ""),
+                                ushkecil = (dataReader["rushkecil"].GetType() != typeof(DBNull) ? (string)dataReader["rushkecil"] : ""),
+                                pradpa = (dataReader["rpradpa"].GetType() != typeof(DBNull) ? (string)dataReader["rpradpa"] : ""),
+                                mtdpemilihanstlh = (dataReader["rmtdpemilihanstlh"].GetType() != typeof(DBNull) ? (string)dataReader["rmtdpemilihanstlh"] : ""),
+                                jeniskebutuhan = (dataReader["rjeniskebutuhan"].GetType() != typeof(DBNull) ? (string)dataReader["rjeniskebutuhan"] : ""),
+                                pemanfaatanmulai = (dataReader["rpemanfaatanmulai"].GetType() != typeof(DBNull) ? (DateTime)dataReader["rpemanfaatanmulai"] : new DateTime()),
+                                pemanfaatanakhir = (dataReader["rpemanfaatanakhir"].GetType() != typeof(DBNull) ? (DateTime)dataReader["rpemanfaatanakhir"] : new DateTime()),
+                                pelaksanaanmulai = (dataReader["rpelaksanaanmulai"].GetType() != typeof(DBNull) ? (DateTime)dataReader["rpelaksanaanmulai"] : new DateTime()),
+                                pelaksanaanakhir = (dataReader["rpelaksanaanakhir"].GetType() != typeof(DBNull) ? (DateTime)dataReader["rpelaksanaanakhir"] : new DateTime()),
+                                pemilihanmulai = (dataReader["rpemilihanmulai"].GetType() != typeof(DBNull) ? (DateTime)dataReader["rpemilihanmulai"] : new DateTime()),
+                                pemilihanakhir = (dataReader["rpemilihanakhir"].GetType() != typeof(DBNull) ? (DateTime)dataReader["rpemilihanakhir"] : new DateTime()),
+                                mtdpemilihanstblm = (dataReader["rmtdpemilihanstblm"].GetType() != typeof(DBNull) ? (string)dataReader["rmtdpemilihanstblm"] : ""),
+                                tipeswakelola = (dataReader["rtipeswakelola"].GetType() != typeof(DBNull) ? (string)dataReader["rtipeswakelola"] : ""),
+                                paketstrategis = (dataReader["rpaketstrategis"].GetType() != typeof(DBNull) ? (string)dataReader["rpaketstrategis"] : ""),
+                                penyelengaraswakelola = (dataReader["rpenyelengaraswakelola"].GetType() != typeof(DBNull) ? (int)dataReader["rpenyelengaraswakelola"] : 0),
+                                pagusblm = (dataReader["rpagusblm"].GetType() != typeof(DBNull) ? (int)dataReader["rpagusblm"] : 0),
+                                pagustlh = (dataReader["rpagustlh"].GetType() != typeof(DBNull) ? (int)dataReader["rpagustlh"] : 0),
+                                nilaibelanjalangsung = (dataReader["rnilaibelanjalangsung"].GetType() != typeof(DBNull) ? (int)dataReader["rnilaibelanjalangsung"] : 0),
+                                nilaisirup = (dataReader["rnilaisirup"].GetType() != typeof(DBNull) ? (int)dataReader["rnilaisirup"] : 0),
+                                idkonsolidasi = (dataReader["ridkonsolidasi"].GetType() != typeof(DBNull) ? (string)dataReader["ridkonsolidasi"] : ""),
+                                keteranganmetode = (dataReader["rketeranganmetode"].GetType() != typeof(DBNull) ? (string)dataReader["rketeranganmetode"] : ""),
+                                keteranganpagu = (dataReader["rketeranganpagu"].GetType() != typeof(DBNull) ? (string)dataReader["rketeranganpagu"] : ""),
                                 mdfdate = (dataReader["rmdfdate"].GetType() != typeof(DBNull) ? (DateTime)dataReader["rmdfdate"] : new DateTime()),
                             });
                         }
@@ -118,7 +194,8 @@ namespace TasikmalayaKota.Simpatik.Web.Services.tsPaket.DALS
                     sqlCommand.Parameters.AddWithValue("_pelaksanaanakhir", ParamD.pelaksanaanakhir == null ? "" : (ParamD.pelaksanaanakhir.Value.Year.ToString() + "-" + ParamD.pelaksanaanakhir.Value.Month.ToString() + "-" + ParamD.pelaksanaanakhir.Value.Day.ToString()));
                     sqlCommand.Parameters.AddWithValue("_pemilihanmulai", (_pemilihanmulai.Value.Year.ToString() + "-" + _pemilihanmulai.Value.Month.ToString() + "-" + _pemilihanmulai.Value.Day.ToString()));
                     sqlCommand.Parameters.AddWithValue("_pemilihanakhir", (_pemilihanakhir.Value.Year.ToString() + "-" + _pemilihanakhir.Value.Month.ToString() + "-" + _pemilihanakhir.Value.Day.ToString()));
-                    sqlCommand.Parameters.AddWithValue("_tipeswakelola", ParamD.tipeswakelola == null ? "0" : ParamD.tipeswakelola);
+                    sqlCommand.Parameters.AddWithValue("_tipeswakelola", ParamD.tipeswakelola == null ? "1" : ParamD.tipeswakelola);
+                    sqlCommand.Parameters.AddWithValue("_paketstrategis", ParamD.paketstrategis == null ? "0" : ParamD.paketstrategis);
                     sqlCommand.Parameters.AddWithValue("_pnyelgraswakelola", ParamD.penyelengaraswakelola);
                     sqlCommand.Parameters.AddWithValue("_uid", UID);
                     sqlConnection.Open();
@@ -174,7 +251,8 @@ namespace TasikmalayaKota.Simpatik.Web.Services.tsPaket.DALS
                     sqlCommand.Parameters.AddWithValue("_tipepaket", ParamD.tipePaket);
                     sqlCommand.Parameters.AddWithValue("_uraianpaket", ParamD.uraian == null ? string.Empty : ParamD.uraian);
                     sqlCommand.Parameters.AddWithValue("_spesifikasipaket", ParamD.spesifikasi == null ? string.Empty : ParamD.spesifikasi);
-                    sqlCommand.Parameters.AddWithValue("_tipeswakelola", ParamD.tipeswakelola == null ? "0" : ParamD.tipeswakelola);
+                    sqlCommand.Parameters.AddWithValue("_tipeswakelola", ParamD.tipeswakelola == null ? "1" : ParamD.tipeswakelola);
+                    sqlCommand.Parameters.AddWithValue("_paketstrategis", ParamD.paketstrategis == null ? "0" : ParamD.paketstrategis);
                     sqlCommand.Parameters.AddWithValue("_penyelengaraswakelola", ParamD.penyelengaraswakelola);
                     sqlCommand.Parameters.AddWithValue("_uid", UID);
                     sqlConnection.Open();

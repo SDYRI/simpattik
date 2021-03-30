@@ -55,6 +55,13 @@ namespace TasikmalayaKota.Simpatik.Web
         {
             services.AddAntiforgery(options => options.HeaderName = "SIMPATTIK-TOKEN");
 
+            services.Configure<CookiePolicyOptions>(options =>
+            {
+                // This lambda determines whether user consent for non-essential cookies is needed for a given request.
+                options.CheckConsentNeeded = context => true;
+                options.MinimumSameSitePolicy = SameSiteMode.None;
+            });
+
             services.AddControllers().AddNewtonsoftJson(options => {
               options.SerializerSettings.ContractResolver = new Newtonsoft.Json.Serialization.DefaultContractResolver();
             });
@@ -72,13 +79,6 @@ namespace TasikmalayaKota.Simpatik.Web
             //    options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
             //    options.JsonSerializerOptions.PropertyNamingPolicy = null;
             //});
-
-            services.Configure<CookiePolicyOptions>(options =>
-            {
-                // This lambda determines whether user consent for non-essential cookies is needed for a given request.
-                options.CheckConsentNeeded = context => true;
-                options.MinimumSameSitePolicy = SameSiteMode.None;
-            });
 
             services.AddHttpContextAccessor();
             services.AddSession(options =>
@@ -131,6 +131,12 @@ namespace TasikmalayaKota.Simpatik.Web
             //    return next(context);
             //});
 
+            string slug = "/" + Configuration.GetValue<string>("VettingSettings:WebsiteSLUG");
+            if (slug != "/")
+            {
+                app.UsePathBase(slug);
+            }
+
             app.UseForwardedHeaders(new ForwardedHeadersOptions
             {
                 ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
@@ -142,7 +148,7 @@ namespace TasikmalayaKota.Simpatik.Web
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
+                app.UseStatusCodePagesWithReExecute("/Error/{0}");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
@@ -159,7 +165,7 @@ namespace TasikmalayaKota.Simpatik.Web
 
             app.UseAuthorization();
             app.UseSession();
-            app.UseMiddleware<AuthMiddleware>();           
+            app.UseMiddleware<AuthMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {

@@ -2,13 +2,14 @@
     ViewData["Title"] = ViewBag.Title;
     List<object> detailPaket = new List<object>();
     detailPaket.Add(new { type = "userstatus", buttonOption = new { content = " Identifikasi", cssClass = "e-flat e-details feather icon-layers" } }); // custom
+    List<string> Toolbar = HttpContextAccessor.HttpContext.Session.GetComplexData<List<string>>("Toolbar");
 }
 <ejs-toast id="toast_default" created="createdToasObj">
     <e-toast-position X="Right"></e-toast-position>
 </ejs-toast>
 
 <ejs-grid id="Grid" actionComplete="CompleteAction" height="490" allowPaging="true" allowResizing="true" allowSorting="true" allowReordering="true" allowGrouping="false"
-          toolbar="@(new List<string>() { "Search", "Add", "Edit", "Delete","Update","Cancel" , "ExcelExport" ,"PdfExport" })" allowFiltering="true" allowSelection="true"
+          toolbar="@Toolbar" allowFiltering="true" allowSelection="true"
           created="createdGrid" allowExcelExport="true" allowPdfExport="true" toolbarClick="toolbarAction" query="@ViewBag.queryPenyedia" commandClick="cmdDetail">
     <e-grid-pagesettings pageCount="5" pageSize="12" pageSizes="true"></e-grid-pagesettings>
     <e-grid-filterSettings type="Menu"></e-grid-filterSettings>
@@ -69,6 +70,7 @@
             if (args.requestType === 'beginEdit' || args.requestType === 'add') {
                 var dialog = args.dialog;
                 dialog.height = 650;
+                dialog.width = "750px";
                 // change the header of the dialog
                 dialog.header = args.requestType === 'beginEdit' ? 'Edit Identifikasi Kebutuhan Barang' : 'New Identifikasi Kebutuhan Barang';
 

@@ -7,6 +7,7 @@ using Syncfusion.EJ2.Base;
 using System.Collections;
 using System;
 using Microsoft.AspNetCore.Http;
+using System.Collections.Generic;
 
 namespace simpat1k.Controllers
 {
@@ -23,7 +24,7 @@ namespace simpat1k.Controllers
         [Route("IndexMe")]
         public IActionResult Index()
         {
-            ViewBag.Title = "Master Tahun Anggaran";
+            ViewBag.Title = "Master Tahun Anggaran ";
             return View();
         }
 
