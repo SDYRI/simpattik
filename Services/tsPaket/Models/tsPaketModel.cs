@@ -40,6 +40,7 @@ namespace TasikmalayaKota.Simpatik.Web.Services.tsPaket.Models
         public int nilaibelanjalangsung { get; set; }
         public int nilaisirup { get; set; }
         public int nilaiselisih { get; set; }
+        public string statushps { get; set; }
         public DateTime? pemanfaatanmulai { get; set; }
         public DateTime? pemanfaatanakhir { get; set; }
         public DateTime? pelaksanaanmulai { get; set; }

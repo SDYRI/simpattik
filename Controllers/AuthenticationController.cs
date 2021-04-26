@@ -50,6 +50,7 @@ namespace TasikmalayaKota.Simpatik.Web.Controllers
                 List<string> toolbar = SetToolbar(Result.Tipe);
                 List<string> toolbarTahun = SetToolbarTahun(Result.Tipe);
                 List<string> toolbarMaster = SetToolbarMaster(Result.Tipe, Result.PaPpk);
+                List<string> toolbarAuditor = SetToolbarAuditor(Result.Tipe);
                 #endregion toolbar
 
                 if (Result.Success && Result.IDAkun != string.Empty)
@@ -68,6 +69,7 @@ namespace TasikmalayaKota.Simpatik.Web.Controllers
                     HttpContext.Session.SetComplexData("Toolbar", toolbar);
                     HttpContext.Session.SetComplexData("ToolbarTahun", toolbarTahun);
                     HttpContext.Session.SetComplexData("ToolbarMaster", toolbarMaster);
+                    HttpContext.Session.SetComplexData("ToolbarAuditor", toolbarAuditor);
 
                     SimpattikGlobals.SetPengumuman(Result.Tipe);
                 }
@@ -83,7 +85,7 @@ namespace TasikmalayaKota.Simpatik.Web.Controllers
         private List<string> SetToolbarTahun(int typeUser)
         {
             List<string> setToolbarTahun = new List<string>();
-            if (typeUser == 0)
+            if ((typeUser == 0) || (typeUser == 1))
             {
                 setToolbarTahun.Add("Search");
                 setToolbarTahun.Add("Add");
@@ -130,7 +132,7 @@ namespace TasikmalayaKota.Simpatik.Web.Controllers
         private List<string> SetToolbarMaster(int typeUser, string pappkUser)
         {
             List<string> setToolbarMaster = new List<string>();
-            if (typeUser == 0)
+            if ((typeUser == 0) || (typeUser == 1))
             {
                 setToolbarMaster.Add("Search");
                 setToolbarMaster.Add("Add");
@@ -157,6 +159,28 @@ namespace TasikmalayaKota.Simpatik.Web.Controllers
             }
 
             return setToolbarMaster;
+        }
+
+        private List<string> SetToolbarAuditor(int typeUser)
+        {
+            List<string> setToolbarAuditor = new List<string>();
+            if ((typeUser == 0) || (typeUser == 2) || (typeUser == 4))
+            {
+                setToolbarAuditor.Add("Search");
+                setToolbarAuditor.Add("Add");
+                setToolbarAuditor.Add("Edit");
+                setToolbarAuditor.Add("Delete");
+                setToolbarAuditor.Add("Update");
+                setToolbarAuditor.Add("Cancel");
+                setToolbarAuditor.Add("ExcelExport");
+                setToolbarAuditor.Add("PdfExport");
+            }
+            else
+            {
+                setToolbarAuditor.Add("Search");
+            }
+
+            return setToolbarAuditor;
         }
 
         [HttpGet]

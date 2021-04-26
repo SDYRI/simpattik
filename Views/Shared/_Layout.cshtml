@@ -139,6 +139,17 @@
                         }
                     </ul>
                 </li>
+                @if (HttpContextAccessor.HttpContext.Session.GetString("Pappk") == "3")
+                {
+                    <li class="nav-item">
+                        <a href="#"><i class="feather icon-briefcase"></i><span class="menu-title">Penganggaran / Budgeting</span></a>
+                        <ul class="menu-content">
+                            <li class="@Html.IsSelected(controller: "tsPaket", action: "IndexHps")">
+                                <a asp-area="" asp-controller="Paket" asp-action="IndexHps"><i class="feather icon-copy"></i><span class="menu-item">HPS Online</span></a>
+                            </li>
+                        </ul>
+                    </li>
+                }
                 @if ((HttpContextAccessor.HttpContext.Session.GetInt32("Tipe") == 1) || (HttpContextAccessor.HttpContext.Session.GetInt32("Tipe") == 0))
                 {
                     <li class="nav-item">
@@ -161,11 +172,11 @@
                     <li class="nav-item">
                         <a href="#"><i class="feather icon-briefcase"></i><span class="menu-title">Penganggaran / Budgeting</span></a>
                         <ul class="menu-content">
-                            <li class="@Html.IsSelected(controller: "tHpsReview", action: "IndexHps")">
-                                <a asp-area="" asp-controller="tHpsReview" asp-action="IndexHps"><i class="feather icon-copy"></i><span class="menu-item">HPS Online</span></a>
+                            <li class="@Html.IsSelected(controller: "tsPaket", action: "IndexHps")">
+                                <a asp-area="" asp-controller="Paket" asp-action="IndexHps"><i class="feather icon-copy"></i><span class="menu-item">HPS Online</span></a>
                             </li>
-                            <li class="@Html.IsSelected(controller: "tHpsReview", action: "IndexReviewHps")">
-                                <a asp-area="" asp-controller="tHpsReview" asp-action="IndexReviewHps"><i class="feather icon-copy"></i><span class="menu-item">Review HPS</span></a>
+                            <li class="@Html.IsSelected(controller: "tsPaket", action: "IndexReviewHps")">
+                                <a asp-area="" asp-controller="Paket" asp-action="IndexReviewHps"><i class="feather icon-copy"></i><span class="menu-item">Review HPS</span></a>
                             </li>
                         </ul>
                     </li>
