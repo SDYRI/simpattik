@@ -1,6 +1,7 @@
 ﻿@model TasikmalayaKota.Simpatik.Web.Services.mUser.Models.mUserModel
 @{
     ViewData["Title"] = ViewBag.Title;
+    var asyncSettings = new Syncfusion.EJ2.Inputs.UploaderAsyncSettings { SaveUrl = @Url.Content("~/UserMaster/SaveSK"), RemoveUrl = @Url.Content("~/UserMaster/RemoveSK") };
 }
 
 <div>
@@ -44,7 +45,7 @@
         </div>
         <div class="form-group col-md-6">
             <div class="e-float-input e-control-wrapper">
-                <ejs-dropdownlist id="ListIdOpdUser" placeholder="Pilih OPD" popupHeight="200px" allowFiltering="true" filtering="onfilteringOPD" sortOrder="@ViewBag.sortDropdown" query="@ViewBag.queryOPD" floatLabelType="Always">
+                <ejs-dropdownlist id="ListIdOpdUser" placeholder="Pilih OPD" popupHeight="200px" allowFiltering="true" filtering="onfilteringOPD" sortOrder="@ViewBag.sortDropdown" query="@ViewBag.queryOPD" floatLabelType="Always" change="onchangeTest">
                     <e-data-manager url="/OpdMaster/OpdMasterSelect" adaptor="UrlAdaptor" crossDomain="true"></e-data-manager>
                     <e-dropdownlist-fields text="NamaSubOpd" value="IdOpd"></e-dropdownlist-fields>
                 </ejs-dropdownlist>
@@ -56,6 +57,15 @@
                     <e-combobox-fields text="Text" value="Value"></e-combobox-fields>
                 </ejs-combobox>
             </div>
+        </div>
+        <div class="form-group col-md-6">
+            <div class="e-float-input upload-area">
+                <input type="text" id="FileSK" readonly name="FileSK" data-required-message="* Select any file" required="" data-msg-containerid="uploadError" class="e-control e-textbox e-lib" asp-for="@Model.FileSK">
+                <span class="e-float-line"></span>
+                <label class="e-float-text e-label-top" for="upload">File SK</label>
+            </div>
+            <div id="uploadError"></div>
+            <ejs-uploader id="UploadFilesSK" autoUpload="true" selected="onFileSelect" multiple="false" asyncSettings="@asyncSettings"></ejs-uploader>
         </div>
     </div>
 </div>

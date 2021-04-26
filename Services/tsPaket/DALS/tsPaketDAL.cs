@@ -96,6 +96,7 @@ namespace TasikmalayaKota.Simpatik.Web.Services.tsPaket.DALS
         public IList<tsPaketModel> GetAllStrategis(int spesifikasi, int tipePaket)
         {
             List<tsPaketModel> Result = new List<tsPaketModel>();
+            List<enumDataModel> statushps = new enumDataModel().Status();
             try
             {
                 using (NpgsqlConnection sqlConnection = new NpgsqlConnection(ConnectionString))
@@ -145,6 +146,7 @@ namespace TasikmalayaKota.Simpatik.Web.Services.tsPaket.DALS
                                 idkonsolidasi = (dataReader["ridkonsolidasi"].GetType() != typeof(DBNull) ? (string)dataReader["ridkonsolidasi"] : ""),
                                 keteranganmetode = (dataReader["rketeranganmetode"].GetType() != typeof(DBNull) ? (string)dataReader["rketeranganmetode"] : ""),
                                 keteranganpagu = (dataReader["rketeranganpagu"].GetType() != typeof(DBNull) ? (string)dataReader["rketeranganpagu"] : ""),
+                                statushps = statushps.FirstOrDefault(x => x.Value == (string)dataReader["rstatushps"]).Text,
                                 mdfdate = (dataReader["rmdfdate"].GetType() != typeof(DBNull) ? (DateTime)dataReader["rmdfdate"] : new DateTime()),
                             });
                         }

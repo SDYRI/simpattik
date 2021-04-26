@@ -12,7 +12,6 @@ using TasikmalayaKota.Simpatik.Web.Services.Middleware.Models;
 using System.Text;
 using System.Security.Cryptography;
 using Syncfusion.EJ2.Navigations;
-
 namespace TasikmalayaKota.Simpatik.Web.Services.mUser.DALS
 {
     public class mUserDAL : ImUser
@@ -22,6 +21,7 @@ namespace TasikmalayaKota.Simpatik.Web.Services.mUser.DALS
         private readonly string UID;
         private readonly string OPD;
         private readonly string TAHUN;
+        private readonly string Folder;
         public mUserDAL(IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
         {
             ConnectionString = configuration.GetConnectionString("SimpatikConnection");
@@ -65,6 +65,7 @@ namespace TasikmalayaKota.Simpatik.Web.Services.mUser.DALS
                                 JabatanUser = (dataReader["jabatanuser"].GetType() != typeof(DBNull) ? (string)dataReader["jabatanuser"] : ""),
                                 GolonganUser = (dataReader["golonganuser"].GetType() != typeof(DBNull) ? (string)dataReader["golonganuser"] : ""),
                                 UserName = (dataReader["username"].GetType() != typeof(DBNull) ? (string)dataReader["username"] : ""),
+                                FileSK = (dataReader["filesk"].GetType() != typeof(DBNull) ? (string)dataReader["filesk"] : ""),
                                 //PasswordUser = (dataReader["passworduser"].GetType() != typeof(DBNull) ? (string)dataReader["passworduser"] : ""),
                                 //SaltUser = (dataReader["saltuser"].GetType() != typeof(DBNull) ? (string)dataReader["saltuser"] : ""),
                                 ListIdOpdUser = (dataReader["listidopduser"].GetType() != typeof(DBNull) ? (string)dataReader["listidopduser"] : ""),
@@ -183,6 +184,7 @@ namespace TasikmalayaKota.Simpatik.Web.Services.mUser.DALS
                     sqlCommand.Parameters.AddWithValue("_idopd", ParamD.ListIdOpdUser);
                     sqlCommand.Parameters.AddWithValue("_tipe", ParamD.TipeIdUser);
                     sqlCommand.Parameters.AddWithValue("_pappk", ParamD.PappkIdUser);
+                    sqlCommand.Parameters.AddWithValue("_filesk", ParamD.FileSK);
                     sqlCommand.Parameters.AddWithValue("_uid", UID);
                     sqlConnection.Open();
                     using (NpgsqlDataReader dataReader = sqlCommand.ExecuteReader())
@@ -244,6 +246,7 @@ namespace TasikmalayaKota.Simpatik.Web.Services.mUser.DALS
                     sqlCommand.Parameters.AddWithValue("_idopd", ParamD.ListIdOpdUser);
                     sqlCommand.Parameters.AddWithValue("_tipe", ParamD.TipeIdUser);
                     sqlCommand.Parameters.AddWithValue("_pappk", ParamD.PappkIdUser);
+                    sqlCommand.Parameters.AddWithValue("_filesk", ParamD.FileSK);
                     sqlCommand.Parameters.AddWithValue("_uid", UID);
                     sqlConnection.Open();
                     using (NpgsqlDataReader dataReader = sqlCommand.ExecuteReader())

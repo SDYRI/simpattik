@@ -25,5 +25,9 @@ namespace TasikmalayaKota.Simpatik.Web.Services.mUser.Models
         public string UserName { get; set; }
         public string ListOpdUser { get; set; }
         public string ListIdOpdUser { get; set; }
+        public string Email { get; set; }
+        public string NoHp { get; set; }
+        public string NoSK { get; set; }
+        public string FileSK { get; set; }
     }
 }

@@ -171,6 +171,26 @@ namespace simpat1k.Controllers
             return Json(new { data = value.Value, message = msg });
         }
 
+        #region Paket HPS
+        [Route("IndexHps")]
+        public IActionResult IndexHps()
+        {
+            ViewBag.Title = "HPS Strategis";
+            ViewBag.queryPenyedia = "new ej.data.Query().addParams('jeniskebutuhan', 1).addParams('tipePaket', 1)";
+            ViewBag.identifikasi = "/Hps/IndexHpsStrategis/";
+            return View();
+        }
+
+        [Route("IndexReviewHps")]
+        public IActionResult IndexReviewHps()
+        {
+            ViewBag.Title = "HPS Strategis";
+            ViewBag.queryPenyedia = "new ej.data.Query().addParams('jeniskebutuhan', 1).addParams('tipePaket', 1)";
+            ViewBag.identifikasi = "/Identifikasi/IndexBarang/";
+            return View();
+        }
+        #endregion
+
         #region Paket Barang
         [Route("IndexBarang")]
         public ActionResult IndexBarang()

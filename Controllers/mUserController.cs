@@ -10,19 +10,32 @@ using TasikmalayaKota.Simpatik.Web.Services.mOpd.Interfaces;
 using TasikmalayaKota.Simpatik.Web.Models;
 using System;
 using TasikmalayaKota.Simpatik.Web.Services.Middleware.Models;
+using Microsoft.AspNetCore.Hosting;
+using System.IO;
+using System.Security.Principal;
+using TasikmalayaKota.Simpatik.Web.Services.mOpd.Models;
+using System.Collections.Generic;
+using Microsoft.AspNetCore.Http.Features;
+using Syncfusion.EJ2.Inputs;
+using System.Net.Http.Headers;
+using System.Runtime.InteropServices.ComTypes;
 
 namespace simpat1k.Controllers
 {
-   [Route("UserMaster")]
-   public class mUserController : Controller
-   {
+    [Route("UserMaster")]
+    public class mUserController : Controller
+    {
+        private readonly IWebHostEnvironment HostEnvironment;
         private readonly ImUser _mUser;
         private readonly ImOpd _mOpd;
+        private readonly string _Folder;
 
-        public mUserController(ImUser mUser, ImOpd mOpd)
-		{
+        public mUserController(ImUser mUser, ImOpd mOpd, IWebHostEnvironment hostEnvironment)
+        {
+            HostEnvironment = hostEnvironment;
             _mUser = mUser;
             _mOpd = mOpd;
+            _Folder = "images/usersk";
         }
 
         [Route("IndexMe")]
@@ -71,9 +84,10 @@ namespace simpat1k.Controllers
 
         [HttpPost]
         [Route("UserMasterCrud")]
-        public IActionResult CrudUpdate([FromBody] CRUDModel<mUserModel> value, string action)
+        public IActionResult CrudUpdate([FromBody] CRUDModel<mUserModel> value, string action, IList<IFormFile> fileupload)
         {
             string msg = string.Empty;
+            bool sukses = false;
             try
             {
                 if (ModelState.IsValid)
@@ -82,18 +96,53 @@ namespace simpat1k.Controllers
                     {
                         DatabaseActionResultModel Result = _mUser.Create(value.Value);
                         msg = Result.Pesan;
+                        sukses = Result.Success;
                     }
                     else if (value.Action == "update")
                     {
                         DatabaseActionResultModel Result = _mUser.Update(value.Value);
                         value.Value.ListOpdUser = Result.Data.ToString();
                         msg = Result.Pesan;
+                        sukses = Result.Success;
                     }
                     else if (value.Action == "remove")
                     {
                         DatabaseActionResultModel Result = _mUser.Remove(value.Key.ToString());
                         msg = Result.Pesan;
+                        sukses = Result.Success;
                     }
+                    if (sukses)
+                    {
+                        foreach (var file in fileupload)
+                        {
+                            if (fileupload != null)
+                            {
+                                string FilePath = Path.Combine(HostEnvironment.WebRootPath, _Folder);
+                                if (!Directory.Exists(FilePath))
+                                {
+                                    Directory.CreateDirectory(FilePath);
+                                }
+
+                                var filename = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
+                                filename = FilePath + $@"\{filename}";
+                                if (!System.IO.File.Exists(filename))
+                                {
+                                    using (FileStream fs = System.IO.File.Create(filename))
+                                    {
+                                        file.CopyTo(fs);
+                                        fs.Flush();
+                                    }
+                                }
+                                else
+                                {
+                                    Response.Clear();
+                                    Response.StatusCode = 204;
+                                    Response.HttpContext.Features.Get<IHttpResponseFeature>().ReasonPhrase = "File already exists.";
+                                }
+                            }
+                        }
+                    }
+
                     return Json(new { data = value.Value, message = msg });
                 }
                 else
@@ -105,6 +154,71 @@ namespace simpat1k.Controllers
             {
                 return BadRequest(exception.Message);
             }
+        }
+
+        [AcceptVerbs("Post")]
+        [Route("SaveSK")]
+        public IActionResult SaveSK(IList<IFormFile> UploadFilesSK)
+        {
+            try
+            {
+                foreach (var file in UploadFilesSK)
+                {
+                    string FilePath = Path.Combine(HostEnvironment.WebRootPath, _Folder);
+                    var filename = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
+                    filename = FilePath + $@"\{filename}";
+                    if (!System.IO.File.Exists(filename))
+                    {
+                        using (FileStream fs = System.IO.File.Create(filename))
+                        {
+                            file.CopyTo(fs);
+                            fs.Flush();
+                        }
+                    }
+                    else
+                    {
+                        Response.Clear();
+                        Response.StatusCode = 204;
+                        Response.HttpContext.Features.Get<IHttpResponseFeature>().ReasonPhrase = "File already exists.";
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Response.Clear();
+                Response.ContentType = "application/json; charset=utf-8";
+                Response.StatusCode = 204;
+                Response.HttpContext.Features.Get<IHttpResponseFeature>().ReasonPhrase = "No Content";
+                Response.HttpContext.Features.Get<IHttpResponseFeature>().ReasonPhrase = e.Message;
+            }
+            return Content("");
+        }
+
+        [AcceptVerbs("Post")]
+        [Route("RemoveSK")]
+        public IActionResult RemoveSK(IList<IFormFile> UploadFilesSK)
+        {
+            try
+            {
+                foreach (var file in UploadFilesSK)
+                {
+                    string FilePath = Path.Combine(HostEnvironment.WebRootPath, _Folder);
+                    var filename = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
+                    filename = FilePath + $@"\{filename}";
+                    if (!System.IO.File.Exists(filename))
+                    {
+                        System.IO.File.Delete(filename);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Response.Clear();
+                Response.StatusCode = 200;
+                Response.HttpContext.Features.Get<IHttpResponseFeature>().ReasonPhrase = "File removed successfully";
+                Response.HttpContext.Features.Get<IHttpResponseFeature>().ReasonPhrase = e.Message;
+            }
+            return Content("");
         }
 
         [HttpPost]

@@ -81,13 +81,14 @@ namespace TasikmalayaKota.Simpatik.Web.Services.Middleware.Models
             tipeuser.Add(new enumDataModel { Text = "Tidak dapat digunakan", Value = "Tidak dapat digunakan" });
             return tipeuser;
         }
-        public List<enumDataModel> Prioritas()
+        public List<enumDataModel> Status()
         {
-            List<enumDataModel> prioritas = new List<enumDataModel>();
-            prioritas.Add(new enumDataModel { Text = "Tinggi", Value = "1" });
-            prioritas.Add(new enumDataModel { Text = "Sedang", Value = "2" });
-            prioritas.Add(new enumDataModel { Text = "Kecil", Value = "3" });
-            return prioritas;
+            List<enumDataModel> status = new List<enumDataModel>();
+            status.Add(new enumDataModel { Text = "Draft", Value = "1" });
+            status.Add(new enumDataModel { Text = "Revisi", Value = "2" });
+            status.Add(new enumDataModel { Text = "Review", Value = "3" });
+            status.Add(new enumDataModel { Text = "Done", Value = "4" });
+            return status;
         }
         public List<enumDataModel> PaPpk()
         {
@@ -96,6 +97,14 @@ namespace TasikmalayaKota.Simpatik.Web.Services.Middleware.Models
             pappk.Add(new enumDataModel { Text = "KPA", Value = "2" });
             pappk.Add(new enumDataModel { Text = "PPK", Value = "3" });
             return pappk;
+        }
+        public List<enumDataModel> Prioritas()
+        {
+            List<enumDataModel> prioritas = new List<enumDataModel>();
+            prioritas.Add(new enumDataModel { Text = "Tinggi", Value = "1" });
+            prioritas.Add(new enumDataModel { Text = "Sedang", Value = "2" });
+            prioritas.Add(new enumDataModel { Text = "Kecil", Value = "3" });
+            return prioritas;
         }
         public List<enumDataModel> TipeSwakelola()
         {
