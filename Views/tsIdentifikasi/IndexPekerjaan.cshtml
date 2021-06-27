@@ -158,7 +158,7 @@
             var ParentObj = document.getElementById('program').ej2_instances[0];
             var SelectObj = document.getElementById('kegiatan').ej2_instances[0];
             SelectObj.enabled = true;
-            var SelectObjQuery = new ej.data.Query().where('IdParent', 'equal', ParentObj.value).addParams('IdPosisi', 2);
+            var SelectObjQuery = new ej.data.Query().take(10).where('IdParent', 'equal', ParentObj.value).addParams('IdPosisi', 2);
             SelectObj.query = SelectObjQuery;
             SelectObj.text = null;
             SelectObj.dataBind();
@@ -168,7 +168,7 @@
             var ParentObj = document.getElementById('kegiatan').ej2_instances[0];
             var SelectObj = document.getElementById('subkegiatan').ej2_instances[0];
             SelectObj.enabled = true;
-            var SelectObjQuery = new ej.data.Query().where('IdParent', 'equal', ParentObj.value).addParams('IdPosisi', 3);
+            var SelectObjQuery = new ej.data.Query().take(10).where('IdParent', 'equal', ParentObj.value).addParams('IdPosisi', 3);
             SelectObj.query = SelectObjQuery;
             SelectObj.text = null;
             SelectObj.dataBind();

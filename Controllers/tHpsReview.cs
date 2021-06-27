@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
 using Syncfusion.EJ2.Base;
+using Syncfusion.EJ2.Navigations;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -45,19 +46,32 @@ namespace TasikmalayaKota.Simpatik.Web.Controllers
         }
 
         [Route("IndexHpsStrategis/{id}")]
-        public IActionResult IndexHpsStrategis()
+        public IActionResult IndexHpsStrategis(string id)
         {
             ViewBag.Title = "HPS Strategis";
+            ViewBag.queryHps = "new ej.data.Query().addParams('idpaket', '" + id + "')";
+            return View();
+        }
+
+
+        [Route("IndexReviewHps/{id}")]
+        public IActionResult IndexReviewHps(string id)
+        {
+            ViewBag.Title = "Review HPS ";
+            ViewBag.headerFilehps = new TabHeader { Text = "File HPS" };
+            ViewBag.headerReviewhps = new TabHeader { Text = "Review HPS" };
+            ViewBag.queryHps = "new ej.data.Query().addParams('idpaket', '" + id + "')";
+            ViewBag.pathDownload = "/Hps/DownloadFileHps/";
             return View();
         }
 
         [HttpPost]
         [Route("get-detail-json")]
-        public ActionResult GetDetailJson(int id)
+        public ActionResult GetDetailJson([FromBody] mSshModel dm)
         {
             try
             {
-                return Json(_tsTHps.GetDetailJson());
+                return Json(_tsTHps.GetDetailJson(dm.typessh, dm.idssh));
             }
             catch (Exception exception)
             {
@@ -96,10 +110,82 @@ namespace TasikmalayaKota.Simpatik.Web.Controllers
         }
 
         [HttpPost]
+        [Route("ReviewHpsAll")]
+        public IActionResult UrlDataReviewsource([FromBody] tHpsReviewModel dm)
+        {
+            IEnumerable DataSource = _tsTHps.GetReviewAll(dm.idpaket);
+            DataOperations operation = new DataOperations();
+            if (dm.Search != null && dm.Search.Count > 0)
+            {
+                DataSource = operation.PerformSearching(DataSource, dm.Search);  //Search
+            }
+            if (dm.Sorted != null && dm.Sorted.Count > 0) //Sorting
+            {
+                DataSource = operation.PerformSorting(DataSource, dm.Sorted);
+            }
+            if (dm.Where != null && dm.Where.Count > 0) //Filtering
+            {
+                DataSource = operation.PerformFiltering(DataSource, dm.Where, dm.Where[0].Operator);
+            }
+            int count = DataSource.Cast<tHpsReviewModel>().Count();
+            if (dm.Skip != 0)
+            {
+                DataSource = operation.PerformSkip(DataSource, dm.Skip);   //Paging
+            }
+            if (dm.Take != 0)
+            {
+                DataSource = operation.PerformTake(DataSource, dm.Take);
+            }
+            return dm.RequiresCounts ? Json(new { result = DataSource, count = count }) : Json(DataSource);
+        }
+
+        [HttpPost]
+        [Route("SshAll")]
+        public IActionResult UrlDataSshsource([FromBody] mSshModel dm)
+        {
+            IEnumerable DataSource = _tsTHps.SshGetAll();
+            DataOperations operation = new DataOperations();
+            if (dm.Search != null && dm.Search.Count > 0)
+            {
+                DataSource = operation.PerformSearching(DataSource, dm.Search);  //Search
+            }
+            if (dm.Sorted != null && dm.Sorted.Count > 0) //Sorting
+            {
+                DataSource = operation.PerformSorting(DataSource, dm.Sorted);
+            }
+            if (dm.Where != null && dm.Where.Count > 0) //Filtering
+            {
+                DataSource = operation.PerformFiltering(DataSource, dm.Where, dm.Where[0].Operator);
+            }
+            int count = DataSource.Cast<mSshModel>().Count();
+            if (dm.Skip != 0)
+            {
+                DataSource = operation.PerformSkip(DataSource, dm.Skip);   //Paging
+            }
+            if (dm.Take != 0)
+            {
+                DataSource = operation.PerformTake(DataSource, dm.Take);
+            }
+            return dm.RequiresCounts ? Json(new { result = DataSource, count = count }) : Json(DataSource);
+        }
+
+        [HttpPost]
         [Route("HpsCrud")]
         public ActionResult CrudUpdateHps([FromBody] CRUDModel<tHpsModel> value, string action)
         {
             string msg = string.Empty;
+
+            foreach (var param in value.Params)
+            {
+                if ((value.Action == "insert") || (value.Action == "update"))
+                {
+                    if (param.Key != "idpaket")
+                    {
+                        continue;
+                    }
+                    value.Value.idpaket = param.GetType().GetProperty("Value").GetValue(param).ToString();
+                }
+            }
 
             if (value.Action == "insert")
             {
@@ -120,11 +206,41 @@ namespace TasikmalayaKota.Simpatik.Web.Controllers
             return Json(new { data = value.Value, message = msg });
         }
 
-        [Route("IndexReviewHps")]
-        public IActionResult IndexReviewHps()
+        [HttpPost]
+        [Route("ReviewHpsCrud")]
+        public ActionResult CrudUpdateReviewHps([FromBody] CRUDModel<tHpsReviewModel> value, string action)
         {
-            ViewBag.Title = "Review HPS ";
-            return View();
+            string msg = string.Empty;
+
+            foreach (var param in value.Params)
+            {
+                if ((value.Action == "insert") || (value.Action == "update"))
+                {
+                    if (param.Key != "idpaket")
+                    {
+                        continue;
+                    }
+                    value.Value.idpaket = param.GetType().GetProperty("Value").GetValue(param).ToString();
+                }
+            }
+
+            if (value.Action == "insert")
+            {
+                DatabaseActionResultModel Result = _tsTHps.Create(value.Value);
+                msg = Result.Pesan;
+            }
+            else if (value.Action == "update")
+            {
+                DatabaseActionResultModel Result = _tsTHps.Update(value.Value);
+                msg = Result.Pesan;
+            }
+            else if (value.Action == "remove")
+            {
+                DatabaseActionResultModel Result = _tsTHps.RemoveReview(value.Key.ToString());
+                msg = Result.Pesan;
+            }
+
+            return Json(new { data = value.Value, message = msg });
         }
 
         [HttpPost]
@@ -163,9 +279,38 @@ namespace TasikmalayaKota.Simpatik.Web.Controllers
             return PartialView("_tsHpsStrategisTemplate", value.Value);
         }
 
+        [HttpPost]
+        [Route("HpsTemplateReviewStrategis")]
+        public IActionResult PartialTemplateReviewHpsStrategis([FromBody] CRUDModel<tHpsReviewModel> value)
+        {
+            var valTemplate = _tsTHps.GetReviewAll(value.Value.idpaket);
+            ViewBag.datasource = valTemplate;
+            ViewBag.Title = "Review Hps " + value.Value.idpaket;
+
+            ViewBag.sortDropdown = "Ascending";
+            ViewBag.querySsh = "new ej.data.Query().select(['idssh', 'namassh']).take(10).requiresCount()";
+
+            #region Enable
+            if (HttpContext.Session.GetInt32("Tipe") == 2)
+            {
+                ViewBag.truefalse = true;
+            }
+            else
+            {
+                ViewBag.truefalse = false;
+            }
+            #endregion Enable
+
+            #region Combobox
+            ViewBag.ssh = new enumDataModel().TipeSSH();
+            #endregion Combobox
+
+            return PartialView("_tsReviewHpsStrategisTemplate", value.Value);
+        }
+
         [AcceptVerbs("Post")]
         [Route("SaveFileHPS")]
-        public IActionResult SaveHPS(IList<IFormFile> UploadFilesHps)
+        public void SaveHPS(IList<IFormFile> UploadFilesHps)
         {
             try
             {
@@ -185,7 +330,8 @@ namespace TasikmalayaKota.Simpatik.Web.Controllers
                     else
                     {
                         Response.Clear();
-                        Response.StatusCode = 204;
+                        Response.ContentType = "application/json; charset=utf-8";
+                        Response.StatusCode = 409;
                         Response.HttpContext.Features.Get<IHttpResponseFeature>().ReasonPhrase = "File already exists.";
                     }
                 }
@@ -194,16 +340,15 @@ namespace TasikmalayaKota.Simpatik.Web.Controllers
             {
                 Response.Clear();
                 Response.ContentType = "application/json; charset=utf-8";
-                Response.StatusCode = 204;
-                Response.HttpContext.Features.Get<IHttpResponseFeature>().ReasonPhrase = "No Content";
+                Response.StatusCode = 404;
+                Response.HttpContext.Features.Get<IHttpResponseFeature>().ReasonPhrase = "File failed to upload.";
                 Response.HttpContext.Features.Get<IHttpResponseFeature>().ReasonPhrase = e.Message;
             }
-            return Content("");
         }
 
         [AcceptVerbs("Post")]
         [Route("RemoveFileHPS")]
-        public IActionResult RemoveHPS(IList<IFormFile> UploadFilesHps)
+        public void RemoveHPS(IList<IFormFile> UploadFilesHps)
         {
             try
             {
@@ -221,11 +366,23 @@ namespace TasikmalayaKota.Simpatik.Web.Controllers
             catch (Exception e)
             {
                 Response.Clear();
-                Response.StatusCode = 200;
-                Response.HttpContext.Features.Get<IHttpResponseFeature>().ReasonPhrase = "File removed successfully";
+                Response.StatusCode = 404;
+                Response.HttpContext.Features.Get<IHttpResponseFeature>().ReasonPhrase = "File removed failed";
                 Response.HttpContext.Features.Get<IHttpResponseFeature>().ReasonPhrase = e.Message;
             }
-            return Content("");
+        }
+
+        [Route("DownloadFileHps/{fileName}")]
+        public FileResult DownloadFile(string fileName)
+        {
+            //Build the File Path.
+            string path = Path.Combine(this.HostEnvironment.WebRootPath, _Folder, fileName);
+
+            //Read the File data into Byte Array.
+            byte[] bytes = System.IO.File.ReadAllBytes(path);
+
+            //Send the File to Download.
+            return File(bytes, "application/octet-stream", fileName);
         }
 
     }

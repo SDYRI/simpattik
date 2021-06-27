@@ -19,6 +19,8 @@ using Microsoft.AspNetCore.Http.Features;
 using Syncfusion.EJ2.Inputs;
 using System.Net.Http.Headers;
 using System.Runtime.InteropServices.ComTypes;
+using TasikmalayaKota.Simpatik.Web.Extensions;
+using Newtonsoft.Json.Linq;
 
 namespace simpat1k.Controllers
 {
@@ -35,7 +37,7 @@ namespace simpat1k.Controllers
             HostEnvironment = hostEnvironment;
             _mUser = mUser;
             _mOpd = mOpd;
-            _Folder = "images/usersk";
+            _Folder = "filesk";
         }
 
         [Route("IndexMe")]
@@ -50,6 +52,16 @@ namespace simpat1k.Controllers
         {
             ViewBag.Title = "Master User PPK";
             return View();
+        }
+
+        [Route("IndexProfileMe")]
+        public IActionResult IndexProfile(mUserModel value)
+        {
+            var valTemplate = _mUser.GetById();
+            value = valTemplate;
+
+            ViewBag.Title = "Profile User";
+            return View(value);
         }
 
         [HttpPost]
@@ -149,6 +161,26 @@ namespace simpat1k.Controllers
                 {
                     return Json(new { data = value.Value, message = ModelState.Values.ToArray()[1].Errors });
                 }
+            }
+            catch (Exception exception)
+            {
+                return BadRequest(exception.Message);
+            }
+        }
+
+        [HttpPost]
+        public IActionResult UserValidation(mUserModel Args)
+        {
+            string msg = string.Empty;
+            try
+            {
+                var valTemplate = _mUser.GetById();
+                Args.UserName = valTemplate.UserName;
+
+                DatabaseActionResultModel Result = _mUser.UpdateProfile(Args);
+                msg = Result.Pesan;
+
+                return RedirectToAction("IndexProfileMe", "UserMaster");
             }
             catch (Exception exception)
             {

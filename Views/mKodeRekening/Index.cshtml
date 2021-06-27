@@ -399,7 +399,7 @@
             var AkunOBJ = document.getElementById('IdParentA').ej2_instances[0];
             var KelompokObj = document.getElementById('IdParent').ej2_instances[0];
             KelompokObj.enabled = true;
-            var KelompokObjQuery = new ej.data.Query().where('IdParent', 'equal', AkunOBJ.value).addParams('IdPosisi', 2);
+            var KelompokObjQuery = new ej.data.Query().take(10).where('IdParent', 'equal', AkunOBJ.value).addParams('IdPosisi', 2);
             KelompokObj.query = KelompokObjQuery;
             KelompokObj.text = null;
             KelompokObj.dataBind();
@@ -503,7 +503,7 @@
             var AkunOBJ = document.getElementById('IdParentA').ej2_instances[0];
             var KelompokObj = document.getElementById('IdParentK').ej2_instances[0];
             KelompokObj.enabled = true;
-            var KelompokObjQuery = new ej.data.Query().where('IdParent', 'equal', AkunOBJ.value).addParams('IdPosisi', 2);
+            var KelompokObjQuery = new ej.data.Query().take(10).where('IdParent', 'equal', AkunOBJ.value).addParams('IdPosisi', 2);
             KelompokObj.query = KelompokObjQuery;
             KelompokObj.text = null;
             KelompokObj.dataBind();
@@ -513,7 +513,7 @@
             var KelompokObj = document.getElementById('IdParentK').ej2_instances[0];
             var JenisObj = document.getElementById('IdParent').ej2_instances[0];
             JenisObj.enabled = true;
-            var JenisObjQuery = new ej.data.Query().where('IdParent', 'equal', KelompokObj.value).addParams('IdPosisi', 3);
+            var JenisObjQuery = new ej.data.Query().take(10).where('IdParent', 'equal', KelompokObj.value).addParams('IdPosisi', 3);
             JenisObj.query = JenisObjQuery;
             JenisObj.text = null;
             JenisObj.dataBind();
@@ -623,7 +623,7 @@
             var KelompokOBJ = document.getElementById('IdParentK').ej2_instances[0];
             var JenisObj = document.getElementById('IdParentJ').ej2_instances[0];
             JenisObj.enabled = true;
-            var JenisObjQuery = new ej.data.Query().where('IdParent', 'equal', KelompokOBJ.value).addParams('IdPosisi', 3);
+            var JenisObjQuery = new ej.data.Query().take(10).where('IdParent', 'equal', KelompokOBJ.value).addParams('IdPosisi', 3);
             JenisObj.query = JenisObjQuery;
             JenisObj.text = null;
             JenisObj.dataBind();
@@ -633,7 +633,7 @@
             var JenisObj = document.getElementById('IdParentJ').ej2_instances[0];
             var RincianObj = document.getElementById('IdParent').ej2_instances[0];
             RincianObj.enabled = true;
-            var RincianObjQuery = new ej.data.Query().where('IdParent', 'equal', JenisObj.value).addParams('IdPosisi', 4);
+            var RincianObjQuery = new ej.data.Query().take(10).where('IdParent', 'equal', JenisObj.value).addParams('IdPosisi', 4);
             RincianObj.query = RincianObjQuery;
             RincianObj.text = null;
             RincianObj.dataBind();
@@ -749,7 +749,7 @@
             var ParentObj = document.getElementById('IdParentJ').ej2_instances[0];
             var SelectObj = document.getElementById('IdParentO').ej2_instances[0];
             SelectObj.enabled = true;
-            var SelectObjQuery = new ej.data.Query().where('IdParent', 'equal', ParentObj.value).addParams('IdPosisi', 4);
+            var SelectObjQuery = new ej.data.Query().take(10).where('IdParent', 'equal', ParentObj.value).addParams('IdPosisi', 4);
             SelectObj.query = SelectObjQuery;
             SelectObj.text = null;
             SelectObj.dataBind();
@@ -759,7 +759,7 @@
             var ParentObj = document.getElementById('IdParentO').ej2_instances[0];
             var SelectObj = document.getElementById('IdParent').ej2_instances[0];
             SelectObj.enabled = true;
-            var SelectObjQuery = new ej.data.Query().where('IdParent', 'equal', ParentObj.value).addParams('IdPosisi', 5);
+            var SelectObjQuery = new ej.data.Query().take(10).where('IdParent', 'equal', ParentObj.value).addParams('IdPosisi', 5);
             SelectObj.query = SelectObjQuery;
             SelectObj.text = null;
             SelectObj.dataBind();

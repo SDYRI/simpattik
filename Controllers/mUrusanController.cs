@@ -1,10 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Syncfusion.EJ2.Base;
+using Syncfusion.EJ2.Navigations;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TasikmalayaKota.Simpatik.Web.Models;
+using TasikmalayaKota.Simpatik.Web.Services.mProgram.Models;
 using TasikmalayaKota.Simpatik.Web.Services.mUrusan.Interfaces;
 using TasikmalayaKota.Simpatik.Web.Services.mUrusan.Models;
 
@@ -23,6 +26,11 @@ namespace simpat1k.Controllers
         [Route("IndexMe")]
         public IActionResult Index()
         {
+            ViewBag.Title = "Master Urusan, Sub Urusan";
+            ViewBag.headerUrusan = new TabHeader { Text = "Urusan" };
+            ViewBag.headerSubUrusan = new TabHeader { Text = "Sub Urusan" };
+            ViewBag.queryUrusan = "new ej.data.Query().addParams('IdPosisi', 1)";
+            ViewBag.querySubUrusan = "new ej.data.Query().addParams('IdPosisi', 2)";
             return View();
         }
 
@@ -54,6 +62,73 @@ namespace simpat1k.Controllers
                 DataSource = operation.PerformTake(DataSource, dm.Take);
             }
             return dm.RequiresCounts ? Json(new { result = DataSource, count = count }) : Json(DataSource);
+        }
+
+        [HttpPost]
+        [Route("UrusanMasterCrud")]
+        public IActionResult CrudUpdate([FromBody] CRUDModel<mUrusanModel> value, string action)
+        {
+            string msg = string.Empty;
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    if (value.Action == "insert")
+                    {
+                        foreach (var param in value.Params)
+                        {
+                            value.Value.IdPosisi = Int32.Parse(param.GetType().GetProperty("Value").GetValue(param).ToString());
+                        }
+
+                        DatabaseActionResultModel Result = _mUrusan.Create(value.Value);
+                        msg = Result.Pesan;
+                    }
+                    else if (value.Action == "update")
+                    {
+                        DatabaseActionResultModel Result = _mUrusan.Update(value.Value);
+                        msg = Result.Pesan;
+                    }
+                    else if (value.Action == "remove")
+                    {
+                        DatabaseActionResultModel Result = _mUrusan.Remove(Int32.Parse(value.Key.ToString()));
+                        msg = Result.Pesan;
+                    }
+                    return Json(new { data = value.Value, message = msg });
+                }
+                else
+                {
+                    return Json(new { data = value.Value, message = ModelState.Values.ToArray()[1].Errors });
+                }
+            }
+            catch (Exception exception)
+            {
+                return BadRequest(exception.Message);
+            }
+        }
+
+        [HttpPost]
+        [Route("UrusanMasterTemplateUrusan")]
+        public IActionResult PartialTemplateProgram([FromBody] CRUDModel<mUrusanModel> value)
+        {
+            var valTemplate = _mUrusan.GetAll(1);
+            ViewBag.datasource = valTemplate;
+            ViewBag.sortDropdown = "Ascending";
+            ViewBag.Title = "Master Urusan " + value.Value.NamaSubUrusan;
+
+            return PartialView("_mUrusanTemplateUrusan", value.Value);
+        }
+
+        [HttpPost]
+        [Route("UrusanMasterTemplateSubUrusan")]
+        public IActionResult PartialTemplateSubUrusan([FromBody] CRUDModel<mUrusanModel> value)
+        {
+            var valTemplate = _mUrusan.GetAll(2);
+            ViewBag.datasource = valTemplate;
+            ViewBag.sortDropdown = "Ascending";
+            ViewBag.queryUrusan = "new ej.data.Query().select(['NamaSubUrusan', 'IdUrusan']).take(10).requiresCount().addParams('IdPosisi', 1)";
+            ViewBag.Title = "Master Sub Urusan " + value.Value.NamaSubUrusan;
+
+            return PartialView("_mUrusanTemplateSubUrusan", value.Value);
         }
     }
 }

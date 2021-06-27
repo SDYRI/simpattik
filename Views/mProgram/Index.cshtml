@@ -274,7 +274,7 @@
             var SelectParentObj = document.getElementById('IdUrusan').ej2_instances[0];
             var SelectObj = document.getElementById('IdParent').ej2_instances[0];
             SelectObj.enabled = true;
-            var SelectObjQuery = new ej.data.Query().where('IdUrusan', 'equal', SelectParentObj.value).addParams('IdPosisi', 1);
+            var SelectObjQuery = new ej.data.Query().take(10).where('IdUrusan', 'equal', SelectParentObj.value).addParams('IdPosisi', 1);
             SelectObj.query = SelectObjQuery;
             SelectObj.text = null;
             SelectObj.dataBind();
@@ -323,6 +323,11 @@
                         dropObject.value = args.rowData['IdParent'];
                         dropObject.text = args.rowData['NamaKegiatan'];
                     }
+                    if (typeof args.rowData['IdUserPPK'] != 'undefined') {
+                        var dropObject = document.getElementById("IdUserPPK").ej2_instances[0];
+                        dropObject.value = args.rowData['IdUserPPK'];
+                        dropObject.text = args.rowData['NamaUserPPK'];
+                    }
                     ej.popups.hideSpinner(args.dialog.element);
                 }).catch(function (xhr) {
                     
@@ -365,7 +370,7 @@
             var SelectParentObj = document.getElementById('IdUrusan').ej2_instances[0];
             var SelectObj = document.getElementById('IdParentU').ej2_instances[0];
             SelectObj.enabled = true;
-            var SelectObjQuery = new ej.data.Query().where('IdUrusan', 'equal', SelectParentObj.value).addParams('IdPosisi', 1);
+            var SelectObjQuery = new ej.data.Query().take(10).where('IdUrusan', 'equal', SelectParentObj.value).addParams('IdPosisi', 1);
             SelectObj.query = SelectObjQuery;
             SelectObj.text = null;
             SelectObj.dataBind();
@@ -400,7 +405,7 @@
             var ParentObj = document.getElementById('IdParentU').ej2_instances[0];
             var SelectObj = document.getElementById('IdParent').ej2_instances[0];
             SelectObj.enabled = true;
-            var SelectObjQuery = new ej.data.Query().where('IdParent', 'equal', ParentObj.value).addParams('IdPosisi', 2);
+            var SelectObjQuery = new ej.data.Query().take(10).where('IdParent', 'equal', ParentObj.value).addParams('IdPosisi', 2);
             SelectObj.query = SelectObjQuery;
             SelectObj.text = null;
             SelectObj.dataBind();

@@ -272,7 +272,7 @@
             var OPDObj = document.getElementById('IdOpd').ej2_instances[0];
             var SelectObj = document.getElementById('IdParent').ej2_instances[0];
             SelectObj.enabled = true;
-            var SelectObjQuery = new ej.data.Query().where('IdOpd', 'equal', OPDObj.value).addParams('IdPosisi', 1);
+            var SelectObjQuery = new ej.data.Query().take(10).where('IdOpd', 'equal', OPDObj.value).addParams('IdPosisi', 1);
             SelectObj.query = SelectObjQuery;
             SelectObj.text = null;
             SelectObj.dataBind();
@@ -369,7 +369,7 @@
             var ProgramOBJ = document.getElementById('IdParentU').ej2_instances[0];
             var KegiatanObj = document.getElementById('IdParent').ej2_instances[0];
             KegiatanObj.enabled = true;
-            var KegiatanObjQuery = new ej.data.Query().where('IdParent', 'equal', ProgramOBJ.value).addParams('IdPosisi', 2);
+            var KegiatanObjQuery = new ej.data.Query().take(10).where('IdParent', 'equal', ProgramOBJ.value).addParams('IdPosisi', 2);
             KegiatanObj.query = KegiatanObjQuery;
             KegiatanObj.text = null;
             KegiatanObj.dataBind();

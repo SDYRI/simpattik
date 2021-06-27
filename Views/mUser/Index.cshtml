@@ -33,45 +33,6 @@
             toastObj = this;
         }
 
-        function onchangeTest() {
-            //Url.Action("GetByList", "Listing", new { name = "John", contact = "calgary, vancouver" })
-
-            var ajax = new ej.base.Ajax({
-                url: "@Url.Action("get-detail-json", "Hps")", //render the partial view
-                type: "POST",
-                contentType: "application/json"
-            });
-            ajax.send().then();
-            ajax.onSuccess = function (data) {
-                console.log(data)
-                //var ctn2 = data;
-                //var tabObj = new ej.navigations.Tab({
-                //    items: [
-                //        {
-                //            header: { 'text': 'Facebook' },
-                //            content: 'Facebook is an online social networking service headquartered in Menlo Park, California. Its website was ' +
-                //                'launched on February 4, 2004, by Mark Zuckerberg with his Harvard College roommates and fellow students Eduardo ' +
-                //                'Saverin, Andrew McCollum, Dustin Moskovitz and Chris Hughes.The founders had initially limited the website\'\s ' +
-                //                'membership to Harvard students, but later expanded it to colleges in the Boston area, the Ivy League, and Stanford ' +
-                //                'University. It gradually added support for students at various other universities and later to high-school students.'
-                //        },
-                //        {
-                //            header: { 'text': 'Whatsapp' },
-                //            content: 'WhatsApp Messenger is a proprietary cross-platform instant messaging client for smartphones that operates ' +
-                //                'under a subscription business model. It uses the Internet to send text messages, images, video, user location and ' +
-                //                'audio media messages to other users using standard cellular mobile numbers. As of February 2016, WhatsApp had a user ' +
-                //                'base of up to one billion,[10] making it the most globally popular messaging application. WhatsApp Inc., based in ' +
-                //                'Mountain View, California, was acquired by Facebook Inc. on February 19, 2014, for approximately US$19.3 billion.'
-                //        },
-                //        { header: { 'text': 'Twitter' }, content: ctn2 },
-                //    ]
-                //});
-
-                ////Render initialized Tab component
-                //tabObj.appendTo('#element');
-            }
-        }
-
         function onfilteringOPD(e) {
             var OPDObj = document.getElementById("ListIdOpdUser").ej2_instances[0];
             if (e.text == '' && e.text.length < 3) {
@@ -82,9 +43,11 @@
             e.updateData(OPDObj.dataSource, query);
         }
 
-        function onFileSelect(args) {
-            var inputElement = document.getElementById('FileSK');
-            inputElement.value = args.filesData[0].name;
+        function onUploadFilesSKSuccess(args) {
+            if (args.operation === 'upload') {
+                var inputElement = document.getElementById('FileSK');
+                inputElement.value = args.file.name;
+            }
         }
 
         function CompleteAction(args) {
@@ -99,6 +62,7 @@
                 args.form.ej2_instances[0].addRules('NamaUser', { required: [true, 'Silahkan Isi Nama User'], minLength: [3, 'Nama User Minimal 3 huruf'] });
                 args.form.ej2_instances[0].addRules('UserName', { required: [true, 'Silahkan Isi User Name'], minLength: [3, 'User Name Minimal 3 huruf'] });
                 args.form.ej2_instances[0].addRules('ListIdOpdUser', { required: [true, 'Silahkan Pilih OPD'] });
+                args.form.ej2_instances[0].addRules('FileSK', { required: [true, 'Silahkan Upload File SK Terlebih Dahulu'] });
 
                 let spinner = ej.popups.createSpinner({ target: args.dialog.element });
                 ej.popups.showSpinner(args.dialog.element);

@@ -1,1 +1,264 @@
-﻿
+﻿@{
+    ViewData["Title"] = ViewBag.Title;
+    var Urusan = "#urusan";
+    var SubUrusan = "#suburusan";
+    List<string> Toolbar = HttpContextAccessor.HttpContext.Session.GetComplexData<List<string>>("ToolbarMaster");
+}
+<ejs-toast id="toast_default" created="createdToasObj">
+    <e-toast-position X="Right"></e-toast-position>
+</ejs-toast>
+
+<div id="urusan" style="display: none">
+    <ejs-grid id="GridUrusan" actionComplete="CompleteActionUrusan" height="490" allowPaging="true" allowResizing="true" allowSorting="true" allowReordering="true" allowGrouping="false"
+              toolbar="@Toolbar" allowFiltering="true" allowSelection="true"
+              allowExcelExport="true" allowPdfExport="true" toolbarClick="toolbarAction" created="createdGridUrusan" query="@ViewBag.queryUrusan">
+        <e-grid-pagesettings pageCount="5" pageSize="12" pageSizes="true"></e-grid-pagesettings>
+        <e-grid-filterSettings type="Menu"></e-grid-filterSettings>
+        <e-grid-editSettings allowAdding="true" allowDeleting="true" allowEditing="true" mode="Dialog" template='#templatedialog' showDeleteConfirmDialog="true"></e-grid-editSettings>
+        <e-grid-selectionsettings type="Single"></e-grid-selectionsettings>
+        <e-grid-columns>
+            <e-grid-column field="IdUrusan" headerText="IdUrusan" isPrimaryKey="true" isIdentity="true" visible="false"></e-grid-column>
+            <e-grid-column field="KodeSubUrusan" width="50" headerText="Kode Urusan"></e-grid-column>
+            <e-grid-column field="NamaSubUrusan" width="150" headerText="Nama Urusan"></e-grid-column>
+        </e-grid-columns>
+    </ejs-grid>
+</div>
+
+<div id="suburusan" style="display: none">
+    <ejs-grid id="GridSubUrusan" actionComplete="CompleteActionSubUrusan" height="490" allowPaging="true" allowResizing="true" allowSorting="true" allowReordering="true" allowGrouping="false"
+              toolbar="@Toolbar" allowFiltering="true" allowSelection="true"
+              allowExcelExport="true" allowPdfExport="true" toolbarClick="toolbarAction" created="createdGridSubUrusan" query="@ViewBag.querySubUrusan">
+        <e-grid-pagesettings pageCount="5" pageSize="12" pageSizes="true"></e-grid-pagesettings>
+        <e-grid-filterSettings type="Menu"></e-grid-filterSettings>
+        <e-grid-editSettings allowAdding="true" allowDeleting="true" allowEditing="true" mode="Dialog" template='#templatedialog' showDeleteConfirmDialog="true"></e-grid-editSettings>
+        <e-grid-selectionsettings type="Single"></e-grid-selectionsettings>
+        <e-grid-columns>
+            <e-grid-column field="IdUrusan" headerText="IdUrusan" isPrimaryKey="true" isIdentity="true" visible="false"></e-grid-column>
+            <e-grid-column field="NamaUrusan" width="50" headerText="Nama Urusan"></e-grid-column>
+            <e-grid-column field="KodeUrusan" width="50" headerText="Kode Urusan"></e-grid-column>
+            <e-grid-column field="KodeSubUrusan" width="50" headerText="Kode Sub Urusan"></e-grid-column>
+            <e-grid-column field="NamaSubUrusan" width="150" headerText="Nama Sub Urusan"></e-grid-column>
+        </e-grid-columns>
+    </ejs-grid>
+</div>
+
+<ejs-tab id="adaptiveTab" heightAdjustMode="None" height="250px" created="tabUrusan">
+    <e-tab-tabitems>
+        <e-tab-tabitem header="ViewBag.headerUrusan" content="@Urusan"></e-tab-tabitem>
+        <e-tab-tabitem header="ViewBag.headerSubUrusan" content="@SubUrusan"></e-tab-tabitem>
+    </e-tab-tabitems>
+</ejs-tab>
+
+@section SectionControls{
+    <script id='templatedialog' type="text/x-template">
+        <div id="Tempdialog">
+        </div>
+    </script>
+
+    <script type="text/javascript">
+        var toastObj;
+        var tabObj;
+
+        function createdToasObj() {
+            toastObj = this;
+        }
+
+        function tabUrusan() {
+            tabObj = document.getElementById('adaptiveTab').ej2_instances[0];
+        }
+
+        function paramToast(title, cssclass, message) {
+            setTimeout(
+                () => {
+                    var toastObj = document.getElementById('toast_default').ej2_instances[0];
+                    toastObj.title = title;
+                    toastObj.cssClass = cssclass;
+                    toastObj.content = message;
+                    toastObj.target = document.body;
+                    toastObj.show();
+                }, 500);
+        }
+
+        //#region urusan
+        function CompleteActionUrusan(args) {
+            var grid = document.querySelector('#GridUrusan').ej2_instances[0];
+
+            if (args.requestType === 'beginEdit' || args.requestType === 'add') {
+                var dialog = args.dialog;
+                dialog.height = 300;
+                dialog.width = "750px";
+                // change the header of the dialog
+                dialog.header = args.requestType === 'beginEdit' ? 'Edit ' + args.rowData['NamaSubUrusan'] : 'New Urusan';
+                args.form.ej2_instances[0].addRules('KodeSubUrusan', { required: [true, 'Silahkan Isi Kode Urusan'], minLength: [1, 'Kode Urusan Minimal 1 huruf'] });
+                args.form.ej2_instances[0].addRules('NamaSubUrusan', { required: [true, 'Silahkan Isi Nama Urusan'], minLength: [3, 'Nama Urusan Minimal 3 huruf'] });
+
+                let spinner = ej.popups.createSpinner({ target: args.dialog.element });
+                ej.popups.showSpinner(args.dialog.element);
+                var ajax = new ej.base.Ajax({
+                    url: "@Url.Action("UrusanMasterTemplateUrusan", "UrusanMaster")", //render the partial view
+                    type: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify({ value: args.rowData })
+                });
+                ajax.send().then(function (data) {
+                    appendElement(data, args.form); //Render the edit form with selected record
+                    args.form.elements.namedItem('KodeSubUrusan').focus();
+                    ej.popups.hideSpinner(args.dialog.element);
+                }).catch(function (xhr) {
+
+                    ej.popups.hideSpinner(args.dialog.element);
+                });
+            }
+            else if (args.requestType === 'save') {
+                grid.refresh();
+                grid.closeEdit();
+            }
+        }
+
+        function createdGridUrusan(args) {
+            class CustomAdaptorUrusan extends ej.data.UrlAdaptor {
+                processResponse(data, ds, query, xhr, request, changes) {
+                    if (!ej.base.isNullOrUndefined(data.message)) {
+                        if ((data.message.indexOf('BERHASIL DISIMPAN') == -1) && (data.message.indexOf('BERHASIL DIHAPUS') == -1)) {
+                            paramToast('Error Master Urusan', 'e-toast-danger', data.message);
+                        }
+                        else {
+                            paramToast('Master Urusan', 'e-toast-success', data.message);
+                        }
+                    }
+
+                    if (!ej.base.isNullOrUndefined(data.data))
+                        return data.data;
+                    else
+                        return data;
+                }
+            }
+            var grid = document.querySelector('#GridUrusan').ej2_instances[0];
+            grid.dataSource = new ej.data.DataManager({
+                url: "/UrusanMaster/UrusanMasterAll",
+                crudUrl: "/UrusanMaster/UrusanMasterCrud",
+                adaptor: new CustomAdaptorUrusan()
+            });
+        }
+
+        function onfilteringUrusan(e) {
+            var SelectObj = document.getElementById("IdParent").ej2_instances[0];
+            if (e.text == '' && e.text.length < 3) {
+                e.updateData(SelectObj.dataSource);
+            }
+
+            let query = new ej.data.Query().select(['NamaSubUrusan', 'IdUrusan']).take(6).addParams('IdPosisi', 1);
+            query = (e.text !== '' && e.text.length >= 3) ? query.where('NamaSubUrusan', 'contains', e.text, true) : query;
+
+            e.updateData(SelectObj.dataSource, query);
+        }
+        //#endregion urusan
+
+        //#region suburusan
+        function CompleteActionSubUrusan(args) {
+            var grid = document.querySelector('#GridSubUrusan').ej2_instances[0];
+
+            if (args.requestType === 'beginEdit' || args.requestType === 'add') {
+                var dialog = args.dialog;
+                dialog.height = 380;
+                dialog.width = "750px";
+                // change the header of the dialog
+                dialog.header = args.requestType === 'beginEdit' ? 'Edit ' + args.rowData['NamaSubUrusan'] : 'New Sub Urusan';
+                args.form.ej2_instances[0].addRules('IdParent', { required: [true, 'Silahkan Pilih Urusan'] });
+                args.form.ej2_instances[0].addRules('KodeSubUrusan', { required: [true, 'Silahkan Isi Kode SubUrusan'], minLength: [1, 'Kode Sub Urusan Minimal 1 huruf'] });
+                args.form.ej2_instances[0].addRules('NamaSubUrusan', { required: [true, 'Silahkan Isi Nama SubUrusan'], minLength: [3, 'Nama Sub Urusan Minimal 3 huruf'] });
+
+                let spinner = ej.popups.createSpinner({ target: args.dialog.element });
+                ej.popups.showSpinner(args.dialog.element);
+                var ajax = new ej.base.Ajax({
+                    url: "@Url.Action("UrusanMasterTemplateSubUrusan", "UrusanMaster")", //render the partial view
+                    type: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify({ value: args.rowData })
+                });
+                ajax.send().then(function (data) {
+                    appendElement(data, args.form); //Render the edit form with selected record
+                    args.form.elements.namedItem('KodeSubUrusan').focus();
+                    if (typeof args.rowData['IdParent'] != 'undefined') {
+                        var dropObject = document.getElementById("IdParent").ej2_instances[0];
+                        dropObject.value = args.rowData['IdParent'];
+                        dropObject.text = args.rowData['NamaSubUrusan'];
+                    }
+                    ej.popups.hideSpinner(args.dialog.element);
+                }).catch(function (xhr) {
+
+                    ej.popups.hideSpinner(args.dialog.element);
+                });
+            }
+            else if (args.requestType === 'save') {
+                grid.refresh();
+                grid.closeEdit();
+            }
+        }
+
+        function createdGridSubUrusan(args) {
+            class CustomAdaptor extends ej.data.UrlAdaptor {
+                processResponse(data, ds, query, xhr, request, changes) {
+                    if (!ej.base.isNullOrUndefined(data.message)) {
+                        if ((data.message.indexOf('BERHASIL DISIMPAN') == -1) && (data.message.indexOf('BERHASIL DIHAPUS') == -1)) {
+                            paramToast('Error Master SubUrusan', 'e-toast-danger', data.message);
+                        }
+                        else {
+                            paramToast('Master SubUrusan', 'e-toast-success', data.message);
+                        }
+                    }
+
+                    if (!ej.base.isNullOrUndefined(data.data))
+                        return data.data;
+                    else
+                        return data;
+                }
+            }
+            var grid = document.querySelector('#GridSubUrusan').ej2_instances[0];
+            grid.dataSource = new ej.data.DataManager({
+                url: "/UrusanMaster/UrusanMasterAll",
+                crudUrl: "/UrusanMaster/UrusanMasterCrud",
+                adaptor: new CustomAdaptor()
+            });
+        }
+        //#endregion suburusan
+
+        function appendElement(elementString, form) {
+            form.querySelector("#Tempdialog").innerHTML = elementString;
+            var script = document.createElement('script');
+            script.type = "text/javascript";
+            var serverScript = form.querySelector("#Tempdialog").querySelector('script');
+            script.textContent = serverScript.innerHTML;
+            document.head.appendChild(script);
+            serverScript.remove();
+        }
+
+        function toolbarAction(args) {
+            var fileNameGrid = "";
+
+            if (this.element.id === "GridUrusan") {
+                fileNameGrid = "Urusan";
+            }
+            else if (this.element.id === "GridSubUrusan") {
+                fileNameGrid = "Sub Urusan";
+            }
+
+            var fileName = "Master " + fileNameGrid;
+
+            if (args.item.id === this.element.id + '_pdfexport') {
+                var exportProperties = {
+                    fileName: fileName + ".pdf"
+                };
+
+                this.pdfExport(exportProperties);
+            }
+            if (args.item.id === this.element.id + '_excelexport') {
+                var exportProperties = {
+                    fileName: fileName + ".xlsx"
+                };
+
+                this.excelExport(exportProperties);
+            }
+        }
+    </script>
+}

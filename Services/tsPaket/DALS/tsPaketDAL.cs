@@ -18,17 +18,20 @@ namespace TasikmalayaKota.Simpatik.Web.Services.tsPaket.DALS
         private readonly string UID;
         private readonly string OPD;
         private readonly string TIPE;
+        private readonly string TAHUN;
         public tsPaketDAL(IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
         {
             ConnectionString = configuration.GetConnectionString("SimpatikConnection");
             UID = httpContextAccessor.HttpContext.Session.GetString("IDAkun");
             OPD = httpContextAccessor.HttpContext.Session.GetString("Opd");
             TIPE = httpContextAccessor.HttpContext.Session.GetInt32("Tipe").ToString();
+            TAHUN = httpContextAccessor.HttpContext.Session.GetString("TahunAktif");
         }
 
         public IList<tsPaketModel> GetAll(int spesifikasi, int tipePaket)
         {
             List<tsPaketModel> Result = new List<tsPaketModel>();
+            List<enumDataModel> statuspaket = new enumDataModel().Status();
             try
             {
                 using (NpgsqlConnection sqlConnection = new NpgsqlConnection(ConnectionString))
@@ -38,6 +41,7 @@ namespace TasikmalayaKota.Simpatik.Web.Services.tsPaket.DALS
                     sqlCommand.Parameters.AddWithValue("_opd", OPD);
                     sqlCommand.Parameters.AddWithValue("_kebutuhan", spesifikasi);
                     sqlCommand.Parameters.AddWithValue("_tipe", tipePaket);
+                    sqlCommand.Parameters.AddWithValue("_tahun", int.Parse(TAHUN));
                     sqlConnection.Open();
                     using (NpgsqlDataReader dataReader = sqlCommand.ExecuteReader())
                     {
@@ -53,6 +57,7 @@ namespace TasikmalayaKota.Simpatik.Web.Services.tsPaket.DALS
                                 pejabat = (dataReader["rpejabat"].GetType() != typeof(DBNull) ? (string)dataReader["rpejabat"] : ""),
                                 thanggrn = (dataReader["rthanggrn"].GetType() != typeof(DBNull) ? ((int)dataReader["rthanggrn"]).ToString() : ""),
                                 nmpaket = (dataReader["rnmpaket"].GetType() != typeof(DBNull) ? (string)dataReader["rnmpaket"] : ""),
+                                namakonsolidasi = (dataReader["rnamakonsolidasi"].GetType() != typeof(DBNull) ? (string)dataReader["rnamakonsolidasi"] : ""),
                                 volume = (dataReader["rvolume"].GetType() != typeof(DBNull) ? (string)dataReader["rvolume"] : ""),
                                 uraian = (dataReader["ruraianpaket"].GetType() != typeof(DBNull) ? (string)dataReader["ruraianpaket"] : ""),
                                 spesifikasi = (dataReader["rspesifikasipaket"].GetType() != typeof(DBNull) ? (string)dataReader["rspesifikasipaket"] : ""),
@@ -78,8 +83,45 @@ namespace TasikmalayaKota.Simpatik.Web.Services.tsPaket.DALS
                                 idkonsolidasi = (dataReader["ridkonsolidasi"].GetType() != typeof(DBNull) ? (string)dataReader["ridkonsolidasi"] : ""),
                                 keteranganmetode = (dataReader["rketeranganmetode"].GetType() != typeof(DBNull) ? (string)dataReader["rketeranganmetode"] : ""),
                                 keteranganpagu = (dataReader["rketeranganpagu"].GetType() != typeof(DBNull) ? (string)dataReader["rketeranganpagu"] : ""),
+                                statuspaket = statuspaket.FirstOrDefault(x => x.Value == (string)dataReader["rstatuspaket"]).Text,
                                 mdfdate = (dataReader["rmdfdate"].GetType() != typeof(DBNull) ? (DateTime)dataReader["rmdfdate"] : new DateTime()),
                                 nilaiselisih = (!(dataReader["rnilaibelanjalangsung"] is DBNull) ? (int)dataReader["rnilaibelanjalangsung"] : 0) - (!(dataReader["rnilaisirup"] is DBNull) ? (int)dataReader["rnilaisirup"] : 0),
+                            });
+                        }
+                    }
+                }
+            }
+            catch (Exception Exception)
+            {
+                throw Exception;
+            }
+
+            return Result;
+        }
+
+        public IList<tsPaketModel> GetAllPerencanaan(int spesifikasi, int tipePaket)
+        {
+            List<tsPaketModel> Result = new List<tsPaketModel>();
+            try
+            {
+                using (NpgsqlConnection sqlConnection = new NpgsqlConnection(ConnectionString))
+                using (NpgsqlCommand sqlCommand = new NpgsqlCommand("public.stp_tsreviewwperencanaangetall", sqlConnection))
+                {
+                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                    sqlCommand.Parameters.AddWithValue("_opd", OPD);
+                    sqlCommand.Parameters.AddWithValue("_tahun", int.Parse(TAHUN));
+                    sqlConnection.Open();
+                    using (NpgsqlDataReader dataReader = sqlCommand.ExecuteReader())
+                    {
+                        while (dataReader.Read())
+                        {
+                            Result.Add(new tsPaketModel()
+                            {
+                                //ididetifikasi = (dataReader["rididetifikasi"].GetType() != typeof(DBNull) ? (int)dataReader["rididetifikasi"] : 0),
+                                lembaga = (dataReader["rlembaga"].GetType() != typeof(DBNull) ? ((int)dataReader["rlembaga"]).ToString() : ""),
+                                opd = (dataReader["ropd"].GetType() != typeof(DBNull) ? ((int)dataReader["ropd"]).ToString() : ""),
+                                namaopd = (dataReader["rnamaopd"].GetType() != typeof(DBNull) ? (string)dataReader["rnamaopd"] : ""),
+                                statuspaket = (dataReader["rstatuspaket"].GetType() != typeof(DBNull) ? (string)dataReader["rstatuspaket"] : ""),
                             });
                         }
                     }
@@ -106,6 +148,7 @@ namespace TasikmalayaKota.Simpatik.Web.Services.tsPaket.DALS
                     sqlCommand.Parameters.AddWithValue("_opd", OPD);
                     sqlCommand.Parameters.AddWithValue("_kebutuhan", spesifikasi);
                     sqlCommand.Parameters.AddWithValue("_tipe", tipePaket);
+                    sqlCommand.Parameters.AddWithValue("_tahun", int.Parse(TAHUN));
                     sqlConnection.Open();
                     using (NpgsqlDataReader dataReader = sqlCommand.ExecuteReader())
                     {
@@ -188,7 +231,7 @@ namespace TasikmalayaKota.Simpatik.Web.Services.tsPaket.DALS
                     sqlCommand.Parameters.AddWithValue("_prodlmnegeri", ParamD.prodlmnegeri == null ? string.Empty : ParamD.prodlmnegeri);
                     sqlCommand.Parameters.AddWithValue("_ushkecil", ParamD.ushkecil == null ? string.Empty : ParamD.ushkecil);
                     sqlCommand.Parameters.AddWithValue("_pradpa", ParamD.pradpa == null ? string.Empty : ParamD.pradpa);
-                    sqlCommand.Parameters.AddWithValue("_mtdpemilihanstlh", ParamD.mtdpemilihanstlh == null ? string.Empty : ParamD.mtdpemilihanstlh);
+                    sqlCommand.Parameters.AddWithValue("_mtdpemilihanstblm", ParamD.mtdpemilihanstblm == null ? string.Empty : ParamD.mtdpemilihanstblm);
                     sqlCommand.Parameters.AddWithValue("_jeniskebutuhan", ParamD.jeniskebutuhan == null ? string.Empty : ParamD.jeniskebutuhan);
                     sqlCommand.Parameters.AddWithValue("_pemanfaatanmulai", (_pemanfaatanmulai.Value.Year.ToString() +"-"+ _pemanfaatanmulai.Value.Month.ToString() +"-"+ _pemanfaatanmulai.Value.Day.ToString()));
                     sqlCommand.Parameters.AddWithValue("_pemanfaatanakhir", (_pemanfaatanakhir.Value.Year.ToString() + "-" + _pemanfaatanakhir.Value.Month.ToString() + "-" + _pemanfaatanakhir.Value.Day.ToString()));
@@ -256,6 +299,71 @@ namespace TasikmalayaKota.Simpatik.Web.Services.tsPaket.DALS
                     sqlCommand.Parameters.AddWithValue("_tipeswakelola", ParamD.tipeswakelola == null ? "1" : ParamD.tipeswakelola);
                     sqlCommand.Parameters.AddWithValue("_paketstrategis", ParamD.paketstrategis == null ? "0" : ParamD.paketstrategis);
                     sqlCommand.Parameters.AddWithValue("_penyelengaraswakelola", ParamD.penyelengaraswakelola);
+                    sqlCommand.Parameters.AddWithValue("_uid", UID);
+                    sqlConnection.Open();
+                    using (NpgsqlDataReader dataReader = sqlCommand.ExecuteReader())
+                    {
+                        while (dataReader.Read())
+                        {
+                            Result.Kode = dataReader["kode"].ToString();
+                            Result.Success = Result.Kode == "01" ? true : false;
+                            Result.Pesan = dataReader["message"].ToString();
+                        }
+                    }
+                }
+            }
+            catch (Exception Exception)
+            {
+                throw Exception;
+            }
+            return Result;
+        }
+
+        public DatabaseActionResultModel UpdateReview(tsPaketModel ParamD)
+        {
+            DatabaseActionResultModel Result = new DatabaseActionResultModel();
+            try
+            {
+                using (NpgsqlConnection sqlConnection = new NpgsqlConnection(ConnectionString))
+                using (NpgsqlCommand sqlCommand = new NpgsqlCommand("public.stp_tspaketupdatereview", sqlConnection))
+                {
+                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                    sqlCommand.Parameters.AddWithValue("_idpaket", ParamD.idpaket);
+                    sqlCommand.Parameters.AddWithValue("_nmpaket", ParamD.nmpaket == null ? string.Empty : ParamD.nmpaket);
+                    sqlCommand.Parameters.AddWithValue("_keteranganmetode", ParamD.keteranganmetode == null ? string.Empty : ParamD.keteranganmetode);
+                    sqlCommand.Parameters.AddWithValue("_keteranganpagu", ParamD.keteranganpagu == null ? string.Empty : ParamD.keteranganpagu);
+                    sqlCommand.Parameters.AddWithValue("_revisi", ParamD.statuspaket);
+                    sqlCommand.Parameters.AddWithValue("_uid", UID);
+                    sqlConnection.Open();
+                    using (NpgsqlDataReader dataReader = sqlCommand.ExecuteReader())
+                    {
+                        while (dataReader.Read())
+                        {
+                            Result.Kode = dataReader["kode"].ToString();
+                            Result.Success = Result.Kode == "01" ? true : false;
+                            Result.Pesan = dataReader["message"].ToString();
+                        }
+                    }
+                }
+            }
+            catch (Exception Exception)
+            {
+                throw Exception;
+            }
+            return Result;
+        }
+
+        public DatabaseActionResultModel UpdateStatusReview(tsPaketModel ParamD)
+        {
+            DatabaseActionResultModel Result = new DatabaseActionResultModel();
+            try
+            {
+                using (NpgsqlConnection sqlConnection = new NpgsqlConnection(ConnectionString))
+                using (NpgsqlCommand sqlCommand = new NpgsqlCommand("public.stp_tspaketupdatestatusreview", sqlConnection))
+                {
+                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                    sqlCommand.Parameters.AddWithValue("_opd", ParamD.opd);
+                    sqlCommand.Parameters.AddWithValue("_tahun", int.Parse(TAHUN));
                     sqlCommand.Parameters.AddWithValue("_uid", UID);
                     sqlConnection.Open();
                     using (NpgsqlDataReader dataReader = sqlCommand.ExecuteReader())

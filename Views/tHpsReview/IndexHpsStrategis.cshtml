@@ -8,14 +8,14 @@
 
 <ejs-grid id="Grid" actionComplete="CompleteAction" height="490" allowPaging="true" allowResizing="true" allowSorting="true" allowReordering="true" allowGrouping="false"
           toolbar="@Toolbar" allowFiltering="true" allowSelection="true"
-          created="createdGrid" allowExcelExport="true" allowPdfExport="true" toolbarClick="toolbarAction">
+          created="createdGrid" allowExcelExport="true" allowPdfExport="true" toolbarClick="toolbarAction" query="@ViewBag.queryHps">
     <e-grid-pagesettings pageCount="5" pageSize="12" pageSizes="true"></e-grid-pagesettings>
     <e-grid-filterSettings type="Menu"></e-grid-filterSettings>
     <e-grid-editSettings allowAdding="true" allowDeleting="true" allowEditing="true" mode="Dialog" template='#templatedialog' showDeleteConfirmDialog="true"></e-grid-editSettings>
     <e-grid-selectionsettings type="Single"></e-grid-selectionsettings>
     <e-grid-columns>
         <e-grid-column field="idhps" headerText="idhps" isPrimaryKey="true" isIdentity="true" visible="false"></e-grid-column>
-        <e-grid-column field="harga" headerText="Harga" width="200"></e-grid-column>
+        <e-grid-column field="jumlahharga" headerText="Harga" width="200"></e-grid-column>
         <e-grid-column field="filehps" headerText="File HPS" width="200"></e-grid-column>
     </e-grid-columns>
 </ejs-grid>
@@ -32,9 +32,11 @@
             toastObj = this;
         }
 
-        function onFileSelect(args) {
-            var inputElement = document.getElementById('filehps');
-            inputElement.value = args.filesData[0].name;
+        function onUploadFilesHpsSuccess(args) {
+            if (args.operation === 'upload') {
+                var inputElement = document.getElementById('filehps');
+                inputElement.value = args.file.name;
+            }
         }
 
         function CompleteAction(args) {
@@ -46,6 +48,7 @@
                 dialog.width = "750px";
                 // change the header of the dialog
                 dialog.header = args.requestType === 'beginEdit' ? 'Edit HPS' : 'New Hps';
+                args.form.ej2_instances[0].addRules('filehps', { required: [true, 'Silahkan Upload File Hps Terlebih Dahulu'] });
 
                 let spinner = ej.popups.createSpinner({ target: args.dialog.element });
                 ej.popups.showSpinner(args.dialog.element);
@@ -96,7 +99,7 @@
             class CustomAdaptor extends ej.data.UrlAdaptor {
                 processResponse(data, ds, query, xhr, request, changes) {
                     if (!ej.base.isNullOrUndefined(data.message)) {
-                        if (data.message.indexOf('BERHASIL DISIMPAN') == -1) {
+                        if ((data.message.indexOf('BERHASIL DISIMPAN') == -1) && (data.message.indexOf('BERHASIL DIHAPUS') == -1)) {
                             paramToast('Error Hps', 'e-toast-danger', data.message);
                         }
                         else {

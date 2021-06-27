@@ -93,6 +93,36 @@ namespace simpat1k.Controllers
         }
 
         [HttpPost]
+        [Route("PaketReviewPerencanaan")]
+        public IActionResult UrlPaketReviewPerencanaan([FromBody] tsPaketModel dm)
+        {
+            IEnumerable DataSource = _tsPaket.GetAllPerencanaan(0, 0);
+            DataOperations operation = new DataOperations();
+            if (dm.Search != null && dm.Search.Count > 0)
+            {
+                DataSource = operation.PerformSearching(DataSource, dm.Search);  //Search
+            }
+            if (dm.Sorted != null && dm.Sorted.Count > 0) //Sorting
+            {
+                DataSource = operation.PerformSorting(DataSource, dm.Sorted);
+            }
+            if (dm.Where != null && dm.Where.Count > 0) //Filtering
+            {
+                DataSource = operation.PerformFiltering(DataSource, dm.Where, dm.Where[0].Operator);
+            }
+            int count = DataSource.Cast<tsPaketModel>().Count();
+            if (dm.Skip != 0)
+            {
+                DataSource = operation.PerformSkip(DataSource, dm.Skip);   //Paging
+            }
+            if (dm.Take != 0)
+            {
+                DataSource = operation.PerformTake(DataSource, dm.Take);
+            }
+            return dm.RequiresCounts ? Json(new { result = DataSource, count = count }) : Json(DataSource);
+        }
+
+        [HttpPost]
         [Route("PaketStrategis")]
         public IActionResult UrlPaketStrategis([FromBody] tsPaketModel dm)
         {
@@ -165,6 +195,33 @@ namespace simpat1k.Controllers
             }
             else
             {
+                if (value.Action == "update")
+                {
+                    DatabaseActionResultModel Result = _tsPaket.UpdateReview(value.Value);
+                    msg = Result.Pesan;
+                }
+                else
+                {
+                    msg = "BERHASIL DISIMPAN";
+                }
+            }
+
+            return Json(new { data = value.Value, message = msg });
+        }
+
+        [HttpPost]
+        [Route("PaketUpdateReviewPerencanaan")]
+        public ActionResult CrudUpdateReviewPerencanaan([FromBody] CRUDModel<tsPaketModel> value, string action)
+        {
+            string msg = string.Empty;
+
+            if (value.Action == "update")
+            {
+                DatabaseActionResultModel Result = _tsPaket.UpdateStatusReview(value.Value);
+                msg = Result.Pesan;
+            }
+            else
+            {
                 msg = "BERHASIL DISIMPAN";
             }
 
@@ -186,7 +243,7 @@ namespace simpat1k.Controllers
         {
             ViewBag.Title = "HPS Strategis";
             ViewBag.queryPenyedia = "new ej.data.Query().addParams('jeniskebutuhan', 1).addParams('tipePaket', 1)";
-            ViewBag.identifikasi = "/Identifikasi/IndexBarang/";
+            ViewBag.identifikasi = "/Hps/IndexReviewHps/";
             return View();
         }
         #endregion
@@ -208,18 +265,106 @@ namespace simpat1k.Controllers
         [Route("PaketBarangTemplate")]
         public IActionResult PartialTemplatePaketBarang([FromBody] CRUDModel<tsPaketModel> value)
         {
-            var valTemplate = _tsPaket.GetAll(1, 1);
-            ViewBag.datasource = valTemplate;
             ViewBag.Title = "Paket Penyedia Kebutuhan Barang " + value.Value.idpaket;
+            ViewBag.sortDropdown = "Ascending";
             value.Value.jeniskebutuhan = "1";
             value.Value.tipePaket = 1;
             value.Value.opd = value.Value.opd == null ? HttpContext.Session.GetString("OpdName") : value.Value.namaopd;
             value.Value.pejabat = value.Value.pejabat == null ? HttpContext.Session.GetString("Nama") : value.Value.pejabat;
+            ViewBag.queryPaket = "new ej.data.Query().select(['nmpaket', 'idpaket']).take(10).requiresCount()";
 
             #region Combobox
             ViewBag.yatidak = new enumDataModel().YaTidak();
             ViewBag.metodepemilihan = new enumDataModel().MetodePemilihan();
+            ViewBag.revisi = new enumDataModel().Revisi();
             #endregion Combobox
+
+            #region Enable
+            if ((HttpContext.Session.GetInt32("Tipe") == 2) || (HttpContext.Session.GetInt32("Tipe") == 4))
+            {
+                ViewBag.truefalse = false;
+                if (value.Value.keteranganmetode != string.Empty)
+                {
+                    ViewBag.truefalsemetode = true;
+                }
+                else
+                {
+                    ViewBag.truefalsemetode = false;
+                }
+            }
+            else
+            {
+                ViewBag.truefalse = true;
+                ViewBag.truefalsemetode = true;
+            }
+            #endregion Enable
+
+            #region EnableKeterangan
+            if (((HttpContext.Session.GetInt32("Tipe") == 2) || (HttpContext.Session.GetInt32("Tipe") == 4)) && value.Value.statuspaket == "Review")
+            {
+                if ((value.Value.keteranganmetode == string.Empty) || (value.Value.keteranganmetode == null) || (value.Value.keteranganpagu == string.Empty) || (value.Value.keteranganpagu == null))
+                {
+                    ViewBag.truefalserevisi = false;
+                }
+                else
+                {
+                    ViewBag.truefalserevisi = true;
+                }
+
+                ViewBag.truefalseket = true;
+            }
+            else
+            {
+                ViewBag.truefalseket = false;
+                ViewBag.truefalserevisi = false;
+            }
+
+            if ((HttpContext.Session.GetInt32("Tipe") == 3) || (HttpContext.Session.GetInt32("Tipe") == 5))
+            {
+                if ((value.Value.statuspaket == "Revisi") || (value.Value.statuspaket == "Done"))
+                {
+                    if ((value.Value.keteranganmetode == string.Empty) || (value.Value.keteranganmetode == null))
+                    {
+                        ViewBag.truefalsemetode = true;
+                    }
+                    else
+                    {
+                        ViewBag.truefalsemetode = false;
+                    }
+                }
+                else
+                {
+                    ViewBag.truefalsemetode = true;
+                }
+            }
+            else
+            {
+                ViewBag.truefalsemetode = false;
+            }
+
+            if ((HttpContext.Session.GetInt32("Tipe") == 3) || (HttpContext.Session.GetInt32("Tipe") == 5))
+            {
+                if ((value.Value.statuspaket == "Revisi") || (value.Value.statuspaket == "Done"))
+                {
+                    if ((value.Value.keteranganpagu == string.Empty) || (value.Value.keteranganpagu == null))
+                    {
+                        ViewBag.truefalsepagu = true;
+                    }
+                    else
+                    {
+                        ViewBag.truefalsepagu = false;
+                    }
+                }
+                else
+                {
+                    ViewBag.truefalsepagu = true;
+                }
+            }
+            else
+            {
+                ViewBag.truefalsepagu = false;
+            }
+            #endregion EnableKeterangan
 
             return PartialView("_tsPaketBarangTemplate", value.Value);
         }
@@ -228,19 +373,106 @@ namespace simpat1k.Controllers
         [Route("PaketSwakelolaBarangTemplate")]
         public IActionResult PartialTemplatePaketSwakelolaBarang([FromBody] CRUDModel<tsPaketModel> value)
         {
-            var valTemplate = _tsPaket.GetAll(1, 1);
-            ViewBag.datasource = valTemplate;
             ViewBag.Title = "Paket Swakelola Kebutuhan Barang " + value.Value.idpaket;
+            ViewBag.sortDropdown = "Ascending";
             value.Value.jeniskebutuhan = "1";
             value.Value.tipePaket = 1;
             value.Value.opd = value.Value.opd == null ? HttpContext.Session.GetString("OpdName") : value.Value.namaopd;
             value.Value.pejabat = value.Value.pejabat == null ? HttpContext.Session.GetString("Nama") : value.Value.pejabat;
+            ViewBag.queryPaket = "new ej.data.Query().select(['nmpaket', 'idpaket']).take(10).requiresCount()";
 
             #region Combobox
             ViewBag.yatidak = new enumDataModel().YaTidak();
             ViewBag.metodepemilihan = new enumDataModel().MetodePemilihan();
             ViewBag.tipeswakelola = new enumDataModel().TipeSwakelola();
+            ViewBag.revisi = new enumDataModel().Revisi();
             #endregion Combobox
+
+            #region Enable
+            if ((HttpContext.Session.GetInt32("Tipe") == 2) || (HttpContext.Session.GetInt32("Tipe") == 4))
+            {
+                ViewBag.truefalse = false;
+                if (value.Value.keteranganmetode != string.Empty)
+                {
+                    ViewBag.truefalsemetode = true;
+                }
+                else
+                {
+                    ViewBag.truefalsemetode = false;
+                }
+            }
+            else
+            {
+                ViewBag.truefalse = true;
+                ViewBag.truefalsemetode = true;
+            }
+            #endregion Enable
+
+            #region EnableKeterangan
+            if (((HttpContext.Session.GetInt32("Tipe") == 2) || (HttpContext.Session.GetInt32("Tipe") == 4)) && value.Value.statuspaket == "Review")
+            {
+                if ((value.Value.keteranganmetode == string.Empty) || (value.Value.keteranganmetode == null) || (value.Value.keteranganpagu == string.Empty) || (value.Value.keteranganpagu == null))
+                {
+                    ViewBag.truefalserevisi = false;
+                }
+                else
+                {
+                    ViewBag.truefalserevisi = true;
+                }
+
+                ViewBag.truefalseket = true;
+            }
+            else
+            {
+                ViewBag.truefalseket = false;
+            }
+
+            if ((HttpContext.Session.GetInt32("Tipe") == 3) || (HttpContext.Session.GetInt32("Tipe") == 5))
+            {
+                if ((value.Value.statuspaket == "Revisi") || (value.Value.statuspaket == "Done"))
+                {
+                    if ((value.Value.keteranganmetode == string.Empty) || (value.Value.keteranganmetode == null))
+                    {
+                        ViewBag.truefalsemetode = true;
+                    }
+                    else
+                    {
+                        ViewBag.truefalsemetode = false;
+                    }
+                }
+                else
+                {
+                    ViewBag.truefalsemetode = true;
+                }
+            }
+            else
+            {
+                ViewBag.truefalsemetode = false;
+            }
+
+            if ((HttpContext.Session.GetInt32("Tipe") == 3) || (HttpContext.Session.GetInt32("Tipe") == 5))
+            {
+                if ((value.Value.statuspaket == "Revisi") || (value.Value.statuspaket == "Done"))
+                {
+                    if ((value.Value.keteranganpagu == string.Empty) || (value.Value.keteranganpagu == null))
+                    {
+                        ViewBag.truefalsepagu = true;
+                    }
+                    else
+                    {
+                        ViewBag.truefalsepagu = false;
+                    }
+                }
+                else
+                {
+                    ViewBag.truefalsepagu = true;
+                }
+            }
+            else
+            {
+                ViewBag.truefalsepagu = false;
+            }
+            #endregion EnableKeterangan
 
             return PartialView("_tsPaketSwakelolaBarangTemplate", value.Value);
         }

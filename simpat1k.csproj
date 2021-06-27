@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <RootNamespace>TasikmalayaKota.Simpatik.Web</RootNamespace>
     <UserSecretsId>e4031597-308d-44b5-ba26-ad601b8367e3</UserSecretsId>
   </PropertyGroup>
