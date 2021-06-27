@@ -1,0 +1,19 @@
+﻿@model TasikmalayaKota.Simpatik.Web.Services.mUrusan.Models.mUrusanModel
+@{
+    ViewData["Title"] = ViewBag.Title;
+}
+
+<div>
+    <div class="form-row">
+        <div class="form-group col-md-12">
+            <div class="e-float-input e-control-wrapper">
+                <ejs-textbox id="KodeSubUrusan" cssClass="e-input" placeholder="Kode Urusan" floatLabelType="Always" ejs-for="@Model.KodeSubUrusan"></ejs-textbox>
+            </div>
+            <div class="e-float-input e-control-wrapper">
+                <ejs-textbox id="NamaSubUrusan" cssClass="e-input" placeholder="Nama Urusan" floatLabelType="Always" ejs-for="@Model.NamaSubUrusan"></ejs-textbox>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ejs-scripts></ejs-scripts>

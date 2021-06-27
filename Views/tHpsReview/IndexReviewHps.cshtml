@@ -1,17 +1,320 @@
-﻿<ejs-grid id="Grid" height="490" allowPaging="true" allowResizing="true" allowSorting="true" allowReordering="true" allowGrouping="false"
-          allowFiltering="true" allowSelection="true">
-    <e-data-manager url="/Hps/HpsAll" adaptor="UrlAdaptor"></e-data-manager>
-    <e-grid-pagesettings pageSize="12" />
-    <e-grid-filterSettings type="Menu"></e-grid-filterSettings>
-    <e-grid-editSettings allowAdding="true" allowEditing="true" mode="Dialog"></e-grid-editSettings>
-    <e-grid-selectionsettings type="Single"></e-grid-selectionsettings>
-    <e-grid-columns>
-        <e-grid-column field="idhps" headerText="idhps" isPrimaryKey="true" isIdentity="true" visible="false"></e-grid-column>
-        <e-grid-column field="namapaket" headerText="Nama Paket"></e-grid-column>
-        <e-grid-column field="namaopd" headerText="OPD" width="200"></e-grid-column>
-        <e-grid-column field="hargassh" headerText="SSH" width="200"></e-grid-column>
-        <e-grid-column field="harga" headerText="Harga Pasar" width="200"></e-grid-column>
-        <e-grid-column field="selisihpagu" headerText="Selisih Pagu" width="200"></e-grid-column>
-        <e-grid-column field="selisihvolume" headerText="Selisih Volume" width="200"></e-grid-column>
-    </e-grid-columns>
-</ejs-grid>
+﻿@{
+    ViewData["Title"] = ViewBag.Title;
+    var Filehps = "#filehps";
+    var Reviewhps = "#reviewhps";
+    List<string> ToolbarAuditor = HttpContextAccessor.HttpContext.Session.GetComplexData<List<string>>("ToolbarAuditor");
+    List<string> Toolbar = HttpContextAccessor.HttpContext.Session.GetComplexData<List<string>>("Toolbar");
+    List<object> downloadHPS = new List<object>();
+    downloadHPS.Add(new { type = "userstatus", buttonOption = new { content = " Download HPS", cssClass = "e-flat e-details feather icon-layers" } }); // custom
+}
+<ejs-toast id="toast_default" created="createdToasObj">
+    <e-toast-position X="Right"></e-toast-position>
+</ejs-toast>
+
+<div id="filehps" style="display: none">
+    <ejs-grid id="GridFile" actionComplete="CompleteActionFile" height="490" allowPaging="true" allowResizing="true" allowSorting="true" allowReordering="true" allowGrouping="false"
+              toolbar="@Toolbar" allowFiltering="true" allowSelection="true"
+              created="createdGridFile" allowExcelExport="true" allowPdfExport="true" toolbarClick="toolbarAction" query="@ViewBag.queryHps" commandClick="cmdDetail">
+        <e-grid-pagesettings pageCount="5" pageSize="12" pageSizes="true"></e-grid-pagesettings>
+        <e-grid-filterSettings type="Menu"></e-grid-filterSettings>
+        <e-grid-editSettings allowAdding="false" allowDeleting="false" allowEditing="false" mode="Dialog" template='#templatedialog' showDeleteConfirmDialog="false"></e-grid-editSettings>
+        <e-grid-selectionsettings type="Single"></e-grid-selectionsettings>
+        <e-grid-columns>
+            <e-grid-column field="idhps" headerText="idhps" isPrimaryKey="true" isIdentity="true" visible="false"></e-grid-column>
+            <e-grid-column field="namapaket" headerText="Nama Paket"></e-grid-column>
+            <e-grid-column field="namaopd" headerText="OPD" width="200"></e-grid-column>
+            <e-grid-column field="jumlahharga" headerText="Harga" width="200" format="n0"></e-grid-column>
+            <e-grid-column field="filehps" headerText="File HPS" width="200"></e-grid-column>
+            <e-grid-column headerText="Download" width="150" commands="downloadHPS"></e-grid-column>
+            @*<e-grid-column field="hargassh" headerText="SSH" width="200"></e-grid-column>
+            <e-grid-column field="harga" headerText="Harga Pasar" width="200"></e-grid-column>
+            <e-grid-column field="selisihpagu" headerText="Selisih Pagu" width="200"></e-grid-column>
+            <e-grid-column field="selisihvolume" headerText="Selisih Volume" width="200"></e-grid-column>*@
+        </e-grid-columns>
+    </ejs-grid>
+</div>
+
+<div id="reviewhps" style="display: none">
+    <ejs-grid id="GridReview" actionComplete="CompleteActionReview" height="490" allowPaging="true" allowResizing="true" allowSorting="true" allowReordering="true" allowGrouping="false"
+              toolbar="@ToolbarAuditor" allowFiltering="true" allowSelection="true"
+              created="createdGridReview" allowExcelExport="true" allowPdfExport="true" toolbarClick="toolbarAction" query="@ViewBag.queryHps" commandClick="cmdDetail">
+        <e-grid-pagesettings pageCount="5" pageSize="12" pageSizes="true"></e-grid-pagesettings>
+        <e-grid-filterSettings type="Menu"></e-grid-filterSettings>
+        <e-grid-editSettings allowAdding="true" allowDeleting="true" allowEditing="true" mode="Dialog" template='#templatedialog' showDeleteConfirmDialog="true"></e-grid-editSettings>
+        <e-grid-selectionsettings type="Single"></e-grid-selectionsettings>
+        <e-grid-columns>
+            <e-grid-column field="idrvwhps" headerText="idrvwhps" isPrimaryKey="true" isIdentity="true" visible="false"></e-grid-column>
+            <e-grid-column field="namassh" headerText="Nama Item" width="200"></e-grid-column>
+            <e-grid-column field="volume" headerText="Volume" width="200" format="n0"></e-grid-column>
+            <e-grid-column field="pagu" headerText="Pagu" width="200" format="n0"></e-grid-column>
+            <e-grid-column field="nilaissh" headerText="SSH" width="200" format="n0"></e-grid-column>
+            <e-grid-column field="hrgpasar" headerText="Harga Pasar" width="200" format="n0"></e-grid-column>
+            <e-grid-column field="slshpagu" headerText="Selisih Pagu" width="200" format="n0"></e-grid-column>
+            <e-grid-column field="slshvolume" headerText="Selisih Volume" width="200" format="n0"></e-grid-column>
+        </e-grid-columns>
+    </ejs-grid>
+</div>
+
+<ejs-tab id="adaptiveTab" heightAdjustMode="None" height="250px" created="tabReviewHPS">
+    <e-tab-tabitems>
+        <e-tab-tabitem header="ViewBag.headerFilehps" content="@Filehps"></e-tab-tabitem>
+        <e-tab-tabitem header="ViewBag.headerReviewhps" content="@Reviewhps"></e-tab-tabitem>
+    </e-tab-tabitems>
+</ejs-tab>
+
+@section SectionControls{
+    <script id='templatedialog' type="text/x-template">
+        <div id="Tempdialog">
+        </div>
+    </script>
+
+    <script type="text/javascript">
+        var toastObj;
+
+        function createdToasObj() {
+            toastObj = this;
+        }
+
+        function tabReviewHPS() {
+            tabObj = document.getElementById('adaptiveTab').ej2_instances[0];
+        }
+
+        function paramToast(title, cssclass, message) {
+            setTimeout(
+                () => {
+                    var toastObj = document.getElementById('toast_default').ej2_instances[0];
+                    toastObj.title = title;
+                    toastObj.cssClass = cssclass;
+                    toastObj.content = message;
+                    toastObj.target = document.body;
+                    toastObj.show();
+                }, 500);
+        }
+
+        function cmdDetail(args) {
+            window.location.href = "@ViewBag.pathDownload" + JSON.parse(JSON.stringify(args.rowData)).filehps;
+        }
+
+        //#region filehps
+        function CompleteActionFile(args) {
+            var grid = document.querySelector('#GridFile').ej2_instances[0];
+
+            if (args.requestType === 'beginEdit' || args.requestType === 'add') {
+                var dialog = args.dialog;
+                dialog.height = 650;
+                dialog.width = "750px";
+                // change the header of the dialog
+                dialog.header = args.requestType === 'beginEdit' ? 'Edit HPS' : 'New Hps';
+                args.form.ej2_instances[0].addRules('filehps', { required: [true, 'Silahkan Upload File Hps Terlebih Dahulu'] });
+
+                let spinner = ej.popups.createSpinner({ target: args.dialog.element });
+                ej.popups.showSpinner(args.dialog.element);
+                var ajax = new ej.base.Ajax({
+                    url: "@Url.Action("HpsTemplateStrategis", "Hps")", //render the partial view
+                    type: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify({ value: args.rowData })
+                });
+                ajax.send().then(function (data) {
+                    appendElement(data, args.form); //Render the edit form with selected record
+                    args.form.elements.namedItem('uraianpekerjaan').focus();
+                    ej.popups.hideSpinner(args.dialog.element);
+                }).catch(function (xhr) {
+
+                    ej.popups.hideSpinner(args.dialog.element);
+                });
+            }
+            else if (args.requestType === 'save') {
+                grid.refresh();
+                grid.closeEdit();
+            }
+        }
+
+        function createdGridFile(args) {
+            class CustomAdaptor extends ej.data.UrlAdaptor {
+                processResponse(data, ds, query, xhr, request, changes) {
+                    if (!ej.base.isNullOrUndefined(data.message)) {
+                        if ((data.message.indexOf('BERHASIL DISIMPAN') == -1) && (data.message.indexOf('BERHASIL DIHAPUS') == -1)) {
+                            paramToast('Error Hps', 'e-toast-danger', data.message);
+                        }
+                        else {
+                            paramToast('Hps', 'e-toast-success', data.message);
+                        }
+                    }
+
+                    if (!ej.base.isNullOrUndefined(data.data))
+                        return data.data;
+                    else
+                        return data;
+                }
+            }
+            var grid = document.querySelector('#GridFile').ej2_instances[0];
+            grid.dataSource = new ej.data.DataManager({
+                url: "/Hps/HpsAll",
+                crudUrl: "/Hps/HpsCrud",
+                adaptor: new CustomAdaptor()
+            });
+        }
+        //#region filehps
+
+        //#region review
+        function CompleteActionReview(args) {
+            var grid = document.querySelector('#GridReview').ej2_instances[0];
+
+            if (args.requestType === 'beginEdit' || args.requestType === 'add') {
+                var dialog = args.dialog;
+                dialog.height = 650;
+                dialog.width = "750px";
+                // change the header of the dialog
+                dialog.header = args.requestType === 'beginEdit' ? 'Edit Review HPS' : 'New Review Hps';
+                args.form.ej2_instances[0].addRules('jenisssh', { required: [true, 'Silahkan Pilih Tipe SSH'] });
+                args.form.ej2_instances[0].addRules('idssh', { required: [true, 'Silahkan Pilih Item SSH'] });
+
+                let spinner = ej.popups.createSpinner({ target: args.dialog.element });
+                ej.popups.showSpinner(args.dialog.element);
+                var ajax = new ej.base.Ajax({
+                    url: "@Url.Action("HpsTemplateReviewStrategis", "Hps")", //render the partial view
+                    type: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify({ value: args.rowData })
+                });
+                ajax.send().then(function (data) {
+                    appendElement(data, args.form); //Render the edit form with selected record
+                    args.form.elements.namedItem('jenisssh').focus();
+                    if (typeof args.rowData['idssh'] != 'undefined') {
+                        var dropObject = document.getElementById("idssh").ej2_instances[0];
+                        dropObject.value = args.rowData['idssh'];
+                        dropObject.text = args.rowData['namassh'];
+                    }
+                    ej.popups.hideSpinner(args.dialog.element);
+                }).catch(function (xhr) {
+
+                    ej.popups.hideSpinner(args.dialog.element);
+                });
+            }
+            else if (args.requestType === 'save') {
+                grid.refresh();
+                grid.closeEdit();
+            }
+        }
+
+        function createdGridReview(args) {
+            class CustomAdaptor extends ej.data.UrlAdaptor {
+                processResponse(data, ds, query, xhr, request, changes) {
+                    if (!ej.base.isNullOrUndefined(data.message)) {
+                        if ((data.message.indexOf('BERHASIL DISIMPAN') == -1) && (data.message.indexOf('BERHASIL DIHAPUS') == -1)) {
+                            paramToast('Error Review Hps', 'e-toast-danger', data.message);
+                        }
+                        else {
+                            paramToast('Review Hps', 'e-toast-success', data.message);
+                        }
+                    }
+
+                    if (!ej.base.isNullOrUndefined(data.data))
+                        return data.data;
+                    else
+                        return data;
+                }
+            }
+            var grid = document.querySelector('#GridReview').ej2_instances[0];
+            grid.dataSource = new ej.data.DataManager({
+                url: "/Hps/ReviewHpsAll",
+                crudUrl: "/Hps/ReviewHpsCrud",
+                adaptor: new CustomAdaptor()
+            });
+        }
+
+        function onchangeJenis() {
+            var SelectParentObj = document.getElementById('jenisssh').ej2_instances[0];
+            var ParentObj = document.getElementById('idssh').ej2_instances[0];
+            ParentObj.enabled = true;
+            var ParentObjQuery = new ej.data.Query().take(10).where('typessh', 'equal', SelectParentObj.value);
+            ParentObj.query = ParentObjQuery;
+            ParentObj.text = null;
+            ParentObj.dataBind();
+        }
+
+        function onfilteringSsh(e) {
+            var SelectParentObj = document.getElementById('jenisssh').ej2_instances[0];
+            var ParentObj = document.getElementById("idssh").ej2_instances[0];
+            if (e.text == '' && e.text.length < 1) {
+                e.updateData(ParentObj.dataSource);
+            }
+
+            let query = new ej.data.Query().select(['namassh', 'idssh']).take(6);
+            query = (e.text !== '' && e.text.length >= 3) ? query.where(new ej.data.Predicate('namassh', 'contains', e.text, true).and('typessh', 'equal', SelectParentObj.value, true)) : query.where('typessh', 'equal', SelectParentObj.value, true);
+
+            e.updateData(ParentObj.dataSource, query);
+        }
+
+        function onchangeItem() {
+            var JenisObj = document.getElementById('jenisssh').ej2_instances[0];
+            var SshObj = document.getElementById("idssh").ej2_instances[0];
+
+            var ajax = new ej.base.Ajax({
+                url: "@Url.Action("get-detail-json", "Hps")",
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify({ typessh: JenisObj.value, idssh: SshObj.value })
+            });
+            ajax.send().then();
+            ajax.onSuccess = function (data) {
+                var obj = JSON.parse(data);
+                document.getElementById("pagu").ej2_instances[0].value = obj.hargassh;
+                document.getElementById("nilaissh").ej2_instances[0].value = obj.hargassh;
+                calculate();
+            }
+        }
+
+        function calculate() {
+            var volume = document.getElementById("volume").ej2_instances[0].value;
+            var pagu = document.getElementById("pagu").ej2_instances[0].value;
+            var hrgpasar = document.getElementById("hrgpasar").ej2_instances[0].value;
+
+            var selisihpagu = pagu - hrgpasar;
+            var selisihvolume = volume * selisihpagu;
+
+            document.getElementById("slshpagu").ej2_instances[0].value = selisihpagu;
+            document.getElementById("slshvolume").ej2_instances[0].value = selisihvolume;
+        }
+        //#region review
+
+        function appendElement(elementString, form) {
+            form.querySelector("#Tempdialog").innerHTML = elementString;
+            var script = document.createElement('script');
+            script.type = "text/javascript";
+            var serverScript = form.querySelector("#Tempdialog").querySelector('script');
+            script.textContent = serverScript.innerHTML;
+            document.head.appendChild(script);
+            serverScript.remove();
+        }
+
+        function toolbarAction(args) {
+            var fileNameGrid = "";
+
+            if (this.element.id === "GridFile") {
+                fileNameGrid = "File";
+            }
+            else if (this.element.id === "GridReview") {
+                fileNameGrid = "Review";
+            }
+
+            var fileName = "Hps " + fileNameGrid + " @ViewBag.Title";
+
+            if (args.item.id === this.element.id + '_pdfexport') {
+                var exportProperties = {
+                    fileName: fileName + ".pdf"
+                };
+
+                this.pdfExport(exportProperties);
+            }
+            if (args.item.id === this.element.id + '_excelexport') {
+                var exportProperties = {
+                    fileName: fileName + ".xlsx"
+                };
+
+                this.excelExport(exportProperties);
+            }
+        }
+    </script>
+}

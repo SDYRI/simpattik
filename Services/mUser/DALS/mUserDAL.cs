@@ -85,6 +85,40 @@ namespace TasikmalayaKota.Simpatik.Web.Services.mUser.DALS
             return Result;
         }
 
+        public mUserModel GetById()
+        {
+            mUserModel Result = new mUserModel();
+
+            try
+            {
+                using (NpgsqlConnection sqlConnection = new NpgsqlConnection(ConnectionString))
+                using (NpgsqlCommand sqlCommand = new NpgsqlCommand("public.stp_muserbyid", sqlConnection))
+                {
+                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                    sqlCommand.Parameters.AddWithValue("_iddtuser", UID);
+
+                    sqlConnection.Open();
+                    using (NpgsqlDataReader dataReader = sqlCommand.ExecuteReader())
+                    {
+                        while (dataReader.Read())
+                        {
+                            Result.NamaUser = (!(dataReader["namauser"] is DBNull) ? (string)dataReader["namauser"] : "");
+                            Result.NipUser = (!(dataReader["nipuser"] is DBNull) ? (string)dataReader["nipuser"] : "");
+                            Result.JabatanUser = (!(dataReader["jabatanuser"] is DBNull) ? (string)dataReader["jabatanuser"] : "");
+                            Result.GolonganUser = (!(dataReader["golonganuser"] is DBNull) ? (string)dataReader["golonganuser"] : "");
+                            Result.UserName = (!(dataReader["username"] is DBNull) ? (string)dataReader["username"] : "");
+                        }
+                    }
+                }
+            }
+            catch (Exception Exception)
+            {
+                throw Exception;
+            }
+
+            return Result;
+        }
+
         public UserValidationResultModel UserValidation(UserValidationArgsModel ParamD)
         {
             UserValidationResultModel Result = new UserValidationResultModel();
@@ -257,6 +291,58 @@ namespace TasikmalayaKota.Simpatik.Web.Services.mUser.DALS
                             Result.Success = Result.Kode == "01" ? true : false;
                             Result.Pesan = dataReader["message"].ToString();
                             Result.Data = dataReader["opduser"].ToString();
+                        }
+                    }
+                }
+            }
+            catch (Exception Exception)
+            {
+                throw Exception;
+            }
+            return Result;
+        }
+
+        public DatabaseActionResultModel UpdateProfile(mUserModel ParamD)
+        {
+            DatabaseActionResultModel Result = new DatabaseActionResultModel();
+            var _value = string.Empty;
+            string hash = string.Empty;
+
+            try
+            {
+                using (NpgsqlConnection sqlConnection = new NpgsqlConnection(ConnectionString))
+                using (NpgsqlCommand sqlCommand = new NpgsqlCommand("public.stp_saltuser", sqlConnection))
+                {
+                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                    sqlCommand.Parameters.AddWithValue("_uid", "0");
+                    sqlConnection.Open();
+                    _value = sqlCommand.ExecuteScalar().ToString();
+                }
+
+                using (SHA256 sha256Hash = SHA256.Create())
+                {
+                    //From String to byte array
+                    byte[] sourceBytes = Encoding.UTF8.GetBytes("simpattik" + ParamD.UserName + "tasikmalayakota" + ParamD.PasswordUser + "bethasolution" + _value);
+                    byte[] hashBytes = sha256Hash.ComputeHash(sourceBytes);
+                    hash = BitConverter.ToString(hashBytes).Replace("-", String.Empty);
+                }
+
+                using (NpgsqlConnection sqlConnection = new NpgsqlConnection(ConnectionString))
+                using (NpgsqlCommand sqlCommand = new NpgsqlCommand("public.stp_muserupdateprofile", sqlConnection))
+                {
+                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                    sqlCommand.Parameters.AddWithValue("_iduser", UID);
+                    sqlCommand.Parameters.AddWithValue("_saltuser", ParamD.PasswordUser == null ? "BPBJ123" : _value);
+                    sqlCommand.Parameters.AddWithValue("_passworduser", ParamD.PasswordUser == null ? "BPBJ123" : hash);
+                    sqlCommand.Parameters.AddWithValue("_uid", UID);
+                    sqlConnection.Open();
+                    using (NpgsqlDataReader dataReader = sqlCommand.ExecuteReader())
+                    {
+                        while (dataReader.Read())
+                        {
+                            Result.Kode = dataReader["kode"].ToString();
+                            Result.Success = Result.Kode == "01" ? true : false;
+                            Result.Pesan = dataReader["message"].ToString();
                         }
                     }
                 }

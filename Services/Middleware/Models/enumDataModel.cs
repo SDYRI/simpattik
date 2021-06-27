@@ -73,6 +73,13 @@ namespace TasikmalayaKota.Simpatik.Web.Services.Middleware.Models
             komplekssederhana.Add(new enumDataModel { Text = "Sederhana", Value = "2" });
             return komplekssederhana;
         }
+        public List<enumDataModel> Revisi()
+        {
+            List<enumDataModel> komplekssederhana = new List<enumDataModel>();
+            komplekssederhana.Add(new enumDataModel { Text = "Revisi", Value = "2" });
+            komplekssederhana.Add(new enumDataModel { Text = "Done", Value = "4" });
+            return komplekssederhana;
+        }
         public List<enumDataModel> Kelayakan()
         {
             List<enumDataModel> tipeuser = new List<enumDataModel>();
@@ -88,6 +95,7 @@ namespace TasikmalayaKota.Simpatik.Web.Services.Middleware.Models
             status.Add(new enumDataModel { Text = "Revisi", Value = "2" });
             status.Add(new enumDataModel { Text = "Review", Value = "3" });
             status.Add(new enumDataModel { Text = "Done", Value = "4" });
+            status.Add(new enumDataModel { Text = "Done", Value = "5" });
             return status;
         }
         public List<enumDataModel> PaPpk()
@@ -105,6 +113,15 @@ namespace TasikmalayaKota.Simpatik.Web.Services.Middleware.Models
             prioritas.Add(new enumDataModel { Text = "Sedang", Value = "2" });
             prioritas.Add(new enumDataModel { Text = "Kecil", Value = "3" });
             return prioritas;
+        }
+        public List<enumDataModel> TipeSSH()
+        {
+            List<enumDataModel> tipessh = new List<enumDataModel>();
+            tipessh.Add(new enumDataModel { Text = "SSH", Value = "1" });
+            tipessh.Add(new enumDataModel { Text = "HSBK", Value = "2" });
+            tipessh.Add(new enumDataModel { Text = "ASB", Value = "3" });
+            tipessh.Add(new enumDataModel { Text = "SBU", Value = "4" });
+            return tipessh;
         }
         public List<enumDataModel> TipeSwakelola()
         {

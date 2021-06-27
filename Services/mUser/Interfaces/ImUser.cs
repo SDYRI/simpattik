@@ -10,9 +10,11 @@ namespace TasikmalayaKota.Simpatik.Web.Services.mUser.Interfaces
     public interface ImUser
     {
         IList<mUserModel> GetAll();
+        mUserModel GetById();
         UserValidationResultModel UserValidation(UserValidationArgsModel Args);
         DatabaseActionResultModel Create(mUserModel model);
         DatabaseActionResultModel Update(mUserModel model);
+        DatabaseActionResultModel UpdateProfile(mUserModel model);
         DatabaseActionResultModel Remove(string model);
     }
 }

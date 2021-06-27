@@ -87,7 +87,7 @@ namespace TasikmalayaKota.Simpatik.Web.Services.mProgram.DALS
                     sqlCommand.Parameters.AddWithValue("_idpdtpg", ParamD.IdParent == 0 ? ParamD.IdParentU : ParamD.IdParent);
                     sqlCommand.Parameters.AddWithValue("_kddtprg", ParamD.KodeSubkegiatan);
                     sqlCommand.Parameters.AddWithValue("_posisi", ParamD.IdPosisi);
-                    sqlCommand.Parameters.AddWithValue("_idppk", ParamD.IdUserPPK);
+                    sqlCommand.Parameters.AddWithValue("_idppk", ParamD.IdUserPPK == null ? "" : ParamD.IdUserPPK);
                     sqlCommand.Parameters.AddWithValue("_tahun", int.Parse(TAHUN));
                     sqlCommand.Parameters.AddWithValue("_uid", UID);
                     sqlConnection.Open();

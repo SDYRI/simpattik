@@ -20,6 +20,7 @@ namespace TasikmalayaKota.Simpatik.Web.Services.tsPaket.Models
         public string pejabat { get; set; }
         public string thanggrn { get; set; }
         public string nmpaket { get; set; }
+        public string namakonsolidasi { get; set; }
         public string volume { get; set; }
         public string uraian { get; set; }
         public string spesifikasi { get; set; }
@@ -41,6 +42,7 @@ namespace TasikmalayaKota.Simpatik.Web.Services.tsPaket.Models
         public int nilaisirup { get; set; }
         public int nilaiselisih { get; set; }
         public string statushps { get; set; }
+        public string statuspaket { get; set; }
         public DateTime? pemanfaatanmulai { get; set; }
         public DateTime? pemanfaatanakhir { get; set; }
         public DateTime? pelaksanaanmulai { get; set; }

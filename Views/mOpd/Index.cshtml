@@ -253,7 +253,7 @@
             var UrusanOBJ = document.getElementById('ListIdUrusan').ej2_instances[0];
             var OPDObj = document.getElementById('IdParent').ej2_instances[0];
             OPDObj.enabled = true;
-            var OPDObjQuery = new ej.data.Query().where('ListIdUrusan', 'equal', UrusanOBJ.value).addParams('IdPosisi', 1);
+            var OPDObjQuery = new ej.data.Query().take(10).where('ListIdUrusan', 'equal', UrusanOBJ.value).addParams('IdPosisi', 1);
             OPDObj.query = OPDObjQuery;
             OPDObj.text = null;
             OPDObj.dataBind();

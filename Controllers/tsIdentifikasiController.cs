@@ -174,7 +174,7 @@ namespace simpat1k.Controllers
             ViewBag.querySubKegiatan = "new ej.data.Query().select(['NamaSubkegiatan', 'IdProgram']).take(10).requiresCount().addParams('IdPosisi', 3)";
 
             #region Enable
-            if (HttpContext.Session.GetInt32("Tipe") == 2)
+            if ((HttpContext.Session.GetInt32("Tipe") == 2) || (HttpContext.Session.GetInt32("Tipe") == 4))
             {
                 ViewBag.truefalse = false;
             }
@@ -223,7 +223,7 @@ namespace simpat1k.Controllers
             ViewBag.querySubKegiatan = "new ej.data.Query().select(['NamaSubkegiatan', 'IdProgram']).take(10).requiresCount().addParams('IdPosisi', 3)";
 
             #region Enable
-            if (HttpContext.Session.GetInt32("Tipe") == 2)
+            if ((HttpContext.Session.GetInt32("Tipe") == 2) || (HttpContext.Session.GetInt32("Tipe") == 4))
             {
                 ViewBag.truefalse = false;
             }
@@ -275,7 +275,7 @@ namespace simpat1k.Controllers
             ViewBag.querySubKegiatan = "new ej.data.Query().select(['NamaSubkegiatan', 'IdProgram']).take(10).requiresCount().addParams('IdPosisi', 3)";
 
             #region Enable
-            if (HttpContext.Session.GetInt32("Tipe") == 2)
+            if ((HttpContext.Session.GetInt32("Tipe") == 2) || (HttpContext.Session.GetInt32("Tipe") == 4))
             {
                 ViewBag.truefalse = false;
             }
@@ -324,7 +324,7 @@ namespace simpat1k.Controllers
             ViewBag.querySubKegiatan = "new ej.data.Query().select(['NamaSubkegiatan', 'IdProgram']).take(10).requiresCount().addParams('IdPosisi', 3)";
 
             #region Enable
-            if (HttpContext.Session.GetInt32("Tipe") == 2)
+            if ((HttpContext.Session.GetInt32("Tipe") == 2) || (HttpContext.Session.GetInt32("Tipe") == 4))
             {
                 ViewBag.truefalse = false;
             }

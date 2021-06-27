@@ -1,0 +1,26 @@
+﻿@model TasikmalayaKota.Simpatik.Web.Services.mUrusan.Models.mUrusanModel
+@{
+    ViewData["Title"] = ViewBag.Title;
+}
+
+<div>
+    <div class="form-row">
+        <div class="form-group col-md-12">
+            <div class="e-float-input e-control-wrapper">
+                <ejs-dropdownlist id="IdParent" placeholder="Pilih Urusan" popupHeight="200px" allowFiltering="true" filtering="onfilteringUrusan" sortOrder="@ViewBag.sortDropdown"
+                                  query="@ViewBag.queryUrusan" floatLabelType="Always">
+                    <e-data-manager url="/UrusanMaster/UrusanMasterAll" adaptor="UrlAdaptor" crossDomain="true"></e-data-manager>
+                    <e-dropdownlist-fields text="NamaSubUrusan" value="IdUrusan"></e-dropdownlist-fields>
+                </ejs-dropdownlist>
+            </div>
+            <div class="e-float-input e-control-wrapper">
+                <ejs-textbox id="KodeSubUrusan" cssClass="e-input" placeholder="Kode Sub Urusan" floatLabelType="Always" ejs-for="@Model.KodeSubUrusan"></ejs-textbox>
+            </div>
+            <div class="e-float-input e-control-wrapper">
+                <ejs-textbox id="NamaSubUrusan" cssClass="e-input" placeholder="Nama Sub Urusan" floatLabelType="Always" ejs-for="@Model.NamaSubUrusan"></ejs-textbox>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ejs-scripts></ejs-scripts>

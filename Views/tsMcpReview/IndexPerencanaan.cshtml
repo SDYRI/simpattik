@@ -1,18 +1,98 @@
-﻿<ejs-grid id="Grid" height="490" allowPaging="true" allowResizing="true" allowSorting="true" allowReordering="true" allowGrouping="false"
-          allowFiltering="true" allowSelection="true">
-    <e-data-manager url="/Paket/PaketReview" adaptor="UrlAdaptor"></e-data-manager>
+﻿@{
+    ViewData["Title"] = ViewBag.Title;
+    List<object> detailPaket = new List<object>();
+    detailPaket.Add(new { type = "userstatus", buttonOption = new { content = " Detail", cssClass = "e-flat e-details feather icon-layers" } }); // custom
+}
+<ejs-toast id="toast_default" created="createdToasObj">
+    <e-toast-position X="Right"></e-toast-position>
+</ejs-toast>
+
+<ejs-grid id="Grid" actionComplete="CompleteAction" height="490" allowPaging="true" allowResizing="true" allowSorting="true" allowReordering="true" allowGrouping="false"
+          toolbar="@(new List<string>() { "Search" })" allowFiltering="true" allowSelection="true" locale="id-ID" created="createdGrid" commandClick="cmdDetail">
     <e-grid-pagesettings pageSize="12" />
     <e-grid-filterSettings type="Menu"></e-grid-filterSettings>
     <e-grid-editSettings allowAdding="true" allowEditing="true" mode="Dialog"></e-grid-editSettings>
     <e-grid-selectionsettings type="Single"></e-grid-selectionsettings>
     <e-grid-columns>
-        <e-grid-column field="idpaket" headerText="idpaket" isPrimaryKey="true" isIdentity="true" visible="false"></e-grid-column>
-        <e-grid-column field="nmpaket" headerText="Nama Paket"></e-grid-column>
-        <e-grid-column field="namaopd" headerText="OPD" width="200"></e-grid-column>
-        <e-grid-column field="pagustlh" headerText="Pagu" width="200"></e-grid-column>
-        <e-grid-column field="mtdpemilihanstblm" headerText="Metode PBJ Sebelum" width="200"></e-grid-column>
-        <e-grid-column field="mtdpemilihanstlh" headerText="Metode PBJ Sesudah" width="200"></e-grid-column>
-        <e-grid-column field="keteranganmetode" headerText="Keterangan" width="200"></e-grid-column>
+        <e-grid-column field="opd" headerText="opd" isPrimaryKey="true" isIdentity="true" visible="false"></e-grid-column>
+        <e-grid-column field="namaopd" headerText="OPD" width="200" allowEditing="false"></e-grid-column>
+        <e-grid-column field="statuspaket" width="200" headerText="Status" allowEditing="false"></e-grid-column>
+        <e-grid-column headerText="Manage Records" width="100" commands="detailPaket"></e-grid-column>
     </e-grid-columns>
 </ejs-grid>
+
+@section SectionControls{
+    <script type="text/javascript">
+        var toastObj;
+
+        function createdToasObj() {
+            toastObj = this;
+        }
+
+        function paramToast(title, cssclass, message) {
+            setTimeout(
+                () => {
+                    var toastObj = document.getElementById('toast_default').ej2_instances[0];
+                    toastObj.title = title;
+                    toastObj.cssClass = cssclass;
+                    toastObj.content = message;
+                    toastObj.target = document.body;
+                    toastObj.show();
+                }, 500);
+        }
+
+        ej.base.L10n.load({
+            'id-ID': {
+                'grid': {
+                    'EmptyRecord': 'Belum ada paket yang dapat ditampilkan',
+                    'SaveButton': 'Review',
+                    'CancelButton': 'Cancel Review'
+                }
+            }
+        });
+
+        function cmdDetail(args) {
+            window.location.href = "@ViewBag.identifikasi" + JSON.parse(JSON.stringify(args.rowData)).opd;
+        }
+
+        function CompleteAction(args) {
+            var grid = document.querySelector('#Grid').ej2_instances[0];
+
+            if (args.requestType === 'beginEdit' || args.requestType === 'add') {
+                var dialog = args.dialog;
+                dialog.header = args.requestType === 'beginEdit' ? 'Review Perencanaan <br />' + args.rowData['namaopd'] : 'New Review';
+            }
+            else if (args.requestType === 'save') {
+                grid.refresh();
+                grid.closeEdit();
+            }
+        }
+
+        function createdGrid(args) {
+            class CustomAdaptor extends ej.data.UrlAdaptor {
+                processResponse(data, ds, query, xhr, request, changes) {
+                    if (!ej.base.isNullOrUndefined(data.message)) {
+                        if ((data.message.indexOf('BERHASIL DISIMPAN') == -1) && (data.message.indexOf('BERHASIL DIHAPUS') == -1)) {
+                            paramToast('Error Review Perencanaan', 'e-toast-danger', data.message);
+                        }
+                        else {
+                            paramToast('Review Perencanaan', 'e-toast-success', data.message);
+                        }
+                    }
+
+                    if (!ej.base.isNullOrUndefined(data.data))
+                        return data.data;
+                    else
+                        return data;
+                };
+            }
+            var grid = document.querySelector('#Grid').ej2_instances[0];
+            grid.dataSource = new ej.data.DataManager({
+                url: "/Paket/PaketReviewPerencanaan",
+                crudUrl: "/Paket/PaketUpdateReviewPerencanaan",
+                adaptor: new CustomAdaptor()
+            });
+        }
+    </script>
+}
 

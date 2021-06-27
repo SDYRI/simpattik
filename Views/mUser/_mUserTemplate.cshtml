@@ -45,7 +45,7 @@
         </div>
         <div class="form-group col-md-6">
             <div class="e-float-input e-control-wrapper">
-                <ejs-dropdownlist id="ListIdOpdUser" placeholder="Pilih OPD" popupHeight="200px" allowFiltering="true" filtering="onfilteringOPD" sortOrder="@ViewBag.sortDropdown" query="@ViewBag.queryOPD" floatLabelType="Always" change="onchangeTest">
+                <ejs-dropdownlist id="ListIdOpdUser" placeholder="Pilih OPD" popupHeight="200px" allowFiltering="true" filtering="onfilteringOPD" sortOrder="@ViewBag.sortDropdown" query="@ViewBag.queryOPD" floatLabelType="Always">
                     <e-data-manager url="/OpdMaster/OpdMasterSelect" adaptor="UrlAdaptor" crossDomain="true"></e-data-manager>
                     <e-dropdownlist-fields text="NamaSubOpd" value="IdOpd"></e-dropdownlist-fields>
                 </ejs-dropdownlist>
@@ -65,7 +65,7 @@
                 <label class="e-float-text e-label-top" for="upload">File SK</label>
             </div>
             <div id="uploadError"></div>
-            <ejs-uploader id="UploadFilesSK" autoUpload="true" selected="onFileSelect" multiple="false" asyncSettings="@asyncSettings"></ejs-uploader>
+            <ejs-uploader id="UploadFilesSK" autoUpload="true" success="onUploadFilesSKSuccess" allowedExtensions=".pdf" multiple="false" asyncSettings="@asyncSettings"></ejs-uploader>
         </div>
     </div>
 </div>

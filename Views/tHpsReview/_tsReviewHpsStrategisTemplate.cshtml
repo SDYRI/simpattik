@@ -1,0 +1,47 @@
+﻿@model TasikmalayaKota.Simpatik.Web.Services.tHps.Models.tHpsReviewModel
+@{
+    ViewData["Title"] = ViewBag.Title;
+    var asyncSettings = new Syncfusion.EJ2.Inputs.UploaderAsyncSettings { SaveUrl = @Url.Content("~/Hps/SaveFileHPS"), RemoveUrl = @Url.Content("~/Hps/RemoveFileHPS") };
+}
+
+<div>
+    <div class="form-row">
+        <div class="form-group col-md-12">
+            <div class="form-group col-md-12">
+                <div class="e-float-input e-control-wrapper">
+                    <input id="idpaket" data-val="true" class="e-control e-textbox e-lib" type="text" role="textbox" hidden>
+                    <ejs-combobox id="jenisssh" dataSource="@ViewBag.ssh" cssClass="e-input" placeholder="Pilih Tipe SSH" floatLabelType="Always" ejs-for="@Model.jenisssh" change="onchangeJenis" enabled="@ViewBag.truefalse">
+                        <e-combobox-fields text="Text" value="Value"></e-combobox-fields>
+                    </ejs-combobox>
+                </div>
+                <div class="e-float-input e-control-wrapper">
+                    <ejs-dropdownlist id="idssh" placeholder="Pilih Item" popupHeight="200px" allowFiltering="true" sortOrder="@ViewBag.sortDropdown" filtering="onfilteringSsh"
+                                      query="@ViewBag.querySsh" floatLabelType="Always" enabled="false" change="onchangeItem">
+                        <e-data-manager url="/Hps/SshAll" adaptor="UrlAdaptor" crossDomain="true"></e-data-manager>
+                        <e-dropdownlist-fields text="namassh" value="idssh"></e-dropdownlist-fields>
+                    </ejs-dropdownlist>
+                </div>
+                <div class="e-float-input e-control-wrapper">
+                    <ejs-numerictextbox id="volume" cssClass="e-input" placeholder="Volume" floatLabelType="Always" ejs-for="@Model.volume" format="n0" min="0" enabled="@ViewBag.truefalse" change="calculate"></ejs-numerictextbox>
+                </div>
+                <div class="e-float-input e-control-wrapper">
+                    <ejs-numerictextbox id="pagu" cssClass="e-input" placeholder="Pagu" floatLabelType="Always" ejs-for="@Model.pagu" format="n0" min="0" enabled="@ViewBag.truefalse" change="calculate"></ejs-numerictextbox>
+                </div>
+                <div class="e-float-input e-control-wrapper">
+                    <ejs-numerictextbox id="nilaissh" cssClass="e-input" placeholder="SSH" floatLabelType="Always" ejs-for="@Model.nilaissh" format="n0" min="0" enabled="false"></ejs-numerictextbox>
+                </div>
+                <div class="e-float-input e-control-wrapper">
+                    <ejs-numerictextbox id="hrgpasar" cssClass="e-input" placeholder="Harga Pasar" floatLabelType="Always" ejs-for="@Model.hrgpasar" format="n0" min="0" enabled="@ViewBag.truefalse" change="calculate"></ejs-numerictextbox>
+                </div>
+                <div class="e-float-input e-control-wrapper">
+                    <ejs-numerictextbox id="slshpagu" cssClass="e-input" placeholder="Selisih Pagu" floatLabelType="Always" ejs-for="@Model.slshpagu" format="n0" min="0" enabled="false"></ejs-numerictextbox>
+                </div>
+                <div class="e-float-input e-control-wrapper">
+                    <ejs-numerictextbox id="slshvolume" cssClass="e-input" placeholder="Selisih Volume" floatLabelType="Always" ejs-for="@Model.slshvolume" format="n0" min="0" enabled="false"></ejs-numerictextbox>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ejs-scripts></ejs-scripts>
