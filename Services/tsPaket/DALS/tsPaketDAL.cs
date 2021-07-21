@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TasikmalayaKota.Simpatik.Web.Extensions;
 using TasikmalayaKota.Simpatik.Web.Models;
 using TasikmalayaKota.Simpatik.Web.Services.Middleware.Models;
 using TasikmalayaKota.Simpatik.Web.Services.tsPaket.Interfaces;
@@ -99,6 +100,77 @@ namespace TasikmalayaKota.Simpatik.Web.Services.tsPaket.DALS
             return Result;
         }
 
+        public IList<tsPaketModel> GetAllReview(int spesifikasi, int tipePaket, string opdReview)
+        {
+            List<tsPaketModel> Result = new List<tsPaketModel>();
+            List<enumDataModel> statuspaket = new enumDataModel().Status();
+            try
+            {
+                using (NpgsqlConnection sqlConnection = new NpgsqlConnection(ConnectionString))
+                using (NpgsqlCommand sqlCommand = new NpgsqlCommand("public.stp_tspaketgetall", sqlConnection))
+                {
+                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                    sqlCommand.Parameters.AddWithValue("_opd", opdReview);
+                    sqlCommand.Parameters.AddWithValue("_kebutuhan", spesifikasi);
+                    sqlCommand.Parameters.AddWithValue("_tipe", tipePaket);
+                    sqlCommand.Parameters.AddWithValue("_tahun", int.Parse(TAHUN));
+                    sqlConnection.Open();
+                    using (NpgsqlDataReader dataReader = sqlCommand.ExecuteReader())
+                    {
+                        while (dataReader.Read())
+                        {
+                            Result.Add(new tsPaketModel()
+                            {
+                                //ididetifikasi = (dataReader["rididetifikasi"].GetType() != typeof(DBNull) ? (int)dataReader["rididetifikasi"] : 0),
+                                idpaket = (dataReader["ridpaket"].GetType() != typeof(DBNull) ? (string)dataReader["ridpaket"] : ""),
+                                lembaga = (dataReader["rlembaga"].GetType() != typeof(DBNull) ? ((int)dataReader["rlembaga"]).ToString() : ""),
+                                opd = (dataReader["ropd"].GetType() != typeof(DBNull) ? ((int)dataReader["ropd"]).ToString() : ""),
+                                namaopd = (dataReader["rnamaopd"].GetType() != typeof(DBNull) ? (string)dataReader["rnamaopd"] : ""),
+                                pejabat = (dataReader["rpejabat"].GetType() != typeof(DBNull) ? (string)dataReader["rpejabat"] : ""),
+                                thanggrn = (dataReader["rthanggrn"].GetType() != typeof(DBNull) ? ((int)dataReader["rthanggrn"]).ToString() : ""),
+                                nmpaket = (dataReader["rnmpaket"].GetType() != typeof(DBNull) ? (string)dataReader["rnmpaket"] : ""),
+                                namakonsolidasi = (dataReader["rnamakonsolidasi"].GetType() != typeof(DBNull) ? (string)dataReader["rnamakonsolidasi"] : ""),
+                                volume = (dataReader["rvolume"].GetType() != typeof(DBNull) ? (string)dataReader["rvolume"] : ""),
+                                uraian = (dataReader["ruraianpaket"].GetType() != typeof(DBNull) ? (string)dataReader["ruraianpaket"] : ""),
+                                spesifikasi = (dataReader["rspesifikasipaket"].GetType() != typeof(DBNull) ? (string)dataReader["rspesifikasipaket"] : ""),
+                                prodlmnegeri = (dataReader["rprodlmnegeri"].GetType() != typeof(DBNull) ? (string)dataReader["rprodlmnegeri"] : ""),
+                                ushkecil = (dataReader["rushkecil"].GetType() != typeof(DBNull) ? (string)dataReader["rushkecil"] : ""),
+                                pradpa = (dataReader["rpradpa"].GetType() != typeof(DBNull) ? (string)dataReader["rpradpa"] : ""),
+                                mtdpemilihanstlh = (dataReader["rmtdpemilihanstlh"].GetType() != typeof(DBNull) ? (string)dataReader["rmtdpemilihanstlh"] : ""),
+                                jeniskebutuhan = (dataReader["rjeniskebutuhan"].GetType() != typeof(DBNull) ? (string)dataReader["rjeniskebutuhan"] : ""),
+                                pemanfaatanmulai = (dataReader["rpemanfaatanmulai"].GetType() != typeof(DBNull) ? (DateTime)dataReader["rpemanfaatanmulai"] : new DateTime()),
+                                pemanfaatanakhir = (dataReader["rpemanfaatanakhir"].GetType() != typeof(DBNull) ? (DateTime)dataReader["rpemanfaatanakhir"] : new DateTime()),
+                                pelaksanaanmulai = (dataReader["rpelaksanaanmulai"].GetType() != typeof(DBNull) ? (DateTime)dataReader["rpelaksanaanmulai"] : new DateTime()),
+                                pelaksanaanakhir = (dataReader["rpelaksanaanakhir"].GetType() != typeof(DBNull) ? (DateTime)dataReader["rpelaksanaanakhir"] : new DateTime()),
+                                pemilihanmulai = (dataReader["rpemilihanmulai"].GetType() != typeof(DBNull) ? (DateTime)dataReader["rpemilihanmulai"] : new DateTime()),
+                                pemilihanakhir = (dataReader["rpemilihanakhir"].GetType() != typeof(DBNull) ? (DateTime)dataReader["rpemilihanakhir"] : new DateTime()),
+                                mtdpemilihanstblm = (dataReader["rmtdpemilihanstblm"].GetType() != typeof(DBNull) ? (string)dataReader["rmtdpemilihanstblm"] : ""),
+                                tipeswakelola = (dataReader["rtipeswakelola"].GetType() != typeof(DBNull) ? (string)dataReader["rtipeswakelola"] : ""),
+                                paketstrategis = (dataReader["rpaketstrategis"].GetType() != typeof(DBNull) ? (string)dataReader["rpaketstrategis"] : ""),
+                                penyelengaraswakelola = (dataReader["rpenyelengaraswakelola"].GetType() != typeof(DBNull) ? (int)dataReader["rpenyelengaraswakelola"] : 0),
+                                pagusblm = (dataReader["rpagusblm"].GetType() != typeof(DBNull) ? (int)dataReader["rpagusblm"] : 0),
+                                pagustlh = (dataReader["rpagustlh"].GetType() != typeof(DBNull) ? (int)dataReader["rpagustlh"] : 0),
+                                nilaibelanjalangsung = (!(dataReader["rnilaibelanjalangsung"] is DBNull) ? (int)dataReader["rnilaibelanjalangsung"] : 0),
+                                nilaisirup = (!(dataReader["rnilaisirup"] is DBNull) ? (int)dataReader["rnilaisirup"] : 0),
+                                idkonsolidasi = (dataReader["ridkonsolidasi"].GetType() != typeof(DBNull) ? (string)dataReader["ridkonsolidasi"] : ""),
+                                keteranganmetode = (dataReader["rketeranganmetode"].GetType() != typeof(DBNull) ? (string)dataReader["rketeranganmetode"] : ""),
+                                keteranganpagu = (dataReader["rketeranganpagu"].GetType() != typeof(DBNull) ? (string)dataReader["rketeranganpagu"] : ""),
+                                statuspaket = statuspaket.FirstOrDefault(x => x.Value == (string)dataReader["rstatuspaket"]).Text,
+                                mdfdate = (dataReader["rmdfdate"].GetType() != typeof(DBNull) ? (DateTime)dataReader["rmdfdate"] : new DateTime()),
+                                nilaiselisih = (!(dataReader["rnilaibelanjalangsung"] is DBNull) ? (int)dataReader["rnilaibelanjalangsung"] : 0) - (!(dataReader["rnilaisirup"] is DBNull) ? (int)dataReader["rnilaisirup"] : 0),
+                            });
+                        }
+                    }
+                }
+            }
+            catch (Exception Exception)
+            {
+                throw Exception;
+            }
+
+            return Result;
+        }
+
         public IList<tsPaketModel> GetAllPerencanaan(int spesifikasi, int tipePaket)
         {
             List<tsPaketModel> Result = new List<tsPaketModel>();
@@ -119,7 +191,7 @@ namespace TasikmalayaKota.Simpatik.Web.Services.tsPaket.DALS
                             {
                                 //ididetifikasi = (dataReader["rididetifikasi"].GetType() != typeof(DBNull) ? (int)dataReader["rididetifikasi"] : 0),
                                 lembaga = (dataReader["rlembaga"].GetType() != typeof(DBNull) ? ((int)dataReader["rlembaga"]).ToString() : ""),
-                                opd = (dataReader["ropd"].GetType() != typeof(DBNull) ? ((int)dataReader["ropd"]).ToString() : ""),
+                                opd = (dataReader["ropd"].GetType() != typeof(DBNull) ? BethaCrypto.Encrypt(((int)dataReader["ropd"]).ToString()) : ""),
                                 namaopd = (dataReader["rnamaopd"].GetType() != typeof(DBNull) ? (string)dataReader["rnamaopd"] : ""),
                                 statuspaket = (dataReader["rstatuspaket"].GetType() != typeof(DBNull) ? (string)dataReader["rstatuspaket"] : ""),
                             });

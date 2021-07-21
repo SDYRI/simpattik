@@ -106,7 +106,7 @@
                 dialog.height = 650;
                 dialog.width = "1024px";
                 // change the header of the dialog
-                dialog.header = args.requestType === 'beginEdit' ? 'Edit Identifikasi Kebutuhan Pekerjaan Kontruksi' : 'New Identifikasi Kebutuhan Pekerjaan Kontruksi';
+                dialog.header = args.requestType === 'beginEdit' ? 'Sunting Identifikasi Kebutuhan Pekerjaan Kontruksi' : 'Tambah Identifikasi Kebutuhan Pekerjaan Kontruksi';
                 args.form.ej2_instances[0].addRules('program', { required: [true, 'Silahkan Pilih Program'] });
                 args.form.ej2_instances[0].addRules('kegiatan', { required: [true, 'Silahkan Pilih Kegiatan'] });
                 args.form.ej2_instances[0].addRules('subkegiatan', { required: [true, 'Silahkan Pilih Sub Kegiatan'] });
@@ -227,7 +227,7 @@
                 processResponse(data, ds, query, xhr, request, changes) {
                     if (!ej.base.isNullOrUndefined(data.message)) {
                         if ((data.message.indexOf('BERHASIL DISIMPAN') == -1) && (data.message.indexOf('BERHASIL DIHAPUS') == -1)) {
-                            paramToast('Error Identifikasi Kebutuhan Pekerjaan Kontruksi', 'e-toast-danger', data.message);
+                            paramToast('Kesalahan Identifikasi Kebutuhan Pekerjaan Kontruksi', 'e-toast-danger', data.message);
                         }
                         else {
                             paramToast('Identifikasi Kebutuhan Pekerjaan Kontruksi', 'e-toast-success', data.message);
@@ -305,7 +305,7 @@
                 txtNilai.val("");
             }
             else {
-                paramToast('Error Identifikasi Kebutuhan Pekerjaan Kontruksi', 'e-toast-danger', 'Harap lengkapi data sumber dana');
+                paramToast('Kesalahan Identifikasi Kebutuhan Pekerjaan Kontruksi', 'e-toast-danger', 'Harap lengkapi data sumber dana');
             }
         };
 
@@ -359,7 +359,7 @@
                 txtNilai.val("");
             }
             else {
-                paramToast('Error Identifikasi Kebutuhan Pekerjaan Kontruksi', 'e-toast-danger', 'Harap lengkapi data kondisi');
+                paramToast('Kesalahan Identifikasi Kebutuhan Pekerjaan Kontruksi', 'e-toast-danger', 'Harap lengkapi data kondisi');
             }
         };
 
@@ -413,7 +413,7 @@
                 txtNilai.val("");
             }
             else {
-                paramToast('Error Identifikasi Kebutuhan Pekerjaan Kontruksi', 'e-toast-danger', 'Harap lengkapi data barang material');
+                paramToast('Kesalahan Identifikasi Kebutuhan Pekerjaan Kontruksi', 'e-toast-danger', 'Harap lengkapi data barang material');
             }
         };
 

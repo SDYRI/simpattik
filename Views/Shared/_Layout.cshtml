@@ -71,15 +71,15 @@
                                     }
                                     else
                                     {
-                                        <span class="user-status">All Opd</span>
+                                        <span class="user-status">Semua Opd</span>
                                     }
                                 </div>
                                 @*<span><img class="round" src="~/images/avataruser/hd.jpg" alt="avatar" height="40" width="40"></span>*@
                             </a>
                             <div class="dropdown-menu dropdown-menu-right">
-                                <a class="dropdown-item" asp-area="" asp-controller="UserMaster" asp-action="IndexProfileMe"><i class="feather icon-user"></i> Edit Profile</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="UserMaster" asp-action="IndexProfileMe"><i class="feather icon-user"></i> Sunting Profil</a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" asp-controller="Authentication" asp-action="Logout"><i class="feather icon-power"></i> Logout</a>
+                                <a class="dropdown-item" asp-controller="Authentication" asp-action="Logout"><i class="feather icon-power"></i> Keluar</a>
                             </div>
                         </li>
                     </ul>
@@ -112,10 +112,10 @@
                 </li>
 
                 <li class="nav-item">
-                    <a href="#"><i class="feather icon-layers"></i><span class="menu-title">Perencanaan / Planing</span></a>
+                    <a href="#"><i class="feather icon-layers"></i><span class="menu-title">Perencanaan Pengadaan Barang Jasa</span></a>
                     <ul class="menu-content">
                         <li>
-                            <a href="#"><i class="feather icon-copy"></i><span class="menu-item">Identifikasi Kebutuhan</span></a>
+                            <a href="#"><i class="feather icon-copy"></i><span class="menu-item">Identifikasi Pengadaan Barang Jasa</span></a>
                             <ul class="menu-content">
                                 <li class="@Html.IsSelected(controller: "tsPaket", action: "IndexBarang")">
                                     <a asp-area="" asp-controller="Paket" asp-action="IndexBarang"><i class="feather icon-circle"></i><span class="menu-item">Barang</span></a>
@@ -142,7 +142,7 @@
                 @if (HttpContextAccessor.HttpContext.Session.GetString("Pappk") != "0")
                 {
                     <li class="nav-item">
-                        <a href="#"><i class="feather icon-briefcase"></i><span class="menu-title">Penganggaran / Budgeting</span></a>
+                        <a href="#"><i class="feather icon-briefcase"></i><span class="menu-title">Penganggaran</span></a>
                         <ul class="menu-content">
                             <li class="@Html.IsSelected(controller: "tsPaket", action: "IndexHps")">
                                 <a asp-area="" asp-controller="Paket" asp-action="IndexHps"><i class="feather icon-copy"></i><span class="menu-item">HPS Online</span></a>
@@ -156,10 +156,10 @@
                         <a href="#"><i class="feather icon-folder"></i><span class="menu-title">Pemrograman</span></a>
                         <ul class="menu-content">
                             <li class="@Html.IsSelected(controller: "tsMcpReview", action: "IndexPerencanaan")">
-                                <a asp-area="" asp-controller="Mcp" asp-action="IndexPerencanaanMe"><i class="feather icon-copy"></i><span class="menu-item">Review Perencanaan</span></a>
+                                <a asp-area="" asp-controller="Mcp" asp-action="IndexPerencanaanMe"><i class="feather icon-copy"></i><span class="menu-item">Reviu Perencanaan</span></a>
                             </li>
                             <li class="@Html.IsSelected(controller: "tsMcpReview", action: "IndexPemaketan")">
-                                <a asp-area="" asp-controller="Mcp" asp-action="IndexPemaketanMe"><i class="feather icon-copy"></i><span class="menu-item">Review Pemaketan</span></a>
+                                <a asp-area="" asp-controller="Mcp" asp-action="IndexPemaketanMe"><i class="feather icon-copy"></i><span class="menu-item">Reviu Pemaketan</span></a>
                             </li>
                             <li class="@Html.IsSelected(controller: "tsMcpReview", action: "IndexPaketStartegis")">
                                 <a asp-area="" asp-controller="Mcp" asp-action="IndexPaketStrategisMe"><i class="feather icon-copy"></i><span class="menu-item">Paket Strategis</span></a>
@@ -170,13 +170,13 @@
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a href="#"><i class="feather icon-briefcase"></i><span class="menu-title">Penganggaran / Budgeting</span></a>
+                        <a href="#"><i class="feather icon-briefcase"></i><span class="menu-title">Penganggaran</span></a>
                         <ul class="menu-content">
                             <li class="@Html.IsSelected(controller: "tsPaket", action: "IndexHps")">
                                 <a asp-area="" asp-controller="Paket" asp-action="IndexHps"><i class="feather icon-copy"></i><span class="menu-item">HPS Online</span></a>
                             </li>
                             <li class="@Html.IsSelected(controller: "tsPaket", action: "IndexReviewHps")">
-                                <a asp-area="" asp-controller="Paket" asp-action="IndexReviewHps"><i class="feather icon-copy"></i><span class="menu-item">Review HPS</span></a>
+                                <a asp-area="" asp-controller="Paket" asp-action="IndexReviewHps"><i class="feather icon-copy"></i><span class="menu-item">Reviu HPS</span></a>
                             </li>
                         </ul>
                     </li>
@@ -190,10 +190,13 @@
                                 <a asp-area="" asp-controller="tAllUpload" asp-action="IndexDPA"><i class="feather icon-copy"></i><span class="menu-item">Upload DPA</span></a>
                             </li>
                             <li class="@Html.IsSelected(controller: "tAllUpload", action: "IndexSpekTeknis")">
-                                <a asp-area="" asp-controller="tAllUpload" asp-action="IndexSpekTeknis"><i class="feather icon-copy"></i><span class="menu-item">Upload Spek Teknis</span></a>
+                                <a asp-area="" asp-controller="tAllUpload" asp-action="IndexSpekTeknis"><i class="feather icon-copy"></i><span class="menu-item">Upload Spesifikasi Teknis</span></a>
                             </li>
                             <li class="@Html.IsSelected(controller: "tAllUpload", action: "IndexHpsKontruksi")">
                                 <a asp-area="" asp-controller="tAllUpload" asp-action="IndexHpsKontruksi"><i class="feather icon-copy"></i><span class="menu-item">Upload HPS Kontruksi</span></a>
+                            </li>
+                            <li class="@Html.IsSelected(controller: "tAllUpload", action: "IndexHpsKontruksi")">
+                                <a asp-area="" asp-controller="tAllUpload" asp-action="IndexHpsKontruksi"><i class="feather icon-copy"></i><span class="menu-item">BA Reviu Dokumen Persiapan</span></a>
                             </li>
                         </ul>
                     </li>
@@ -209,7 +212,7 @@
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a href="#"><i class="feather icon-repeat"></i><span class="menu-title">Penyerahan Pekerjaan / Hand Over</span></a>
+                        <a href="#"><i class="feather icon-repeat"></i><span class="menu-title">Penyerahan Pekerjaan</span></a>
                         <ul class="menu-content">
                             <li class="@Html.IsSelected(controller: "tAllUpload", action: "IndexBast")">
                                 <a asp-area="" asp-controller="tAllUpload" asp-action="IndexBast"><i class="feather icon-copy"></i><span class="menu-item">BAST Baku</span></a>
@@ -254,10 +257,10 @@
                 else if (HttpContextAccessor.HttpContext.Session.GetInt32("Tipe") == 2)
                 {
                     <li class="nav-item">
-                        <a href="#"><i class="feather icon-briefcase"></i><span class="menu-title">Penganggaran / Budgeting</span></a>
+                        <a href="#"><i class="feather icon-briefcase"></i><span class="menu-title">Penganggaran</span></a>
                         <ul class="menu-content">
                             <li class="@Html.IsSelected(controller: "tsPaket", action: "IndexReviewHps")">
-                                <a asp-area="" asp-controller="Paket" asp-action="IndexReviewHps"><i class="feather icon-copy"></i><span class="menu-item">Review HPS</span></a>
+                                <a asp-area="" asp-controller="Paket" asp-action="IndexReviewHps"><i class="feather icon-copy"></i><span class="menu-item">Reviu HPS</span></a>
                             </li>
                         </ul>
                     </li>
@@ -282,10 +285,10 @@
                         <a href="#"><i class="feather icon-folder"></i><span class="menu-title">Pemrograman</span></a>
                         <ul class="menu-content">
                             <li class="@Html.IsSelected(controller: "tsMcpReview", action: "IndexPerencanaan")">
-                                <a asp-area="" asp-controller="Mcp" asp-action="IndexPerencanaanMe"><i class="feather icon-copy"></i><span class="menu-item">Review Perencanaan</span></a>
+                                <a asp-area="" asp-controller="Mcp" asp-action="IndexPerencanaanMe"><i class="feather icon-copy"></i><span class="menu-item">Reviu Perencanaan</span></a>
                             </li>
                             <li class="@Html.IsSelected(controller: "tsMcpReview", action: "IndexPemaketan")">
-                                <a asp-area="" asp-controller="Mcp" asp-action="IndexPemaketanMe"><i class="feather icon-copy"></i><span class="menu-item">Review Pemaketan</span></a>
+                                <a asp-area="" asp-controller="Mcp" asp-action="IndexPemaketanMe"><i class="feather icon-copy"></i><span class="menu-item">Reviu Pemaketan</span></a>
                             </li>
                             <li class="@Html.IsSelected(controller: "tsMcpReview", action: "IndexPaketStartegis")">
                                 <a asp-area="" asp-controller="Mcp" asp-action="IndexPaketStrategisMe"><i class="feather icon-copy"></i><span class="menu-item">Paket Strategis</span></a>
@@ -296,13 +299,13 @@
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a href="#"><i class="feather icon-briefcase"></i><span class="menu-title">Penganggaran / Budgeting</span></a>
+                        <a href="#"><i class="feather icon-briefcase"></i><span class="menu-title">Penganggaran</span></a>
                         <ul class="menu-content">
                             <li class="@Html.IsSelected(controller: "tsPaket", action: "IndexHps")">
                                 <a asp-area="" asp-controller="Paket" asp-action="IndexHps"><i class="feather icon-copy"></i><span class="menu-item">HPS Online</span></a>
                             </li>
                             <li class="@Html.IsSelected(controller: "tsPaket", action: "IndexReviewHps")">
-                                <a asp-area="" asp-controller="Paket" asp-action="IndexReviewHps"><i class="feather icon-copy"></i><span class="menu-item">Review HPS</span></a>
+                                <a asp-area="" asp-controller="Paket" asp-action="IndexReviewHps"><i class="feather icon-copy"></i><span class="menu-item">Reviu HPS</span></a>
                             </li>
                         </ul>
                     </li>
@@ -335,7 +338,7 @@
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a href="#"><i class="feather icon-repeat"></i><span class="menu-title">Penyerahan Pekerjaan / Hand Over</span></a>
+                        <a href="#"><i class="feather icon-repeat"></i><span class="menu-title">Penyerahan Pekerjaan</span></a>
                         <ul class="menu-content">
                             <li class="@Html.IsSelected(controller: "tAllUpload", action: "IndexBast")">
                                 <a asp-area="" asp-controller="tAllUpload" asp-action="IndexBast"><i class="feather icon-copy"></i><span class="menu-item">BAST Baku</span></a>
@@ -404,6 +407,43 @@
     <script src="~/lib/core/app-menu.js"></script>
     <script src="~/lib/core/app.js"></script>
     @*<script src="~/lib/scripts/components.js"></script>*@
+    <script type="text/javascript">
+        ej.base.L10n.load({
+            'en-US': {
+                'grid': {
+                    'Add': 'Tambah',
+                    'Edit': 'Sunting',
+                    'Cancel': 'Batal',
+                    'Update': 'Simpan',
+                    'Delete': 'Hapus',
+                    'Search': 'Pencarian',
+                    'Pdfexport': 'Cetak Pdf',
+                    'Excelexport': 'Cetak Excel',
+                    'EmptyRecord': 'Belum ada data yang dapat ditampilkan',
+                    'SaveButton': 'Simpan',
+                    'CancelButton': 'Batal'
+                },
+                'pager': {
+                    'currentPageInfo': '{0} dari {1} halaman',
+                    'totalItemsInfo': '({0} Item)',
+                    'firstPageTooltip': 'Halaman Pertama',
+                    'lastPageTooltip': 'Halaman Terakhir',
+                    'nextPageTooltip': 'Halaman Selanjutnya',
+                    'previousPageTooltip': 'Halaman Sebelumnya',
+                    'nextPagerTooltip': 'Halaman Selanjutnya',
+                    'previousPagerTooltip': 'Halaman Sebelumnya',
+                    'pagerDropDown': 'Item Setiap Halaman',
+                    'pagerAllDropDown': 'Item',
+                    'All': 'Semua'
+                },
+                'datepicker': {
+                    'today': 'Hari Ini'
+                }
+            }
+        });
+        ej.base.setCulture('en-US');
+        //ej.base.setCurrencyCode('USD');
+    </script>
     <!-- END: Theme JS-->
 
 

@@ -47,7 +47,7 @@
                 dialog.height = 650;
                 dialog.width = "750px";
                 // change the header of the dialog
-                dialog.header = args.requestType === 'beginEdit' ? 'Edit HPS' : 'New Hps';
+                dialog.header = args.requestType === 'beginEdit' ? 'Sunting HPS' : 'Tambah Hps';
                 args.form.ej2_instances[0].addRules('filehps', { required: [true, 'Silahkan Upload File Hps Terlebih Dahulu'] });
 
                 let spinner = ej.popups.createSpinner({ target: args.dialog.element });
@@ -100,7 +100,7 @@
                 processResponse(data, ds, query, xhr, request, changes) {
                     if (!ej.base.isNullOrUndefined(data.message)) {
                         if ((data.message.indexOf('BERHASIL DISIMPAN') == -1) && (data.message.indexOf('BERHASIL DIHAPUS') == -1)) {
-                            paramToast('Error Hps', 'e-toast-danger', data.message);
+                            paramToast('Kesalahan Hps', 'e-toast-danger', data.message);
                         }
                         else {
                             paramToast('Hps', 'e-toast-success', data.message);

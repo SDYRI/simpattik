@@ -111,7 +111,7 @@
                 dialog.height = 320;
                 dialog.width = "750px";
                 // change the header of the dialog
-                dialog.header = args.requestType === 'beginEdit' ? 'Edit ' + args.rowData['NamaSubkegiatan'] : 'New Program';
+                dialog.header = args.requestType === 'beginEdit' ? 'Sunting ' + args.rowData['NamaSubkegiatan'] : 'Tambah Program';
                 args.form.ej2_instances[0].addRules('IdUrusan', { required: [true, 'Silahkan Pilih Urusan'] });
                 args.form.ej2_instances[0].addRules('KodeSubkegiatan', { required: [true, 'Silahkan Isi Kode Program'], minLength: [1, 'Kode Program Minimal 1 huruf'] });
                 args.form.ej2_instances[0].addRules('NamaSubkegiatan', { required: [true, 'Silahkan Isi Nama Program'], minLength: [3, 'Nama Program Minimal 3 huruf'] });
@@ -149,7 +149,7 @@
                 processResponse(data, ds, query, xhr, request, changes) {
                     if (!ej.base.isNullOrUndefined(data.message)) {
                         if ((data.message.indexOf('BERHASIL DISIMPAN') == -1) && (data.message.indexOf('BERHASIL DIHAPUS') == -1)) {
-                            paramToast('Error Master Program', 'e-toast-danger', data.message);
+                            paramToast('Kesalahan Master Program', 'e-toast-danger', data.message);
                         }
                         else {
                             paramToast('Master Program', 'e-toast-success', data.message);
@@ -192,7 +192,7 @@
                 dialog.height = 420;
                 dialog.width = "750px";
                 // change the header of the dialog
-                dialog.header = args.requestType === 'beginEdit' ? 'Edit ' + args.rowData['NamaSubkegiatan'] : 'New Kegiatan';
+                dialog.header = args.requestType === 'beginEdit' ? 'Sunting ' + args.rowData['NamaSubkegiatan'] : 'Tambah Kegiatan';
                 args.form.ej2_instances[0].addRules('IdUrusan', { required: [true, 'Silahkan Pilih Urusan'] });
                 args.form.ej2_instances[0].addRules('IdParent', { required: [true, 'Silahkan Pilih Program'] });
                 args.form.ej2_instances[0].addRules('KodeSubkegiatan', { required: [true, 'Silahkan Isi Kode Kegiatan'], minLength: [1, 'Kode Kegiatan Minimal 1 huruf'] });
@@ -236,7 +236,7 @@
                 processResponse(data, ds, query, xhr, request, changes) {
                     if (!ej.base.isNullOrUndefined(data.message)) {
                         if ((data.message.indexOf('BERHASIL DISIMPAN') == -1) && (data.message.indexOf('BERHASIL DIHAPUS') == -1)) {
-                            paramToast('Error Master Kegiatan', 'e-toast-danger', data.message);
+                            paramToast('Kesalahan Master Kegiatan', 'e-toast-danger', data.message);
                         }
                         else {
                             paramToast('Master Kegiatan', 'e-toast-success', data.message);
@@ -290,7 +290,7 @@
                 dialog.height = 580;
                 dialog.width = "750px";
                 // change the header of the dialog
-                dialog.header = args.requestType === 'beginEdit' ? 'Edit ' + args.rowData['NamaSubkegiatan'] : 'New Sub Kegiatan';
+                dialog.header = args.requestType === 'beginEdit' ? 'Sunting ' + args.rowData['NamaSubkegiatan'] : 'Tambah Sub Kegiatan';
                 args.form.ej2_instances[0].addRules('IdUrusan', { required: [true, 'Silahkan Pilih Urusan'] });
                 args.form.ej2_instances[0].addRules('IdParentU', { required: [true, 'Silahkan Pilih Program'] });
                 args.form.ej2_instances[0].addRules('IdParent', { required: [true, 'Silahkan Pilih Kegiatan'] });
@@ -345,7 +345,7 @@
                 processResponse(data, ds, query, xhr, request, changes) {
                     if (!ej.base.isNullOrUndefined(data.message)) {
                         if ((data.message.indexOf('BERHASIL DISIMPAN') == -1) && (data.message.indexOf('BERHASIL DIHAPUS') == -1)) {
-                            paramToast('Error Master Sub Kegiatan', 'e-toast-danger', data.message);
+                            paramToast('Kesalahan Master Sub Kegiatan', 'e-toast-danger', data.message);
                         }
                         else {
                             paramToast('Master Sub Kegiatan', 'e-toast-success', data.message);

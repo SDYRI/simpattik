@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TasikmalayaKota.Simpatik.Web.Extensions;
 
 namespace TasikmalayaKota.Simpatik.Web.Controllers
 {
@@ -26,11 +27,17 @@ namespace TasikmalayaKota.Simpatik.Web.Controllers
         [Route("IndexPerencanaanDetailMe/{id}")]
         public IActionResult IndexPerencanaanDetail(string id)
         {
+            string opd = BethaCrypto.Decrypt(id);
             ViewBag.Title = "Review Perencanaan Detail";
             ViewBag.headerPenyedia = new TabHeader { Text = "Penyedia" };
             ViewBag.headerSwakelola = new TabHeader { Text = "Swakelola" };
-            ViewBag.queryPenyedia = "new ej.data.Query().addParams('jeniskebutuhan', 1).addParams('tipePaket', 1)";
-            ViewBag.querySwakelola = "new ej.data.Query().addParams('jeniskebutuhan', 1).addParams('tipePaket', 2)";
+            ViewBag.queryPenyedia = "new ej.data.Query().addParams('jeniskebutuhan', 1).addParams('tipePaket', 1).addParams('opd', '" + opd + "')";
+            ViewBag.querySwakelola = "new ej.data.Query().addParams('jeniskebutuhan', 1).addParams('tipePaket', 2).addParams('opd', '" + opd + "')";
+            
+            ViewBag.identifikasiBarang = "/Identifikasi/IndexBarang/";
+            ViewBag.identifikasiPekerjaan = "/Identifikasi/IndexPekerjaan/";
+            ViewBag.identifikasiKonsultasi = "/Identifikasi/IndexKonsultasi/";
+            ViewBag.identifikasiLainnya = "/Identifikasi/IndexLainnya/";
             return View();
         }
 

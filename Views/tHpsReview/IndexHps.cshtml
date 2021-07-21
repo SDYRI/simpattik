@@ -16,7 +16,7 @@
     <e-grid-columns>
         <e-grid-column field="idhps" headerText="idhps" isPrimaryKey="true" isIdentity="true" visible="false"></e-grid-column>
         <e-grid-column field="namapaket" headerText="Nama Paket"></e-grid-column>
-        <e-grid-column field="namaopd" headerText="OPD" width="200"></e-grid-column>
+        <e-grid-column field="namaopd" headerText="SUB OPD" width="200"></e-grid-column>
         <e-grid-column field="hargassh" headerText="SSH" width="200"></e-grid-column>
         <e-grid-column field="harga" headerText="Harga Pasar" width="200"></e-grid-column>
     </e-grid-columns>
@@ -47,7 +47,7 @@
                 dialog.height = 750;
                 dialog.width = "750px";
                 // change the header of the dialog
-                dialog.header = args.requestType === 'beginEdit' ? 'Edit ' + @ViewBag.Title : 'New Hps';
+                dialog.header = args.requestType === 'beginEdit' ? 'Sunting ' + @ViewBag.Title : 'Tambah Hps';
 
                 let spinner = ej.popups.createSpinner({ target: args.dialog.element });
                 ej.popups.showSpinner(args.dialog.element);
@@ -99,7 +99,7 @@
                 processResponse(data, ds, query, xhr, request, changes) {
                     if (!ej.base.isNullOrUndefined(data.message)) {
                         if (data.message.indexOf('BERHASIL DISIMPAN') == -1) {
-                            paramToast('Error Hps', 'e-toast-danger', data.message);
+                            paramToast('Kesalahan Hps', 'e-toast-danger', data.message);
                         }
                         else {
                             paramToast('Hps', 'e-toast-success', data.message);

@@ -88,7 +88,7 @@
                 dialog.height = 300;
                 dialog.width = "750px";
                 // change the header of the dialog
-                dialog.header = args.requestType === 'beginEdit' ? 'Edit ' + args.rowData['NamaSubUrusan'] : 'New Urusan';
+                dialog.header = args.requestType === 'beginEdit' ? 'Sunting ' + args.rowData['NamaSubUrusan'] : 'Tambah Urusan';
                 args.form.ej2_instances[0].addRules('KodeSubUrusan', { required: [true, 'Silahkan Isi Kode Urusan'], minLength: [1, 'Kode Urusan Minimal 1 huruf'] });
                 args.form.ej2_instances[0].addRules('NamaSubUrusan', { required: [true, 'Silahkan Isi Nama Urusan'], minLength: [3, 'Nama Urusan Minimal 3 huruf'] });
 
@@ -120,7 +120,7 @@
                 processResponse(data, ds, query, xhr, request, changes) {
                     if (!ej.base.isNullOrUndefined(data.message)) {
                         if ((data.message.indexOf('BERHASIL DISIMPAN') == -1) && (data.message.indexOf('BERHASIL DIHAPUS') == -1)) {
-                            paramToast('Error Master Urusan', 'e-toast-danger', data.message);
+                            paramToast('Kesalahan Master Urusan', 'e-toast-danger', data.message);
                         }
                         else {
                             paramToast('Master Urusan', 'e-toast-success', data.message);
@@ -163,7 +163,7 @@
                 dialog.height = 380;
                 dialog.width = "750px";
                 // change the header of the dialog
-                dialog.header = args.requestType === 'beginEdit' ? 'Edit ' + args.rowData['NamaSubUrusan'] : 'New Sub Urusan';
+                dialog.header = args.requestType === 'beginEdit' ? 'Sunting ' + args.rowData['NamaSubUrusan'] : 'Tambah Sub Urusan';
                 args.form.ej2_instances[0].addRules('IdParent', { required: [true, 'Silahkan Pilih Urusan'] });
                 args.form.ej2_instances[0].addRules('KodeSubUrusan', { required: [true, 'Silahkan Isi Kode SubUrusan'], minLength: [1, 'Kode Sub Urusan Minimal 1 huruf'] });
                 args.form.ej2_instances[0].addRules('NamaSubUrusan', { required: [true, 'Silahkan Isi Nama SubUrusan'], minLength: [3, 'Nama Sub Urusan Minimal 3 huruf'] });
@@ -201,7 +201,7 @@
                 processResponse(data, ds, query, xhr, request, changes) {
                     if (!ej.base.isNullOrUndefined(data.message)) {
                         if ((data.message.indexOf('BERHASIL DISIMPAN') == -1) && (data.message.indexOf('BERHASIL DIHAPUS') == -1)) {
-                            paramToast('Error Master SubUrusan', 'e-toast-danger', data.message);
+                            paramToast('Kesalahan Master SubUrusan', 'e-toast-danger', data.message);
                         }
                         else {
                             paramToast('Master SubUrusan', 'e-toast-success', data.message);

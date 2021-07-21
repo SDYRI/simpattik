@@ -58,7 +58,7 @@
                 dialog.height = 600;
                 dialog.width = "750px";
                 // change the header of the dialog
-                dialog.header = args.requestType === 'beginEdit' ? 'Edit ' + args.rowData['NamaUser'] : 'New User';
+                dialog.header = args.requestType === 'beginEdit' ? 'Sunting ' + args.rowData['NamaUser'] : 'Tambah User';
                 args.form.ej2_instances[0].addRules('NamaUser', { required: [true, 'Silahkan Isi Nama User'], minLength: [3, 'Nama User Minimal 3 huruf'] });
                 args.form.ej2_instances[0].addRules('UserName', { required: [true, 'Silahkan Isi User Name'], minLength: [3, 'User Name Minimal 3 huruf'] });
                 args.form.ej2_instances[0].addRules('ListIdOpdUser', { required: [true, 'Silahkan Pilih OPD'] });
@@ -106,7 +106,7 @@
                 processResponse(data, ds, query, xhr, request, changes) {
                     if (!ej.base.isNullOrUndefined(data.message)) {
                         if ((data.message.indexOf('BERHASIL DISIMPAN') == -1) && (data.message.indexOf('BERHASIL DIHAPUS') == -1)) {
-                            paramToast('Error Master User', 'e-toast-danger', data.message);
+                            paramToast('Kesalahan Master User', 'e-toast-danger', data.message);
                         }
                         else {
                             paramToast('Master User', 'e-toast-success', data.message);
