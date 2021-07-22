@@ -15,7 +15,7 @@
     <e-grid-selectionsettings type="Single"></e-grid-selectionsettings>
     <e-grid-columns>
         <e-grid-column field="opd" headerText="opd" isPrimaryKey="true" isIdentity="true" visible="false"></e-grid-column>
-        <e-grid-column field="namaopd" headerText="OPD" width="200" allowEditing="false"></e-grid-column>
+        <e-grid-column field="namaopd" headerText="SUB OPD" width="200" allowEditing="false"></e-grid-column>
         <e-grid-column field="statuspaket" width="200" headerText="Status" allowEditing="false"></e-grid-column>
         <e-grid-column headerText="Manage Records" width="100" commands="detailPaket"></e-grid-column>
     </e-grid-columns>
@@ -45,8 +45,8 @@
             'id-ID': {
                 'grid': {
                     'EmptyRecord': 'Belum ada paket yang dapat ditampilkan',
-                    'SaveButton': 'Review',
-                    'CancelButton': 'Cancel Review'
+                    'SaveButton': 'Reviu',
+                    'CancelButton': 'Batal Reviu'
                 }
             }
         });
@@ -60,7 +60,7 @@
 
             if (args.requestType === 'beginEdit' || args.requestType === 'add') {
                 var dialog = args.dialog;
-                dialog.header = args.requestType === 'beginEdit' ? 'Review Perencanaan <br />' + args.rowData['namaopd'] : 'New Review';
+                dialog.header = args.requestType === 'beginEdit' ? 'Review Perencanaan <br />' + args.rowData['namaopd'] : 'Tambah Review';
             }
             else if (args.requestType === 'save') {
                 grid.refresh();
@@ -73,7 +73,7 @@
                 processResponse(data, ds, query, xhr, request, changes) {
                     if (!ej.base.isNullOrUndefined(data.message)) {
                         if ((data.message.indexOf('BERHASIL DISIMPAN') == -1) && (data.message.indexOf('BERHASIL DIHAPUS') == -1)) {
-                            paramToast('Error Review Perencanaan', 'e-toast-danger', data.message);
+                            paramToast('Kesalahan Review Perencanaan', 'e-toast-danger', data.message);
                         }
                         else {
                             paramToast('Review Perencanaan', 'e-toast-success', data.message);

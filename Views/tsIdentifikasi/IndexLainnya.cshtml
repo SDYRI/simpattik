@@ -84,7 +84,7 @@
                 dialog.height = 650;
                 dialog.width = "1024px";
                 // change the header of the dialog
-                dialog.header = args.requestType === 'beginEdit' ? 'Edit Identifikasi Kebutuhan Jasa Lainnya' : 'New Identifikasi Kebutuhan Jasa Lainnya';
+                dialog.header = args.requestType === 'beginEdit' ? 'Sunting Identifikasi Kebutuhan Jasa Lainnya' : 'Tambah Identifikasi Kebutuhan Jasa Lainnya';
                 args.form.ej2_instances[0].addRules('program', { required: [true, 'Silahkan Pilih Program'] });
                 args.form.ej2_instances[0].addRules('kegiatan', { required: [true, 'Silahkan Pilih Kegiatan'] });
                 args.form.ej2_instances[0].addRules('subkegiatan', { required: [true, 'Silahkan Pilih Sub Kegiatan'] });
@@ -203,7 +203,7 @@
                 processResponse(data, ds, query, xhr, request, changes) {
                     if (!ej.base.isNullOrUndefined(data.message)) {
                         if ((data.message.indexOf('BERHASIL DISIMPAN') == -1) && (data.message.indexOf('BERHASIL DIHAPUS') == -1)) {
-                            paramToast('Error Identifikasi Kebutuhan Jasa Lainnya', 'e-toast-danger', data.message);
+                            paramToast('Kesalahan Identifikasi Kebutuhan Jasa Lainnya', 'e-toast-danger', data.message);
                         }
                         else {
                             paramToast('Identifikasi Kebutuhan Jasa Lainnya', 'e-toast-success', data.message);
@@ -281,7 +281,7 @@
                 txtNilai.val("");
             }
             else {
-                paramToast('Error Identifikasi Kebutuhan Jasa Lainnya', 'e-toast-danger', 'Harap lengkapi data sumber dana');
+                paramToast('Kesalahan Identifikasi Kebutuhan Jasa Lainnya', 'e-toast-danger', 'Harap lengkapi data sumber dana');
             }
         };
 

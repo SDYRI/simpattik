@@ -66,7 +66,7 @@ namespace simpat1k.Controllers
         [Route("PaketReview")]
         public IActionResult UrlPaketReview([FromBody] tsPaketModel dm)
         {
-            IEnumerable DataSource = _tsPaket.GetAll(0, 0);
+            IEnumerable DataSource = _tsPaket.GetAllReview(0, dm.tipePaket, dm.opd);
             DataOperations operation = new DataOperations();
             if (dm.Search != null && dm.Search.Count > 0)
             {
@@ -425,6 +425,7 @@ namespace simpat1k.Controllers
             else
             {
                 ViewBag.truefalseket = false;
+                ViewBag.truefalserevisi = false;
             }
 
             if ((HttpContext.Session.GetInt32("Tipe") == 3) || (HttpContext.Session.GetInt32("Tipe") == 5))

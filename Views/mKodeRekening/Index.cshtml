@@ -173,7 +173,7 @@
                 dialog.height = 220;
                 dialog.width = "750px";
                 // change the header of the dialog
-                dialog.header = args.requestType === 'beginEdit' ? 'Edit ' + args.rowData['NamaSubRincian'] : 'New Akun';
+                dialog.header = args.requestType === 'beginEdit' ? 'Sunting ' + args.rowData['NamaSubRincian'] : 'Tambah Akun';
                 args.form.ej2_instances[0].addRules('KodeSubRincian', { required: [true, 'Silahkan Isi Kode Akun'], minLength: [1, 'Kode Akun Minimal 1 huruf'] });
                 args.form.ej2_instances[0].addRules('NamaSubRincian', { required: [true, 'Silahkan Isi Nama Akun'], minLength: [3, 'Nama Akun Minimal 3 huruf'] });
 
@@ -205,7 +205,7 @@
                 processResponse(data, ds, query, xhr, request, changes) {
                     if (!ej.base.isNullOrUndefined(data.message)) {
                         if ((data.message.indexOf('BERHASIL DISIMPAN') == -1) && (data.message.indexOf('BERHASIL DIHAPUS') == -1)) {
-                            paramToast('Error Master Akun', 'e-toast-danger', data.message);
+                            paramToast('Kesalahan Master Akun', 'e-toast-danger', data.message);
                         }
                         else {
                             paramToast('Master Akun', 'e-toast-success', data.message);
@@ -236,7 +236,7 @@
                 dialog.height = 320;
                 dialog.width = "750px";
                 // change the header of the dialog
-                dialog.header = args.requestType === 'beginEdit' ? 'Edit ' + args.rowData['NamaSubRincian'] : 'New Kelompok';
+                dialog.header = args.requestType === 'beginEdit' ? 'Sunting ' + args.rowData['NamaSubRincian'] : 'Tambah Kelompok';
                 args.form.ej2_instances[0].addRules('IdParent', { required: [true, 'Silahkan Pilih Akun'] });
                 args.form.ej2_instances[0].addRules('KodeSubRincian', { required: [true, 'Silahkan Isi Kode Kelompok'], minLength: [1, 'Kode Kelompok Minimal 1 huruf'] });
                 args.form.ej2_instances[0].addRules('NamaSubRincian', { required: [true, 'Silahkan Isi Nama Kelompok'], minLength: [3, 'Nama Kelompok Minimal 3 huruf'] });
@@ -274,7 +274,7 @@
                 processResponse(data, ds, query, xhr, request, changes) {
                     if (!ej.base.isNullOrUndefined(data.message)) {
                         if ((data.message.indexOf('BERHASIL DISIMPAN') == -1) && (data.message.indexOf('BERHASIL DIHAPUS') == -1)) {
-                            paramToast('Error Master Kelompok', 'e-toast-danger', data.message);
+                            paramToast('Kesalahan Master Kelompok', 'e-toast-danger', data.message);
                         }
                         else {
                             paramToast('Master Kelompok', 'e-toast-success', data.message);
@@ -317,7 +317,7 @@
                 dialog.height = 420;
                 dialog.width = "750px";
                 // change the header of the dialog
-                dialog.header = args.requestType === 'beginEdit' ? 'Edit ' + args.rowData['NamaSubRincian'] : 'New Jenis';
+                dialog.header = args.requestType === 'beginEdit' ? 'Sunting ' + args.rowData['NamaSubRincian'] : 'Tambah Jenis';
                 args.form.ej2_instances[0].addRules('IdParentA', { required: [true, 'Silahkan Pilih Akun'] });
                 args.form.ej2_instances[0].addRules('IdParent', { required: [true, 'Silahkan Pilih Kelompok'] });
                 args.form.ej2_instances[0].addRules('KodeSubRincian', { required: [true, 'Silahkan Isi Kode Jenis'], minLength: [1, 'Kode Jenis Minimal 1 huruf'] });
@@ -361,7 +361,7 @@
                 processResponse(data, ds, query, xhr, request, changes) {
                     if (!ej.base.isNullOrUndefined(data.message)) {
                         if ((data.message.indexOf('BERHASIL DISIMPAN') == -1) && (data.message.indexOf('BERHASIL DIHAPUS') == -1)) {
-                            paramToast('Error Master Jenis', 'e-toast-danger', data.message);
+                            paramToast('Kesalahan Master Jenis', 'e-toast-danger', data.message);
                         }
                         else {
                             paramToast('Master Jenis', 'e-toast-success', data.message);
@@ -415,7 +415,7 @@
                 dialog.height = 520;
                 dialog.width = "750px";
                 // change the header of the dialog
-                dialog.header = args.requestType === 'beginEdit' ? 'Edit ' + args.rowData['NamaSubRincian'] : 'New Objek';
+                dialog.header = args.requestType === 'beginEdit' ? 'Sunting ' + args.rowData['NamaSubRincian'] : 'Tambah Objek';
                 args.form.ej2_instances[0].addRules('IdParentA', { required: [true, 'Silahkan Pilih Akun'] });
                 args.form.ej2_instances[0].addRules('IdParentK', { required: [true, 'Silahkan Pilih Kelompok'] });
                 args.form.ej2_instances[0].addRules('IdParent', { required: [true, 'Silahkan Pilih Jenis'] });
@@ -465,7 +465,7 @@
                 processResponse(data, ds, query, xhr, request, changes) {
                     if (!ej.base.isNullOrUndefined(data.message)) {
                         if ((data.message.indexOf('BERHASIL DISIMPAN') == -1) && (data.message.indexOf('BERHASIL DIHAPUS') == -1)) {
-                            paramToast('Error Master Objek', 'e-toast-danger', data.message);
+                            paramToast('Kesalahan Master Objek', 'e-toast-danger', data.message);
                         }
                         else {
                             paramToast('Master Objek', 'e-toast-success', data.message);
@@ -529,7 +529,7 @@
                 dialog.height = 620;
                 dialog.width = "750px";
                 // change the header of the dialog
-                dialog.header = args.requestType === 'beginEdit' ? 'Edit ' + args.rowData['NamaSubRincian'] : 'New Rincian';
+                dialog.header = args.requestType === 'beginEdit' ? 'Sunting ' + args.rowData['NamaSubRincian'] : 'Tambah Rincian';
                 args.form.ej2_instances[0].addRules('IdParentA', { required: [true, 'Silahkan Pilih Akun'] });
                 args.form.ej2_instances[0].addRules('IdParentK', { required: [true, 'Silahkan Pilih Kelompok'] });
                 args.form.ej2_instances[0].addRules('IdParentJ', { required: [true, 'Silahkan Pilih Jenis'] });
@@ -585,7 +585,7 @@
                 processResponse(data, ds, query, xhr, request, changes) {
                     if (!ej.base.isNullOrUndefined(data.message)) {
                         if ((data.message.indexOf('BERHASIL DISIMPAN') == -1) && (data.message.indexOf('BERHASIL DIHAPUS') == -1)) {
-                            paramToast('Error Master Rincian', 'e-toast-danger', data.message);
+                            paramToast('Kesalahan Master Rincian', 'e-toast-danger', data.message);
                         }
                         else {
                             paramToast('Master Rincian', 'e-toast-success', data.message);
@@ -649,7 +649,7 @@
                 dialog.height = 720;
                 dialog.width = "750px";
                 // change the header of the dialog
-                dialog.header = args.requestType === 'beginEdit' ? 'Edit ' + args.rowData['NamaSubRincian'] : 'New Sub Rincian';
+                dialog.header = args.requestType === 'beginEdit' ? 'Sunting ' + args.rowData['NamaSubRincian'] : 'Tambah Sub Rincian';
                 args.form.ej2_instances[0].addRules('IdParentA', { required: [true, 'Silahkan Pilih Akun'] });
                 args.form.ej2_instances[0].addRules('IdParentK', { required: [true, 'Silahkan Pilih Kelompok'] });
                 args.form.ej2_instances[0].addRules('IdParentJ', { required: [true, 'Silahkan Pilih Jenis'] });
@@ -711,7 +711,7 @@
                 processResponse(data, ds, query, xhr, request, changes) {
                     if (!ej.base.isNullOrUndefined(data.message)) {
                         if ((data.message.indexOf('BERHASIL DISIMPAN') == -1) && (data.message.indexOf('BERHASIL DIHAPUS') == -1)) {
-                            paramToast('Error Master Sub Rincian', 'e-toast-danger', data.message);
+                            paramToast('Kesalahan Master Sub Rincian', 'e-toast-danger', data.message);
                         }
                         else {
                             paramToast('Master Sub Rincian', 'e-toast-success', data.message);

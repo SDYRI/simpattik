@@ -25,6 +25,7 @@ namespace TasikmalayaKota.Simpatik.Web.Services.mKodeRekening.Models
         public string NamaObjek { get; set; }
         public string NamaRincian { get; set; }
         public string NamaSubRincian { get; set; }
+        public string ViewKodeRekening { get; set; }
 
         public int IdParentA { get; set; }
         public int IdParentK { get; set; }

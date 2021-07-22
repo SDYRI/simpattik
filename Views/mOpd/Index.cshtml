@@ -89,7 +89,7 @@
                 dialog.height = 320;
                 dialog.width = "750px";
                 // change the header of the dialog
-                dialog.header = args.requestType === 'beginEdit' ? 'Edit ' + args.rowData['NamaSubOpd'] : 'New OPD';
+                dialog.header = args.requestType === 'beginEdit' ? 'Sunting ' + args.rowData['NamaSubOpd'] : 'Tambah OPD';
                 args.form.ej2_instances[0].addRules('ListIdUrusan', { required: [true, 'Silahkan Pilih Urusan'] });
                 args.form.ej2_instances[0].addRules('KodeSubOpd', { required: [true, 'Silahkan Isi Kode OPD'], minLength: [1, 'Kode OPD Minimal 1 huruf'] });
                 args.form.ej2_instances[0].addRules('NamaSubOpd', { required: [true, 'Silahkan Isi Nama OPD'], minLength: [3, 'Nama OPD Minimal 3 huruf'] });
@@ -128,7 +128,7 @@
                 processResponse(data, ds, query, xhr, request, changes) {
                     if (!ej.base.isNullOrUndefined(data.message)) {
                         if ((data.message.indexOf('BERHASIL DISIMPAN') == -1) && (data.message.indexOf('BERHASIL DIHAPUS') == -1)) {
-                            paramToast('Error Master Opd', 'e-toast-danger', data.message);
+                            paramToast('Kesalahan Master Opd', 'e-toast-danger', data.message);
                         }
                         else {
                             paramToast('Master Opd', 'e-toast-success', data.message);
@@ -171,7 +171,7 @@
                 dialog.height = 420;
                 dialog.width = "750px";
                 // change the header of the dialog
-                dialog.header = args.requestType === 'beginEdit' ? 'Edit ' + args.rowData['NamaSubOpd'] : 'New Sub Opd';
+                dialog.header = args.requestType === 'beginEdit' ? 'Sunting ' + args.rowData['NamaSubOpd'] : 'Tambah Sub Opd';
                 args.form.ej2_instances[0].addRules('ListIdUrusan', { required: [true, 'Silahkan Pilih Urusan'] });
                 args.form.ej2_instances[0].addRules('IdParent', { required: [true, 'Silahkan Pilih OPD'] });
                 args.form.ej2_instances[0].addRules('KodeSubOpd', { required: [true, 'Silahkan Isi Kode Sub Opd'], minLength: [1, 'Kode Sub OPD Minimal 1 huruf'] });
@@ -215,7 +215,7 @@
                 processResponse(data, ds, query, xhr, request, changes) {
                     if (!ej.base.isNullOrUndefined(data.message)) {
                         if ((data.message.indexOf('BERHASIL DISIMPAN') == -1) && (data.message.indexOf('BERHASIL DIHAPUS') == -1)) {
-                            paramToast('Error Master Sub Opd', 'e-toast-danger', data.message);
+                            paramToast('Kesalahan Master Sub Opd', 'e-toast-danger', data.message);
                         }
                         else {
                             paramToast('Master Sub Opd', 'e-toast-success', data.message);

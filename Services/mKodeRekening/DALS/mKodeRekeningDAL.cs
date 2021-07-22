@@ -53,6 +53,7 @@ namespace TasikmalayaKota.Simpatik.Web.Services.mKodeRekening.DALS
                                 NamaObjek = (dataReader["namaobjek"].GetType() != typeof(DBNull) ? (string)dataReader["namaobjek"] : ""),
                                 NamaRincian = (dataReader["namarincian"].GetType() != typeof(DBNull) ? (string)dataReader["namarincian"] : ""),
                                 NamaSubRincian = (dataReader["namasubrincian"].GetType() != typeof(DBNull) ? (string)dataReader["namasubrincian"] : ""),
+                                ViewKodeRekening = (dataReader["viewkoderekening"].GetType() != typeof(DBNull) ? (string)dataReader["viewkoderekening"] : ""),
                                 IdParent = (dataReader["idparent"].GetType() != typeof(DBNull) ? (int)dataReader["idparent"] : 0),
                                 IdPosisi = (dataReader["idposisi"].GetType() != typeof(DBNull) ? (int)dataReader["idposisi"] : 0),
                             });

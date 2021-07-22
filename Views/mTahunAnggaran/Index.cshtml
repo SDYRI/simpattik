@@ -39,7 +39,7 @@
                 var dialog = args.dialog;
                 dialog.height = 235;
                 // change the header of the dialog
-                dialog.header = args.requestType === 'beginEdit' ? 'Edit ' + args.rowData['TahunAnggaran'] : 'New Tahun Anggaran';
+                dialog.header = args.requestType === 'beginEdit' ? 'Sunting ' + args.rowData['TahunAnggaran'] : 'Tambah Tahun Anggaran';
                 args.form.ej2_instances[0].addRules('TahunAnggaran', { required: [true, 'Silahkan Isi Tahun Anggaran'], minLength: [4, 'Tahun Anggaran 4 huruf'], maxLength: [4, 'Tahun Anggaran 4 huruf'] });
 
                 let spinner = ej.popups.createSpinner({ target: args.dialog.element });
@@ -92,7 +92,7 @@
                 processResponse(data, ds, query, xhr, request, changes) {
                     if (!ej.base.isNullOrUndefined(data.message)) {
                         if (data.message.indexOf('BERHASIL DISIMPAN') == -1) {
-                            paramToast('Error Tahun Anggaran', 'e-toast-danger', data.message);
+                            paramToast('Kesalahan Tahun Anggaran', 'e-toast-danger', data.message);
                         }
                         else {
                             paramToast('Tahun Anggaran', 'e-toast-success', data.message);

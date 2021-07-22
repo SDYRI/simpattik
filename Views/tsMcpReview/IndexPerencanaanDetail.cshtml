@@ -20,9 +20,9 @@
         <e-grid-selectionsettings type="Single"></e-grid-selectionsettings>
         <e-grid-columns>
             <e-grid-column field="idpaket" headerText="idpaket" isPrimaryKey="true" isIdentity="true" visible="false"></e-grid-column>
-            <e-grid-column field="namaopd" headerText="OPD" width="200"></e-grid-column>
+            <e-grid-column field="namaopd" headerText="SUB OPD" width="200"></e-grid-column>
             <e-grid-column field="nmpaket" headerText="Nama Paket"></e-grid-column>
-            <e-grid-column field="pagusblm" width="150" headerText="Pagu"></e-grid-column>
+            <e-grid-column field="pagusblm" width="150" headerText="Pagu" format="n0"></e-grid-column>
             <e-grid-column field="statuspaket" width="150" headerText="Status"></e-grid-column>
             <e-grid-column headerText="Manage Records" width="150" commands="detailPaket"></e-grid-column>
         </e-grid-columns>
@@ -39,9 +39,9 @@
         <e-grid-selectionsettings type="Single"></e-grid-selectionsettings>
         <e-grid-columns>
             <e-grid-column field="idpaket" headerText="idpaket" isPrimaryKey="true" isIdentity="true" visible="false"></e-grid-column>
-            <e-grid-column field="namaopd" headerText="OPD" width="200"></e-grid-column>
+            <e-grid-column field="namaopd" headerText="SUB OPD" width="200"></e-grid-column>
             <e-grid-column field="nmpaket" headerText="Nama Paket"></e-grid-column>
-            <e-grid-column field="pagusblm" width="150" headerText="Pagu"></e-grid-column>
+            <e-grid-column field="pagusblm" width="150" headerText="Pagu" format="n0"></e-grid-column>
             <e-grid-column field="statuspaket" width="150" headerText="Status"></e-grid-column>
             <e-grid-column headerText="Manage Records" width="150" commands="detailPaket"></e-grid-column>
         </e-grid-columns>
@@ -88,7 +88,18 @@
 
         function cmdDetail(args) {
             //alert(JSON.parse(JSON.stringify(args.rowData)).ididetifikasi)
-            window.location.href = "@ViewBag.identifikasi" + JSON.parse(JSON.stringify(args.rowData)).idpaket;
+            if (JSON.parse(JSON.stringify(args.rowData)).jeniskebutuhan == 1) {
+                window.location.href = "@ViewBag.identifikasiBarang" + JSON.parse(JSON.stringify(args.rowData)).idpaket;
+            }
+            else if (JSON.parse(JSON.stringify(args.rowData)).jeniskebutuhan == 2) {
+                window.location.href = "@ViewBag.identifikasiPekerjaan" + JSON.parse(JSON.stringify(args.rowData)).idpaket;
+            }
+            else if (JSON.parse(JSON.stringify(args.rowData)).jeniskebutuhan == 3) {
+                window.location.href = "@ViewBag.identifikasiKonsultasi" + JSON.parse(JSON.stringify(args.rowData)).idpaket;
+            }
+            else if (JSON.parse(JSON.stringify(args.rowData)).jeniskebutuhan == 4) {
+                window.location.href = "@ViewBag.identifikasiLainnya" + JSON.parse(JSON.stringify(args.rowData)).idpaket;
+            }
         }
 
         //#region penyedia
@@ -100,7 +111,7 @@
                 dialog.height = 750;
                 dialog.width = "1024px";
                 // change the header of the dialog
-                dialog.header = args.requestType === 'beginEdit' ? 'Edit Paket Penyedia @ViewBag.Title' : 'New Paket Penyedia @ViewBag.Title';
+                dialog.header = args.requestType === 'beginEdit' ? 'Sunting Paket Penyedia @ViewBag.Title' : 'Tambah Paket Penyedia @ViewBag.Title';
                 args.form.ej2_instances[0].addRules('pemanfaatanmulai', { required: [true, 'Silahkan Pilih Waktu Pemanfaatan'] });
                 args.form.ej2_instances[0].addRules('pemanfaatanakhir', { required: [true, 'Silahkan Pilih Waktu Pemanfaatan'] });
                 args.form.ej2_instances[0].addRules('pelaksanaanmulai', { required: [true, 'Silahkan Pilih Waktu Pelaksanaan'] });
@@ -146,7 +157,7 @@
                 processResponse(data, ds, query, xhr, request, changes) {
                     if (!ej.base.isNullOrUndefined(data.message)) {
                         if ((data.message.indexOf('BERHASIL DISIMPAN') == -1) && (data.message.indexOf('BERHASIL DIHAPUS') == -1)) {
-                            paramToast('Error Paket Penyedia @ViewBag.Title', 'e-toast-danger', data.message);
+                            paramToast('Kesalahan Paket Penyedia @ViewBag.Title', 'e-toast-danger', data.message);
                         }
                         else {
                             paramToast('Paket Penyedia @ViewBag.Title', 'e-toast-success', data.message);
@@ -161,7 +172,7 @@
             }
             var grid = document.querySelector('#GridPenyedia').ej2_instances[0];
             grid.dataSource = new ej.data.DataManager({
-                url: "/Paket/PaketAll",
+                url: "/Paket/PaketReview",
                 crudUrl: "/Paket/PaketCrud",
                 adaptor: new CustomAdaptor()
             });
@@ -177,7 +188,7 @@
                 dialog.height = 750;
                 dialog.width = "1024px";
                 // change the header of the dialog
-                dialog.header = args.requestType === 'beginEdit' ? 'Edit Paket Swakelola @ViewBag.Title' : 'New Paket Swakelola @ViewBag.Title' ;
+                dialog.header = args.requestType === 'beginEdit' ? 'Sunting Paket Swakelola @ViewBag.Title' : 'Tambah Paket Swakelola @ViewBag.Title' ;
                 args.form.ej2_instances[0].addRules('pelaksanaanmulai', { required: [true, 'Silahkan Pilih Waktu Pelaksanaan'] });
                 args.form.ej2_instances[0].addRules('pelaksanaanakhir', { required: [true, 'Silahkan Pilih Waktu Pelaksanaan'] });
 
@@ -214,7 +225,7 @@
                 processResponse(data, ds, query, xhr, request, changes) {
                     if (!ej.base.isNullOrUndefined(data.message)) {
                         if ((data.message.indexOf('BERHASIL DISIMPAN') == -1) && (data.message.indexOf('BERHASIL DIHAPUS') == -1)) {
-                            paramToast('Error Paket Swakelola @ViewBag.Title', 'e-toast-danger', data.message);
+                            paramToast('Kesalahan Paket Swakelola @ViewBag.Title', 'e-toast-danger', data.message);
                         }
                         else {
                             paramToast('Paket Swakelola @ViewBag.Title', 'e-toast-success', data.message);
