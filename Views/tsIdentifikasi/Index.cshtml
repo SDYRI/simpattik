@@ -2,31 +2,87 @@
     ViewData["Title"] = ViewBag.Title;
     List<object> toolbarItems = new List<object>();
     toolbarItems.Add("Search");
-    toolbarItems.Add(new { text = "Cetak Penetapan", tooltipText = "Cetak Penetapan", prefixIcon = "feather icon-printer", id = "cetak" });
+    toolbarItems.Add(new { text = "Cetak Laporan", tooltipText = "Cetak Laporan", prefixIcon = "feather icon-printer", id = "cetakLap" });
+    if ((HttpContextAccessor.HttpContext.Session.GetInt32("Tipe") == 3) && (HttpContextAccessor.HttpContext.Session.GetString("Pappk") != "3"))
+    {
+        toolbarItems.Add(new { text = "Cetak Penetapan", tooltipText = "Cetak Penetapan", prefixIcon = "feather icon-printer", id = "cetak" });
+    }
 }
 <ejs-grid id="Grid" height="490" allowPaging="true" allowResizing="true" allowSorting="true" allowReordering="true" allowGrouping="false"
-          toolbar="toolbarItems" allowFiltering="true" allowSelection="true" toolbarClick="toolbarAction">
+          toolbar="toolbarItems" allowFiltering="true" allowSelection="true" allowExcelExport="true" toolbarClick="toolbarAction" query="@ViewBag.queryTipePaket"
+          excelExportComplete="excelExportComplete">
     <e-data-manager url="/Identifikasi/IdentifikasiPengadaanPenetapan" adaptor="UrlAdaptor"></e-data-manager>
     <e-grid-pagesettings pageSize="12" />
     <e-grid-filterSettings type="Menu"></e-grid-filterSettings>
     <e-grid-selectionsettings type="Single"></e-grid-selectionsettings>
     <e-grid-columns>
         <e-grid-column field="ididetifikasi" headerText="ididetifikasi" isPrimaryKey="true" isIdentity="true" visible="false"></e-grid-column>
-        <e-grid-column field="opd" headerText="SUB OPD"></e-grid-column>
-        <e-grid-column field="jeniskebutuhan" headerText="Jenis Kebutuhan"></e-grid-column>
-        <e-grid-column field="namabrgkerj" headerText="Nama"></e-grid-column>
-        <e-grid-column field="nilaisumberdana" headerText="Nilai" width="200"></e-grid-column>
-        <e-grid-column field="valuesumberdana" headerText="Sumberdana" width="200"></e-grid-column>
+        <e-grid-column field="opd" headerText="OPD"></e-grid-column>
+        <e-grid-column field="subopd" headerText="SUB OPD"></e-grid-column>
+        <e-grid-column field="jeniskebutuhan" headerText="Jenis Pengadaan"></e-grid-column>
+        <e-grid-column field="tipepaketnama" headerText="Cara Pengadaan"></e-grid-column>
+        <e-grid-column field="namabrgkerj" headerText="Nama Barang/ Jasa"></e-grid-column>
+        <e-grid-column field="nilaisumberdana" headerText="Anggaran Pengadaan" width="200"></e-grid-column>
+        <e-grid-column field="valuesumberdana" headerText="Sumber Dana" width="200"></e-grid-column>
+        <e-grid-column field="pelaksanaanmulai" headerText="Pelaksanaan Mulai"></e-grid-column>
+        <e-grid-column field="pelaksanaanakhir" headerText="Pelaksanaan Akhir"></e-grid-column>
     </e-grid-columns>
 </ejs-grid>
 
+<form action="/Identifikasi/ExcelExportIdentifikasi" id="formexcelexport" method="post">
+    <input type="hidden" name="GridModel" id="excelexportitem" />
+</form>
 
 @section SectionControls{
     <script type="text/javascript">
         function toolbarAction(args) {
+            var gridInstance = document.getElementById("Grid").ej2_instances[0];
+            gridInstance.columns[1].visible = false;
+            var sorted = [];
+            var where;
+            var headerText = [];
+            var fields = [];
+            var format = [];
+            var gridquery = gridInstance.getDataModule().generateQuery(true).queries;
+            for (var i = 0; i < gridquery.length; i++) {
+                if (gridquery[i].fn == "onSortBy") {
+                    sorted.push({ name: gridquery[i].e.fieldName, direction: gridquery[i].e.direction })
+                }
+                if (gridquery[i].fn == "onWhere") {
+                    where = [gridquery[i].e];
+                }
+            }
+            var visibleCols = this.getVisibleColumns();
+            for (var i = 0; i < visibleCols.length; i++) {
+                headerText[i] = visibleCols[i].headerText;
+                fields[i] = visibleCols[i].field;
+                format[i] = visibleCols[i].format;
+
+            }
+            var columns = JSON.stringify({ sorted: sorted, where: where, fields: fields, columnsName: headerText, format: format });
+
             if (args.item.id === 'cetak') {
                 window.open('@Url.Action("SuratPenetapan", "Identifikasi")');
             }
+
+            if (args.item.id === 'cetakLap') {
+                //window.open('@Url.Action("SuratPenetapan", "Identifikasi")');
+                //var exportProperties = {
+                //    fileName: "LaporanPerencanaan.xlsx"
+                //};
+
+                document.getElementById("excelexportitem").value = columns;
+                var form = document.querySelector("#formexcelexport");
+                form.submit();
+                args.cancel = true;
+
+                this.excelExport(exportProperties);
+            }
+        }
+
+        function excelExportComplete(args) {
+            this.columns[1].visible = true;
+
         }
     </script>
 }

@@ -132,14 +132,31 @@ namespace TasikmalayaKota.Simpatik.Web.Services.Middleware.Models
             tipeswa.Add(new enumDataModel { Text = "Tipe 4", Value = "4" });
             return tipeswa;
         }
+        public List<enumDataModel> Satuan()
+        {
+            List<enumDataModel> satuan = new List<enumDataModel>();
+            satuan.Add(new enumDataModel { Text = "", Value = "0" });
+            satuan.Add(new enumDataModel { Text = "Unit", Value = "1" });
+            satuan.Add(new enumDataModel { Text = "Orang", Value = "2" });
+            satuan.Add(new enumDataModel { Text = "Pax", Value = "3" });
+            satuan.Add(new enumDataModel { Text = "Rim", Value = "4" });
+            satuan.Add(new enumDataModel { Text = "Buah", Value = "5" });
+            satuan.Add(new enumDataModel { Text = "Paket", Value = "6" });
+            satuan.Add(new enumDataModel { Text = "Laporan", Value = "7" });
+            satuan.Add(new enumDataModel { Text = "Dokumen", Value = "8" });
+            satuan.Add(new enumDataModel { Text = "Layanan", Value = "9" });
+            satuan.Add(new enumDataModel { Text = "Stel", Value = "10" });
+            satuan.Add(new enumDataModel { Text = "Bulan", Value = "11" });
+            return satuan;
+        }
         public List<enumDataModel> JenisKebutuhan()
         {
-            List<enumDataModel> tipeswa = new List<enumDataModel>();
-            tipeswa.Add(new enumDataModel { Text = "Barang", Value = "1" });
-            tipeswa.Add(new enumDataModel { Text = "Pekerjaan Kontruksi", Value = "2" });
-            tipeswa.Add(new enumDataModel { Text = "Jasa Konsultasi", Value = "3" });
-            tipeswa.Add(new enumDataModel { Text = "Jasa Lainnya", Value = "4" });
-            return tipeswa;
+            List<enumDataModel> jnskbthan = new List<enumDataModel>();
+            jnskbthan.Add(new enumDataModel { Text = "Barang", Value = "1" });
+            jnskbthan.Add(new enumDataModel { Text = "Pekerjaan Kontruksi", Value = "2" });
+            jnskbthan.Add(new enumDataModel { Text = "Jasa Konsultasi", Value = "3" });
+            jnskbthan.Add(new enumDataModel { Text = "Jasa Lainnya", Value = "4" });
+            return jnskbthan;
         }
         public List<enumDataModel> TipeUser()
         {

@@ -131,12 +131,20 @@
                                 </li>
                             </ul>
                         </li>
-                        @if ((HttpContextAccessor.HttpContext.Session.GetInt32("Tipe") == 3) && (HttpContextAccessor.HttpContext.Session.GetString("Pappk") != "3"))
-                        {
-                            <li class="@Html.IsSelected(controller: "tsIdentifikasi", action: "Index")">
-                                <a asp-area="" asp-controller="Identifikasi" asp-action="IndexMe"><i class="feather icon-copy"></i><span class="menu-item">Penetapan Perencanaan Pengadaan</span></a>
-                            </li>
-                        }
+                        <li>
+                            <a href="#"><i class="feather icon-copy"></i><span class="menu-item">Laporan Perencanaan Pengadaan</span></a>
+                            <ul class="menu-content">
+                                <li class="@Html.IsSelected(controller: "tsIdentifikasi", action: "Index")">
+                                    <a asp-area="" asp-controller="Identifikasi" asp-action="IndexMe"><i class="feather icon-circle"></i><span class="menu-item">Rekap Perencanaan Pengadaan</span></a>
+                                </li>
+                                @*<li class="@Html.IsSelected(controller: "tsIdentifikasi", action: "IndexLapPenyedia")">
+                                    <a asp-area="" asp-controller="Identifikasi" asp-action="IndexLapPenyedia"><i class="feather icon-circle"></i><span class="menu-item">Rekap Pengadaan Penyedia</span></a>
+                                </li>
+                                <li class="@Html.IsSelected(controller: "tsIdentifikasi", action: "IndexLapSwakelola")">
+                                    <a asp-area="" asp-controller="Identifikasi" asp-action="IndexLapSwakelola"><i class="feather icon-circle"></i><span class="menu-item">Rekap Pengadaan Swakelola</span></a>
+                                </li>*@
+                            </ul>
+                        </li>
                     </ul>
                 </li>
                 @if (HttpContextAccessor.HttpContext.Session.GetString("Pappk") != "0")
