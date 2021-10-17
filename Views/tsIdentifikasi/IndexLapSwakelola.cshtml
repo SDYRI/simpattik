@@ -1,0 +1,104 @@
+﻿@{
+    ViewData["Title"] = ViewBag.Title;
+    List<object> toolbarItems = new List<object>();
+    toolbarItems.Add("Search");
+    toolbarItems.Add(new { text = "Cetak Laporan", tooltipText = "Cetak Laporan", prefixIcon = "feather icon-printer", id = "cetak" });
+}
+<ejs-grid id="Grid" height="490" allowPaging="true" allowResizing="true" allowSorting="true" allowReordering="true" allowGrouping="false"
+          toolbar="toolbarItems" allowFiltering="true" allowSelection="true" allowExcelExport="true" toolbarClick="toolbarAction" query="@ViewBag.queryTipePaket" excelExportComplete="excelExportComplete">
+    <e-data-manager url="/Identifikasi/IdentifikasiPengadaanPenetapan" adaptor="UrlAdaptor"></e-data-manager>
+    <e-grid-pagesettings pageSize="12" />
+    <e-grid-filterSettings type="Menu"></e-grid-filterSettings>
+    <e-grid-selectionsettings type="Single"></e-grid-selectionsettings>
+    <e-grid-columns>
+        <e-grid-column field="ididetifikasi" headerText="ididetifikasi" isPrimaryKey="true" isIdentity="true" visible="false"></e-grid-column>
+        <e-grid-column field="opd" headerText="OPD"></e-grid-column>
+        <e-grid-column field="subopd" headerText="SUB OPD"></e-grid-column>
+        <e-grid-column field="jeniskebutuhan" headerText="Jenis Pengadaan"></e-grid-column>
+        <e-grid-column field="namabrgkerj" headerText="Nama Barang/ Jasa"></e-grid-column>
+        <e-grid-column field="tipeswakelolapaket" headerText="Tipe Swakelola"></e-grid-column>
+        <e-grid-column field="nilaisumberdana" headerText="Anggaran Pengadaan" width="200"></e-grid-column>
+        <e-grid-column field="valuesumberdana" headerText="Sumber Dana" width="200"></e-grid-column>
+        <e-grid-column field="pelaksanaanmulai" headerText="Pelaksanaan Mulai"></e-grid-column>
+        <e-grid-column field="pelaksanaanakhir" headerText="Pelaksanaan Akhir"></e-grid-column>
+    </e-grid-columns>
+</ejs-grid>
+
+<form action="/Identifikasi/ExcelExportIdentifikasiSwakelola" id="formexcelexport" method="post">
+    <input type="hidden" name="GridModel" id="excelexportitem" />
+</form>
+
+@section SectionControls{
+    <script type="text/javascript">
+        function toolbarAction(args) {
+            var gridInstance = document.getElementById("Grid").ej2_instances[0];
+            gridInstance.columns[1].visible = false;
+            var sorted = [];
+            var where;
+            var headerText = [];
+            var fields = [];
+            var format = [];
+            var gridquery = gridInstance.getDataModule().generateQuery(true).queries;
+            for (var i = 0; i < gridquery.length; i++) {
+                if (gridquery[i].fn == "onSortBy") {
+                    sorted.push({ name: gridquery[i].e.fieldName, direction: gridquery[i].e.direction })
+                }
+                if (gridquery[i].fn == "onWhere") {
+                    where = [gridquery[i].e];
+                }
+            }
+            var visibleCols = this.getVisibleColumns(); 
+            for (var i = 0; i < visibleCols.length; i++) {
+                headerText[i] = visibleCols[i].headerText;
+                fields[i] = visibleCols[i].field;
+                format[i] = visibleCols[i].format;
+
+            }
+            var columns = JSON.stringify({ sorted: sorted, where: where, fields: fields, columnsName: headerText, format: format });
+
+            if (args.item.id === 'cetak') {
+                //window.open('@Url.Action("SuratPenetapan", "Identifikasi")');
+                //var exportProperties = {
+                //    fileName: "LaporanSwakelola.xlsx",
+                //    header: {
+                //        headerRows: 9,
+                //        rows: [
+                //            { cells: [{ colSpan: 9, value: "Rencana Umum Pengadaan Swakelola", style: { fontSize: 15, hAlign: 'Center', bold: true, } }] },
+                //            {
+                //                index: 3, //row index 
+                //                cells: [
+                //                    { index: 1, colSpan: 2, value: 'Grid Action', style: { fontColor: '#C67878', fontSize: 15, bold: true } },
+                //                    { index: 5, value: 'Filter Type', style: { fontColor: '#C67878', bold: true }, width: 150 }
+                //                ]
+                //            },
+                //            { cells: [{ colSpan: 1, value: "Pemerintah Daerah", style: { fontSize: 13, hAlign: 'Left', bold: true, } }] },
+                //            { cells: [{ colSpan: 1, value: "Perangkat Daerah", style: { fontSize: 13, hAlign: 'Left', bold: true, } }] },
+                //            { cells: [{ colSpan: 1, value: "Tahun Anggaran", style: { fontSize: 13, hAlign: 'Left', bold: true, } }] },
+                //            { cells: [{ colSpan: 1, value: "Program", style: { fontSize: 13, hAlign: 'Left', bold: true, } }] },
+                //            { cells: [{ colSpan: 1, value: "Kegiatan", style: { fontSize: 13, hAlign: 'Left', bold: true, } }] },
+                //            { cells: [{ colSpan: 1, value: "Sub Kegiatan", style: { fontSize: 13, hAlign: 'Left', bold: true, } }] }
+                //        ]
+                //    },
+                //    //footer: {
+                //    //    footerRows: 4,
+                //    //    rows: [
+                //    //        { cells: [{ colSpan: 4, value: "Northwind Traders", style: { hAlign: 'Center', bold: true, } }] }
+                //    //    ]
+                //    //},
+                //};
+
+                //this.excelExport(exportProperties);
+
+                document.getElementById("excelexportitem").value = columns;
+                var form = document.querySelector("#formexcelexport");
+                form.submit();
+                args.cancel = true;
+            }
+        }
+
+        function excelExportComplete(args) {
+            this.columns[1].visible = true;
+
+        }
+    </script>
+}

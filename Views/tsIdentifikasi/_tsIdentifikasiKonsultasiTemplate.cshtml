@@ -87,7 +87,7 @@
                         {
                             <tr>
                                 <td>@sumberdana.smbrdn</td>
-                                <td>@sumberdana.nilai.ToString("n0")</td>
+                                <td>@sumberdana.nilai.ToString("n0").Replace(",", ".")</td>
                                 @if (ViewBag.truefalse)
                                 {
                                     <td><button type="button" class="btn btn-icon rounded-circle btn-outline-primary" onclick="btnSumberDanaRemove(this)"><i class="feather icon-minus-circle"></i></button></td>
@@ -132,7 +132,7 @@
                 <ejs-numerictextbox id="perkiraanbiaya" cssClass="e-input" placeholder="Perkiraan Biaya" floatLabelType="Always" ejs-for="@Model.perkiraanbiaya" format="n0" min="0" enabled="@ViewBag.truefalse"></ejs-numerictextbox>
             </div>
             <div class="e-float-input e-control-wrapper">
-                <ejs-combobox id="ketersediaanusaha" dataSource="@ViewBag.banyakterbatas" cssClass="e-input" placeholder="Ketersediaan Pelaku Usaha" floatLabelType="Always" ejs-for="@Model.ketersediaanusaha" enabled="@ViewBag.truefalse">
+                <ejs-combobox id="ketersediaanusaha" dataSource="@ViewBag.banyakterbatas" cssClass="e-input" placeholder="Ketersediaan Pelaku Usaha" floatLabelType="Always" AllowCustom="false" ejs-for="@Model.ketersediaanusaha" enabled="@ViewBag.truefalse">
                     <e-combobox-fields text="Text" value="Value"></e-combobox-fields>
                 </ejs-combobox>
             </div>

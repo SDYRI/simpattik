@@ -1,13 +1,15 @@
 ﻿@{
     ViewData["Title"] = ViewBag.Title;
     List<string> Toolbar = HttpContextAccessor.HttpContext.Session.GetComplexData<List<string>>("ToolbarMaster");
+    List<object> downloadSK = new List<object>();
+    downloadSK.Add(new { type = "userstatus", buttonOption = new { content = " Lihat SK", cssClass = "e-flat e-details feather icon-layers" } }); // custom
 }
 <ejs-toast id="toast_default" created="createdToasObj">
     <e-toast-position X="Right"></e-toast-position>
 </ejs-toast>
 
 <ejs-grid id="Grid" actionComplete="CompleteAction" height="490" allowPaging="true" allowResizing="true" allowSorting="true" allowReordering="true" allowGrouping="false" 
-          toolbar="@Toolbar" allowFiltering="true" allowSelection="true" created="createdGrid">
+          toolbar="@Toolbar" allowFiltering="true" allowSelection="true" created="createdGrid" commandClick="cmdDetail">
     <e-grid-pagesettings pageSize="12" />
     <e-grid-filterSettings type="Menu"></e-grid-filterSettings>
     <e-grid-editSettings allowAdding="true" allowDeleting="true" allowEditing="true" mode="Dialog" template='#templatedialog' showDeleteConfirmDialog="true"></e-grid-editSettings>
@@ -17,7 +19,8 @@
         <e-grid-column field="NamaUser" width="150" headerText="Nama User"></e-grid-column>
         <e-grid-column field="UserName" headerText="User Name" width="100"></e-grid-column>
         <e-grid-column field="PappkUser" headerText="PA/ PPK" width="100"></e-grid-column>
-        <e-grid-column field="ListOpdUser" headerText="Opd"></e-grid-column>
+        <e-grid-column field="ListOpdUser" headerText="Opd/ Sub Opd"></e-grid-column>
+        <e-grid-column headerText="Download" width="150" commands="downloadSK"></e-grid-column>
     </e-grid-columns>
 </ejs-grid>
 
@@ -43,11 +46,38 @@
             e.updateData(OPDObj.dataSource, query);
         }
 
+        function cmdDetail(args) {
+            //var pdfViewer = document.getElementById('pdfViewer').ej2_instances[0];
+            //pdfViewer.load("@ViewBag.pathDownload" + JSON.parse(JSON.stringify(args.rowData)).FileSK, null);
+            //window.location.href = "@ViewBag.pathDownload" + JSON.parse(JSON.stringify(args.rowData)).FileSK;
+            window.open('@Url.Action("DownloadFileSk", "UserMaster")?fileskname=' + JSON.parse(JSON.stringify(args.rowData)).FileSK);
+            //window.open('@Url.Action("Default", "PdfViewer")');
+        }
+
         function onUploadFilesSKSuccess(args) {
+            console.log(args);
             if (args.operation === 'upload') {
                 var inputElement = document.getElementById('FileSK');
                 inputElement.value = args.file.name;
             }
+        }
+
+        function create_UUID() {
+            var dt = new Date().getTime();
+            var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+                var r = (dt + Math.random() * 16) % 16 | 0;
+                dt = Math.floor(dt / 16);
+                return (c == 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+            });
+            return uuid;
+        }
+
+        function onFileSelected(args) {
+            for (i = 0; i < args.filesData.length; i++) {
+                //args.filesData[i].name = args.filesData[i].name.substring(0, args.filesData[i].name.lastIndexOf('.')) + "-modified" + '.pdf';
+                args.filesData[i].name = create_UUID() + '.pdf';
+            }
+            args.isModified = true;
         }
 
         function CompleteAction(args) {

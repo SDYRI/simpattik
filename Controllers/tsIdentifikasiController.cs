@@ -19,6 +19,9 @@ using System.Security.Cryptography;
 using Syncfusion.XlsIO.Implementation;
 using Syncfusion.Pdf;
 using Syncfusion.XlsIORenderer;
+using System.Runtime.InteropServices.ComTypes;
+using Microsoft.Extensions.Hosting;
+using Microsoft.AspNetCore.Hosting;
 
 namespace simpat1k.Controllers
 {
@@ -26,15 +29,19 @@ namespace simpat1k.Controllers
     [Route("Identifikasi")]
     public class tsIdentifikasiController : Controller
     {
+        private readonly IWebHostEnvironment HostEnvironment;
         private readonly ItsIdentifikasi _tsIdentifikasi;
         private readonly string OPD;
         private readonly string TA;
+        private readonly string _Folder;
 
-        public tsIdentifikasiController(ItsIdentifikasi tsIdentifikasi, IHttpContextAccessor httpContextAccessor)
+        public tsIdentifikasiController(ItsIdentifikasi tsIdentifikasi, IHttpContextAccessor httpContextAccessor, IWebHostEnvironment hostEnvironment)
         {
+            HostEnvironment = hostEnvironment;
             _tsIdentifikasi = tsIdentifikasi;
             OPD = httpContextAccessor.HttpContext.Session.GetString("Opd");
             TA = httpContextAccessor.HttpContext.Session.GetString("TahunAktif");
+            _Folder = "filesrtpenetapan/";
         }
         public class ExportModel : DataManagerRequest  // Create the model class to Deserialize the GridModel 
         {
@@ -156,7 +163,7 @@ namespace simpat1k.Controllers
                 }
             }
 
-            if (HttpContext.Session.GetInt32("Tipe") == 3)
+            if ((HttpContext.Session.GetInt32("Tipe") == 3) && (HttpContext.Session.GetString("Pappk") == "3"))
             {
                 if (value.Action == "insert")
                 {
@@ -176,7 +183,7 @@ namespace simpat1k.Controllers
             }
             else
             {
-                msg = "BERHASIL DISIMPAN";
+                msg = "GAGAL DISIMPAN";
             }
 
             return Json(new { data = value.Value, message = msg });
@@ -190,6 +197,7 @@ namespace simpat1k.Controllers
         {
             ViewBag.Title = "Identifikasi Kebutuhan Barang";
             ViewBag.queryIdentifikasi = "new ej.data.Query().addParams('jeniskebutuhan', 1).addParams('idpaket', '" + id + "')";
+            ViewBag.LinkPaket = "IndexBarang";
             return View();
         }
 
@@ -240,6 +248,7 @@ namespace simpat1k.Controllers
         {
             ViewBag.Title = "Identifikasi Kebutuhan Pekerjaan Kontruksi";
             ViewBag.queryIdentifikasi = "new ej.data.Query().addParams('jeniskebutuhan', 2).addParams('idpaket', '" + id + "')";
+            ViewBag.LinkPaket = "IndexPekerjaan";
             return View();
         }
 
@@ -293,6 +302,7 @@ namespace simpat1k.Controllers
         {
             ViewBag.Title = "Identifikasi Kebutuhan Jasa Konsultasi";
             ViewBag.queryIdentifikasi = "new ej.data.Query().addParams('jeniskebutuhan', 3).addParams('idpaket', '" + id + "')";
+            ViewBag.LinkPaket = "IndexKonsultasi";
             return View();
         }
 
@@ -343,6 +353,7 @@ namespace simpat1k.Controllers
         {
             ViewBag.Title = "Identifikasi Kebutuhan Jasa Lainnya";
             ViewBag.queryIdentifikasi = "new ej.data.Query().addParams('jeniskebutuhan', 4).addParams('idpaket', '" + id + "')";
+            ViewBag.LinkPaket = "IndexLainnya";
             return View();
         }
 
@@ -405,13 +416,13 @@ namespace simpat1k.Controllers
                 IWorksheet worksheet = workbook.Worksheets[0];
 
                 //Adding a picture
-                FileStream imageStream = new FileStream("wwwroot\\images\\logo\\Logo_Kota_Tasikmalaya.png", FileMode.Open, FileAccess.Read);
+                FileStream imageStream = new FileStream("wwwroot/images/logo/Logo_Kota_Tasikmalaya.png", FileMode.Open, FileAccess.Read);
                 IPictureShape shape = worksheet.Pictures.AddPicture(1, 1, imageStream);
 
                 //Positioning a Picture
                 shape.Top = 10;
-                //shape.Left = 325;
-                shape.Left = 255;
+                shape.Left = 305;
+                //shape.Left = 255;
 
                 //Re-sizing a Picture
                 shape.Height = 100;
@@ -427,16 +438,16 @@ namespace simpat1k.Controllers
                 int t = 0;
 
                 //Apply style to headers 
-                worksheet["A7:F7"].Merge();
+                worksheet["A7:G7"].Merge();
                 foreach (var opd in reports.GroupBy(c => new { c.opd }).Select(sg => new { sg.Key }))
                 {
                     worksheet["A7"].Text = opd.Key.opd.ToUpper();
                 }
 
-                worksheet["A10:F10"].Merge();
+                worksheet["A10:G10"].Merge();
                 worksheet["A10"].Text = "SURAT PENETAPAN";
 
-                worksheet["A11:F11"].Merge();
+                worksheet["A11:G11"].Merge();
                 worksheet["A11"].Text = "Nomor: ...........................................";
 
                 worksheet["A" + m].Text = "Menimbang";
@@ -444,8 +455,8 @@ namespace simpat1k.Controllers
                 foreach (var menimbang in reports.Where(rs => rs.tipedasar.Contains("menimbang")).Select(mb => new { mb.urutdasar, mb.ketdasar }))
                 {
                     worksheet["C" + m].Text = menimbang.urutdasar;
-                    worksheet.Range["F" + m].ColumnWidth = 50;
-                    worksheet["D" + m + ":" + "F" + m].Merge();
+                    //worksheet.Range["F" + m].ColumnWidth = 50;
+                    worksheet["D" + m + ":" + "G" + m].Merge();
                     worksheet["D" + m].Text = menimbang.ketdasar;
                     worksheet.Range["D" + m].RowHeight = 35;
 
@@ -459,8 +470,8 @@ namespace simpat1k.Controllers
                 foreach (var dasar in reports.Where(rs => rs.tipedasar.Contains("dasar")).Select(mb => new { mb.urutdasar, mb.ketdasar }))
                 {
                     worksheet["C" + m].Text = dasar.urutdasar;
-                    worksheet.Range["F" + m].ColumnWidth = 50;
-                    worksheet["D" + m + ":" + "F" + m].Merge();
+                    //worksheet.Range["F" + m].ColumnWidth = 50;
+                    worksheet["D" + m + ":" + "G" + m].Merge();
                     worksheet["D" + m].Text = dasar.ketdasar;
                     worksheet.Range["D" + m].RowHeight = 35;
 
@@ -469,7 +480,7 @@ namespace simpat1k.Controllers
 
                 t = m + 1;
 
-                worksheet["A" + t + ":" + "F" + t].Merge();
+                worksheet["A" + t + ":" + "G" + t].Merge();
                 worksheet["A" + t].Text = "MENETAPKAN";
 
                 m = t + 2;
@@ -477,25 +488,25 @@ namespace simpat1k.Controllers
                 {
                     worksheet["A" + m].Text = "Kesatu";
                     worksheet["B" + m].Text = ":";
-                    worksheet["C" + m + ":" + "F" + m].Merge();
-                    worksheet["C" + m].Text = "Perencanaan Pengadaan Barang/Jasa Pemerintah dalam lingkup (Satuan Kerja / Perangkat Daerah) Tahun Anggaran " + tahun.Key.tahun.ToString();
-                    worksheet["C" + m].RowHeight = 35;
+                    worksheet["C" + m + ":" + "G" + m].Merge();
+                    worksheet["C" + m].Text = String.Format("Perencanaan Pengadaan Barang/Jasa Pemerintah dalam lingkup (Satuan Kerja / Perangkat Daerah) Tahun Anggaran " + tahun.Key.tahun.ToString());
+                    worksheet.Range["C" + m].RowHeight = 35;
 
                     m = m + 1;
 
                     worksheet["A" + m].Text = "Kedua";
                     worksheet["B" + m].Text = ":";
-                    worksheet["C" + m + ":" + "F" + m].Merge();
-                    worksheet["C" + m].Text = "Hasil Perencanaan Pengadaan dituangkan ke dalam Rencana Umum Pengadaan Barang / Jasa Pemerintah Tahun Anggaran " + tahun.Key.tahun.ToString();
-                    worksheet["C" + m].RowHeight = 35;
+                    worksheet["C" + m + ":" + "G" + m].Merge();
+                    worksheet["C" + m].Text = String.Format("Hasil Perencanaan Pengadaan dituangkan ke dalam Rencana Umum Pengadaan Barang / Jasa Pemerintah Tahun Anggaran " + tahun.Key.tahun.ToString());
+                    worksheet.Range["C" + m].RowHeight = 35;
 
                     m = m + 1;
 
                     worksheet["A" + m].Text = "Ketiga";
                     worksheet["B" + m].Text = ":";
-                    worksheet["C" + m + ":" + "F" + m].Merge();
+                    worksheet["C" + m + ":" + "G" + m].Merge();
                     worksheet["C" + m].Text = "Penetapan ini mulai berlaku pada tanggal ditetapkan. ";
-                    worksheet["C" + m].RowHeight = 35;
+                    worksheet.Range["C" + m].RowHeight = 35;
                 }
 
                 m = m + 1;
@@ -503,18 +514,25 @@ namespace simpat1k.Controllers
                 //Footer Laporan
                 foreach (var footr in reports.GroupBy(c => new { c.namappk, c.nipppk }).Select(sg => new { sg.Key }))
                 {
-                    worksheet["F" + (m + 2)].Text = "TASIKMALAYA, " + formatindonesia();
-                    worksheet["F" + (m + 3)].Text = "Pengguna Anggaran,";
-                    worksheet["F" + (m + 8)].Text = footr.Key.namappk.ToUpper();
-                    worksheet["F" + (m + 9)].Text = "NIP. " + footr.Key.nipppk.ToUpper();
+                    //worksheet["F" + (m + 2) + ":" + "H" + (m + 2)].Merge();
+                    worksheet["G" + (m + 2)].Text = "TASIKMALAYA, " + formatindonesia();
+                    //worksheet["F" + (m + 3) + ":" + "H" + (m + 3)].Merge();
+                    worksheet["G" + (m + 3)].Text = "Pengguna Anggaran,";
+                    //worksheet["F" + (m + 8) + ":" + "H" + (m + 8)].Merge();
+                    worksheet["G" + (m + 8)].Text = footr.Key.namappk.ToUpper();
+                    //worksheet["F" + (m + 9) + ":" + "H" + (m + 9)].Merge();
+                    worksheet["G" + (m + 9)].Text = "NIP. " + footr.Key.nipppk.ToUpper();
                 }
 
-                IStyle menetapkanStyle = workbook.Styles.Add("MenetapkanStyle");
-                menetapkanStyle.BeginUpdate();
-                menetapkanStyle.VerticalAlignment = ExcelVAlign.VAlignTop;
-                menetapkanStyle.WrapText = true;
-                menetapkanStyle.EndUpdate();
-                worksheet.Range["C" + a + ":" + "F" + m].CellStyle = menetapkanStyle;
+
+                IStyle menimbangStyle = workbook.Styles.Add("MenimbangStyle");
+                menimbangStyle.BeginUpdate();
+                menimbangStyle.VerticalAlignment = ExcelVAlign.VAlignTop;
+                menimbangStyle.HorizontalAlignment = ExcelHAlign.HAlignJustify;
+                menimbangStyle.WrapText = true;
+                menimbangStyle.EndUpdate();
+                //worksheet.Range["C" + a + ":" + "H" + (t-1)].CellStyle = menimbangStyle;
+                worksheet.Range["C" + a + ":" + "G" + m].CellStyle = menimbangStyle;
 
                 IStyle menetapkanDepanStyle = workbook.Styles.Add("MenetapkanDepanStyle");
                 menetapkanDepanStyle.BeginUpdate();
@@ -527,19 +545,34 @@ namespace simpat1k.Controllers
                 headingStyleCenter.Font.Bold = true;
                 headingStyleCenter.HorizontalAlignment = ExcelHAlign.HAlignCenter;
                 headingStyleCenter.EndUpdate();
-                worksheet.Range["A7:E11"].CellStyle = headingStyleCenter;
-                worksheet.Range["A" + t + ":" + "F" + t].CellStyle = headingStyleCenter;
+                worksheet.Range["A7:G11"].CellStyle = headingStyleCenter;
+                worksheet.Range["A" + t + ":" + "G" + t].CellStyle = headingStyleCenter;
+
+                //IStyle menetapkanStyle = workbook.Styles.Add("MenetapkanStyle");
+                //menetapkanStyle.BeginUpdate();
+                //menetapkanStyle.VerticalAlignment = ExcelVAlign.VAlignTop;
+                //menetapkanStyle.HorizontalAlignment = ExcelHAlign.HAlignJustify;
+                //menetapkanStyle.WrapText = true;
+                //menetapkanStyle.EndUpdate();
+                //worksheet.Range["C" + (t + 1) + ":" + "H" + m].CellStyle = menetapkanStyle;
 
                 IStyle footerStyleCenter = workbook.Styles.Add("FooterStyle");
                 footerStyleCenter.BeginUpdate();
                 footerStyleCenter.HorizontalAlignment = ExcelHAlign.HAlignCenter;
                 footerStyleCenter.EndUpdate();
-                worksheet.Range["F" + (m + 2) + ":F" + (m + 10)].CellStyle = footerStyleCenter;
+                worksheet.Range["G" + (m + 2) + ":G" + (m + 10)].CellStyle = footerStyleCenter;
 
                 worksheet.UsedRange.AutofitColumns();
+                //worksheet.UsedRange.AutofitRows();
+                worksheet.Range["C" + a + ":" + "G" + (t - 1)].AutofitRows();
+                //worksheet.Range["C" + (t + 1) + ":" + "H" + m].AutofitRows();
+
+                //worksheet.HPageBreaks.Add(worksheet.Range["H" + (m + 1)]);
 
                 //Saving the workbook as stream
                 MemoryStream stream = new MemoryStream();
+
+
                 //--## Excel Save ##--
                 //workbook.SaveAs(stream);
                 //stream.Position = 0;
@@ -548,10 +581,27 @@ namespace simpat1k.Controllers
                 //FileStreamResult fileStreamResult = new FileStreamResult(stream, "application/excel");
 
                 //fileStreamResult.FileDownloadName = "Surat_Penetapan.xlsx";
+                //return fileStreamResult;
                 //--## Excel Save ##--
 
                 //--## Excel To PDF Save ##--
-                //Initialize XlsIO renderer.
+                ////Initialize XlsIO renderer.
+                //XlsIORenderer renderer = new XlsIORenderer();
+
+                ////Convert Excel document into PDF document 
+                //PdfDocument pdfDocument = renderer.ConvertToPDF(workbook);
+                //pdfDocument.Save(stream);
+                //stream.Position = 0;
+
+                ////Download the PDF file in the browser
+                //FileStreamResult fileStreamResult = new FileStreamResult(stream, "application/pdf");
+
+                //fileStreamResult.FileDownloadName = "Surat_Penetapan.pdf";
+                //return fileStreamResult;
+                //--## Excel To PDF Save ##--
+
+                //--## to pdfviewer ##--
+                string sFileName = @"Surat_Penetapan_" + System.Guid.NewGuid().ToString() + ".pdf";
                 XlsIORenderer renderer = new XlsIORenderer();
 
                 //Convert Excel document into PDF document 
@@ -559,13 +609,16 @@ namespace simpat1k.Controllers
                 pdfDocument.Save(stream);
                 stream.Position = 0;
 
-                //Download the PDF file in the browser
-                FileStreamResult fileStreamResult = new FileStreamResult(stream, "application/pdf");
+                string path = Path.Combine(HostEnvironment.WebRootPath, _Folder, sFileName);
+                using (FileStream outputFileStream = new FileStream(path, FileMode.Create))
+                {
+                    stream.CopyTo(outputFileStream);
+                }
 
-                fileStreamResult.FileDownloadName = "Surat_Penetapan.pdf";
-                //--## Excel To PDF Save ##--
-
-                return fileStreamResult;
+                ViewBag.Title = sFileName;
+                ViewBag.DocumentPath = Path.Combine(HostEnvironment.WebRootPath, _Folder, sFileName);
+                return View("~/Views/PdfViewer/Default.cshtml");
+                //--## to pdfviewer ##--
             }
         }
         #endregion Surat Penetapan

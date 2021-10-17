@@ -10,7 +10,7 @@
             <div class="form-group col-md-12">
                 <div class="e-float-input e-control-wrapper">
                     <input id="idpaket" data-val="true" class="e-control e-textbox e-lib" type="text" role="textbox" hidden>
-                    <ejs-combobox id="jenisssh" dataSource="@ViewBag.ssh" cssClass="e-input" placeholder="Pilih Tipe SSH" floatLabelType="Always" ejs-for="@Model.jenisssh" change="onchangeJenis" enabled="@ViewBag.truefalse">
+                    <ejs-combobox id="jenisssh" dataSource="@ViewBag.ssh" cssClass="e-input" placeholder="Pilih Tipe SSH" floatLabelType="Always" AllowCustom="false" ejs-for="@Model.jenisssh" change="onchangeJenis" enabled="@ViewBag.truefalse">
                         <e-combobox-fields text="Text" value="Value"></e-combobox-fields>
                     </ejs-combobox>
                 </div>

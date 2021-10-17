@@ -21,6 +21,11 @@ using System.Net.Http.Headers;
 using System.Runtime.InteropServices.ComTypes;
 using TasikmalayaKota.Simpatik.Web.Extensions;
 using Newtonsoft.Json.Linq;
+using Syncfusion.Pdf.Parsing;
+using static System.Net.WebRequestMethods;
+using Syncfusion.EJ2.PdfViewer;
+using Microsoft.Extensions.Caching.Memory;
+using Newtonsoft.Json;
 
 namespace simpat1k.Controllers
 {
@@ -28,22 +33,25 @@ namespace simpat1k.Controllers
     public class mUserController : Controller
     {
         private readonly IWebHostEnvironment HostEnvironment;
+        private IMemoryCache _cache;
         private readonly ImUser _mUser;
         private readonly ImOpd _mOpd;
         private readonly string _Folder;
 
-        public mUserController(ImUser mUser, ImOpd mOpd, IWebHostEnvironment hostEnvironment)
+        public mUserController(ImUser mUser, ImOpd mOpd, IWebHostEnvironment hostEnvironment, IMemoryCache cache)
         {
             HostEnvironment = hostEnvironment;
             _mUser = mUser;
             _mOpd = mOpd;
-            _Folder = "filesk";
+            _cache = cache;
+            _Folder = "filesk/";
         }
 
         [Route("IndexMe")]
         public IActionResult Index()
         {
             ViewBag.Title = "Master User";
+            ViewBag.pathDownload = Path.Combine(HostEnvironment.WebRootPath, _Folder);
             return View();
         }
 
@@ -96,7 +104,7 @@ namespace simpat1k.Controllers
 
         [HttpPost]
         [Route("UserMasterCrud")]
-        public IActionResult CrudUpdate([FromBody] CRUDModel<mUserModel> value, string action, IList<IFormFile> fileupload)
+        public IActionResult CrudUpdate([FromBody] CRUDModel<mUserModel> value, string action, IList<IFormFile> fileupload, IFormCollection form)
         {
             string msg = string.Empty;
             bool sukses = false;
@@ -136,7 +144,7 @@ namespace simpat1k.Controllers
                                 }
 
                                 var filename = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
-                                filename = FilePath + $@"\{filename}";
+                                filename = FilePath + $"{filename}";
                                 if (!System.IO.File.Exists(filename))
                                 {
                                     using (FileStream fs = System.IO.File.Create(filename))
@@ -197,8 +205,10 @@ namespace simpat1k.Controllers
                 foreach (var file in UploadFilesSK)
                 {
                     string FilePath = Path.Combine(HostEnvironment.WebRootPath, _Folder);
+                    string extension = Path.GetExtension(ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"'));
                     var filename = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
-                    filename = FilePath + $@"\{filename}";
+                    //var filename = System.Guid.NewGuid().ToString() + extension;
+                    filename = FilePath + $"{filename}";
                     if (!System.IO.File.Exists(filename))
                     {
                         using (FileStream fs = System.IO.File.Create(filename))
@@ -236,7 +246,7 @@ namespace simpat1k.Controllers
                 {
                     string FilePath = Path.Combine(HostEnvironment.WebRootPath, _Folder);
                     var filename = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
-                    filename = FilePath + $@"\{filename}";
+                    filename = FilePath + $"{filename}";
                     if (!System.IO.File.Exists(filename))
                     {
                         System.IO.File.Delete(filename);
@@ -287,6 +297,14 @@ namespace simpat1k.Controllers
             ViewBag.idOPD = HttpContext.Session.GetString("Opd");
 
             return PartialView("_mUserTemplatePpk", value.Value);
+        }
+
+        [Route("DownloadFileSk")]
+        public IActionResult GetDocumentFileSk(string fileskname)
+        {
+            ViewBag.Title = fileskname;
+            ViewBag.DocumentPath = Path.Combine(HostEnvironment.WebRootPath, _Folder, fileskname);
+            return View("~/Views/PdfViewer/Default.cshtml");
         }
     }
 }

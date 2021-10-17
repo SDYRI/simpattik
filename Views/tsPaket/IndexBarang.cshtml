@@ -6,6 +6,25 @@
     detailPaket.Add(new { type = "userstatus", buttonOption = new { content = " Identifikasi", cssClass = "e-flat e-details feather icon-layers" } }); // custom
     List<string> Toolbar = HttpContextAccessor.HttpContext.Session.GetComplexData<List<string>>("Toolbar");
 }
+
+<div class="content-header-left col-md-9 col-12 mb-2">
+    <div class="row breadcrumbs-top">
+        <div class="col-12">
+            <h2 class="content-header-title float-left mb-0">Identifikasi Pengadaan Barang Jasa</h2>
+            <div class="breadcrumb-wrapper col-12">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a href="#">Paket</a>
+                    </li>
+                    <li class="breadcrumb-item active">
+                        @ViewBag.Title
+                    </li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
 <ejs-toast id="toast_default" created="createdToasObj">
     <e-toast-position X="Right"></e-toast-position>
 </ejs-toast>
@@ -101,6 +120,12 @@
                 dialog.width = "1024px";
                 // change the header of the dialog
                 dialog.header = args.requestType === 'beginEdit' ? 'Sunting Paket Penyedia @ViewBag.Title' : 'Tambah Paket Penyedia @ViewBag.Title';
+                args.form.ej2_instances[0].addRules('prodlmnegeri', { required: [true, 'Silahkan Pilih Produk Dalam Negeri'] });
+                args.form.ej2_instances[0].addRules('ushkecil', { required: [true, 'Silahkan Pilih Usaha Kecil'] });
+                args.form.ej2_instances[0].addRules('pradpa', { required: [true, 'Silahkan Pilih Pra DIPA/ DPA'] });
+                args.form.ej2_instances[0].addRules('mtdpemilihanstblm', { required: [true, 'Silahkan Pilih Metode Pemilihan'] });
+                args.form.ej2_instances[0].addRules('paketstrategis', { required: [true, 'Silahkan Pilih Paket Strategis'] });
+
                 args.form.ej2_instances[0].addRules('pemanfaatanmulai', { required: [true, 'Silahkan Pilih Waktu Pemanfaatan'] });
                 args.form.ej2_instances[0].addRules('pemanfaatanakhir', { required: [true, 'Silahkan Pilih Waktu Pemanfaatan'] });
                 args.form.ej2_instances[0].addRules('pelaksanaanmulai', { required: [true, 'Silahkan Pilih Waktu Pelaksanaan'] });
@@ -177,7 +202,11 @@
                 dialog.height = 750;
                 dialog.width = "1024px";
                 // change the header of the dialog
-                dialog.header = args.requestType === 'beginEdit' ? 'Sunting Paket Swakelola @ViewBag.Title' : 'Tambah Paket Swakelola @ViewBag.Title' ;
+                dialog.header = args.requestType === 'beginEdit' ? 'Sunting Paket Swakelola @ViewBag.Title' : 'Tambah Paket Swakelola @ViewBag.Title';
+                args.form.ej2_instances[0].addRules('pradpa', { required: [true, 'Silahkan Pilih Pra DIPA/ DPA'] });
+                args.form.ej2_instances[0].addRules('tipeswakelola', { required: [true, 'Silahkan Pilih Tipe Swakelola'] });
+                args.form.ej2_instances[0].addRules('paketstrategis', { required: [true, 'Silahkan Pilih Paket Strategis'] });
+
                 args.form.ej2_instances[0].addRules('pelaksanaanmulai', { required: [true, 'Silahkan Pilih Waktu Pelaksanaan'] });
                 args.form.ej2_instances[0].addRules('pelaksanaanakhir', { required: [true, 'Silahkan Pilih Waktu Pelaksanaan'] });
 

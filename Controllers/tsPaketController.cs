@@ -177,20 +177,27 @@ namespace simpat1k.Controllers
 
             if (HttpContext.Session.GetInt32("Tipe") == 3)
             {
-                if (value.Action == "insert")
+                if (HttpContext.Session.GetString("Pappk") == "3")
                 {
-                    DatabaseActionResultModel Result = _tsPaket.Create(value.Value);
-                    msg = Result.Pesan;
+                    if (value.Action == "insert")
+                    {
+                        DatabaseActionResultModel Result = _tsPaket.Create(value.Value);
+                        msg = Result.Pesan;
+                    }
+                    else if (value.Action == "update")
+                    {
+                        DatabaseActionResultModel Result = _tsPaket.Update(value.Value);
+                        msg = Result.Pesan;
+                    }
+                    else if (value.Action == "remove")
+                    {
+                        DatabaseActionResultModel Result = _tsPaket.Remove(value.Key.ToString());
+                        msg = Result.Pesan;
+                    }
                 }
-                else if (value.Action == "update")
+                else
                 {
-                    DatabaseActionResultModel Result = _tsPaket.Update(value.Value);
-                    msg = Result.Pesan;
-                }
-                else if (value.Action == "remove")
-                {
-                    DatabaseActionResultModel Result = _tsPaket.Remove(value.Key.ToString());
-                    msg = Result.Pesan;
+                    msg = "GAGAL DISIMPAN";
                 }
             }
             else
@@ -202,7 +209,7 @@ namespace simpat1k.Controllers
                 }
                 else
                 {
-                    msg = "BERHASIL DISIMPAN";
+                    msg = "GAGAL DISIMPAN";
                 }
             }
 
@@ -222,7 +229,7 @@ namespace simpat1k.Controllers
             }
             else
             {
-                msg = "BERHASIL DISIMPAN";
+                msg = "GAGAL DISIMPAN";
             }
 
             return Json(new { data = value.Value, message = msg });
@@ -483,7 +490,7 @@ namespace simpat1k.Controllers
         [Route("IndexPekerjaan")]
         public ActionResult IndexPekerjaan()
         {
-            ViewBag.Title = "Kebutuhan Pekerjaan";
+            ViewBag.Title = "Kebutuhan Pekerjaan Kontruksi";
             ViewBag.headerPenyedia = new TabHeader { Text = "Penyedia" };
             ViewBag.headerSwakelola = new TabHeader { Text = "Swakelola" };
             ViewBag.queryPenyedia = "new ej.data.Query().addParams('jeniskebutuhan', 2).addParams('tipePaket', 1)";

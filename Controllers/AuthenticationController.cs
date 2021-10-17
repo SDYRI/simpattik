@@ -47,7 +47,7 @@ namespace TasikmalayaKota.Simpatik.Web.Controllers
                 //List<MenuValidationResultModel> dataMenu = new List<MenuValidationResultModel>();
 
                 #region toolbar
-                List<string> toolbar = SetToolbar(Result.Tipe);
+                List<string> toolbar = SetToolbar(Result.Tipe, Result.PaPpk);
                 List<string> toolbarTahun = SetToolbarTahun(Result.Tipe);
                 List<string> toolbarMaster = SetToolbarMaster(Result.Tipe, Result.PaPpk);
                 List<string> toolbarAuditor = SetToolbarAuditor(Result.Tipe);
@@ -101,19 +101,28 @@ namespace TasikmalayaKota.Simpatik.Web.Controllers
             return setToolbarTahun;
         }
 
-        private List<string> SetToolbar(int typeUser)
+        private List<string> SetToolbar(int typeUser, string pappkUser)
         {
             List<string> setToolbar = new List<string>();
             if ((typeUser == 0) || (typeUser == 3))
             {
-                setToolbar.Add("Search");
-                setToolbar.Add("Add");
-                setToolbar.Add("Edit");
-                setToolbar.Add("Delete");
-                setToolbar.Add("Update");
-                setToolbar.Add("Cancel");
-                setToolbar.Add("ExcelExport");
-                setToolbar.Add("PdfExport");
+                if (pappkUser == "3")
+                {
+                    setToolbar.Add("Search");
+                    setToolbar.Add("Add");
+                    setToolbar.Add("Edit");
+                    setToolbar.Add("Delete");
+                    //setToolbar.Add("Update");
+                    //setToolbar.Add("Cancel");
+                    setToolbar.Add("ExcelExport");
+                    setToolbar.Add("PdfExport");
+                }
+                else
+                {
+                    setToolbar.Add("Search");
+                    setToolbar.Add("ExcelExport");
+                    setToolbar.Add("PdfExport");
+                }
             }
             else if (typeUser == 2)
             {
@@ -138,8 +147,8 @@ namespace TasikmalayaKota.Simpatik.Web.Controllers
                 setToolbarMaster.Add("Add");
                 setToolbarMaster.Add("Edit");
                 setToolbarMaster.Add("Delete");
-                setToolbarMaster.Add("Update");
-                setToolbarMaster.Add("Cancel");
+                //setToolbarMaster.Add("Update");
+                //setToolbarMaster.Add("Cancel");
                 setToolbarMaster.Add("ExcelExport");
                 setToolbarMaster.Add("PdfExport");
             }
@@ -148,8 +157,8 @@ namespace TasikmalayaKota.Simpatik.Web.Controllers
                 setToolbarMaster.Add("Search");
                 setToolbarMaster.Add("Add");
                 setToolbarMaster.Add("Edit");
-                setToolbarMaster.Add("Update");
-                setToolbarMaster.Add("Cancel");
+                //setToolbarMaster.Add("Update");
+                //setToolbarMaster.Add("Cancel");
                 setToolbarMaster.Add("ExcelExport");
                 setToolbarMaster.Add("PdfExport");
             }
@@ -170,8 +179,8 @@ namespace TasikmalayaKota.Simpatik.Web.Controllers
                 setToolbarAuditor.Add("Add");
                 setToolbarAuditor.Add("Edit");
                 setToolbarAuditor.Add("Delete");
-                setToolbarAuditor.Add("Update");
-                setToolbarAuditor.Add("Cancel");
+                //setToolbarAuditor.Add("Update");
+                //setToolbarAuditor.Add("Cancel");
                 setToolbarAuditor.Add("ExcelExport");
                 setToolbarAuditor.Add("PdfExport");
             }

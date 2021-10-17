@@ -134,6 +134,9 @@ namespace TasikmalayaKota.Simpatik.Web
             //    return next(context);
             //});
 
+            //Register Syncfusion license
+            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("NDQ4NkAzMTM4MmUzNDJlMzBHaWpSODd3bWtaNGpMR3g2OHBHQTU5UWZ2YzBCc3N6OU0xMnNTVG1PNm5zPQ==");
+
             string slug = "/" + Configuration.GetValue<string>("VettingSettings:WebsiteSLUG");
             if (slug != "/")
             {

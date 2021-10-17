@@ -1,0 +1,89 @@
+{
+  "ConnectionStrings": {
+    "SimpatikConnection": "Server=163.53.185.51;Port=5432;Database=simpattik;user id=postgres;password=adminBPBJ;"
+    //"SimpatikConnection": "Server=172.25.240.1;Port=5432;Database=simpattik;user id=postgres;password=$dY123;"
+  },
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft": "Warning",
+      "Microsoft.Hosting.Lifetime": "Information"
+    }
+  },
+  "Kestrel": {
+    "Certificates": {
+      "Default": {
+        "Path": "/app/cert/cert.pfx",
+        "Password": "adminBPBJ"
+      }
+    }
+  },
+  //"Kestrel": {
+  //  "Endpoints": {
+  //    "Http": {
+  //      "Url": "http://172.25.240.1:80"
+  //    },
+  //    "Https": {
+  //      "Url": "https://*:443",
+  //      "Certificate": {
+  //        "Path": "/app/cert/cert.pfx",
+  //        "Password": "adminBPBJ"
+  //      }
+  //    }
+  //  }
+  //},
+  /*
+  // Dibuka jika diperlukan saat publish
+  "Kestrel": {
+    "Endpoints": {
+      "Http": {
+        "Url": "http://163.53.185.51:5100"
+      },
+      "HttpsDefaultCert": {
+        "Url": "https://163.53.185.51:5101"
+      }
+    }
+  },
+  */
+  "AllowedHosts": "*",
+  "SimpatikSettings": {
+    /*
+    1. Jika menggunakan path (contoh : tasikmalayakota.go.id/simpattik) maka pada  WebsiteSLUG, tambahkan nama path nya. contoh "WebsiteSLUG": "simpattik"
+    2. Dan apabila tanpa path (contoh : simpattik.tasikmalayakota.go.id) maka pada slug kosongkan saja. contoh "WebsiteSLUG": ""  
+    */
+    "WebsiteSLUG": ""
+  }
+}
+
+
+//{
+//  "ConnectionStrings": {
+//    "SimpatikConnection": "Server=127.0.0.1;Port=5432;Database=simpattik;user id=postgres;password=adminBPBJ;"
+//  },
+//  "Logging": {
+//    "LogLevel": {
+//      "Default": "Information",
+//      "Microsoft": "Warning",
+//      "Microsoft.Hosting.Lifetime": "Information"
+//    }
+//  },
+//  "Kestrel": {
+//    "Endpoints": {
+//      "Http": {
+//        "Url": "http://163.53.185.51:80"
+//      },
+//      "HttpsDefaultCert": {
+//        "Url": "https://163.53.185.51:443",
+//        "Certificate": {
+//          "Path": "/etc/ssl/commercial/cert.pfx",
+//          "Password": "qwe123",
+//          "AllowInvalid": true
+//        }
+//      }
+//    }
+//  },
+//  "AllowedHosts": "*",
+//  "SimpatikSettings": {
+//    "WebsiteSLUG": ""
+//  }
+//}
