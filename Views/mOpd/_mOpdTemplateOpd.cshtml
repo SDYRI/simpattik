@@ -7,7 +7,7 @@
     <div class="form-row">
         <div class="form-group col-md-12">
             <div class="e-float-input e-control-wrapper">
-                <ejs-dropdownlist id="ListIdUrusan" placeholder="Pilih Urusan" popupHeight="200px" allowFiltering="true" filtering="onfilteringUrusan" sortOrder="@ViewBag.sortDropdown" 
+                <ejs-dropdownlist id="ListIdUrusan" placeholder="Pilih Bidang Urusan" popupHeight="200px" allowFiltering="true" filtering="onfilteringUrusan" sortOrder="@ViewBag.sortDropdown" 
                                   query="@ViewBag.queryUrusan" floatLabelType="Always">
                     <e-data-manager url="/UrusanMaster/UrusanMasterAll" adaptor="UrlAdaptor" crossDomain="true"></e-data-manager>
                     <e-dropdownlist-fields text="NamaSubUrusan" value="IdUrusan"></e-dropdownlist-fields>
@@ -16,12 +16,12 @@
         </div>
         <div class="form-group col-md-4">
             <div class="e-float-input e-control-wrapper">
-                <ejs-textbox id="KodeSubOpd" cssClass="e-input" placeholder="Kode Opd" floatLabelType="Always" ejs-for="@Model.KodeSubOpd"></ejs-textbox>
+                <ejs-textbox id="KodeSubOpd" cssClass="e-input" placeholder="Kode Organisasi" floatLabelType="Always" ejs-for="@Model.KodeSubOpd"></ejs-textbox>
             </div>
         </div>
         <div class="form-group col-md-8">
             <div class="e-float-input e-control-wrapper">
-                <ejs-textbox id="NamaSubOpd" cssClass="e-input" placeholder="Nama Opd" floatLabelType="Always" ejs-for="@Model.NamaSubOpd"></ejs-textbox>
+                <ejs-textbox id="NamaSubOpd" cssClass="e-input" placeholder="Nama Organisasi" floatLabelType="Always" ejs-for="@Model.NamaSubOpd"></ejs-textbox>
             </div>
         </div>
     </div>

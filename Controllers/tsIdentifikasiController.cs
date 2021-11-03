@@ -22,6 +22,7 @@ using Syncfusion.XlsIORenderer;
 using System.Runtime.InteropServices.ComTypes;
 using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Hosting;
+using Syncfusion.EJ2.Spreadsheet;
 
 namespace simpat1k.Controllers
 {
@@ -790,6 +791,7 @@ namespace simpat1k.Controllers
                     worksheet.ImportData(visualData, importDataOptions);
 
                     worksheet.UsedRange.AutofitColumns();
+                    worksheet.Protect(",6Gn]a3VX@whh`>z=,]Ps6Jy<j4.x[n aGA:$-C`.,Kmf)93nYXjS2Q~rGP@, CZb8DmQ9tCh = SDY_RI - &{={pN3m`KxL % B9 + k", ExcelSheetProtection.All);
                 }
 
                 IWorksheet hideworksheet = workbook.Worksheets[0];
@@ -797,6 +799,15 @@ namespace simpat1k.Controllers
 
                 MemoryStream stream = new MemoryStream();
                 //--## Excel Save ##--
+
+                //--## Protect ##--
+                bool isProtectWindow = true;
+                bool isProtectContent = true;
+
+                //Protect Workbook
+                //workbook.SetWriteProtectionPassword(",6Gn]a3VX@whh`>z=,]Ps6Jy<j4.x[n aGA:$-C`.,Kmf)93nYXjS2Q~rGP@, CZb8DmQ9tCh = SDY_RI - &{={pN3m`KxL % B9 + k");
+                workbook.Protect(isProtectWindow, isProtectContent, ",6Gn]a3VX@whh`>z=,]Ps6Jy<j4.x[n aGA:$-C`.,Kmf)93nYXjS2Q~rGP@, CZb8DmQ9tCh = SDY_RI - &{={pN3m`KxL % B9 + k");
+
                 workbook.SaveAs(stream);
                 stream.Position = 0;
 

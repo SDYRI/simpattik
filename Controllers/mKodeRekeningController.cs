@@ -8,6 +8,9 @@ using System.Collections;
 using TasikmalayaKota.Simpatik.Web.Services.mKodeRekening.Models;
 using System;
 using Syncfusion.EJ2.Navigations;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Hosting;
+using System.IO;
 
 namespace simpat1k.Controllers
 {
@@ -24,20 +27,27 @@ namespace simpat1k.Controllers
         [Route("IndexMe")]
         public IActionResult Index()
         {
-            ViewBag.Title = "Master Kode Rekening";
-            ViewBag.headerAkun = new TabHeader { Text = "Akun" };
-            ViewBag.headerKelompok = new TabHeader { Text = "Kelompok" };
-            ViewBag.headerJenis = new TabHeader { Text = "Jenis" };
-            ViewBag.headerObjek = new TabHeader { Text = "Objek" };
-            ViewBag.headerRincian = new TabHeader { Text = "Rincian" };
-            ViewBag.headerSubRincian = new TabHeader { Text = "Sub Rincian" };
-            ViewBag.queryAkun = "new ej.data.Query().addParams('IdPosisi', 1)";
-            ViewBag.queryKelompok = "new ej.data.Query().addParams('IdPosisi', 2)";
-            ViewBag.queryJenis = "new ej.data.Query().addParams('IdPosisi', 3)";
-            ViewBag.queryObjek = "new ej.data.Query().addParams('IdPosisi', 4)";
-            ViewBag.queryRincian = "new ej.data.Query().addParams('IdPosisi', 5)";
-            ViewBag.querySubRincian = "new ej.data.Query().addParams('IdPosisi', 6)";
-            return View();
+            if (HttpContext.Session.GetInt32("Tipe") == 1)
+            {
+                ViewBag.Title = "Master Kode Rekening";
+                ViewBag.headerAkun = new TabHeader { Text = "Akun" };
+                ViewBag.headerKelompok = new TabHeader { Text = "Kelompok" };
+                ViewBag.headerJenis = new TabHeader { Text = "Jenis" };
+                ViewBag.headerObjek = new TabHeader { Text = "Objek" };
+                ViewBag.headerRincian = new TabHeader { Text = "Rincian" };
+                ViewBag.headerSubRincian = new TabHeader { Text = "Sub Rincian" };
+                ViewBag.queryAkun = "new ej.data.Query().addParams('IdPosisi', 1)";
+                ViewBag.queryKelompok = "new ej.data.Query().addParams('IdPosisi', 2)";
+                ViewBag.queryJenis = "new ej.data.Query().addParams('IdPosisi', 3)";
+                ViewBag.queryObjek = "new ej.data.Query().addParams('IdPosisi', 4)";
+                ViewBag.queryRincian = "new ej.data.Query().addParams('IdPosisi', 5)";
+                ViewBag.querySubRincian = "new ej.data.Query().addParams('IdPosisi', 6)";
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("HandleError", "ErrorExecute", new { code = 404 });
+            }
         }
 
         [HttpPost]
@@ -109,26 +119,34 @@ namespace simpat1k.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    if (value.Action == "insert")
+                    if (HttpContext.Session.GetInt32("Tipe") == 1)
                     {
-                        foreach (var param in value.Params)
+                        if (value.Action == "insert")
                         {
-                            value.Value.IdPosisi = Int32.Parse(param.GetType().GetProperty("Value").GetValue(param).ToString());
-                        }
+                            foreach (var param in value.Params)
+                            {
+                                value.Value.IdPosisi = Int32.Parse(param.GetType().GetProperty("Value").GetValue(param).ToString());
+                            }
 
-                        DatabaseActionResultModel Result = _mKodeRekening.Create(value.Value);
-                        msg = Result.Pesan;
+                            DatabaseActionResultModel Result = _mKodeRekening.Create(value.Value);
+                            msg = Result.Pesan;
+                        }
+                        else if (value.Action == "update")
+                        {
+                            DatabaseActionResultModel Result = _mKodeRekening.Update(value.Value);
+                            msg = Result.Pesan;
+                        }
+                        else if (value.Action == "remove")
+                        {
+                            DatabaseActionResultModel Result = _mKodeRekening.Remove(Int32.Parse(value.Key.ToString()));
+                            msg = Result.Pesan;
+                        }
                     }
-                    else if (value.Action == "update")
+                    else
                     {
-                        DatabaseActionResultModel Result = _mKodeRekening.Update(value.Value);
-                        msg = Result.Pesan;
+                        msg = "GAGAL DISIMPAN";
                     }
-                    else if (value.Action == "remove")
-                    {
-                        DatabaseActionResultModel Result = _mKodeRekening.Remove(Int32.Parse(value.Key.ToString()));
-                        msg = Result.Pesan;
-                    }
+
                     return Json(new { data = value.Value, message = msg });
                 }
                 else
@@ -146,8 +164,6 @@ namespace simpat1k.Controllers
         [Route("KodeRekeningMasterTemplateAkun")]
         public IActionResult PartialTemplateAkun([FromBody] CRUDModel<mKodeRekeningModel> value)
         {
-            var valTemplate = _mKodeRekening.GetAll(1);
-            ViewBag.datasource = valTemplate;
             ViewBag.Title = "Master Akun " + value.Value.NamaSubRincian;
 
             return PartialView("_mKodeRekeningTemplateAkun", value.Value);
@@ -157,8 +173,6 @@ namespace simpat1k.Controllers
         [Route("KodeRekeningMasterTemplateKelompok")]
         public IActionResult PartialTemplateKelompok([FromBody] CRUDModel<mKodeRekeningModel> value)
         {
-            var valTemplate = _mKodeRekening.GetAll(2);
-            ViewBag.datasource = valTemplate;
             ViewBag.sortDropdown = "Ascending";
             ViewBag.queryAkun = "new ej.data.Query().select(['NamaSubRincian', 'IdKodeRekening']).take(10).requiresCount().addParams('IdPosisi', 1)";
             ViewBag.Title = "Master Kelompok " + value.Value.NamaSubRincian;
@@ -170,8 +184,6 @@ namespace simpat1k.Controllers
         [Route("KodeRekeningMasterTemplateJenis")]
         public IActionResult PartialTemplateJenis([FromBody] CRUDModel<mKodeRekeningModel> value)
         {
-            var valTemplate = _mKodeRekening.GetAll(3);
-            ViewBag.datasource = valTemplate;
             ViewBag.sortDropdown = "Ascending";
             ViewBag.queryAkun = "new ej.data.Query().select(['NamaSubRincian', 'IdKodeRekening']).take(10).requiresCount().addParams('IdPosisi', 1)";
             ViewBag.queryKelompok = "new ej.data.Query().select(['NamaSubRincian', 'IdKodeRekening']).take(10).requiresCount().addParams('IdPosisi', 2)";
@@ -184,8 +196,6 @@ namespace simpat1k.Controllers
         [Route("KodeRekeningMasterTemplateObjek")]
         public IActionResult PartialTemplateObjek([FromBody] CRUDModel<mKodeRekeningModel> value)
         {
-            var valTemplate = _mKodeRekening.GetAll(3);
-            ViewBag.datasource = valTemplate;
             ViewBag.sortDropdown = "Ascending";
             ViewBag.queryAkun = "new ej.data.Query().select(['NamaSubRincian', 'IdKodeRekening']).take(10).requiresCount().addParams('IdPosisi', 1)";
             ViewBag.queryKelompok = "new ej.data.Query().select(['NamaSubRincian', 'IdKodeRekening']).take(10).requiresCount().addParams('IdPosisi', 2)";
@@ -199,8 +209,6 @@ namespace simpat1k.Controllers
         [Route("KodeRekeningMasterTemplateRincian")]
         public IActionResult PartialTemplateRincian([FromBody] CRUDModel<mKodeRekeningModel> value)
         {
-            var valTemplate = _mKodeRekening.GetAll(3);
-            ViewBag.datasource = valTemplate;
             ViewBag.sortDropdown = "Ascending";
             ViewBag.queryAkun = "new ej.data.Query().select(['NamaSubRincian', 'IdKodeRekening']).take(10).requiresCount().addParams('IdPosisi', 1)";
             ViewBag.queryKelompok = "new ej.data.Query().select(['NamaSubRincian', 'IdKodeRekening']).take(10).requiresCount().addParams('IdPosisi', 2)";
@@ -215,8 +223,6 @@ namespace simpat1k.Controllers
         [Route("KodeRekeningMasterTemplateSubRincian")]
         public IActionResult PartialTemplateSubRincian([FromBody] CRUDModel<mKodeRekeningModel> value)
         {
-            var valTemplate = _mKodeRekening.GetAll(3);
-            ViewBag.datasource = valTemplate;
             ViewBag.sortDropdown = "Ascending";
             ViewBag.queryAkun = "new ej.data.Query().select(['NamaSubRincian', 'IdKodeRekening']).take(10).requiresCount().addParams('IdPosisi', 1)";
             ViewBag.queryKelompok = "new ej.data.Query().select(['NamaSubRincian', 'IdKodeRekening']).take(10).requiresCount().addParams('IdPosisi', 2)";

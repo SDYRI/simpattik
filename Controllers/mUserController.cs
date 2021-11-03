@@ -50,9 +50,21 @@ namespace simpat1k.Controllers
         [Route("IndexMe")]
         public IActionResult Index()
         {
-            ViewBag.Title = "Master User";
-            ViewBag.pathDownload = Path.Combine(HostEnvironment.WebRootPath, _Folder);
-            return View();
+            if (HttpContext.Session.GetInt32("Tipe") == 1)
+            {
+                ViewBag.Title = "Master User";
+                ViewBag.pathDownload = Path.Combine(HostEnvironment.WebRootPath, _Folder);
+                return View();
+            }
+            else if (((HttpContext.Session.GetInt32("Tipe") == 5) && (HttpContext.Session.GetString("Pappk") == "1")) || ((HttpContext.Session.GetInt32("Tipe") == 5) && (HttpContext.Session.GetString("Pappk") == "2")))
+            {
+                ViewBag.Title = "Master User PPK";
+                return View("IndexPpk");
+            }
+            else
+            {
+                return RedirectToAction("HandleError", "ErrorExecute", new { code = 404 });
+            }
         }
 
         [Route("IndexPpkMe")]
@@ -112,55 +124,63 @@ namespace simpat1k.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    if (value.Action == "insert")
+                    //if ((HttpContext.Session.GetInt32("Tipe") == 1) || ((HttpContext.Session.GetInt32("Tipe") == 5) && (HttpContext.Session.GetString("Pappk") == "1")) || ((HttpContext.Session.GetInt32("Tipe") == 5) && (HttpContext.Session.GetString("Pappk") == "2")))
+                    if (HttpContext.Session.GetInt32("Tipe") == 1)
                     {
-                        DatabaseActionResultModel Result = _mUser.Create(value.Value);
-                        msg = Result.Pesan;
-                        sukses = Result.Success;
-                    }
-                    else if (value.Action == "update")
-                    {
-                        DatabaseActionResultModel Result = _mUser.Update(value.Value);
-                        value.Value.ListOpdUser = Result.Data.ToString();
-                        msg = Result.Pesan;
-                        sukses = Result.Success;
-                    }
-                    else if (value.Action == "remove")
-                    {
-                        DatabaseActionResultModel Result = _mUser.Remove(value.Key.ToString());
-                        msg = Result.Pesan;
-                        sukses = Result.Success;
-                    }
-                    if (sukses)
-                    {
-                        foreach (var file in fileupload)
+                        if ((HttpContext.Session.GetInt32("Tipe") == 1) && (value.Action == "insert"))
                         {
-                            if (fileupload != null)
+                            DatabaseActionResultModel Result = _mUser.Create(value.Value);
+                            msg = Result.Pesan;
+                            sukses = Result.Success;
+                        }
+                        else if ((HttpContext.Session.GetInt32("Tipe") == 1) && (value.Action == "update"))
+                        {
+                            DatabaseActionResultModel Result = _mUser.Update(value.Value);
+                            value.Value.ListOpdUser = Result.Data.ToString();
+                            msg = Result.Pesan;
+                            sukses = Result.Success;
+                        }
+                        else if ((HttpContext.Session.GetInt32("Tipe") == 1) && (value.Action == "remove"))
+                        {
+                            DatabaseActionResultModel Result = _mUser.Remove(value.Key.ToString());
+                            msg = Result.Pesan;
+                            sukses = Result.Success;
+                        }
+                        if (sukses)
+                        {
+                            foreach (var file in fileupload)
                             {
-                                string FilePath = Path.Combine(HostEnvironment.WebRootPath, _Folder);
-                                if (!Directory.Exists(FilePath))
+                                if (fileupload != null)
                                 {
-                                    Directory.CreateDirectory(FilePath);
-                                }
-
-                                var filename = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
-                                filename = FilePath + $"{filename}";
-                                if (!System.IO.File.Exists(filename))
-                                {
-                                    using (FileStream fs = System.IO.File.Create(filename))
+                                    string FilePath = Path.Combine(HostEnvironment.WebRootPath, _Folder);
+                                    if (!Directory.Exists(FilePath))
                                     {
-                                        file.CopyTo(fs);
-                                        fs.Flush();
+                                        Directory.CreateDirectory(FilePath);
                                     }
-                                }
-                                else
-                                {
-                                    Response.Clear();
-                                    Response.StatusCode = 204;
-                                    Response.HttpContext.Features.Get<IHttpResponseFeature>().ReasonPhrase = "File already exists.";
+
+                                    var filename = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
+                                    filename = FilePath + $"{filename}";
+                                    if (!System.IO.File.Exists(filename))
+                                    {
+                                        using (FileStream fs = System.IO.File.Create(filename))
+                                        {
+                                            file.CopyTo(fs);
+                                            fs.Flush();
+                                        }
+                                    }
+                                    else
+                                    {
+                                        Response.Clear();
+                                        Response.StatusCode = 204;
+                                        Response.HttpContext.Features.Get<IHttpResponseFeature>().ReasonPhrase = "File already exists.";
+                                    }
                                 }
                             }
                         }
+                    }
+                    else
+                    {
+                        msg = "GAGAL DISIMPAN";
                     }
 
                     return Json(new { data = value.Value, message = msg });
@@ -267,10 +287,7 @@ namespace simpat1k.Controllers
         [Route("UserMasterTemplate")]
         public IActionResult PartialTemplateUser([FromBody] CRUDModel<mUserModel> value)
         {
-            var valTemplate = _mUser.GetAll();
-            ViewBag.datasource = valTemplate;
-            //ViewBag.dataOPD = _mOpd.GetAll().ToList();
-            ViewBag.sortDropdown = "Ascending";
+           ViewBag.sortDropdown = "Ascending";
             ViewBag.queryOPD = "new ej.data.Query().select(['NamaOpd', 'IdOpd']).take(10).requiresCount()";
             ViewBag.Title = "Master User " + value.Value.NamaUser;
             ViewBag.id = 2; //value.Value.ListIdOpdUser;
@@ -287,9 +304,6 @@ namespace simpat1k.Controllers
         [Route("UserMasterTemplatePpk")]
         public IActionResult PartialTemplateUserPpk([FromBody] CRUDModel<mUserModel> value)
         {
-            var valTemplate = _mUser.GetAll();
-            ViewBag.datasource = valTemplate;
-            //ViewBag.dataOPD = _mOpd.GetAll().ToList();
             ViewBag.sortDropdown = "Ascending";
             ViewBag.queryOPD = "new ej.data.Query().select(['NamaOpd', 'IdOpd']).take(10).requiresCount()";
             ViewBag.Title = "Master User " + value.Value.NamaUser;

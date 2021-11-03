@@ -8,6 +8,9 @@ using TasikmalayaKota.Simpatik.Web.Services.mProgram.Interfaces;
 using TasikmalayaKota.Simpatik.Web.Services.mProgram.Models;
 using System;
 using Syncfusion.EJ2.Navigations;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Hosting;
+using System.IO;
 
 namespace simpat1k.Controllers
 {
@@ -24,14 +27,21 @@ namespace simpat1k.Controllers
         [Route("IndexMe")]
         public IActionResult Index()
         {
-            ViewBag.Title = "Master Program, Kegiatan, Sub Kegiatan";
-            ViewBag.headerProgram = new TabHeader { Text = "Program" };
-            ViewBag.headerKegiatan = new TabHeader { Text = "Kegiatan" };
-            ViewBag.headerSubKegiatan = new TabHeader { Text = "Sub Kegiatan" };
-            ViewBag.queryProgram = "new ej.data.Query().addParams('IdPosisi', 1)";
-            ViewBag.queryKegiatan = "new ej.data.Query().addParams('IdPosisi', 2)";
-            ViewBag.querySubKegiatan = "new ej.data.Query().addParams('IdPosisi', 3)";
-            return View();
+            if ((HttpContext.Session.GetInt32("Tipe") == 1) || (((HttpContext.Session.GetInt32("Tipe") == 5) && (HttpContext.Session.GetString("Pappk") == "1")) || ((HttpContext.Session.GetInt32("Tipe") == 5) && (HttpContext.Session.GetString("Pappk") == "2"))))
+            {
+                ViewBag.Title = "Master Program, Kegiatan, Sub Kegiatan";
+                ViewBag.headerProgram = new TabHeader { Text = "Program" };
+                ViewBag.headerKegiatan = new TabHeader { Text = "Kegiatan" };
+                ViewBag.headerSubKegiatan = new TabHeader { Text = "Sub Kegiatan" };
+                ViewBag.queryProgram = "new ej.data.Query().addParams('IdPosisi', 1)";
+                ViewBag.queryKegiatan = "new ej.data.Query().addParams('IdPosisi', 2)";
+                ViewBag.querySubKegiatan = "new ej.data.Query().addParams('IdPosisi', 3)";
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("HandleError", "ErrorExecute", new { code = 404 });
+            }
         }
 
         [HttpPost]
@@ -103,26 +113,34 @@ namespace simpat1k.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    if (value.Action == "insert")
+                    if ((HttpContext.Session.GetInt32("Tipe") == 1) || ((HttpContext.Session.GetInt32("Tipe") == 5) && (HttpContext.Session.GetString("Pappk") == "1")) || ((HttpContext.Session.GetInt32("Tipe") == 5) && (HttpContext.Session.GetString("Pappk") == "2")))
                     {
-                        foreach (var param in value.Params)
+                        if ((HttpContext.Session.GetInt32("Tipe") == 1) && (value.Action == "insert"))
                         {
-                            value.Value.IdPosisi = Int32.Parse(param.GetType().GetProperty("Value").GetValue(param).ToString());
-                        }
+                            foreach (var param in value.Params)
+                            {
+                                value.Value.IdPosisi = Int32.Parse(param.GetType().GetProperty("Value").GetValue(param).ToString());
+                            }
 
-                        DatabaseActionResultModel Result = _mProgram.Create(value.Value);
-                        msg = Result.Pesan;
+                            DatabaseActionResultModel Result = _mProgram.Create(value.Value);
+                            msg = Result.Pesan;
+                        }
+                        else if (value.Action == "update")
+                        {
+                            DatabaseActionResultModel Result = _mProgram.Update(value.Value);
+                            msg = Result.Pesan;
+                        }
+                        else if ((HttpContext.Session.GetInt32("Tipe") == 1) && (value.Action == "remove"))
+                        {
+                            DatabaseActionResultModel Result = _mProgram.Remove(Int32.Parse(value.Key.ToString()));
+                            msg = Result.Pesan;
+                        }
                     }
-                    else if (value.Action == "update")
+                    else
                     {
-                        DatabaseActionResultModel Result = _mProgram.Update(value.Value);
-                        msg = Result.Pesan;
+                        msg = "GAGAL DISIMPAN";
                     }
-                    else if (value.Action == "remove")
-                    {
-                        DatabaseActionResultModel Result = _mProgram.Remove(Int32.Parse(value.Key.ToString()));
-                        msg = Result.Pesan;
-                    }
+
                     return Json(new { data = value.Value, message = msg });
                 }
                 else
@@ -140,8 +158,6 @@ namespace simpat1k.Controllers
         [Route("ProgramMasterTemplateProgram")]
         public IActionResult PartialTemplateProgram([FromBody] CRUDModel<mProgramModel> value)
         {
-            var valTemplate = _mProgram.GetAll(1);
-            ViewBag.datasource = valTemplate;
             ViewBag.sortDropdown = "Ascending";
             ViewBag.queryOPD = "new ej.data.Query().select(['NamaOpd', 'IdOpd']).take(10).requiresCount()";
             ViewBag.Title = "Master Program " + value.Value.NamaProgram;
@@ -153,8 +169,6 @@ namespace simpat1k.Controllers
         [Route("ProgramMasterTemplateKegiatan")]
         public IActionResult PartialTemplateKegiatan([FromBody] CRUDModel<mProgramModel> value)
         {
-            var valTemplate = _mProgram.GetAll(2);
-            ViewBag.datasource = valTemplate;
             ViewBag.sortDropdown = "Ascending";
             ViewBag.queryOPD = "new ej.data.Query().select(['NamaOpd', 'IdOpd']).take(10).requiresCount()";
             ViewBag.queryProgram = "new ej.data.Query().select(['NamaSubkegiatan', 'IdProgram']).take(10).requiresCount().addParams('IdPosisi', 1)";
@@ -167,8 +181,6 @@ namespace simpat1k.Controllers
         [Route("ProgramMasterTemplateSubKegiatan")]
         public IActionResult PartialTemplateSubKegiatan([FromBody] CRUDModel<mProgramModel> value)
         {
-            var valTemplate = _mProgram.GetAll(3);
-            ViewBag.datasource = valTemplate;
             ViewBag.sortDropdown = "Ascending";
             ViewBag.queryOPD = "new ej.data.Query().select(['NamaOpd', 'IdOpd']).take(10).requiresCount()";
             ViewBag.queryProgram = "new ej.data.Query().select(['NamaSubkegiatan', 'IdProgram']).take(10).requiresCount().addParams('IdPosisi', 1)";

@@ -77,6 +77,18 @@
             e.updateData(OPDObj.dataSource, query);
         }
 
+        function onfilteringProgram(e) {
+            var SelectObj = document.getElementById("program").ej2_instances[0];
+            if (e.text == '' && e.text.length < 3) {
+                e.updateData(SelectObj.dataSource);
+            }
+
+            let query = new ej.data.Query().select(['NamaSubkegiatan', 'IdProgram']).take(10).addParams('IdPosisi', 1);
+            query = (e.text !== '' && e.text.length >= 1) ? query.where(new ej.data.Predicate('NamaSubkegiatan', 'contains', e.text, true).or('IdUrusan', 'contains', e.text, true)) : query;
+
+            e.updateData(SelectObj.dataSource, query);
+        }
+
         function onfilteringKodeRekening(e) {
             var SelectObj = document.getElementById("idbrgkerj").ej2_instances[0];
             if (e.text == '' && e.text.length < 3) {

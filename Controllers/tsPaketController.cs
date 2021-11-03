@@ -175,34 +175,27 @@ namespace simpat1k.Controllers
                 }
             }
 
-            if (HttpContext.Session.GetInt32("Tipe") == 3)
+            if ((HttpContext.Session.GetInt32("Tipe") == 3) && (HttpContext.Session.GetString("Pappk") == "3"))
             {
-                if (HttpContext.Session.GetString("Pappk") == "3")
+                if (value.Action == "insert")
                 {
-                    if (value.Action == "insert")
-                    {
-                        DatabaseActionResultModel Result = _tsPaket.Create(value.Value);
-                        msg = Result.Pesan;
-                    }
-                    else if (value.Action == "update")
-                    {
-                        DatabaseActionResultModel Result = _tsPaket.Update(value.Value);
-                        msg = Result.Pesan;
-                    }
-                    else if (value.Action == "remove")
-                    {
-                        DatabaseActionResultModel Result = _tsPaket.Remove(value.Key.ToString());
-                        msg = Result.Pesan;
-                    }
+                    DatabaseActionResultModel Result = _tsPaket.Create(value.Value);
+                    msg = Result.Pesan;
                 }
-                else
+                else if (value.Action == "update")
                 {
-                    msg = "GAGAL DISIMPAN";
+                    DatabaseActionResultModel Result = _tsPaket.Update(value.Value);
+                    msg = Result.Pesan;
+                }
+                else if (value.Action == "remove")
+                {
+                    DatabaseActionResultModel Result = _tsPaket.Remove(value.Key.ToString());
+                    msg = Result.Pesan;
                 }
             }
             else
             {
-                if (value.Action == "update")
+                if ((HttpContext.Session.GetInt32("Tipe") == 4) && (value.Action == "update"))
                 {
                     DatabaseActionResultModel Result = _tsPaket.UpdateReview(value.Value);
                     msg = Result.Pesan;
@@ -222,7 +215,7 @@ namespace simpat1k.Controllers
         {
             string msg = string.Empty;
 
-            if (value.Action == "update")
+            if ((HttpContext.Session.GetInt32("Tipe") == 4) && (value.Action == "update"))
             {
                 DatabaseActionResultModel Result = _tsPaket.UpdateStatusReview(value.Value);
                 msg = Result.Pesan;

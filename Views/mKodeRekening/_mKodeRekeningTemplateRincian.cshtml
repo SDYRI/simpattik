@@ -8,7 +8,7 @@
         <div class="form-group col-md-12">
             <div class="e-float-input e-control-wrapper">
                 <ejs-dropdownlist id="IdParentA" placeholder="Pilih Akun" popupHeight="200px" allowFiltering="true" filtering="onfilteringAkun" sortOrder="@ViewBag.sortDropdown"
-                                  query="@ViewBag.queryAkun" floatLabelType="Always" change="onchangeAkunObjek">
+                                  query="@ViewBag.queryAkun" floatLabelType="Always" close="onchangeAkunObjek">
                     <e-data-manager url="/KodeRekeningMaster/KodeRekeningMasterAll" adaptor="UrlAdaptor" crossDomain="true"></e-data-manager>
                     <e-dropdownlist-fields text="NamaSubRincian" value="IdKodeRekening"></e-dropdownlist-fields>
                 </ejs-dropdownlist>
@@ -17,7 +17,7 @@
         <div class="form-group col-md-12">
             <div class="e-float-input e-control-wrapper">
                 <ejs-dropdownlist id="IdParentK" placeholder="Pilih Kelompok" popupHeight="200px" allowFiltering="true" filtering="onfilteringKelompok" sortOrder="@ViewBag.sortDropdown"
-                                  query="@ViewBag.queryKelompok" floatLabelType="Always" enabled="false" change="onchangeKelompokRincian">
+                                  query="@ViewBag.queryKelompok" floatLabelType="Always" enabled="false" close="onchangeKelompokRincian">
                     <e-data-manager url="/KodeRekeningMaster/KodeRekeningMasterAll" adaptor="UrlAdaptor" crossDomain="true"></e-data-manager>
                     <e-dropdownlist-fields text="NamaSubRincian" value="IdKodeRekening"></e-dropdownlist-fields>
                 </ejs-dropdownlist>
@@ -26,7 +26,7 @@
         <div class="form-group col-md-12">
             <div class="e-float-input e-control-wrapper">
                 <ejs-dropdownlist id="IdParentJ" placeholder="Pilih Jenis" popupHeight="200px" allowFiltering="true" filtering="onfilteringJenis" sortOrder="@ViewBag.sortDropdown"
-                                  query="@ViewBag.queryJenis" floatLabelType="Always" enabled="false" change="onchangeJenis">
+                                  query="@ViewBag.queryJenis" floatLabelType="Always" enabled="false" close="onchangeJenis">
                     <e-data-manager url="/KodeRekeningMaster/KodeRekeningMasterAll" adaptor="UrlAdaptor" crossDomain="true"></e-data-manager>
                     <e-dropdownlist-fields text="NamaSubRincian" value="IdKodeRekening"></e-dropdownlist-fields>
                 </ejs-dropdownlist>

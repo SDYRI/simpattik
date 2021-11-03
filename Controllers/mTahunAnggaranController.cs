@@ -8,12 +8,14 @@ using System.Collections;
 using System;
 using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
+using Microsoft.Extensions.Hosting;
+using System.IO;
 
 namespace simpat1k.Controllers
 {
     [Route("TahunAnggaranMaster")]
     public class mTahunAnggaranController : Controller
-   {
+    {
         private readonly ImTahunAnggaran _mTahunAnggaran;
 
         public mTahunAnggaranController(ImTahunAnggaran mTahunAnggaran)
@@ -24,8 +26,15 @@ namespace simpat1k.Controllers
         [Route("IndexMe")]
         public IActionResult Index()
         {
-            ViewBag.Title = "Master Tahun Anggaran ";
-            return View();
+            if (HttpContext.Session.GetInt32("Tipe") == 1)
+            {
+                ViewBag.Title = "Master Tahun Anggaran ";
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("HandleError", "ErrorExecute", new { code = 404 });
+            }
         }
 
         [HttpPost]
@@ -67,21 +76,29 @@ namespace simpat1k.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    if (value.Action == "insert")
+                    if (HttpContext.Session.GetInt32("Tipe") == 1)
                     {
-                        DatabaseActionResultModel Result = _mTahunAnggaran.Create(value.Value);
-                        msg = Result.Pesan;
-                        //if (Result.Success)
-                        //{
-                        //    //model.IdKota = Convert.ToInt32(Result.Data);
-                        //    //SaveLogSimelon(model, "129");
-                        //}
+                        if (value.Action == "insert")
+                        {
+                            DatabaseActionResultModel Result = _mTahunAnggaran.Create(value.Value);
+                            msg = Result.Pesan;
+                            //if (Result.Success)
+                            //{
+                            //    //model.IdKota = Convert.ToInt32(Result.Data);
+                            //    //SaveLogSimelon(model, "129");
+                            //}
+                        }
+                        else if (value.Action == "update")
+                        {
+                            DatabaseActionResultModel Result = _mTahunAnggaran.Update(value.Value);
+                            msg = Result.Pesan;
+                        }
                     }
-                    else if (value.Action == "update")
+                    else
                     {
-                        DatabaseActionResultModel Result = _mTahunAnggaran.Update(value.Value);
-                        msg = Result.Pesan;
+                        msg = "GAGAL DISIMPAN";
                     }
+
                     return Json(new { data = value.Value, message = msg });
                 }
                 else
@@ -99,8 +116,6 @@ namespace simpat1k.Controllers
         [Route("TahunAnggaranMasterTemplate")]
         public IActionResult PartialTemplateUser([FromBody] CRUDModel<mTahunAnggaranModel> value)
         {
-            var valTemplate = _mTahunAnggaran.GetAll();
-            ViewBag.datasource = valTemplate;
             ViewBag.Title = "Master Tahun Anggaran " + value.Value.TahunAnggaran;
 
             return PartialView("_mTahunAnggaranTemplate", value.Value);
