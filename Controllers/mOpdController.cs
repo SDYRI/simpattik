@@ -12,6 +12,7 @@ using System;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Hosting;
 using System.IO;
+using Microsoft.VisualBasic;
 
 namespace simpat1k.Controllers
 {
@@ -48,6 +49,36 @@ namespace simpat1k.Controllers
         public IActionResult UrlDatasource([FromBody] mOpdModel dm)
         {
             IEnumerable DataSource = _mOpd.GetAll(dm.IdPosisi);
+            DataOperations operation = new DataOperations();
+            if (dm.Search != null && dm.Search.Count > 0)
+            {
+                DataSource = operation.PerformSearching(DataSource, dm.Search);  //Search
+            }
+            if (dm.Sorted != null && dm.Sorted.Count > 0) //Sorting
+            {
+                DataSource = operation.PerformSorting(DataSource, dm.Sorted);
+            }
+            if (dm.Where != null && dm.Where.Count > 0) //Filtering
+            {
+                DataSource = operation.PerformFiltering(DataSource, dm.Where, dm.Where[0].Operator);
+            }
+            int count = DataSource.Cast<mOpdModel>().Count();
+            if (dm.Skip != 0)
+            {
+                DataSource = operation.PerformSkip(DataSource, dm.Skip);   //Paging
+            }
+            if (dm.Take != 0)
+            {
+                DataSource = operation.PerformTake(DataSource, dm.Take);
+            }
+            return dm.RequiresCounts ? Json(new { result = DataSource, count = count }) : Json(DataSource);
+        }
+
+        [HttpPost]
+        [Route("OpdMasterUrusan")]
+        public IActionResult UrusanDatasource([FromBody] mOpdModel dm)
+        {
+            IEnumerable DataSource = _mOpd.GetAllUrusan(dm.IdPosisi, dm.ListIdUrusanCb);
             DataOperations operation = new DataOperations();
             if (dm.Search != null && dm.Search.Count > 0)
             {
@@ -114,6 +145,22 @@ namespace simpat1k.Controllers
                 {
                     if (HttpContext.Session.GetInt32("Tipe") == 1)
                     {
+                        if(value.Value.ListIdUrusan != null)
+                        {
+                            if (value.Value.IdPosisi == 2)
+                            {
+                                value.Value.ListIdUrusanCb = string.Join(",", value.Value.ListIdUrusanCb);
+                            }
+                            else
+                            {
+                                value.Value.ListIdUrusanCb = string.Join(",", value.Value.ListIdUrusan);
+                            }
+                        }
+                        else
+                        {
+                            value.Value.ListIdUrusanCb = string.Join(",", value.Value.ListIdUrusanCb);
+                        }
+
                         if (value.Action == "insert")
                         {
                             foreach (var param in value.Params)
@@ -167,7 +214,7 @@ namespace simpat1k.Controllers
         public IActionResult PartialTemplateOpd([FromBody] CRUDModel<mOpdModel> value)
         {
             ViewBag.sortDropdown = "Ascending";
-            ViewBag.queryUrusan = "new ej.data.Query().select(['NamaSubUrusan', 'IdUrusan']).take(10).requiresCount().addParams('IdPosisi', 2)";
+            ViewBag.queryUrusan = "new ej.data.Query().select(['NamaSubUrusan', 'IdUrusan']).requiresCount().addParams('IdPosisi', 2)";
             ViewBag.Title = "Master Opd " + value.Value.NamaOpd;
 
             return PartialView("_mOpdTemplateOpd", value.Value);

@@ -23,6 +23,8 @@ using System.Runtime.InteropServices.ComTypes;
 using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Hosting;
 using Syncfusion.EJ2.Spreadsheet;
+using Newtonsoft.Json.Linq;
+using System.Text;
 
 namespace simpat1k.Controllers
 {
@@ -644,6 +646,7 @@ namespace simpat1k.Controllers
         {
             ExportModel exportModel = new ExportModel();
             exportModel = (ExportModel)JsonConvert.DeserializeObject(GridModel, typeof(ExportModel));  // Deserialized the GridModel
+            string hashStyle = string.Empty;
 
             IEnumerable DataSource = _tsIdentifikasi.GetAllLaporan(0);
             DataOperations operation = new DataOperations();
@@ -667,9 +670,18 @@ namespace simpat1k.Controllers
 
                 IList<tsIdentifikasiModel> subkegiatan = DataSource.AsQueryable().Cast<tsIdentifikasiModel>().ToList();
 
+                int noSheet = 1;
                 foreach (var subkegiatanName in subkegiatan.GroupBy(c => new { c.opd, c.subopd, c.namappk, c.nipppk, c.namaprogram, c.namakegiatan, c.namasubkegiatan }).Select(sg => new { sg.Key }))
                 {
-                    worksheet = workbook.Worksheets.Create(subkegiatanName.Key.namasubkegiatan);
+                    using (SHA256 sha256Hash = SHA256.Create())
+                    {
+                        //From String to byte array
+                        byte[] sourceBytes = Encoding.UTF8.GetBytes("simpattik" + subkegiatanName.Key.namasubkegiatan + "tasikmalayakota" + subkegiatanName.Key.opd + "bethasolution");
+                        byte[] hashBytes = sha256Hash.ComputeHash(sourceBytes);
+                        hashStyle = BitConverter.ToString(hashBytes).Replace("-", String.Empty);
+                    }
+
+                    worksheet = workbook.Worksheets.Create(noSheet + ". " + subkegiatanName.Key.namasubkegiatan.Substring(0, 20));
 
                     IList<tsIdentifikasiModel> reports = DataSource.AsQueryable().Cast<tsIdentifikasiModel>().ToList();
                     var visualData = reports.Where(rs => rs.namasubkegiatan.Contains(subkegiatanName.Key.namasubkegiatan)).Select(vd => new { vd.no, vd.namabrgkerj, vd.kriteria, vd.usahakecil, vd.uraian, vd.lokasi, vd.jeniskebutuhan, vd.kbki, vd.tipepaketnama, vd.namapaket, vd.spesifikasi, vd.jumlahbarang, vd.satuan, vd.tipeswakelolapaket, vd.subopd, vd.metodepemilihan, vd.pelaksanaanmulai, vd.pelaksanaanakhir, vd.nilaisumberdana, vd.valuesumberdana }).ToList();
@@ -744,14 +756,14 @@ namespace simpat1k.Controllers
                     worksheet["S10"].Text = "Anggaran Pengadaan";
                     worksheet["T10"].Text = "Sumber Dana";
 
-                    IStyle headingStyleLeft = workbook.Styles.Add("HeadingStyleHeader" + subkegiatanName.Key.subopd + subkegiatanName.Key.namaprogram + subkegiatanName.Key.namakegiatan + subkegiatanName.Key.namasubkegiatan);
+                    IStyle headingStyleLeft = workbook.Styles.Add("HeadingStyleHeader" + hashStyle);
                     headingStyleLeft.BeginUpdate();
                     headingStyleLeft.Font.Bold = true;
                     headingStyleLeft.HorizontalAlignment = ExcelHAlign.HAlignLeft;
                     headingStyleLeft.EndUpdate();
                     worksheet.Range["A3:A8"].CellStyle = headingStyleLeft;
 
-                    IStyle headingStyleCenter = workbook.Styles.Add("HeadingStyle" + subkegiatanName.Key.subopd + subkegiatanName.Key.namaprogram + subkegiatanName.Key.namakegiatan + subkegiatanName.Key.namasubkegiatan);
+                    IStyle headingStyleCenter = workbook.Styles.Add("HeadingStyle" + hashStyle);
                     headingStyleCenter.BeginUpdate();
                     headingStyleCenter.Font.Bold = true;
                     headingStyleCenter.HorizontalAlignment = ExcelHAlign.HAlignCenter;
@@ -759,7 +771,7 @@ namespace simpat1k.Controllers
                     worksheet.Range["A1:C1"].CellStyle = headingStyleCenter;
                     worksheet.Range["B" + (FirstRow + (CountData + 2)) + ":B" + (FirstRow + (CountData + 3))].CellStyle = headingStyleCenter;
 
-                    IStyle headingTitleBorder = workbook.Styles.Add("HeadingTitleBorder" + subkegiatanName.Key.subopd + subkegiatanName.Key.namaprogram + subkegiatanName.Key.namakegiatan + subkegiatanName.Key.namasubkegiatan);
+                    IStyle headingTitleBorder = workbook.Styles.Add("HeadingTitleBorder" + hashStyle);
                     headingTitleBorder.BeginUpdate();
                     headingTitleBorder.Font.Bold = true;
                     headingTitleBorder.HorizontalAlignment = ExcelHAlign.HAlignCenter;
@@ -770,7 +782,7 @@ namespace simpat1k.Controllers
                     headingTitleBorder.EndUpdate();
                     worksheet.Range["A10:T10"].CellStyle = headingTitleBorder;
 
-                    IStyle headingBorder = workbook.Styles.Add("HeadingBorder" + subkegiatanName.Key.subopd + subkegiatanName.Key.namaprogram + subkegiatanName.Key.namakegiatan + subkegiatanName.Key.namasubkegiatan);
+                    IStyle headingBorder = workbook.Styles.Add("HeadingBorder" + hashStyle);
                     headingBorder.BeginUpdate();
                     headingBorder.Borders[ExcelBordersIndex.EdgeLeft].LineStyle = ExcelLineStyle.Thin;
                     headingBorder.Borders[ExcelBordersIndex.EdgeRight].LineStyle = ExcelLineStyle.Thin;
@@ -779,7 +791,7 @@ namespace simpat1k.Controllers
                     headingBorder.EndUpdate();
                     worksheet.Range["A" + FirstRow + ":T" + (FirstRow + (CountData - 1))].CellStyle = headingBorder;
 
-                    IStyle footerStyleCenter = workbook.Styles.Add("FooterStyle" + subkegiatanName.Key.subopd + subkegiatanName.Key.namaprogram + subkegiatanName.Key.namakegiatan + subkegiatanName.Key.namasubkegiatan);
+                    IStyle footerStyleCenter = workbook.Styles.Add("FooterStyle" + hashStyle);
                     footerStyleCenter.BeginUpdate();
                     footerStyleCenter.HorizontalAlignment = ExcelHAlign.HAlignCenter;
                     footerStyleCenter.EndUpdate();
@@ -792,6 +804,8 @@ namespace simpat1k.Controllers
 
                     worksheet.UsedRange.AutofitColumns();
                     worksheet.Protect(",6Gn]a3VX@whh`>z=,]Ps6Jy<j4.x[n aGA:$-C`.,Kmf)93nYXjS2Q~rGP@, CZb8DmQ9tCh = SDY_RI - &{={pN3m`KxL % B9 + k", ExcelSheetProtection.All);
+
+                    noSheet = noSheet + 1;
                 }
 
                 IWorksheet hideworksheet = workbook.Worksheets[0];

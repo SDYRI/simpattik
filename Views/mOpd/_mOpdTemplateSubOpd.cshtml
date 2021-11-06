@@ -7,7 +7,7 @@
     <div class="form-row">
        <div class="form-group col-md-12">
             <div class="e-float-input e-control-wrapper">
-                <ejs-dropdownlist id="ListIdUrusan" placeholder="Pilih Bidang Urusan" popupHeight="200px" allowFiltering="true" filtering="onfilteringUrusan" sortOrder="@ViewBag.sortDropdown"
+                <ejs-dropdownlist id="ListIdUrusanCb" placeholder="Pilih Bidang Urusan" popupHeight="200px" allowFiltering="true" filtering="onfilteringUrusanSubOpd" sortOrder="@ViewBag.sortDropdown"
                                   query="@ViewBag.queryUrusan" floatLabelType="Always" close="onchangeUrusan">
                     <e-data-manager url="/UrusanMaster/UrusanMasterAll" adaptor="UrlAdaptor" crossDomain="true"></e-data-manager>
                     <e-dropdownlist-fields text="NamaSubUrusan" value="IdUrusan"></e-dropdownlist-fields>
@@ -18,7 +18,7 @@
             <div class="e-float-input e-control-wrapper">
                 <ejs-dropdownlist id="IdParent" placeholder="Pilih Organisasi" popupHeight="200px" allowFiltering="true" filtering="onfilteringOpd" sortOrder="@ViewBag.sortDropdown"
                                   query="@ViewBag.queryOPD" floatLabelType="Always" enabled="false">
-                    <e-data-manager url="/OpdMaster/OpdMasterAll" adaptor="UrlAdaptor" crossDomain="true"></e-data-manager>
+                    <e-data-manager url="/OpdMaster/OpdMasterUrusan" adaptor="UrlAdaptor" crossDomain="true"></e-data-manager>
                     <e-dropdownlist-fields text="NamaSubOpd" value="IdOpd"></e-dropdownlist-fields>
                 </ejs-dropdownlist>
             </div>

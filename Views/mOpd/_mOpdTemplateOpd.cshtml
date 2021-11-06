@@ -7,11 +7,15 @@
     <div class="form-row">
         <div class="form-group col-md-12">
             <div class="e-float-input e-control-wrapper">
-                <ejs-dropdownlist id="ListIdUrusan" placeholder="Pilih Bidang Urusan" popupHeight="200px" allowFiltering="true" filtering="onfilteringUrusan" sortOrder="@ViewBag.sortDropdown" 
-                                  query="@ViewBag.queryUrusan" floatLabelType="Always">
+                @*<ejs-dropdownlist id="ListIdUrusan" placeholder="Pilih Bidang Urusan" popupHeight="200px" allowFiltering="true" filtering="onfilteringUrusan" sortOrder="@ViewBag.sortDropdown"
+                          query="@ViewBag.queryUrusan" floatLabelType="Always">
+            <e-data-manager url="/UrusanMaster/UrusanMasterAll" adaptor="UrlAdaptor" crossDomain="true"></e-data-manager>
+            <e-dropdownlist-fields text="NamaSubUrusan" value="IdUrusan"></e-dropdownlist-fields>
+        </ejs-dropdownlist>*@
+                <ejs-multiselect id="ListIdUrusan" placeholder="Pilih Bidang Urusan" popupHeight="200px" allowFiltering="true" filtering="onfilteringUrusan" sortOrder="@ViewBag.sortDropdown"          query="@ViewBag.queryUrusan" floatLabelType="Always" showDropDownIcon="true">
                     <e-data-manager url="/UrusanMaster/UrusanMasterAll" adaptor="UrlAdaptor" crossDomain="true"></e-data-manager>
-                    <e-dropdownlist-fields text="NamaSubUrusan" value="IdUrusan"></e-dropdownlist-fields>
-                </ejs-dropdownlist>
+                    <e-multiselect-fields text="NamaSubUrusan" value="IdUrusan"></e-multiselect-fields>
+                </ejs-multiselect>
             </div>
         </div>
         <div class="form-group col-md-4">
