@@ -44,11 +44,16 @@
         </div>
         <div class="form-group col-md-12">
             <div class="e-float-input e-control-wrapper">
-                <ejs-dropdownlist id="IdUserPPK" placeholder="Pilih PPK" popupHeight="200px" allowFiltering="true" filtering="onfilteringPpk" sortOrder="@ViewBag.sortDropdown"
+                @*<ejs-dropdownlist id="IdUserPPK" placeholder="Pilih PPK" popupHeight="200px" allowFiltering="true" filtering="onfilteringPpk" sortOrder="@ViewBag.sortDropdown"
                                   query="@ViewBag.queryPPK" floatLabelType="Always" enabled="true">
                     <e-data-manager url="/UserMaster/UserMasterAll" adaptor="UrlAdaptor" crossDomain="true"></e-data-manager>
                     <e-dropdownlist-fields text="NamaUser" value="IdUser"></e-dropdownlist-fields>
-                </ejs-dropdownlist>
+                </ejs-dropdownlist>*@
+
+                <ejs-multiselect id="IdUserPPK" placeholder="Pilih PPK" popupHeight="200px" allowFiltering="true" filtering="onfilteringPpk" sortOrder="@ViewBag.sortDropdown" query="@ViewBag.queryPPK" floatLabelType="Always" showDropDownIcon="true">
+                    <e-data-manager url="/UserMaster/UserMasterAll" adaptor="UrlAdaptor" crossDomain="true"></e-data-manager>
+                    <e-multiselect-fields text="NamaUser" value="IdUser"></e-multiselect-fields>
+                </ejs-multiselect>
             </div>
         </div>
     </div>

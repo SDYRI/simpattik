@@ -115,6 +115,15 @@ namespace simpat1k.Controllers
                 {
                     if ((HttpContext.Session.GetInt32("Tipe") == 1) || ((HttpContext.Session.GetInt32("Tipe") == 5) && (HttpContext.Session.GetString("Pappk") == "1")) || ((HttpContext.Session.GetInt32("Tipe") == 5) && (HttpContext.Session.GetString("Pappk") == "2")))
                     {
+                        if (value.Value.IdUserPPK != null)
+                        {
+                            value.Value.IdUserPPKCb = string.Join(",", value.Value.IdUserPPK);
+                        }
+                        else
+                        {
+                            value.Value.IdUserPPKCb = string.Join(",", value.Value.IdUserPPKCb);
+                        }
+
                         if ((HttpContext.Session.GetInt32("Tipe") == 1) && (value.Action == "insert"))
                         {
                             foreach (var param in value.Params)
@@ -186,7 +195,7 @@ namespace simpat1k.Controllers
             ViewBag.queryProgram = "new ej.data.Query().select(['NamaSubkegiatan', 'IdProgram']).take(10).requiresCount().addParams('IdPosisi', 1)";
             ViewBag.queryKegiatan = "new ej.data.Query().select(['NamaSubkegiatan', 'IdProgram']).take(10).requiresCount().addParams('IdPosisi', 2)";
             //ViewBag.queryPPK = "new ej.data.Query().select(['NamaUser', 'IdUser']).take(10).requiresCount().addParams('PappkIdUser', 3)";
-            ViewBag.queryPPK = "new ej.data.Query().select(['NamaUser', 'IdUser']).take(10).requiresCount()";
+            ViewBag.queryPPK = "new ej.data.Query().select(['NamaUser', 'IdUser']).requiresCount()";
             ViewBag.Title = "Master Sub Kegiatan " + value.Value.NamaProgram;
 
             return PartialView("_mProgramTemplateSubKegiatan", value.Value);
