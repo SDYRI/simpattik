@@ -10,7 +10,7 @@ namespace TasikmalayaKota.Simpatik.Web.Services.tsIdentifikasi.Models
 {
     public class sumberDanaModel
     {
-        public int nilai { get; set; }
+        public Int64 nilai { get; set; }
         public string smbrdn { get; set; }
     }
 
@@ -57,12 +57,13 @@ namespace TasikmalayaKota.Simpatik.Web.Services.tsIdentifikasi.Models
         public string fungsi { get; set; }
         public string jumlahbarang { get; set; }
         public string satuan { get; set; }
+        public string namasatuan { get; set; }
         public string waktu { get; set; }
         public string pihak { get; set; }
         public string totalwaktu { get; set; }
         public string ekatalog { get; set; }
         public string prioritas { get; set; }
-        public int perkiraanbiaya { get; set; }
+        public Int64 perkiraanbiaya { get; set; }
         public string jumlahpegawai { get; set; }
         public string bebantugas { get; set; }
         public string jumlahbarangtersedia { get; set; }
@@ -138,6 +139,7 @@ namespace TasikmalayaKota.Simpatik.Web.Services.tsIdentifikasi.Models
         public string txtsumberdana { get; set; }
         public IList<sumberDanaModel> sumberdanal { get; set; }
         public string nilaisumberdana { get; set; }
+        public Int64 nilaisumberdanaint { get; set; }
         public string valuesumberdana { get; set; }
         #endregion
 

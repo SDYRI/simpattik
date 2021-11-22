@@ -186,6 +186,11 @@
                         var dropObject = document.getElementById("idbrgkerj").ej2_instances[0];
                         dropObject.value = args.rowData['idbrgkerj'];
                     }
+                    if (typeof args.rowData['satuan'] != 'undefined') {
+                        var cmboObject = document.getElementById("satuan").ej2_instances[0];
+                        cmboObject.value = args.rowData['satuan'];
+                        cmboObject.text = args.rowData['namasatuan'];
+                    }
                     ej.popups.hideSpinner(args.dialog.element);
                 }).catch(function (xhr) {
                     ej.popups.hideSpinner(args.dialog.element);

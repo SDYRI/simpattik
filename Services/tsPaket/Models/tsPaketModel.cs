@@ -36,8 +36,8 @@ namespace TasikmalayaKota.Simpatik.Web.Services.tsPaket.Models
         public string urutpaketstrategis { get; set; }
         public string keteranganmetode { get; set; }
         public string keteranganpagu { get; set; }
-        public int pagusblm { get; set; }
-        public int pagustlh { get; set; }
+        public Int64 pagusblm { get; set; }
+        public Int64 pagustlh { get; set; }
         public int nilaibelanjalangsung { get; set; }
         public int nilaisirup { get; set; }
         public int nilaiselisih { get; set; }

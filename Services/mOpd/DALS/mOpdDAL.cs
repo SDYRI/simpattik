@@ -56,6 +56,11 @@ namespace TasikmalayaKota.Simpatik.Web.Services.mOpd.DALS
                                 ListUrusan = (dataReader["listurusanopd"].GetType() != typeof(DBNull) ? (string)dataReader["listurusanopd"] : ""),
                                 IdParent = (dataReader["idparent"].GetType() != typeof(DBNull) ? (int)dataReader["idparent"] : 0),
                                 IdPosisi = (dataReader["idposisi"].GetType() != typeof(DBNull) ? (int)dataReader["idposisi"] : 0),
+                                AlamatOpd = (dataReader["alamatopd"].GetType() != typeof(DBNull) ? (string)dataReader["alamatopd"] : ""),
+                                TlpOpd = (dataReader["tlpopd"].GetType() != typeof(DBNull) ? (string)dataReader["tlpopd"] : ""),
+                                FaxOpd = (dataReader["faxopd"].GetType() != typeof(DBNull) ? (string)dataReader["faxopd"] : ""),
+                                KodeposOpd = (dataReader["kodeposopd"].GetType() != typeof(DBNull) ? (string)dataReader["kodeposopd"] : ""),
+                                EmailOpd = (dataReader["emailopd"].GetType() != typeof(DBNull) ? (string)dataReader["emailopd"] : ""),
                             });
                         }
                     }
@@ -98,6 +103,11 @@ namespace TasikmalayaKota.Simpatik.Web.Services.mOpd.DALS
                                 ListUrusan = (dataReader["listurusanopd"].GetType() != typeof(DBNull) ? (string)dataReader["listurusanopd"] : ""),
                                 IdParent = (dataReader["idparent"].GetType() != typeof(DBNull) ? (int)dataReader["idparent"] : 0),
                                 IdPosisi = (dataReader["idposisi"].GetType() != typeof(DBNull) ? (int)dataReader["idposisi"] : 0),
+                                AlamatOpd = (dataReader["alamatopd"].GetType() != typeof(DBNull) ? (string)dataReader["alamatopd"] : ""),
+                                TlpOpd = (dataReader["tlpopd"].GetType() != typeof(DBNull) ? (string)dataReader["tlpopd"] : ""),
+                                FaxOpd = (dataReader["faxopd"].GetType() != typeof(DBNull) ? (string)dataReader["faxopd"] : ""),
+                                KodeposOpd = (dataReader["kodeposopd"].GetType() != typeof(DBNull) ? (string)dataReader["kodeposopd"] : ""),
+                                EmailOpd = (dataReader["emailopd"].GetType() != typeof(DBNull) ? (string)dataReader["emailopd"] : ""),
                             });
                         }
                     }
@@ -123,6 +133,11 @@ namespace TasikmalayaKota.Simpatik.Web.Services.mOpd.DALS
                     sqlCommand.Parameters.AddWithValue("_nmdtopd", ParamD.NamaSubOpd);
                     sqlCommand.Parameters.AddWithValue("_idpropd", ParamD.IdParent == 0 ? ParamD.IdParentU : ParamD.IdParent);
                     sqlCommand.Parameters.AddWithValue("_ktkdopd", ParamD.KodeSubOpd);
+                    sqlCommand.Parameters.AddWithValue("_almtopd", ParamD.AlamatOpd);
+                    sqlCommand.Parameters.AddWithValue("_tlpopd", ParamD.TlpOpd);
+                    sqlCommand.Parameters.AddWithValue("_faxopd", ParamD.FaxOpd);
+                    sqlCommand.Parameters.AddWithValue("_kdposopd", ParamD.KodeposOpd);
+                    sqlCommand.Parameters.AddWithValue("_emailopd", ParamD.EmailOpd);
                     sqlCommand.Parameters.AddWithValue("_posisi", ParamD.IdPosisi);
                     sqlCommand.Parameters.AddWithValue("_idurusan", ParamD.ListIdUrusanCb);
                     sqlCommand.Parameters.AddWithValue("_tahun", int.Parse(TAHUN));
@@ -159,6 +174,11 @@ namespace TasikmalayaKota.Simpatik.Web.Services.mOpd.DALS
                     sqlCommand.Parameters.AddWithValue("_nmdtopd", ParamD.NamaSubOpd);
                     sqlCommand.Parameters.AddWithValue("_idpropd", ParamD.IdParent);
                     sqlCommand.Parameters.AddWithValue("_ktkdopd", ParamD.KodeSubOpd);
+                    sqlCommand.Parameters.AddWithValue("_almtopd", ParamD.AlamatOpd);
+                    sqlCommand.Parameters.AddWithValue("_tlpopd", ParamD.TlpOpd);
+                    sqlCommand.Parameters.AddWithValue("_faxopd", ParamD.FaxOpd);
+                    sqlCommand.Parameters.AddWithValue("_kdposopd", ParamD.KodeposOpd);
+                    sqlCommand.Parameters.AddWithValue("_emailopd", ParamD.EmailOpd);
                     sqlCommand.Parameters.AddWithValue("_posisi", ParamD.IdPosisi);
                     sqlCommand.Parameters.AddWithValue("_idurusan", ParamD.ListIdUrusanCb);
                     sqlCommand.Parameters.AddWithValue("_uid", UID);

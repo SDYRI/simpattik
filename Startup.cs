@@ -40,6 +40,8 @@ using TasikmalayaKota.Simpatik.Web.Services.tsPaket.DALS;
 using Microsoft.AspNetCore.Antiforgery;
 using TasikmalayaKota.Simpatik.Web.Services.tHps.Interfaces;
 using TasikmalayaKota.Simpatik.Web.Services.tHps.DALS;
+using TasikmalayaKota.Simpatik.Web.Services.mSatuan.Interfaces;
+using TasikmalayaKota.Simpatik.Web.Services.mSatuan.DALS;
 
 namespace TasikmalayaKota.Simpatik.Web
 {
@@ -110,6 +112,7 @@ namespace TasikmalayaKota.Simpatik.Web
                 .AddTransient<ImUrusan, mUrusanDAL>()
                 .AddTransient<ItsPaket, tsPaketDAL>()
                 .AddTransient<ItHps, tHpsDAL>()
+                .AddTransient<ImSatuan, mSatuanDAL>()
             ;
         }
 

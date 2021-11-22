@@ -23,6 +23,11 @@ namespace TasikmalayaKota.Simpatik.Web.Services.mOpd.Models
         public int IdParentU { get; set; }
         public int IdParent { get; set; }
         public int IdPosisi { get; set; }
+        public string AlamatOpd { get; set; }
+        public string TlpOpd { get; set; }
+        public string FaxOpd { get; set; }
+        public string KodeposOpd { get; set; }
+        public string EmailOpd { get; set; }
     }
 
 }

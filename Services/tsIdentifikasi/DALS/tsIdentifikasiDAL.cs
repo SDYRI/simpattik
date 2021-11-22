@@ -84,7 +84,7 @@ namespace TasikmalayaKota.Simpatik.Web.Services.tsIdentifikasi.DALS
                                 totalwaktu = (dataReader["rtotalwaktu"].GetType() != typeof(DBNull) ? (string)dataReader["rtotalwaktu"] : ""),
                                 ekatalog = (dataReader["rekatalog"].GetType() != typeof(DBNull) ? (string)dataReader["rekatalog"] : ""),
                                 prioritas = (dataReader["rprioritas"].GetType() != typeof(DBNull) ? (string)dataReader["rprioritas"] : ""),
-                                perkiraanbiaya = (dataReader["rperkiraanbiaya"].GetType() != typeof(DBNull) ? (int)dataReader["rperkiraanbiaya"] : 0),
+                                perkiraanbiaya = (dataReader["rperkiraanbiaya"].GetType() != typeof(DBNull) ? (Int64)dataReader["rperkiraanbiaya"] : 0),
                                 jumlahpegawai = (dataReader["rjumlahpegawai"].GetType() != typeof(DBNull) ? (string)dataReader["rjumlahpegawai"] : ""),
                                 bebantugas = (dataReader["rbebantugas"].GetType() != typeof(DBNull) ? (string)dataReader["rbebantugas"] : ""),
                                 jumlahbarangtersedia = (dataReader["rjumlahbarangtersedia"].GetType() != typeof(DBNull) ? (string)dataReader["rjumlahbarangtersedia"] : ""),
@@ -140,6 +140,7 @@ namespace TasikmalayaKota.Simpatik.Web.Services.tsIdentifikasi.DALS
                                 pnyswakelola = (dataReader["rpnyswakelola"].GetType() != typeof(DBNull) ? (string)dataReader["rpnyswakelola"] : ""),
                                 nilaisirup = (dataReader["rnilaisirup"].GetType() != typeof(DBNull) ? (int)dataReader["rnilaisirup"] : 0),
                                 satuan = (dataReader["rsatuan"].GetType() != typeof(DBNull) ? (string)dataReader["rsatuan"] : "1"),
+                                namasatuan = (dataReader["rnamasatuan"].GetType() != typeof(DBNull) ? (string)dataReader["rnamasatuan"] : "Unit"),
                                 sumberdana = (dataReader["rsumberdana"].GetType() != typeof(DBNull) ? (string)dataReader["rsumberdana"] != "[]" ? (string)dataReader["rsumberdana"] : "[0]" : "[0]"),
                                 sumberdanal = sumberDanaAll,
                                 kondisilayak = (dataReader["rkondisilayak"].GetType() != typeof(DBNull) ? (string)dataReader["rkondisilayak"] != "[]" ? (string)dataReader["rkondisilayak"] : "[0]" : "[0]"),
@@ -221,7 +222,7 @@ namespace TasikmalayaKota.Simpatik.Web.Services.tsIdentifikasi.DALS
                                 totalwaktu = (dataReader["rtotalwaktu"].GetType() != typeof(DBNull) ? (string)dataReader["rtotalwaktu"] : ""),
                                 ekatalog = (dataReader["rekatalog"].GetType() != typeof(DBNull) ? (string)dataReader["rekatalog"] : ""),
                                 prioritas = (dataReader["rprioritas"].GetType() != typeof(DBNull) ? (string)dataReader["rprioritas"] : ""),
-                                perkiraanbiaya = (dataReader["rperkiraanbiaya"].GetType() != typeof(DBNull) ? (int)dataReader["rperkiraanbiaya"] : 0),
+                                perkiraanbiaya = (dataReader["rperkiraanbiaya"].GetType() != typeof(DBNull) ? (Int64)dataReader["rperkiraanbiaya"] : 0),
                                 jumlahpegawai = (dataReader["rjumlahpegawai"].GetType() != typeof(DBNull) ? (string)dataReader["rjumlahpegawai"] : ""),
                                 bebantugas = (dataReader["rbebantugas"].GetType() != typeof(DBNull) ? (string)dataReader["rbebantugas"] : ""),
                                 jumlahbarangtersedia = (dataReader["rjumlahbarangtersedia"].GetType() != typeof(DBNull) ? (string)dataReader["rjumlahbarangtersedia"] : ""),
@@ -277,6 +278,7 @@ namespace TasikmalayaKota.Simpatik.Web.Services.tsIdentifikasi.DALS
                                 pnyswakelola = (dataReader["rpnyswakelola"].GetType() != typeof(DBNull) ? (string)dataReader["rpnyswakelola"] : ""),
                                 nilaisirup = (dataReader["rnilaisirup"].GetType() != typeof(DBNull) ? (int)dataReader["rnilaisirup"] : 0),
                                 satuan = (dataReader["rsatuan"].GetType() != typeof(DBNull) ? (string)dataReader["rsatuan"] : "1"),
+                                namasatuan = (dataReader["rnamasatuan"].GetType() != typeof(DBNull) ? (string)dataReader["rnamasatuan"] : "Unit"),
                                 sumberdana = (dataReader["rsumberdana"].GetType() != typeof(DBNull) ? (string)dataReader["rsumberdana"] != "[]" ? (string)dataReader["rsumberdana"] : "[0]" : "[0]"),
                                 sumberdanal = sumberDanaAll,
                                 kondisilayak = (dataReader["rkondisilayak"].GetType() != typeof(DBNull) ? (string)dataReader["rkondisilayak"] != "[]" ? (string)dataReader["rkondisilayak"] : "[0]" : "[0]"),
@@ -301,7 +303,6 @@ namespace TasikmalayaKota.Simpatik.Web.Services.tsIdentifikasi.DALS
         {
             List<tsIdentifikasiModel> Result = new List<tsIdentifikasiModel>();
             List<enumDataModel> jenisKebutuhan = new enumDataModel().JenisKebutuhan();
-            List<enumDataModel> satuan = new enumDataModel().Satuan();
             List<enumDataModel> metodepemilihan = new enumDataModel().MetodePemilihan();
             try
             {
@@ -352,7 +353,7 @@ namespace TasikmalayaKota.Simpatik.Web.Services.tsIdentifikasi.DALS
                                 totalwaktu = (dataReader["rtotalwaktu"].GetType() != typeof(DBNull) ? (string)dataReader["rtotalwaktu"] : ""),
                                 ekatalog = (dataReader["rekatalog"].GetType() != typeof(DBNull) ? (string)dataReader["rekatalog"] : ""),
                                 prioritas = (dataReader["rprioritas"].GetType() != typeof(DBNull) ? (string)dataReader["rprioritas"] : ""),
-                                perkiraanbiaya = (dataReader["rperkiraanbiaya"].GetType() != typeof(DBNull) ? (int)dataReader["rperkiraanbiaya"] : 0),
+                                perkiraanbiaya = (dataReader["rperkiraanbiaya"].GetType() != typeof(DBNull) ? (Int64)dataReader["rperkiraanbiaya"] : 0),
                                 jumlahpegawai = (dataReader["rjumlahpegawai"].GetType() != typeof(DBNull) ? (string)dataReader["rjumlahpegawai"] : ""),
                                 bebantugas = (dataReader["rbebantugas"].GetType() != typeof(DBNull) ? (string)dataReader["rbebantugas"] : ""),
                                 jumlahbarangtersedia = (dataReader["rjumlahbarangtersedia"].GetType() != typeof(DBNull) ? (string)dataReader["rjumlahbarangtersedia"] : ""),
@@ -408,7 +409,8 @@ namespace TasikmalayaKota.Simpatik.Web.Services.tsIdentifikasi.DALS
                                 tipeswakelolapaket = (dataReader["rtipeswakelolapaket"].GetType() != typeof(DBNull) ? (string)dataReader["rtipeswakelolapaket"] : ""),
                                 pnyswakelola = (dataReader["rpnyswakelola"].GetType() != typeof(DBNull) ? (string)dataReader["rpnyswakelola"] : ""),
                                 nilaisirup = (dataReader["rnilaisirup"].GetType() != typeof(DBNull) ? (int)dataReader["rnilaisirup"] : 0),
-                                satuan = satuan.FirstOrDefault(x => x.Value == (string)dataReader["rsatuan"]).Text,
+                                satuan = (dataReader["rsatuan"].GetType() != typeof(DBNull) ? (string)dataReader["rsatuan"] : "1"),
+                                namasatuan = (dataReader["rnamasatuan"].GetType() != typeof(DBNull) ? (string)dataReader["rnamasatuan"] : "Unit"),
                                 sumberdana = (dataReader["rsumberdana"].GetType() != typeof(DBNull) ? (string)dataReader["rsumberdana"] != "[]" ? (string)dataReader["rsumberdana"] : "[0]" : "[0]"),
                                 sumberdanal = sumberDanaAll,
                                 kondisilayak = (dataReader["rkondisilayak"].GetType() != typeof(DBNull) ? (string)dataReader["rkondisilayak"] != "[]" ? (string)dataReader["rkondisilayak"] : "[0]" : "[0]"),
@@ -416,7 +418,7 @@ namespace TasikmalayaKota.Simpatik.Web.Services.tsIdentifikasi.DALS
                                 txtsumberdana = (dataReader["rsumberdana"].GetType() != typeof(DBNull) ? (string)dataReader["rsumberdana"] != "[]" ? (string)dataReader["rsumberdana"] : "[0]" : "[0]"),
                                 txtkondisi = (dataReader["rkondisilayak"].GetType() != typeof(DBNull) ? (string)dataReader["rkondisilayak"] != "[]" ? (string)dataReader["rkondisilayak"] : "[0]" : "[0]"),
                                 txtbarangmaterial = (dataReader["rbarangmaterial"].GetType() != typeof(DBNull) ? (string)dataReader["rbarangmaterial"] != "[]" ? (string)dataReader["rbarangmaterial"] : "[0]" : "[0]"),
-                                nilaisumberdana = (dataReader["rnilaisumberdana"].GetType() != typeof(DBNull) ? string.Format("{0:#,0}", Convert.ToInt32(dataReader["rnilaisumberdana"])) : ""),
+                                nilaisumberdanaint = (dataReader["rnilaisumberdana"].GetType() != typeof(DBNull) ? (Int64)dataReader["rnilaisumberdanaint"] : 0),
                                 valuesumberdana = (dataReader["rvaluesumberdana"].GetType() != typeof(DBNull) ? (string)dataReader["rvaluesumberdana"] : ""),
                                 pemanfaatanmulai = (dataReader["rpemanfaatanmulai"].GetType() != typeof(DBNull) ? (string)dataReader["rpemanfaatanmulai"] : ""),
                                 pemanfaatanakhir = (dataReader["rpemanfaatanakhir"].GetType() != typeof(DBNull) ? (string)dataReader["rpemanfaatanakhir"] : ""),
@@ -512,7 +514,7 @@ namespace TasikmalayaKota.Simpatik.Web.Services.tsIdentifikasi.DALS
                     sqlCommand.Parameters.AddWithValue("_totalwaktu", ParamD.totalwaktu == null ? string.Empty : ParamD.totalwaktu);
                     sqlCommand.Parameters.AddWithValue("_ekatalog", ParamD.ekatalog == null ? string.Empty : ParamD.ekatalog);
                     sqlCommand.Parameters.AddWithValue("_prioritas", ParamD.prioritas == null ? string.Empty : ParamD.prioritas);
-                    sqlCommand.Parameters.AddWithValue("_perkiraanbiaya", ParamD.perkiraanbiaya == 0 ? 0 : ParamD.perkiraanbiaya);
+                    sqlCommand.Parameters.AddWithValue("_perkiraanbiaya", (Int64)ParamD.perkiraanbiaya == 0 ? 0 : (Int64)ParamD.perkiraanbiaya);
                     sqlCommand.Parameters.AddWithValue("_jumlahpegawai", ParamD.jumlahpegawai == null ? string.Empty : ParamD.jumlahpegawai);
                     sqlCommand.Parameters.AddWithValue("_bebantugas", ParamD.bebantugas == null ? string.Empty : ParamD.bebantugas);
                     sqlCommand.Parameters.AddWithValue("_jumlahbarangtersedia", ParamD.jumlahbarangtersedia == null ? string.Empty : ParamD.jumlahbarangtersedia);
@@ -612,7 +614,7 @@ namespace TasikmalayaKota.Simpatik.Web.Services.tsIdentifikasi.DALS
                     sqlCommand.Parameters.AddWithValue("_totalwaktu", ParamD.totalwaktu == null ? string.Empty : ParamD.totalwaktu);
                     sqlCommand.Parameters.AddWithValue("_ekatalog", ParamD.ekatalog == null ? string.Empty : ParamD.ekatalog);
                     sqlCommand.Parameters.AddWithValue("_prioritas", ParamD.prioritas == null ? string.Empty : ParamD.prioritas);
-                    sqlCommand.Parameters.AddWithValue("_perkiraanbiaya", ParamD.perkiraanbiaya == 0 ? 0 : ParamD.perkiraanbiaya);
+                    sqlCommand.Parameters.AddWithValue("_perkiraanbiaya", (Int64)ParamD.perkiraanbiaya == 0 ? 0 : (Int64)ParamD.perkiraanbiaya);
                     sqlCommand.Parameters.AddWithValue("_jumlahpegawai", ParamD.jumlahpegawai == null ? string.Empty : ParamD.jumlahpegawai);
                     sqlCommand.Parameters.AddWithValue("_bebantugas", ParamD.bebantugas == null ? string.Empty : ParamD.bebantugas);
                     sqlCommand.Parameters.AddWithValue("_jumlahbarangtersedia", ParamD.jumlahbarangtersedia == null ? string.Empty : ParamD.jumlahbarangtersedia);

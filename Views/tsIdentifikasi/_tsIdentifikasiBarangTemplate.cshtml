@@ -80,9 +80,11 @@
                 <ejs-numerictextbox id="jumlahbarang" cssClass="e-input" placeholder="Jumlah Barang yang diperlukan" floatLabelType="Always" ejs-for="@Model.jumlahbarang" format="n0" min="0" enabled="@ViewBag.truefalse"></ejs-numerictextbox>
             </div>
             <div class="e-float-input e-control-wrapper">
-                <ejs-combobox id="satuan" dataSource="@ViewBag.satuan" cssClass="e-input" placeholder="Satuan" floatLabelType="Always" AllowCustom="false" ejs-for="@Model.satuan" enabled="@ViewBag.truefalse">
-                    <e-combobox-fields text="Text" value="Value"></e-combobox-fields>
-                </ejs-combobox>
+                <ejs-dropdownlist id="satuan" placeholder="Pilih satuan" popupHeight="200px" allowFiltering="true" sortOrder="@ViewBag.sortDropdown"
+                                  floatLabelType="Always" enabled="@ViewBag.truefalse">
+                    <e-data-manager url="/SatuanMaster/SatuanMasterAll" adaptor="UrlAdaptor" crossDomain="true"></e-data-manager>
+                    <e-dropdownlist-fields text="NamaSatuan" value="IdSatuan"></e-dropdownlist-fields>
+                </ejs-dropdownlist>
             </div>
             <div class="e-float-input e-control-wrapper">
                 <ejs-textbox id="waktu" cssClass="e-input" placeholder="Waktu Pemanfaatan Barang" floatLabelType="Always" ejs-for="@Model.waktu" enabled="@ViewBag.truefalse"></ejs-textbox>

@@ -25,6 +25,7 @@ using Microsoft.AspNetCore.Hosting;
 using Syncfusion.EJ2.Spreadsheet;
 using Newtonsoft.Json.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace simpat1k.Controllers
 {
@@ -676,15 +677,23 @@ namespace simpat1k.Controllers
                     using (SHA256 sha256Hash = SHA256.Create())
                     {
                         //From String to byte array
-                        byte[] sourceBytes = Encoding.UTF8.GetBytes("simpattik" + subkegiatanName.Key.namasubkegiatan + "tasikmalayakota" + subkegiatanName.Key.opd + "bethasolution");
+                        byte[] sourceBytes = Encoding.UTF8.GetBytes("simpattik" + Guid.NewGuid() + subkegiatanName.Key.namasubkegiatan + "tasikmalayakota" + subkegiatanName.Key.opd + "bethasolution");
                         byte[] hashBytes = sha256Hash.ComputeHash(sourceBytes);
                         hashStyle = BitConverter.ToString(hashBytes).Replace("-", String.Empty);
                     }
 
-                    worksheet = workbook.Worksheets.Create(noSheet + ". " + subkegiatanName.Key.namasubkegiatan.Substring(0, 20));
+                    if(subkegiatanName.Key.namasubkegiatan.Length > 20)
+                    {
+                        worksheet = workbook.Worksheets.Create(noSheet + ". " + Regex.Replace(subkegiatanName.Key.namasubkegiatan.Substring(0, 20), @"[^0-9a-zA-Z]+", ""));
+                    }
+                    else
+                    {
+                        worksheet = workbook.Worksheets.Create(noSheet + ". " + Regex.Replace(subkegiatanName.Key.namasubkegiatan.Substring(0, subkegiatanName.Key.namasubkegiatan.Length), @"[^0-9a-zA-Z]+", ""));
+                    }
+                    
 
                     IList<tsIdentifikasiModel> reports = DataSource.AsQueryable().Cast<tsIdentifikasiModel>().ToList();
-                    var visualData = reports.Where(rs => rs.namasubkegiatan.Contains(subkegiatanName.Key.namasubkegiatan)).Select(vd => new { vd.no, vd.namabrgkerj, vd.kriteria, vd.usahakecil, vd.uraian, vd.lokasi, vd.jeniskebutuhan, vd.kbki, vd.tipepaketnama, vd.namapaket, vd.spesifikasi, vd.jumlahbarang, vd.satuan, vd.tipeswakelolapaket, vd.subopd, vd.metodepemilihan, vd.pelaksanaanmulai, vd.pelaksanaanakhir, vd.nilaisumberdana, vd.valuesumberdana }).ToList();
+                    var visualData = reports.Where(rs => rs.namasubkegiatan.Contains(subkegiatanName.Key.namasubkegiatan)).Select(vd => new { vd.no, vd.namabrgkerj, vd.kriteria, vd.usahakecil, vd.uraian, vd.lokasi, vd.jeniskebutuhan, vd.kbki, vd.tipepaketnama, vd.namapaket, vd.spesifikasi, vd.jumlahbarang, vd.namasatuan, vd.tipeswakelolapaket, vd.subopd, vd.metodepemilihan, vd.pelaksanaanmulai, vd.pelaksanaanakhir, vd.nilaisumberdana, vd.valuesumberdana }).ToList();
                     int FirstRow = 11;
                     int CountData = visualData.Count;
 
