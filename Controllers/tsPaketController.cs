@@ -175,7 +175,7 @@ namespace simpat1k.Controllers
                 }
             }
 
-            if (HttpContext.Session.GetInt32("Tipe") == 3)
+            if ((HttpContext.Session.GetInt32("Tipe") == 3) && (HttpContext.Session.GetString("Pappk") == "3"))
             {
                 if (value.Action == "insert")
                 {
@@ -195,14 +195,14 @@ namespace simpat1k.Controllers
             }
             else
             {
-                if (value.Action == "update")
+                if ((HttpContext.Session.GetInt32("Tipe") == 4) && (value.Action == "update"))
                 {
                     DatabaseActionResultModel Result = _tsPaket.UpdateReview(value.Value);
                     msg = Result.Pesan;
                 }
                 else
                 {
-                    msg = "BERHASIL DISIMPAN";
+                    msg = "GAGAL DISIMPAN";
                 }
             }
 
@@ -215,14 +215,14 @@ namespace simpat1k.Controllers
         {
             string msg = string.Empty;
 
-            if (value.Action == "update")
+            if ((HttpContext.Session.GetInt32("Tipe") == 4) && (value.Action == "update"))
             {
                 DatabaseActionResultModel Result = _tsPaket.UpdateStatusReview(value.Value);
                 msg = Result.Pesan;
             }
             else
             {
-                msg = "BERHASIL DISIMPAN";
+                msg = "GAGAL DISIMPAN";
             }
 
             return Json(new { data = value.Value, message = msg });
@@ -483,7 +483,7 @@ namespace simpat1k.Controllers
         [Route("IndexPekerjaan")]
         public ActionResult IndexPekerjaan()
         {
-            ViewBag.Title = "Kebutuhan Pekerjaan";
+            ViewBag.Title = "Kebutuhan Pekerjaan Kontruksi";
             ViewBag.headerPenyedia = new TabHeader { Text = "Penyedia" };
             ViewBag.headerSwakelola = new TabHeader { Text = "Swakelola" };
             ViewBag.queryPenyedia = "new ej.data.Query().addParams('jeniskebutuhan', 2).addParams('tipePaket', 1)";

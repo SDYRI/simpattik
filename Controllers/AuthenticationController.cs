@@ -47,10 +47,11 @@ namespace TasikmalayaKota.Simpatik.Web.Controllers
                 //List<MenuValidationResultModel> dataMenu = new List<MenuValidationResultModel>();
 
                 #region toolbar
-                List<string> toolbar = SetToolbar(Result.Tipe);
+                List<string> toolbar = SetToolbar(Result.Tipe, Result.PaPpk);
                 List<string> toolbarTahun = SetToolbarTahun(Result.Tipe);
                 List<string> toolbarMaster = SetToolbarMaster(Result.Tipe, Result.PaPpk);
                 List<string> toolbarAuditor = SetToolbarAuditor(Result.Tipe);
+                List<string> toolbarMasterPPK = SetToolbarMasterPPK(Result.Tipe, Result.PaPpk);
                 #endregion toolbar
 
                 if (Result.Success && Result.IDAkun != string.Empty)
@@ -70,6 +71,7 @@ namespace TasikmalayaKota.Simpatik.Web.Controllers
                     HttpContext.Session.SetComplexData("ToolbarTahun", toolbarTahun);
                     HttpContext.Session.SetComplexData("ToolbarMaster", toolbarMaster);
                     HttpContext.Session.SetComplexData("ToolbarAuditor", toolbarAuditor);
+                    HttpContext.Session.SetComplexData("ToolbarMasterPPK", toolbarMasterPPK);
 
                     SimpattikGlobals.SetPengumuman(Result.Tipe);
                 }
@@ -85,7 +87,7 @@ namespace TasikmalayaKota.Simpatik.Web.Controllers
         private List<string> SetToolbarTahun(int typeUser)
         {
             List<string> setToolbarTahun = new List<string>();
-            if ((typeUser == 0) || (typeUser == 1))
+            if (typeUser == 1)
             {
                 setToolbarTahun.Add("Search");
                 setToolbarTahun.Add("Add");
@@ -101,17 +103,17 @@ namespace TasikmalayaKota.Simpatik.Web.Controllers
             return setToolbarTahun;
         }
 
-        private List<string> SetToolbar(int typeUser)
+        private List<string> SetToolbar(int typeUser, string pappkUser)
         {
             List<string> setToolbar = new List<string>();
-            if ((typeUser == 0) || (typeUser == 3))
+            if ((typeUser == 3) && (pappkUser == "3"))
             {
                 setToolbar.Add("Search");
                 setToolbar.Add("Add");
                 setToolbar.Add("Edit");
                 setToolbar.Add("Delete");
-                setToolbar.Add("Update");
-                setToolbar.Add("Cancel");
+                //setToolbar.Add("Update");
+                //setToolbar.Add("Cancel");
                 setToolbar.Add("ExcelExport");
                 setToolbar.Add("PdfExport");
             }
@@ -132,24 +134,56 @@ namespace TasikmalayaKota.Simpatik.Web.Controllers
         private List<string> SetToolbarMaster(int typeUser, string pappkUser)
         {
             List<string> setToolbarMaster = new List<string>();
-            if ((typeUser == 0) || (typeUser == 1))
+            if (typeUser == 1)
             {
                 setToolbarMaster.Add("Search");
                 setToolbarMaster.Add("Add");
                 setToolbarMaster.Add("Edit");
                 setToolbarMaster.Add("Delete");
-                setToolbarMaster.Add("Update");
-                setToolbarMaster.Add("Cancel");
+                //setToolbarMaster.Add("Update");
+                //setToolbarMaster.Add("Cancel");
                 setToolbarMaster.Add("ExcelExport");
                 setToolbarMaster.Add("PdfExport");
             }
-            else if ((typeUser == 2) && (pappkUser == "1"))
+            else if (((typeUser == 5) && (pappkUser == "1")) || ((typeUser == 5) && (pappkUser == "2")))
             {
                 setToolbarMaster.Add("Search");
                 setToolbarMaster.Add("Add");
                 setToolbarMaster.Add("Edit");
-                setToolbarMaster.Add("Update");
-                setToolbarMaster.Add("Cancel");
+                setToolbarMaster.Add("Delete");
+                //setToolbarMaster.Add("Update");
+                //setToolbarMaster.Add("Cancel");
+                setToolbarMaster.Add("ExcelExport");
+                setToolbarMaster.Add("PdfExport");
+            }
+            else
+            {
+                setToolbarMaster.Add("Search");
+            }
+
+            return setToolbarMaster;
+        }
+
+        private List<string> SetToolbarMasterPPK(int typeUser, string pappkUser)
+        {
+            List<string> setToolbarMaster = new List<string>();
+            if (typeUser == 1)
+            {
+                setToolbarMaster.Add("Search");
+                setToolbarMaster.Add("Add");
+                setToolbarMaster.Add("Edit");
+                setToolbarMaster.Add("Delete");
+                //setToolbarMaster.Add("Update");
+                //setToolbarMaster.Add("Cancel");
+                setToolbarMaster.Add("ExcelExport");
+                setToolbarMaster.Add("PdfExport");
+            }
+            else if (((typeUser == 5) && (pappkUser == "1")) || ((typeUser == 5) && (pappkUser == "2")))
+            {
+                setToolbarMaster.Add("Search");
+                setToolbarMaster.Add("Edit");
+                //setToolbarMaster.Add("Update");
+                //setToolbarMaster.Add("Cancel");
                 setToolbarMaster.Add("ExcelExport");
                 setToolbarMaster.Add("PdfExport");
             }
@@ -164,14 +198,14 @@ namespace TasikmalayaKota.Simpatik.Web.Controllers
         private List<string> SetToolbarAuditor(int typeUser)
         {
             List<string> setToolbarAuditor = new List<string>();
-            if ((typeUser == 0) || (typeUser == 2) || (typeUser == 4))
+            if ((typeUser == 2) || (typeUser == 4))
             {
                 setToolbarAuditor.Add("Search");
                 setToolbarAuditor.Add("Add");
                 setToolbarAuditor.Add("Edit");
                 setToolbarAuditor.Add("Delete");
-                setToolbarAuditor.Add("Update");
-                setToolbarAuditor.Add("Cancel");
+                //setToolbarAuditor.Add("Update");
+                //setToolbarAuditor.Add("Cancel");
                 setToolbarAuditor.Add("ExcelExport");
                 setToolbarAuditor.Add("PdfExport");
             }

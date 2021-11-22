@@ -1,0 +1,17 @@
+version: '3.4'
+
+services:
+  simpat1k:
+    container_name: simpatt1klinuxdocker
+    image: simpatt1klinux
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 5000:80
+      - 5001:443
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - ASPNETCORE_Kestrel__Certificates__Default__Password='adminBPBJ'
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/app/cert/cert.pfx

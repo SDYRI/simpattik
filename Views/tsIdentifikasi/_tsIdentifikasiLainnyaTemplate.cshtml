@@ -12,7 +12,7 @@
                     @*@Html.TextBoxFor(x => Model.jeniskebutuhan, new { @class = "e-control e-textbox e-lib", @readonly = "readonly", @hidden = "hidden" })*@
                     @*<input id="paket" data-val="true" class="e-control e-textbox e-lib" type="text" role="textbox" hidden>*@
                     <span class="e-float-line"></span>
-                    <label class="e-float-text e-label-top" id="label_opd">SUB OPD</label>
+                    <label class="e-float-text e-label-top" id="label_opd">Unit</label>
                 </div>
             </div>
             <div class="e-float-input e-control-wrapper" hidden>
@@ -28,14 +28,14 @@
             </div>
             <div class="e-float-input e-control-wrapper">
                 <ejs-dropdownlist id="program" placeholder="Pilih Program" popupHeight="200px" allowFiltering="true" sortOrder="@ViewBag.sortDropdown"
-                                  query="@ViewBag.queryProgram" floatLabelType="Always" change="onchangeKegiatan" enabled="@ViewBag.truefalse">
+                                  query="@ViewBag.queryProgram" floatLabelType="Always" close="onchangeKegiatan" enabled="@ViewBag.truefalse">
                     <e-data-manager url="/ProgramMaster/ProgramMasterAll" adaptor="UrlAdaptor" crossDomain="true"></e-data-manager>
                     <e-dropdownlist-fields text="NamaSubkegiatan" value="IdProgram"></e-dropdownlist-fields>
                 </ejs-dropdownlist>
             </div>
             <div class="e-float-input e-control-wrapper">
                 <ejs-dropdownlist id="kegiatan" placeholder="Pilih Kegiatan" popupHeight="200px" allowFiltering="true" sortOrder="@ViewBag.sortDropdown"
-                                  query="@ViewBag.queryKegiatan" floatLabelType="Always" enabled="false" change="onchangeSubKegiatan">
+                                  query="@ViewBag.queryKegiatan" floatLabelType="Always" enabled="false" close="onchangeSubKegiatan">
                     <e-data-manager url="/ProgramMaster/ProgramMasterAll" adaptor="UrlAdaptor" crossDomain="true"></e-data-manager>
                     <e-dropdownlist-fields text="NamaSubkegiatan" value="IdProgram"></e-dropdownlist-fields>
                 </ejs-dropdownlist>
@@ -87,7 +87,7 @@
                         {
                             <tr>
                                 <td>@sumberdana.smbrdn</td>
-                                <td>@sumberdana.nilai.ToString("n0")</td>
+                                <td>@sumberdana.nilai.ToString("n0").Replace(",", ".")</td>
                                 @if (ViewBag.truefalse)
                                 {
                                     <td><button type="button" class="btn btn-icon rounded-circle btn-outline-primary" onclick="btnSumberDanaRemove(this)"><i class="feather icon-minus-circle"></i></button></td>
@@ -132,7 +132,7 @@
                 <ejs-numerictextbox id="perkiraanbiaya" cssClass="e-input" placeholder="Perkiraan Biaya" floatLabelType="Always" ejs-for="@Model.perkiraanbiaya" format="n0" min="0" enabled="@ViewBag.truefalse"></ejs-numerictextbox>
             </div>
             <div class="e-float-input e-control-wrapper">
-                <ejs-combobox id="ketersediaanusaha" dataSource="@ViewBag.banyakterbatas" cssClass="e-input" placeholder="Ketersediaan Pelaku Usaha" floatLabelType="Always" ejs-for="@Model.ketersediaanusaha" enabled="@ViewBag.truefalse">
+                <ejs-combobox id="ketersediaanusaha" dataSource="@ViewBag.banyakterbatas" cssClass="e-input" placeholder="Ketersediaan Pelaku Usaha" floatLabelType="Always" AllowCustom="false" ejs-for="@Model.ketersediaanusaha" enabled="@ViewBag.truefalse">
                     <e-combobox-fields text="Text" value="Value"></e-combobox-fields>
                 </ejs-combobox>
             </div>

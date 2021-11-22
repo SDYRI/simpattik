@@ -38,14 +38,14 @@
         </div>
         <div class="form-group col-md-6">
             <div class="e-float-input e-control-wrapper">
-                <ejs-combobox id="PappkIdUser" dataSource="@ViewBag.pappk" cssClass="e-input" placeholder="Pilih PA/PPK" floatLabelType="Always" ejs-for="@Model.PappkIdUser">
+                <ejs-combobox id="PappkIdUser" dataSource="@ViewBag.pappk" cssClass="e-input" placeholder="Pilih PA/PPK" floatLabelType="Always" AllowCustom="false" ejs-for="@Model.PappkIdUser">
                     <e-combobox-fields text="Text" value="Value"></e-combobox-fields>
                 </ejs-combobox>
             </div>
         </div>
         <div class="form-group col-md-6">
             <div class="e-float-input e-control-wrapper">
-                <ejs-dropdownlist id="ListIdOpdUser" placeholder="Pilih OPD" popupHeight="200px" allowFiltering="true" filtering="onfilteringOPD" sortOrder="@ViewBag.sortDropdown" query="@ViewBag.queryOPD" floatLabelType="Always">
+                <ejs-dropdownlist id="ListIdOpdUser" placeholder="Pilih Organisasi/ Unit" popupHeight="200px" allowFiltering="true" filtering="onfilteringOPD" sortOrder="@ViewBag.sortDropdown" query="@ViewBag.queryOPD" floatLabelType="Always">
                     <e-data-manager url="/OpdMaster/OpdMasterSelect" adaptor="UrlAdaptor" crossDomain="true"></e-data-manager>
                     <e-dropdownlist-fields text="NamaSubOpd" value="IdOpd"></e-dropdownlist-fields>
                 </ejs-dropdownlist>
@@ -53,7 +53,7 @@
         </div>
         <div class="form-group col-md-6">
             <div class="e-float-input e-control-wrapper">
-                <ejs-combobox id="TipeIdUser" dataSource="@ViewBag.tipeuser" cssClass="e-input" placeholder="Pilih Tipe User" floatLabelType="Always" ejs-for="@Model.TipeIdUser">
+                <ejs-combobox id="TipeIdUser" dataSource="@ViewBag.tipeuser" cssClass="e-input" placeholder="Pilih Tipe User" floatLabelType="Always" AllowCustom="false" ejs-for="@Model.TipeIdUser">
                     <e-combobox-fields text="Text" value="Value"></e-combobox-fields>
                 </ejs-combobox>
             </div>
@@ -65,7 +65,7 @@
                 <label class="e-float-text e-label-top" for="upload">File SK</label>
             </div>
             <div id="uploadError"></div>
-            <ejs-uploader id="UploadFilesSK" autoUpload="true" success="onUploadFilesSKSuccess" allowedExtensions=".pdf" multiple="false" asyncSettings="@asyncSettings"></ejs-uploader>
+            <ejs-uploader id="UploadFilesSK" autoUpload="false" success="onUploadFilesSKSuccess" allowedExtensions=".pdf" multiple="false" asyncSettings="@asyncSettings" selected="onFileSelected"></ejs-uploader>
         </div>
     </div>
 </div>

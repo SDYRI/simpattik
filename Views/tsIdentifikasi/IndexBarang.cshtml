@@ -7,6 +7,27 @@
 @Html.AntiForgeryToken()
 @Html.ValidationSummary(true)
 
+<div class="content-header-left col-md-9 col-12 mb-2">
+    <div class="row breadcrumbs-top">
+        <div class="col-12">
+            <h2 class="content-header-title float-left mb-0">Identifikasi Pengadaan Barang Jasa</h2>
+            <div class="breadcrumb-wrapper col-12">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a asp-area="" asp-controller="Paket" asp-action="@ViewBag.LinkPaket">Paket</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="#">Identifikasi</a>
+                    </li>
+                    <li class="breadcrumb-item active">
+                        @ViewBag.Title
+                    </li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
 <ejs-toast id="toast_default" created="createdToasObj">
     <e-toast-position X="Right"></e-toast-position>
 </ejs-toast>
@@ -36,6 +57,7 @@
         var toastObj;
         var flag = true;
         var dataStrngNew;
+        var totalnilai = 0;
 
         function createdToasObj() {
             toastObj = this;
@@ -53,6 +75,18 @@
             let query = new ej.data.Query().select(['NamaOpd', 'IdOpd']).take(6);
             query = (e.text !== '' && e.text.length >= 3) ? query.where('NamaOpd', 'contains', e.text, true) : query;
             e.updateData(OPDObj.dataSource, query);
+        }
+
+        function onfilteringProgram(e) {
+            var SelectObj = document.getElementById("program").ej2_instances[0];
+            if (e.text == '' && e.text.length < 3) {
+                e.updateData(SelectObj.dataSource);
+            }
+
+            let query = new ej.data.Query().select(['NamaSubkegiatan', 'IdProgram']).take(10).addParams('IdPosisi', 1);
+            query = (e.text !== '' && e.text.length >= 1) ? query.where(new ej.data.Predicate('NamaSubkegiatan', 'contains', e.text, true).or('IdUrusan', 'contains', e.text, true)) : query;
+
+            e.updateData(SelectObj.dataSource, query);
         }
 
         function onfilteringKodeRekening(e) {
@@ -82,14 +116,22 @@
                 // #endregion Sumber Dana
                 // #region Kondisi
                 var kondisis = new Array();
+                var nilaikondisi = new Array();
+                totalnilai = 0;
                 $("#tblKondisi TBODY TR").each(function () {
                     var row = $(this);
                     var kondisi = {};
                     kondisi.nilai = row.find("TD").eq(1).html().replace(/\./g, "");
                     kondisi.kondisi = row.find("TD").eq(0).html();
                     kondisis.push(kondisi);
+                    var nilaitabel = {};
+                    nilaitabel = row.find("TD").eq(1).html().replace(/\./g, "");
+                    nilaikondisi.push(parseInt(nilaitabel));
                 });
                 $("#txtkondisilayak").val(kondisis.length != 0 ? JSON.stringify(kondisis) : "[0]");
+                for (i = 0; i < nilaikondisi.length; i++) {
+                    totalnilai += nilaikondisi[i];
+                }
                 // #endregion Kondisi
             }
         }
@@ -143,6 +185,11 @@
                     if (typeof args.rowData['idbrgkerj'] != 'undefined') {
                         var dropObject = document.getElementById("idbrgkerj").ej2_instances[0];
                         dropObject.value = args.rowData['idbrgkerj'];
+                    }
+                    if (typeof args.rowData['satuan'] != 'undefined') {
+                        var cmboObject = document.getElementById("satuan").ej2_instances[0];
+                        cmboObject.value = args.rowData['satuan'];
+                        cmboObject.text = args.rowData['namasatuan'];
                     }
                     ej.popups.hideSpinner(args.dialog.element);
                 }).catch(function (xhr) {

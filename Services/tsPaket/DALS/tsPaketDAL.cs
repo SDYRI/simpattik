@@ -4,6 +4,7 @@ using Npgsql;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 using TasikmalayaKota.Simpatik.Web.Extensions;
 using TasikmalayaKota.Simpatik.Web.Models;
@@ -77,8 +78,8 @@ namespace TasikmalayaKota.Simpatik.Web.Services.tsPaket.DALS
                                 tipeswakelola = (dataReader["rtipeswakelola"].GetType() != typeof(DBNull) ? (string)dataReader["rtipeswakelola"] : ""),
                                 paketstrategis = (dataReader["rpaketstrategis"].GetType() != typeof(DBNull) ? (string)dataReader["rpaketstrategis"] : ""),
                                 penyelengaraswakelola = (dataReader["rpenyelengaraswakelola"].GetType() != typeof(DBNull) ? (int)dataReader["rpenyelengaraswakelola"] : 0),
-                                pagusblm = (dataReader["rpagusblm"].GetType() != typeof(DBNull) ? (int)dataReader["rpagusblm"] : 0),
-                                pagustlh = (dataReader["rpagustlh"].GetType() != typeof(DBNull) ? (int)dataReader["rpagustlh"] : 0),
+                                pagusblm = (dataReader["rpagusblm"].GetType() != typeof(DBNull) ? (Int64)dataReader["rpagusblm"] : 0),
+                                pagustlh = (dataReader["rpagustlh"].GetType() != typeof(DBNull) ? (Int64)dataReader["rpagustlh"] : 0),
                                 nilaibelanjalangsung = (!(dataReader["rnilaibelanjalangsung"] is DBNull) ? (int)dataReader["rnilaibelanjalangsung"] : 0),
                                 nilaisirup = (!(dataReader["rnilaisirup"] is DBNull) ? (int)dataReader["rnilaisirup"] : 0),
                                 idkonsolidasi = (dataReader["ridkonsolidasi"].GetType() != typeof(DBNull) ? (string)dataReader["ridkonsolidasi"] : ""),
@@ -148,8 +149,8 @@ namespace TasikmalayaKota.Simpatik.Web.Services.tsPaket.DALS
                                 tipeswakelola = (dataReader["rtipeswakelola"].GetType() != typeof(DBNull) ? (string)dataReader["rtipeswakelola"] : ""),
                                 paketstrategis = (dataReader["rpaketstrategis"].GetType() != typeof(DBNull) ? (string)dataReader["rpaketstrategis"] : ""),
                                 penyelengaraswakelola = (dataReader["rpenyelengaraswakelola"].GetType() != typeof(DBNull) ? (int)dataReader["rpenyelengaraswakelola"] : 0),
-                                pagusblm = (dataReader["rpagusblm"].GetType() != typeof(DBNull) ? (int)dataReader["rpagusblm"] : 0),
-                                pagustlh = (dataReader["rpagustlh"].GetType() != typeof(DBNull) ? (int)dataReader["rpagustlh"] : 0),
+                                pagusblm = (dataReader["rpagusblm"].GetType() != typeof(DBNull) ? (Int64)dataReader["rpagusblm"] : 0),
+                                pagustlh = (dataReader["rpagustlh"].GetType() != typeof(DBNull) ? (Int64)dataReader["rpagustlh"] : 0),
                                 nilaibelanjalangsung = (!(dataReader["rnilaibelanjalangsung"] is DBNull) ? (int)dataReader["rnilaibelanjalangsung"] : 0),
                                 nilaisirup = (!(dataReader["rnilaisirup"] is DBNull) ? (int)dataReader["rnilaisirup"] : 0),
                                 idkonsolidasi = (dataReader["ridkonsolidasi"].GetType() != typeof(DBNull) ? (string)dataReader["ridkonsolidasi"] : ""),
@@ -254,8 +255,8 @@ namespace TasikmalayaKota.Simpatik.Web.Services.tsPaket.DALS
                                 tipeswakelola = (dataReader["rtipeswakelola"].GetType() != typeof(DBNull) ? (string)dataReader["rtipeswakelola"] : ""),
                                 paketstrategis = (dataReader["rpaketstrategis"].GetType() != typeof(DBNull) ? (string)dataReader["rpaketstrategis"] : ""),
                                 penyelengaraswakelola = (dataReader["rpenyelengaraswakelola"].GetType() != typeof(DBNull) ? (int)dataReader["rpenyelengaraswakelola"] : 0),
-                                pagusblm = (dataReader["rpagusblm"].GetType() != typeof(DBNull) ? (int)dataReader["rpagusblm"] : 0),
-                                pagustlh = (dataReader["rpagustlh"].GetType() != typeof(DBNull) ? (int)dataReader["rpagustlh"] : 0),
+                                pagusblm = (dataReader["rpagusblm"].GetType() != typeof(DBNull) ? (Int64)dataReader["rpagusblm"] : 0),
+                                pagustlh = (dataReader["rpagustlh"].GetType() != typeof(DBNull) ? (Int64)dataReader["rpagustlh"] : 0),
                                 nilaibelanjalangsung = (dataReader["rnilaibelanjalangsung"].GetType() != typeof(DBNull) ? (int)dataReader["rnilaibelanjalangsung"] : 0),
                                 nilaisirup = (dataReader["rnilaisirup"].GetType() != typeof(DBNull) ? (int)dataReader["rnilaisirup"] : 0),
                                 idkonsolidasi = (dataReader["ridkonsolidasi"].GetType() != typeof(DBNull) ? (string)dataReader["ridkonsolidasi"] : ""),
@@ -434,7 +435,7 @@ namespace TasikmalayaKota.Simpatik.Web.Services.tsPaket.DALS
                 using (NpgsqlCommand sqlCommand = new NpgsqlCommand("public.stp_tspaketupdatestatusreview", sqlConnection))
                 {
                     sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
-                    sqlCommand.Parameters.AddWithValue("_opd", ParamD.opd);
+                    sqlCommand.Parameters.AddWithValue("_opd", BethaCrypto.Decrypt(ParamD.opd));
                     sqlCommand.Parameters.AddWithValue("_tahun", int.Parse(TAHUN));
                     sqlCommand.Parameters.AddWithValue("_uid", UID);
                     sqlConnection.Open();

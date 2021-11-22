@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Syncfusion.EJ2.Base;
 using Syncfusion.EJ2.Navigations;
 using System;
@@ -26,12 +27,19 @@ namespace simpat1k.Controllers
         [Route("IndexMe")]
         public IActionResult Index()
         {
-            ViewBag.Title = "Master Urusan, Sub Urusan";
-            ViewBag.headerUrusan = new TabHeader { Text = "Urusan" };
-            ViewBag.headerSubUrusan = new TabHeader { Text = "Sub Urusan" };
-            ViewBag.queryUrusan = "new ej.data.Query().addParams('IdPosisi', 1)";
-            ViewBag.querySubUrusan = "new ej.data.Query().addParams('IdPosisi', 2)";
-            return View();
+            if (HttpContext.Session.GetInt32("Tipe") == 1)
+            {
+                ViewBag.Title = "Master Urusan, Sub Urusan";
+                ViewBag.headerUrusan = new TabHeader { Text = "URUSAN PEMERINTAHAN" };
+                ViewBag.headerSubUrusan = new TabHeader { Text = "BIDANG URUSAN" };
+                ViewBag.queryUrusan = "new ej.data.Query().addParams('IdPosisi', 1)";
+                ViewBag.querySubUrusan = "new ej.data.Query().addParams('IdPosisi', 2)";
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("HandleError", "ErrorExecute", new { code = 404 });
+            }
         }
 
         [HttpPost]
@@ -73,26 +81,34 @@ namespace simpat1k.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    if (value.Action == "insert")
+                    if (HttpContext.Session.GetInt32("Tipe") == 1)
                     {
-                        foreach (var param in value.Params)
+                        if (value.Action == "insert")
                         {
-                            value.Value.IdPosisi = Int32.Parse(param.GetType().GetProperty("Value").GetValue(param).ToString());
-                        }
+                            foreach (var param in value.Params)
+                            {
+                                value.Value.IdPosisi = Int32.Parse(param.GetType().GetProperty("Value").GetValue(param).ToString());
+                            }
 
-                        DatabaseActionResultModel Result = _mUrusan.Create(value.Value);
-                        msg = Result.Pesan;
+                            DatabaseActionResultModel Result = _mUrusan.Create(value.Value);
+                            msg = Result.Pesan;
+                        }
+                        else if (value.Action == "update")
+                        {
+                            DatabaseActionResultModel Result = _mUrusan.Update(value.Value);
+                            msg = Result.Pesan;
+                        }
+                        else if (value.Action == "remove")
+                        {
+                            DatabaseActionResultModel Result = _mUrusan.Remove(Int32.Parse(value.Key.ToString()));
+                            msg = Result.Pesan;
+                        }
                     }
-                    else if (value.Action == "update")
+                    else
                     {
-                        DatabaseActionResultModel Result = _mUrusan.Update(value.Value);
-                        msg = Result.Pesan;
+                        msg = "GAGAL DISIMPAN";
                     }
-                    else if (value.Action == "remove")
-                    {
-                        DatabaseActionResultModel Result = _mUrusan.Remove(Int32.Parse(value.Key.ToString()));
-                        msg = Result.Pesan;
-                    }
+                    
                     return Json(new { data = value.Value, message = msg });
                 }
                 else
@@ -110,8 +126,6 @@ namespace simpat1k.Controllers
         [Route("UrusanMasterTemplateUrusan")]
         public IActionResult PartialTemplateProgram([FromBody] CRUDModel<mUrusanModel> value)
         {
-            var valTemplate = _mUrusan.GetAll(1);
-            ViewBag.datasource = valTemplate;
             ViewBag.sortDropdown = "Ascending";
             ViewBag.Title = "Master Urusan " + value.Value.NamaSubUrusan;
 
@@ -122,8 +136,6 @@ namespace simpat1k.Controllers
         [Route("UrusanMasterTemplateSubUrusan")]
         public IActionResult PartialTemplateSubUrusan([FromBody] CRUDModel<mUrusanModel> value)
         {
-            var valTemplate = _mUrusan.GetAll(2);
-            ViewBag.datasource = valTemplate;
             ViewBag.sortDropdown = "Ascending";
             ViewBag.queryUrusan = "new ej.data.Query().select(['NamaSubUrusan', 'IdUrusan']).take(10).requiresCount().addParams('IdPosisi', 1)";
             ViewBag.Title = "Master Sub Urusan " + value.Value.NamaSubUrusan;

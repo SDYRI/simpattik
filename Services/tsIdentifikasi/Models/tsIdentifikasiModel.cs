@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,7 +10,7 @@ namespace TasikmalayaKota.Simpatik.Web.Services.tsIdentifikasi.Models
 {
     public class sumberDanaModel
     {
-        public int nilai { get; set; }
+        public Int64 nilai { get; set; }
         public string smbrdn { get; set; }
     }
 
@@ -34,12 +35,14 @@ namespace TasikmalayaKota.Simpatik.Web.Services.tsIdentifikasi.Models
             barangmateriall = new List<barangmaterialModel>();
         }
 
+        public int no { get; set; }
         public int ididetifikasi { get; set; }
         public string idpaket { get; set; }
         public int thanggrn { get; set; }
         public int lembaga { get; set; }
         public int idopd { get; set; }
         public string opd { get; set; }
+        public string subopd { get; set; }
         public string pejabat { get; set; }
         public string program { get; set; }
         public string namaprogram { get; set; }
@@ -53,12 +56,14 @@ namespace TasikmalayaKota.Simpatik.Web.Services.tsIdentifikasi.Models
         public string namabrgkerj { get; set; }
         public string fungsi { get; set; }
         public string jumlahbarang { get; set; }
+        public string satuan { get; set; }
+        public string namasatuan { get; set; }
         public string waktu { get; set; }
         public string pihak { get; set; }
         public string totalwaktu { get; set; }
         public string ekatalog { get; set; }
         public string prioritas { get; set; }
-        public int perkiraanbiaya { get; set; }
+        public Int64 perkiraanbiaya { get; set; }
         public string jumlahpegawai { get; set; }
         public string bebantugas { get; set; }
         public string jumlahbarangtersedia { get; set; }
@@ -111,15 +116,30 @@ namespace TasikmalayaKota.Simpatik.Web.Services.tsIdentifikasi.Models
         public string uraian { get; set; }
         public string kbki { get; set; }
         public string tipeswakelola { get; set; }
+        public string tipeswakelolapaket { get; set; }
         public string pnyswakelola { get; set; }
         public int nilaisirup { get; set; }
         public DateTime crtdate { get; set; }
         public DateTime mdfdate { get; set; }
+        public string pemanfaatanmulai { get; set; }
+        public string pemanfaatanakhir { get; set; }
+        public string pelaksanaanmulai { get; set; }
+        public string pelaksanaanakhir { get; set; }
+        public string pemilihanmulai { get; set; }
+        public string pemilihanakhir { get; set; }
+        public int tipepaket { get; set; }
+        public string tipepaketnama { get; set; }
+        public string namapaket { get; set; }
+        public string metodepemilihan { get; set; }
+        public string namappk { get; set; }
+        public string nipppk { get; set; }
+
 
         #region sumberDana
         public string txtsumberdana { get; set; }
         public IList<sumberDanaModel> sumberdanal { get; set; }
         public string nilaisumberdana { get; set; }
+        public Int64 nilaisumberdanaint { get; set; }
         public string valuesumberdana { get; set; }
         #endregion
 

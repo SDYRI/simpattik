@@ -40,6 +40,8 @@ using TasikmalayaKota.Simpatik.Web.Services.tsPaket.DALS;
 using Microsoft.AspNetCore.Antiforgery;
 using TasikmalayaKota.Simpatik.Web.Services.tHps.Interfaces;
 using TasikmalayaKota.Simpatik.Web.Services.tHps.DALS;
+using TasikmalayaKota.Simpatik.Web.Services.mSatuan.Interfaces;
+using TasikmalayaKota.Simpatik.Web.Services.mSatuan.DALS;
 
 namespace TasikmalayaKota.Simpatik.Web
 {
@@ -110,6 +112,7 @@ namespace TasikmalayaKota.Simpatik.Web
                 .AddTransient<ImUrusan, mUrusanDAL>()
                 .AddTransient<ItsPaket, tsPaketDAL>()
                 .AddTransient<ItHps, tHpsDAL>()
+                .AddTransient<ImSatuan, mSatuanDAL>()
             ;
         }
 
@@ -133,6 +136,9 @@ namespace TasikmalayaKota.Simpatik.Web
 
             //    return next(context);
             //});
+
+            //Register Syncfusion license
+            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("NDQ4NkAzMTM4MmUzNDJlMzBHaWpSODd3bWtaNGpMR3g2OHBHQTU5UWZ2YzBCc3N6OU0xMnNTVG1PNm5zPQ==");
 
             string slug = "/" + Configuration.GetValue<string>("VettingSettings:WebsiteSLUG");
             if (slug != "/")

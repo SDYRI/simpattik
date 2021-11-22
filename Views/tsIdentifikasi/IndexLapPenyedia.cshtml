@@ -1,0 +1,43 @@
+﻿@{
+    ViewData["Title"] = ViewBag.Title;
+    List<object> toolbarItems = new List<object>();
+    toolbarItems.Add("Search");
+    toolbarItems.Add(new { text = "Cetak Laporan", tooltipText = "Cetak Laporan", prefixIcon = "feather icon-printer", id = "cetak" });
+}
+<ejs-grid id="Grid" height="490" allowPaging="true" allowResizing="true" allowSorting="true" allowReordering="true" allowGrouping="false"
+          toolbar="toolbarItems" allowFiltering="true" allowSelection="true" allowExcelExport="true" toolbarClick="toolbarAction" query="@ViewBag.queryTipePaket">
+    <e-data-manager url="/Identifikasi/IdentifikasiPengadaanPenetapan" adaptor="UrlAdaptor"></e-data-manager>
+    <e-grid-pagesettings pageSize="12" />
+    <e-grid-filterSettings type="Menu"></e-grid-filterSettings>
+    <e-grid-selectionsettings type="Single"></e-grid-selectionsettings>
+    <e-grid-columns>
+        <e-grid-column field="ididetifikasi" headerText="ididetifikasi" isPrimaryKey="true" isIdentity="true" visible="false"></e-grid-column>
+        <e-grid-column field="opd" headerText="OPD"></e-grid-column>
+        <e-grid-column field="subopd" headerText="SUB OPD"></e-grid-column>
+        <e-grid-column field="jeniskebutuhan" headerText="Jenis Pengadaan"></e-grid-column>
+        <e-grid-column field="namabrgkerj" headerText="Nama Barang/ Jasa"></e-grid-column>
+        <e-grid-column field="nilaisumberdana" headerText="Anggaran Pengadaan" width="200"></e-grid-column>
+        <e-grid-column field="valuesumberdana" headerText="Sumber Dana" width="200"></e-grid-column>
+        <e-grid-column field="pemanfaatanmulai" headerText="Pemanfaatan Mulai"></e-grid-column>
+        <e-grid-column field="pemanfaatanakhir" headerText="Pemanfaatan Akhir"></e-grid-column>
+        <e-grid-column field="pelaksanaanmulai" headerText="Pelaksanaan Mulai"></e-grid-column>
+        <e-grid-column field="pelaksanaanakhir" headerText="Pelaksanaan Akhir"></e-grid-column>
+        <e-grid-column field="pemilihanmulai" headerText="Pemilihan Mulai"></e-grid-column>
+        <e-grid-column field="pemilihanakhir" headerText="Pemilihan Akhir"></e-grid-column>
+    </e-grid-columns>
+</ejs-grid>
+
+@section SectionControls{
+    <script type="text/javascript">
+        function toolbarAction(args) {
+            if (args.item.id === 'cetak') {
+                //window.open('@Url.Action("SuratPenetapan", "Identifikasi")');
+                var exportProperties = {
+                    fileName: "LaporanSwakelola.xlsx"
+                };
+
+                this.excelExport(exportProperties);
+            }
+        }
+    </script>
+}

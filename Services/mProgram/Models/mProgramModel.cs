@@ -23,7 +23,8 @@ namespace TasikmalayaKota.Simpatik.Web.Services.mProgram.Models
         public int IdPosisi { get; set; }
         public int IdUrusan { get; set; }
         public string NamaUrusan { get; set; }
-        public string IdUserPPK { get; set; }
+        public List<string> IdUserPPK { get; set; }
+        public string IdUserPPKCb { get; set; }
         public string NamaUserPPK { get; set; }
     }
 }

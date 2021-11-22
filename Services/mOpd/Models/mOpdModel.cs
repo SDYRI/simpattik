@@ -17,10 +17,17 @@ namespace TasikmalayaKota.Simpatik.Web.Services.mOpd.Models
         public string KodeSubOpd { get; set; }
         public string NamaOpd { get; set; }
         public string NamaSubOpd { get; set; }
-        public string ListIdUrusan { get; set; }
+        public string ListIdUrusanCb { get; set; }
+        public List<int> ListIdUrusan { get; set; }
         public string ListUrusan { get; set; }
         public int IdParentU { get; set; }
         public int IdParent { get; set; }
         public int IdPosisi { get; set; }
+        public string AlamatOpd { get; set; }
+        public string TlpOpd { get; set; }
+        public string FaxOpd { get; set; }
+        public string KodeposOpd { get; set; }
+        public string EmailOpd { get; set; }
     }
+
 }

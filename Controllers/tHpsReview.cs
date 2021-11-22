@@ -247,8 +247,6 @@ namespace TasikmalayaKota.Simpatik.Web.Controllers
         [Route("HpsTemplate")]
         public IActionResult PartialTemplatePaketBarang([FromBody] CRUDModel<tHpsModel> value)
         {
-            var valTemplate = _tsTHps.GetAll();
-            ViewBag.datasource = valTemplate;
             ViewBag.Title = "Hps " + value.Value.idpaket;
             value.Value.opd = value.Value.opd == null ? HttpContext.Session.GetString("OpdName") : value.Value.namaopd;
             value.Value.pejabat = value.Value.pejabat == null ? HttpContext.Session.GetString("Nama") : value.Value.pejabat;
@@ -265,8 +263,6 @@ namespace TasikmalayaKota.Simpatik.Web.Controllers
         [Route("HpsTemplateStrategis")]
         public IActionResult PartialTemplateHpsStrategis([FromBody] CRUDModel<tHpsModel> value)
         {
-            var valTemplate = _tsTHps.GetAll();
-            ViewBag.datasource = valTemplate;
             ViewBag.Title = "Hps " + value.Value.idpaket;
             value.Value.opd = value.Value.opd == null ? HttpContext.Session.GetString("OpdName") : value.Value.namaopd;
             value.Value.pejabat = value.Value.pejabat == null ? HttpContext.Session.GetString("Nama") : value.Value.pejabat;
@@ -283,8 +279,6 @@ namespace TasikmalayaKota.Simpatik.Web.Controllers
         [Route("HpsTemplateReviewStrategis")]
         public IActionResult PartialTemplateReviewHpsStrategis([FromBody] CRUDModel<tHpsReviewModel> value)
         {
-            var valTemplate = _tsTHps.GetReviewAll(value.Value.idpaket);
-            ViewBag.datasource = valTemplate;
             ViewBag.Title = "Review Hps " + value.Value.idpaket;
 
             ViewBag.sortDropdown = "Ascending";

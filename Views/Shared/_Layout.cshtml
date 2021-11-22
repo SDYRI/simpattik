@@ -65,14 +65,7 @@
                             <a class="dropdown-toggle nav-link dropdown-user-link" href="#" data-toggle="dropdown">
                                 <div class="user-nav d-sm-flex d-none">
                                     <span class="user-name text-bold-600">@HttpContextAccessor.HttpContext.Session.GetString("Nama")</span>
-                                    @if ((@HttpContextAccessor.HttpContext.Session.GetInt32("Tipe") != 1) && (@HttpContextAccessor.HttpContext.Session.GetInt32("Tipe") != 0) && (@HttpContextAccessor.HttpContext.Session.GetInt32("Tipe") != 2) && (@HttpContextAccessor.HttpContext.Session.GetInt32("Tipe") != 4))
-                                    {
-                                        <span class="user-status">@HttpContextAccessor.HttpContext.Session.GetString("OpdName")</span>
-                                    }
-                                    else
-                                    {
-                                        <span class="user-status">Semua Opd</span>
-                                    }
+                                    <span class="user-status">@HttpContextAccessor.HttpContext.Session.GetString("OpdName")</span>
                                 </div>
                                 @*<span><img class="round" src="~/images/avataruser/hd.jpg" alt="avatar" height="40" width="40"></span>*@
                             </a>
@@ -131,12 +124,20 @@
                                 </li>
                             </ul>
                         </li>
-                        @if ((HttpContextAccessor.HttpContext.Session.GetInt32("Tipe") == 3) && (HttpContextAccessor.HttpContext.Session.GetString("Pappk") != "3"))
-                        {
-                            <li class="@Html.IsSelected(controller: "tsIdentifikasi", action: "Index")">
-                                <a asp-area="" asp-controller="Identifikasi" asp-action="IndexMe"><i class="feather icon-copy"></i><span class="menu-item">Penetapan Perencanaan Pengadaan</span></a>
-                            </li>
-                        }
+                        <li>
+                            <a href="#"><i class="feather icon-copy"></i><span class="menu-item">Laporan Perencanaan Pengadaan</span></a>
+                            <ul class="menu-content">
+                                <li class="@Html.IsSelected(controller: "tsIdentifikasi", action: "Index")">
+                                    <a asp-area="" asp-controller="Identifikasi" asp-action="IndexMe"><i class="feather icon-circle"></i><span class="menu-item">Rekap Perencanaan Pengadaan</span></a>
+                                </li>
+                                @*<li class="@Html.IsSelected(controller: "tsIdentifikasi", action: "IndexLapPenyedia")">
+                                        <a asp-area="" asp-controller="Identifikasi" asp-action="IndexLapPenyedia"><i class="feather icon-circle"></i><span class="menu-item">Rekap Pengadaan Penyedia</span></a>
+                                    </li>
+                                    <li class="@Html.IsSelected(controller: "tsIdentifikasi", action: "IndexLapSwakelola")">
+                                        <a asp-area="" asp-controller="Identifikasi" asp-action="IndexLapSwakelola"><i class="feather icon-circle"></i><span class="menu-item">Rekap Pengadaan Swakelola</span></a>
+                                    </li>*@
+                            </ul>
+                        </li>
                     </ul>
                 </li>
                 @if (HttpContextAccessor.HttpContext.Session.GetString("Pappk") != "0")
@@ -150,7 +151,7 @@
                         </ul>
                     </li>
                 }
-                @if ((HttpContextAccessor.HttpContext.Session.GetInt32("Tipe") == 1) || (HttpContextAccessor.HttpContext.Session.GetInt32("Tipe") == 0))
+                @if (HttpContextAccessor.HttpContext.Session.GetInt32("Tipe") == 1)
                 {
                     <li class="nav-item">
                         <a href="#"><i class="feather icon-folder"></i><span class="menu-title">Pemrograman</span></a>
@@ -240,7 +241,7 @@
                                 <a asp-area="" asp-controller="UserMaster" asp-action="IndexMe"><i class="feather icon-copy"></i><span class="menu-item">User</span></a>
                             </li>
                             <li class="@Html.IsSelected(controller: "mOpd", action: "Index")">
-                                <a asp-area="" asp-controller="OpdMaster" asp-action="IndexMe"><i class="feather icon-copy"></i><span class="menu-item">OPD</span></a>
+                                <a asp-area="" asp-controller="OpdMaster" asp-action="IndexMe"><i class="feather icon-copy"></i><span class="menu-item">Organisasi</span></a>
                             </li>
                             <li class="@Html.IsSelected(controller: "mUrusan", action: "Index")">
                                 <a asp-area="" asp-controller="UrusanMaster" asp-action="IndexMe"><i class="feather icon-copy"></i><span class="menu-item">Urusan</span></a>
@@ -250,6 +251,9 @@
                             </li>
                             <li class="@Html.IsSelected(controller: "mKodeRekening", action: "Index")">
                                 <a asp-area="" asp-controller="KodeRekeningMaster" asp-action="IndexMe"><i class="feather icon-copy"></i><span class="menu-item">Kode Rekening</span></a>
+                            </li>
+                            <li class="@Html.IsSelected(controller: "mSatuan", action: "Index")">
+                                <a asp-area="" asp-controller="SatuanMaster" asp-action="IndexMe"><i class="feather icon-copy"></i><span class="menu-item">Satuan</span></a>
                             </li>
                         </ul>
                     </li>
@@ -265,7 +269,7 @@
                         </ul>
                     </li>
                 }
-                else if ((HttpContextAccessor.HttpContext.Session.GetInt32("Tipe") == 3) && (HttpContextAccessor.HttpContext.Session.GetString("Pappk") != "3"))
+                else if (((HttpContextAccessor.HttpContext.Session.GetInt32("Tipe") == 5) && (HttpContextAccessor.HttpContext.Session.GetString("Pappk") == "1")) || ((HttpContextAccessor.HttpContext.Session.GetInt32("Tipe") == 5) && (HttpContextAccessor.HttpContext.Session.GetString("Pappk") == "2")))
                 {
                     <li class="nav-item">
                         <a href="#"><i class="feather icon-command"></i><span class="menu-title">Master</span></a>
@@ -442,7 +446,7 @@
             }
         });
         ej.base.setCulture('en-US');
-        //ej.base.setCurrencyCode('USD');
+            //ej.base.setCurrencyCode('USD');
     </script>
     <!-- END: Theme JS-->
 
