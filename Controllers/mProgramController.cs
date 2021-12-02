@@ -11,6 +11,7 @@ using Syncfusion.EJ2.Navigations;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Hosting;
 using System.IO;
+using TasikmalayaKota.Simpatik.Web.Services.mTahunAnggaran.Interfaces;
 
 namespace simpat1k.Controllers
 {
@@ -18,10 +19,12 @@ namespace simpat1k.Controllers
     public class mProgramController : Controller
     {
         private readonly ImProgram _mProgram;
+        private readonly ImTahunAnggaran _mTahunAnggaran;
 
-        public mProgramController(ImProgram mProgram)
+        public mProgramController(ImProgram mProgram, ImTahunAnggaran mTahunAnggaran)
         {
             _mProgram = mProgram;
+            _mTahunAnggaran = mTahunAnggaran;
         }
 
         [Route("IndexMe")]
@@ -113,41 +116,48 @@ namespace simpat1k.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    if ((HttpContext.Session.GetInt32("Tipe") == 1) || ((HttpContext.Session.GetInt32("Tipe") == 5) && (HttpContext.Session.GetString("Pappk") == "1")) || ((HttpContext.Session.GetInt32("Tipe") == 5) && (HttpContext.Session.GetString("Pappk") == "2")))
+                    if (_mTahunAnggaran.GetUserTahunAktif() == "True" || HttpContext.Session.GetInt32("Tipe") == 1)
                     {
-                        if (value.Value.IdUserPPK != null)
+                        if ((HttpContext.Session.GetInt32("Tipe") == 1) || ((HttpContext.Session.GetInt32("Tipe") == 5) && (HttpContext.Session.GetString("Pappk") == "1")) || ((HttpContext.Session.GetInt32("Tipe") == 5) && (HttpContext.Session.GetString("Pappk") == "2")))
                         {
-                            value.Value.IdUserPPKCb = string.Join(",", value.Value.IdUserPPK);
+                            if (value.Value.IdUserPPK != null)
+                            {
+                                value.Value.IdUserPPKCb = string.Join(",", value.Value.IdUserPPK);
+                            }
+                            else
+                            {
+                                value.Value.IdUserPPKCb = string.Join(",", value.Value.IdUserPPKCb);
+                            }
+
+                            if ((HttpContext.Session.GetInt32("Tipe") == 1) && (value.Action == "insert"))
+                            {
+                                foreach (var param in value.Params)
+                                {
+                                    value.Value.IdPosisi = Int32.Parse(param.GetType().GetProperty("Value").GetValue(param).ToString());
+                                }
+
+                                DatabaseActionResultModel Result = _mProgram.Create(value.Value);
+                                msg = Result.Pesan;
+                            }
+                            else if (value.Action == "update")
+                            {
+                                DatabaseActionResultModel Result = _mProgram.Update(value.Value);
+                                msg = Result.Pesan;
+                            }
+                            else if ((HttpContext.Session.GetInt32("Tipe") == 1) && (value.Action == "remove"))
+                            {
+                                DatabaseActionResultModel Result = _mProgram.Remove(Int32.Parse(value.Key.ToString()));
+                                msg = Result.Pesan;
+                            }
                         }
                         else
                         {
-                            value.Value.IdUserPPKCb = string.Join(",", value.Value.IdUserPPKCb);
-                        }
-
-                        if ((HttpContext.Session.GetInt32("Tipe") == 1) && (value.Action == "insert"))
-                        {
-                            foreach (var param in value.Params)
-                            {
-                                value.Value.IdPosisi = Int32.Parse(param.GetType().GetProperty("Value").GetValue(param).ToString());
-                            }
-
-                            DatabaseActionResultModel Result = _mProgram.Create(value.Value);
-                            msg = Result.Pesan;
-                        }
-                        else if (value.Action == "update")
-                        {
-                            DatabaseActionResultModel Result = _mProgram.Update(value.Value);
-                            msg = Result.Pesan;
-                        }
-                        else if ((HttpContext.Session.GetInt32("Tipe") == 1) && (value.Action == "remove"))
-                        {
-                            DatabaseActionResultModel Result = _mProgram.Remove(Int32.Parse(value.Key.ToString()));
-                            msg = Result.Pesan;
+                            msg = "GAGAL DISIMPAN";
                         }
                     }
                     else
                     {
-                        msg = "GAGAL DISIMPAN";
+                        msg = "SEDANG TAHAP REVIU";
                     }
 
                     return Json(new { data = value.Value, message = msg });

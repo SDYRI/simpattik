@@ -12,5 +12,6 @@ namespace TasikmalayaKota.Simpatik.Web.Services.mTahunAnggaran.Interfaces
         IList<mTahunAnggaranModel> GetAll();
         DatabaseActionResultModel Create(mTahunAnggaranModel model);
         DatabaseActionResultModel Update(mTahunAnggaranModel model);
+        string GetUserTahunAktif();
     }
 }

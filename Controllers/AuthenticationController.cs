@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TasikmalayaKota.Simpatik.Web.Extensions;
 using TasikmalayaKota.Simpatik.Web.Models;
+using TasikmalayaKota.Simpatik.Web.Services.mTahunAnggaran.Interfaces;
 using TasikmalayaKota.Simpatik.Web.Services.mUser.Interfaces;
 
 namespace TasikmalayaKota.Simpatik.Web.Controllers
@@ -16,10 +17,13 @@ namespace TasikmalayaKota.Simpatik.Web.Controllers
     {
         private readonly ImUser Users;
         private readonly IWebHostEnvironment Env;
-        public AuthenticationController(ImUser users, IWebHostEnvironment env)
+        private readonly ImTahunAnggaran _mTahunAnggaran;
+
+        public AuthenticationController(ImUser users, IWebHostEnvironment env, ImTahunAnggaran mTahunAnggaran)
         {
             Users = users;
             Env = env;
+            _mTahunAnggaran = mTahunAnggaran;
         }
 
         [Route("")]
@@ -44,14 +48,15 @@ namespace TasikmalayaKota.Simpatik.Web.Controllers
             {
                 Args.Action = "login";
                 UserValidationResultModel Result = Users.UserValidation(Args);
+                string TahunUserAktif = _mTahunAnggaran.GetUserTahunAktif();
                 //List<MenuValidationResultModel> dataMenu = new List<MenuValidationResultModel>();
 
                 #region toolbar
-                List<string> toolbar = SetToolbar(Result.Tipe, Result.PaPpk);
-                List<string> toolbarTahun = SetToolbarTahun(Result.Tipe);
-                List<string> toolbarMaster = SetToolbarMaster(Result.Tipe, Result.PaPpk);
-                List<string> toolbarAuditor = SetToolbarAuditor(Result.Tipe);
-                List<string> toolbarMasterPPK = SetToolbarMasterPPK(Result.Tipe, Result.PaPpk);
+                List<string> toolbar = (TahunUserAktif == "False" && Result.Tipe != 1) ? SetToolbarNonAktif() : SetToolbar(Result.Tipe, Result.PaPpk);
+                List<string> toolbarTahun = (TahunUserAktif == "False" && Result.Tipe != 1) ? SetToolbarNonAktif() : SetToolbarTahun(Result.Tipe);
+                List<string> toolbarMaster = (TahunUserAktif == "False" && Result.Tipe != 1) ? SetToolbarNonAktif() : SetToolbarMaster(Result.Tipe, Result.PaPpk);
+                List<string> toolbarAuditor = (TahunUserAktif == "False" && Result.Tipe != 1) ? SetToolbarNonAktif() : SetToolbarAuditor(Result.Tipe);
+                List<string> toolbarMasterPPK = (TahunUserAktif == "False" && Result.Tipe != 1) ? SetToolbarNonAktif() : SetToolbarMasterPPK(Result.Tipe, Result.PaPpk);
                 #endregion toolbar
 
                 if (Result.Success && Result.IDAkun != string.Empty)
@@ -66,6 +71,7 @@ namespace TasikmalayaKota.Simpatik.Web.Controllers
                     HttpContext.Session.SetString("Opd", Result.Opd);
                     HttpContext.Session.SetString("OpdName", Result.OpdName);
                     HttpContext.Session.SetString("TahunAktif", Result.TahunAktif);
+                    HttpContext.Session.SetString("TahunUserAktif", TahunUserAktif);
                     HttpContext.Session.SetString("Pappk", Result.PaPpk);
                     HttpContext.Session.SetComplexData("Toolbar", toolbar);
                     HttpContext.Session.SetComplexData("ToolbarTahun", toolbarTahun);
@@ -82,6 +88,14 @@ namespace TasikmalayaKota.Simpatik.Web.Controllers
             {
                 return BadRequest(exception.Message);
             }
+        }
+
+        private List<string> SetToolbarNonAktif()
+        {
+            List<string> setToolbarNonAktif = new List<string>();
+            setToolbarNonAktif.Add("Search");
+
+            return setToolbarNonAktif;
         }
 
         private List<string> SetToolbarTahun(int typeUser)

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Npgsql;
+using Syncfusion.EJ2.PivotView;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -40,7 +41,8 @@ namespace TasikmalayaKota.Simpatik.Web.Services.mTahunAnggaran.DALS
                             {
                                 TahunAnggaran = (dataReader["tahunanggaran"].GetType() != typeof(DBNull) ? (int)dataReader["tahunanggaran"] : 0),
                                 TahunAnggaranOld = (dataReader["tahunanggaran"].GetType() != typeof(DBNull) ? (int)dataReader["tahunanggaran"] : 0),
-                                TahunAnggaranAktif = (dataReader["tahunaktif"].GetType() != typeof(DBNull) ? (bool)dataReader["tahunaktif"] : false)
+                                TahunAnggaranAktif = (dataReader["tahunaktif"].GetType() != typeof(DBNull) ? (bool)dataReader["tahunaktif"] : false),
+                                UserAktif = (dataReader["usertahunaktif"].GetType() != typeof(DBNull) ? (bool)dataReader["usertahunaktif"] : false)
                             });
                         }
                     }
@@ -65,6 +67,7 @@ namespace TasikmalayaKota.Simpatik.Web.Services.mTahunAnggaran.DALS
                     sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
                     sqlCommand.Parameters.AddWithValue("_tahun", ParamD.TahunAnggaran);
                     sqlCommand.Parameters.AddWithValue("_aktif", ParamD.TahunAnggaranAktif);
+                    sqlCommand.Parameters.AddWithValue("_useraktif", ParamD.UserAktif);
                     sqlCommand.Parameters.AddWithValue("_uid", UID);
                     sqlConnection.Open();
                     using (NpgsqlDataReader dataReader = sqlCommand.ExecuteReader())
@@ -97,6 +100,7 @@ namespace TasikmalayaKota.Simpatik.Web.Services.mTahunAnggaran.DALS
                     sqlCommand.Parameters.AddWithValue("_tahun", ParamD.TahunAnggaran);
                     sqlCommand.Parameters.AddWithValue("_tahunold", ParamD.TahunAnggaranOld);
                     sqlCommand.Parameters.AddWithValue("_aktif", ParamD.TahunAnggaranAktif);
+                    sqlCommand.Parameters.AddWithValue("_useraktif", ParamD.UserAktif);
                     sqlCommand.Parameters.AddWithValue("_uid", UID);
                     sqlConnection.Open();
                     using (NpgsqlDataReader dataReader = sqlCommand.ExecuteReader())
@@ -115,6 +119,27 @@ namespace TasikmalayaKota.Simpatik.Web.Services.mTahunAnggaran.DALS
                 throw Exception;
             }
             return Result;
+        }
+
+        public string GetUserTahunAktif()
+        {
+            string _value = string.Empty;
+            try
+            {
+                using (NpgsqlConnection sqlConnection = new NpgsqlConnection(ConnectionString))
+                using (NpgsqlCommand sqlCommand = new NpgsqlCommand("public.fc_gettahunuseraktif", sqlConnection))
+                {
+                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                    sqlConnection.Open();
+                    _value = Convert.ToString(sqlCommand.ExecuteScalar());
+                }
+            }
+            catch (Exception Exception)
+            {
+                throw Exception;
+            }
+
+            return _value;
         }
     }
 }

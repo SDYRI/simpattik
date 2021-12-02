@@ -9,6 +9,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using TasikmalayaKota.Simpatik.Web.Models;
 using TasikmalayaKota.Simpatik.Web.Services.Middleware.Models;
+using TasikmalayaKota.Simpatik.Web.Services.mTahunAnggaran.Interfaces;
 using TasikmalayaKota.Simpatik.Web.Services.tsPaket.Interfaces;
 using TasikmalayaKota.Simpatik.Web.Services.tsPaket.Models;
 
@@ -18,10 +19,12 @@ namespace simpat1k.Controllers
     public class tsPaketController : Controller
     {
         private readonly ItsPaket _tsPaket;
+        private readonly ImTahunAnggaran _mTahunAnggaran;
 
-        public tsPaketController(ItsPaket tsPaket)
+        public tsPaketController(ItsPaket tsPaket, ImTahunAnggaran mTahunAnggaran)
         {
             _tsPaket = tsPaket;
+            _mTahunAnggaran = mTahunAnggaran;
         }
 
         [Route("IndexMe")]
@@ -175,35 +178,42 @@ namespace simpat1k.Controllers
                 }
             }
 
-            if ((HttpContext.Session.GetInt32("Tipe") == 3) && (HttpContext.Session.GetString("Pappk") == "3"))
+            if (_mTahunAnggaran.GetUserTahunAktif() == "True")
             {
-                if (value.Action == "insert")
+                if ((HttpContext.Session.GetInt32("Tipe") == 3) && (HttpContext.Session.GetString("Pappk") == "3"))
                 {
-                    DatabaseActionResultModel Result = _tsPaket.Create(value.Value);
-                    msg = Result.Pesan;
+                    if (value.Action == "insert")
+                    {
+                        DatabaseActionResultModel Result = _tsPaket.Create(value.Value);
+                        msg = Result.Pesan;
+                    }
+                    else if (value.Action == "update")
+                    {
+                        DatabaseActionResultModel Result = _tsPaket.Update(value.Value);
+                        msg = Result.Pesan;
+                    }
+                    else if (value.Action == "remove")
+                    {
+                        DatabaseActionResultModel Result = _tsPaket.Remove(value.Key.ToString());
+                        msg = Result.Pesan;
+                    }
                 }
-                else if (value.Action == "update")
+                else
                 {
-                    DatabaseActionResultModel Result = _tsPaket.Update(value.Value);
-                    msg = Result.Pesan;
-                }
-                else if (value.Action == "remove")
-                {
-                    DatabaseActionResultModel Result = _tsPaket.Remove(value.Key.ToString());
-                    msg = Result.Pesan;
+                    if ((HttpContext.Session.GetInt32("Tipe") == 4) && (value.Action == "update"))
+                    {
+                        DatabaseActionResultModel Result = _tsPaket.UpdateReview(value.Value);
+                        msg = Result.Pesan;
+                    }
+                    else
+                    {
+                        msg = "GAGAL DISIMPAN";
+                    }
                 }
             }
             else
             {
-                if ((HttpContext.Session.GetInt32("Tipe") == 4) && (value.Action == "update"))
-                {
-                    DatabaseActionResultModel Result = _tsPaket.UpdateReview(value.Value);
-                    msg = Result.Pesan;
-                }
-                else
-                {
-                    msg = "GAGAL DISIMPAN";
-                }
+                msg = "SEDANG TAHAP REVIU";
             }
 
             return Json(new { data = value.Value, message = msg });

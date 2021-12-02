@@ -15,9 +15,9 @@ EXPOSE 443
 FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
 
 # install System.Drawing native dependencies  --> Uncomment saat publish
-#RUN ln -s /lib/x86_64-linux-gnu/libdl-2.28.so /lib/x86_64-linux-gnu/libdl.so  
-#RUN apt-get update && apt-get install -y --allow-unauthenticated libgdiplus libc6-dev libx11-dev  
-#RUN ln -s libgdiplus.so gdiplus.dll 
+RUN ln -s /lib/x86_64-linux-gnu/libdl-2.28.so /lib/x86_64-linux-gnu/libdl.so  
+RUN apt-get update && apt-get install -y --allow-unauthenticated libgdiplus libc6-dev libx11-dev  
+RUN ln -s libgdiplus.so gdiplus.dll 
 
 WORKDIR /src
 COPY ["simpat1k.csproj", "."]

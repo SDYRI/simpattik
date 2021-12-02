@@ -9,7 +9,7 @@
 <ejs-grid id="Grid" actionComplete="CompleteAction" height="490" allowPaging="true" allowResizing="true" allowSorting="true" allowReordering="true" allowGrouping="false"
           toolbar="@Toolbar" allowFiltering="true" allowSelection="true" allowExcelExport="true" allowPdfExport="true"
           toolbarClick="toolbarAction" created="createdGrid">
-    <e-grid-pagesettings pageSize="12" />
+    <e-grid-pagesettings pageCount="5" pageSize="12" pageSizes="true"></e-grid-pagesettings>
     <e-grid-filterSettings type="Menu"></e-grid-filterSettings>
     <e-grid-editSettings allowAdding="true" allowEditing="true" mode="Dialog"></e-grid-editSettings>
     <e-grid-selectionsettings type="Single"></e-grid-selectionsettings>
@@ -39,7 +39,7 @@
                 dialog.height = 235;
                 // change the header of the dialog
                 dialog.header = args.requestType === 'beginEdit' ? 'Sunting ' + args.rowData['NamaSatuan'] : 'Tambah Satuan';
-                args.form.ej2_instances[0].addRules('NamaSatuan', { required: [true, 'Silahkan Isi Satuan'], minLength: [3, 'Satuan 3 huruf']});
+                args.form.ej2_instances[0].addRules('NamaSatuan', { required: [true, 'Silahkan Isi Satuan'], minLength: [1, 'Satuan minimal 1 huruf']});
 
                 let spinner = ej.popups.createSpinner({ target: args.dialog.element });
                 ej.popups.showSpinner(args.dialog.element);

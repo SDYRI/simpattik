@@ -16,13 +16,13 @@ namespace TasikmalayaKota.Simpatik.Web.Services.tsIdentifikasi.Models
 
     public class kondisiModel
     {
-        public int nilai { get; set; }
+        public Int64 nilai { get; set; }
         public string kondisi { get; set; }
     }
 
     public class barangmaterialModel
     {
-        public int nilai { get; set; }
+        public Int64 nilai { get; set; }
         public string material { get; set; }
     }
 
@@ -53,6 +53,7 @@ namespace TasikmalayaKota.Simpatik.Web.Services.tsIdentifikasi.Models
         public int idbrgkerj { get; set; }
         public string outputidentifikasi { get; set; }
         public string jeniskebutuhan { get; set; }
+        public string namajeniskebutuhan { get; set; }
         public string namabrgkerj { get; set; }
         public string fungsi { get; set; }
         public string jumlahbarang { get; set; }
@@ -106,6 +107,7 @@ namespace TasikmalayaKota.Simpatik.Web.Services.tsIdentifikasi.Models
         public string manfaat { get; set; }
         public string kuantitas { get; set; }
         public string spesifikasi { get; set; }
+        public string spesifikasipaket { get; set; }
         public string waktupenggunaan { get; set; }
         public string ketersediaanusaha { get; set; }
         public string ukurankapasitas { get; set; }
@@ -133,6 +135,7 @@ namespace TasikmalayaKota.Simpatik.Web.Services.tsIdentifikasi.Models
         public string metodepemilihan { get; set; }
         public string namappk { get; set; }
         public string nipppk { get; set; }
+        public string volumepekerjaan { get; set; }
 
 
         #region sumberDana

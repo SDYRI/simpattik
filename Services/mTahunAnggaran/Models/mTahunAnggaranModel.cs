@@ -14,5 +14,6 @@ namespace TasikmalayaKota.Simpatik.Web.Services.mTahunAnggaran.Models
         public int TahunAnggaran { get; set; }
         public int TahunAnggaranOld { get; set; }
         public bool TahunAnggaranAktif { get; set; }
+        public bool UserAktif { get; set; }
     }
 }

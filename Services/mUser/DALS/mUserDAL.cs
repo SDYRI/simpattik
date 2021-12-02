@@ -166,6 +166,7 @@ namespace TasikmalayaKota.Simpatik.Web.Services.mUser.DALS
                             Result.Opd = dataReader["listidopduser"].ToString();
                             Result.OpdName = dataReader["listopduser"].ToString();
                             Result.TahunAktif = dataReader["tahunaktif"].ToString();
+                            Result.UserAktif = (bool)dataReader["useraktif"];
                             Result.PaPpk = dataReader["pappkuser"].ToString();
                             Result.Success = Result.IDAkun != string.Empty ? true : false;
                         }

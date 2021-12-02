@@ -33,6 +33,7 @@ namespace TasikmalayaKota.Simpatik.Web.Models
         public string Opd { get; set; }
         public string OpdName { get; set; }
         public string TahunAktif { get; set; }
+        public bool UserAktif { get; set; }
         public string PaPpk { get; set; }
         public List<string> Toolbar { get; set; }
         public List<string> ToolbarTahun { get; set; }

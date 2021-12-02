@@ -62,7 +62,7 @@ namespace TasikmalayaKota.Simpatik.Web.Services.mSatuan.DALS
                 using (NpgsqlCommand sqlCommand = new NpgsqlCommand("public.stp_msatuaninsert", sqlConnection))
                 {
                     sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
-                    sqlCommand.Parameters.AddWithValue("_nmsatuan", ParamD.NamaSatuan);
+                    sqlCommand.Parameters.AddWithValue("_nmsatuan", ParamD.NamaSatuan.Trim());
                     sqlCommand.Parameters.AddWithValue("_uid", UID);
                     sqlConnection.Open();
                     using (NpgsqlDataReader dataReader = sqlCommand.ExecuteReader())
@@ -93,7 +93,7 @@ namespace TasikmalayaKota.Simpatik.Web.Services.mSatuan.DALS
                 {
                     sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
                     sqlCommand.Parameters.AddWithValue("_iddtsatuan", ParamD.IdSatuan);
-                    sqlCommand.Parameters.AddWithValue("_nmsatuan", ParamD.NamaSatuan);
+                    sqlCommand.Parameters.AddWithValue("_nmsatuan", ParamD.NamaSatuan.Trim());
                     sqlCommand.Parameters.AddWithValue("_uid", UID);
                     sqlConnection.Open();
                     using (NpgsqlDataReader dataReader = sqlCommand.ExecuteReader())

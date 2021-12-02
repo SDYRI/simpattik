@@ -21,7 +21,9 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
-      "applicationUrl": "https://127.0.0.1:5001;http://127.0.0.1:5000"
+      "sqlDebugging": false,
+      "applicationUrl": "https://127.0.0.1:5001;http://127.0.0.1:5000",
+      "nativeDebugging": false
     },
     "Docker": {
       "commandName": "Docker",

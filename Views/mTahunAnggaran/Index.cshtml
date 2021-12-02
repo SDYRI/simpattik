@@ -9,7 +9,7 @@
 <ejs-grid id="Grid" actionComplete="CompleteAction" height="490" allowPaging="true" allowResizing="true" allowSorting="true" allowReordering="true" allowGrouping="false"
           toolbar="@Toolbar" allowFiltering="true" allowSelection="true" allowExcelExport="true" allowPdfExport="true"
           toolbarClick="toolbarAction" created="createdGrid">
-    <e-grid-pagesettings pageSize="12" />
+    <e-grid-pagesettings pageCount="5" pageSize="12" pageSizes="true"></e-grid-pagesettings>
     <e-grid-filterSettings type="Menu"></e-grid-filterSettings>
     <e-grid-editSettings allowAdding="true" allowEditing="true" mode="Dialog"></e-grid-editSettings>
     <e-grid-selectionsettings type="Single"></e-grid-selectionsettings>
@@ -17,6 +17,7 @@
         <e-grid-column field="TahunAnggaranOld" headerText="Tahun Anggaran Old" isPrimaryKey="true" isIdentity="true" visible="false"></e-grid-column>
         <e-grid-column field="TahunAnggaran" width="150" headerText="Tahun Anggaran"></e-grid-column>
         <e-grid-column field="TahunAnggaranAktif" headerText="Status Aktif" editType="booleanedit" displayAsCheckBox="true" textAlign="Center" type="boolean"></e-grid-column>
+        <e-grid-column field="UserAktif" headerText="User Aktif" editType="booleanedit" displayAsCheckBox="true" textAlign="Center" type="boolean"></e-grid-column>
     </e-grid-columns>
 </ejs-grid>
 
@@ -37,7 +38,7 @@
 
             if (args.requestType === 'beginEdit' || args.requestType === 'add') {
                 var dialog = args.dialog;
-                dialog.height = 235;
+                dialog.height = 265;
                 // change the header of the dialog
                 dialog.header = args.requestType === 'beginEdit' ? 'Sunting ' + args.rowData['TahunAnggaran'] : 'Tambah Tahun Anggaran';
                 args.form.ej2_instances[0].addRules('TahunAnggaran', { required: [true, 'Silahkan Isi Tahun Anggaran'], minLength: [4, 'Tahun Anggaran 4 huruf'], maxLength: [4, 'Tahun Anggaran 4 huruf'] });

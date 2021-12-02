@@ -180,6 +180,7 @@ namespace TasikmalayaKota.Simpatik.Web.Services.Middleware.Models
             metodepemilihan.Add(new enumDataModel { Text = "Seleksi", Value = "7" });
             metodepemilihan.Add(new enumDataModel { Text = "Tender", Value = "8" });
             metodepemilihan.Add(new enumDataModel { Text = "Tender Cepat", Value = "9" });
+            metodepemilihan.Add(new enumDataModel { Text = "Dikecualikan", Value = "10" });
             return metodepemilihan;
         }
     }

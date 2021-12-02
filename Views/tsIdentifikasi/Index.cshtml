@@ -2,6 +2,7 @@
     ViewData["Title"] = ViewBag.Title;
     List<object> toolbarItems = new List<object>();
     toolbarItems.Add("Search");
+    //toolbarItems.Add("ExcelExport");
     toolbarItems.Add(new { text = "Cetak Laporan", tooltipText = "Cetak Laporan", prefixIcon = "feather icon-printer", id = "cetakLap" });
     if ((HttpContextAccessor.HttpContext.Session.GetInt32("Tipe") == 3) && (HttpContextAccessor.HttpContext.Session.GetString("Pappk") != "3"))
     {
@@ -11,17 +12,33 @@
 <ejs-grid id="Grid" height="490" allowPaging="true" allowResizing="true" allowSorting="true" allowReordering="true" allowGrouping="false"
           toolbar="toolbarItems" allowFiltering="true" allowSelection="true" allowExcelExport="true" toolbarClick="toolbarAction" query="@ViewBag.queryTipePaket"
           excelExportComplete="excelExportComplete">
+@*<ejs-grid id="Grid" height="490" allowPaging="true" allowResizing="true" allowSorting="true" allowReordering="true" allowGrouping="false"
+          toolbar="toolbarItems" allowFiltering="true" allowSelection="true"
+          allowExcelExport="true" toolbarClick="toolbarAction" query="@ViewBag.queryTipePaket">*@
     <e-data-manager url="/Identifikasi/IdentifikasiPengadaanPenetapan" adaptor="UrlAdaptor"></e-data-manager>
-    <e-grid-pagesettings pageSize="12" />
+    <e-grid-pagesettings pageCount="5" pageSize="12" pageSizes="true"></e-grid-pagesettings>
     <e-grid-filterSettings type="Menu"></e-grid-filterSettings>
     <e-grid-selectionsettings type="Single"></e-grid-selectionsettings>
     <e-grid-columns>
         <e-grid-column field="ididetifikasi" headerText="ididetifikasi" isPrimaryKey="true" isIdentity="true" visible="false"></e-grid-column>
         <e-grid-column field="opd" headerText="Organisasi"></e-grid-column>
         <e-grid-column field="subopd" headerText="Unit"></e-grid-column>
-        <e-grid-column field="jeniskebutuhan" headerText="Jenis Pengadaan"></e-grid-column>
-        <e-grid-column field="tipepaketnama" headerText="Cara Pengadaan"></e-grid-column>
+        <e-grid-column field="namasubkegiatan" headerText="Sub Kegiatan"></e-grid-column>
+        <e-grid-column field="namapaket" headerText="Nama Paket"></e-grid-column>
         <e-grid-column field="namabrgkerj" headerText="Nama Barang/ Jasa"></e-grid-column>
+        <e-grid-column field="kriteria" headerText="Kriteria Barang/ Jasa"></e-grid-column>
+        <e-grid-column field="usahakecil" headerText="Kriteria Pelaku Usaha"></e-grid-column>
+        <e-grid-column field="tipeswakelolapaket" headerText="Tipe Swakelola"></e-grid-column>
+        <e-grid-column field="pihak" headerText="Penyelenggara Swakelola"></e-grid-column>
+        <e-grid-column field="uraian" headerText="Uraian Pekerjaan"></e-grid-column>
+        <e-grid-column field="volumepekerjaan" headerText="Volume Pekerjaan"></e-grid-column>
+        <e-grid-column field="tipepaketnama" headerText="Cara Pengadaan"></e-grid-column>
+        <e-grid-column field="namajeniskebutuhan" headerText="Jenis Pengadaan"></e-grid-column>
+        <e-grid-column field="spesifikasipaket" headerText="Spesifikasi"></e-grid-column>
+        <e-grid-column field="jumlahbarang" headerText="Kuantitas"></e-grid-column>
+        <e-grid-column field="namasatuan" headerText="Satuan"></e-grid-column>
+        <e-grid-column field="metodepemilihan" headerText="Metode Pemilihan"></e-grid-column>
+        <e-grid-column field="lokasi" headerText="Lokasi Pekerjaan/ Barang"></e-grid-column>
         <e-grid-column field="nilaisumberdanaint" headerText="Anggaran Pengadaan" format="n0" width="200"></e-grid-column>
         <e-grid-column field="valuesumberdana" headerText="Sumber Dana" width="200"></e-grid-column>
         <e-grid-column field="pelaksanaanmulai" headerText="Pelaksanaan Mulai"></e-grid-column>
@@ -79,6 +96,25 @@
                 this.excelExport(exportProperties);
             }
         }
+
+        //function toolbarAction(args) {
+        //    var fileName = "Laporan Identifikasi";
+
+        //    if (args.item.id === this.element.id + '_pdfexport') {
+        //        var exportProperties = {
+        //            fileName: fileName + ".pdf"
+        //        };
+
+        //        this.pdfExport(exportProperties);
+        //    }
+        //    if (args.item.id === this.element.id + '_excelexport') {
+        //        var exportProperties = {
+        //            fileName: fileName + ".xlsx"
+        //        };
+
+        //        this.excelExport(exportProperties);
+        //    }
+        //}
 
         function excelExportComplete(args) {
             this.columns[1].visible = true;

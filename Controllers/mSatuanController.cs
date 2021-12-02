@@ -27,7 +27,15 @@ namespace TasikmalayaKota.Simpatik.Web.Controllers
         [Route("IndexMe")]
         public IActionResult Index()
         {
-            return View();
+            if (HttpContext.Session.GetInt32("Tipe") == 1)
+            {
+                ViewBag.Title = "Master Satuan";
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("HandleError", "ErrorExecute", new { code = 404 });
+            }
         }
 
         [HttpPost]
