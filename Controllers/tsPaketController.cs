@@ -499,7 +499,7 @@ namespace simpat1k.Controllers
             ViewBag.queryPenyedia = "new ej.data.Query().addParams('jeniskebutuhan', 2).addParams('tipePaket', 1)";
             ViewBag.querySwakelola = "new ej.data.Query().addParams('jeniskebutuhan', 2).addParams('tipePaket', 2)";
             ViewBag.identifikasi = "/Identifikasi/IndexPekerjaan/";
-            return View("IndexBarang");
+            return View("IndexBarangOnly");
         }
         #endregion Paket Pekerjaan
 
@@ -513,7 +513,7 @@ namespace simpat1k.Controllers
             ViewBag.queryPenyedia = "new ej.data.Query().addParams('jeniskebutuhan', 3).addParams('tipePaket', 1)";
             ViewBag.querySwakelola = "new ej.data.Query().addParams('jeniskebutuhan', 3).addParams('tipePaket', 2)";
             ViewBag.identifikasi = "/Identifikasi/IndexKonsultasi/";
-            return View("IndexBarang");
+            return View("IndexBarangOnly");
         }
         #endregion Paket Jasa Konsultasi
 
@@ -527,7 +527,7 @@ namespace simpat1k.Controllers
             ViewBag.queryPenyedia = "new ej.data.Query().addParams('jeniskebutuhan', 4).addParams('tipePaket', 1)";
             ViewBag.querySwakelola = "new ej.data.Query().addParams('jeniskebutuhan', 4).addParams('tipePaket', 2)";
             ViewBag.identifikasi = "/Identifikasi/IndexLainnya/";
-            return View("IndexBarang");
+            return View("IndexBarangOnly");
         }
         #endregion Paket Jasa Lainnya
     }
