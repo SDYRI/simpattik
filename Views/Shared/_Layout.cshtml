@@ -53,10 +53,10 @@
                             <li class="nav-item d-none d-lg-block">Perencanaan <b>@HttpContextAccessor.HttpContext.Session.GetString("TahunAktif")</b></li>
                         </ul>
                         @*<ul class="nav navbar-nav bookmark-icons">
-                                <li class="nav-item d-none d-lg-block"><a class="nav-link" href="app-todo.html" data-toggle="tooltip" data-placement="top" title="Todo"><i class="ficon feather icon-check-square"></i></a></li>
-                                <li class="nav-item d-none d-lg-block"><a class="nav-link" href="app-chat.html" data-toggle="tooltip" data-placement="top" title="Chat"><i class="ficon feather icon-message-square"></i></a></li>
-                                <li class="nav-item d-none d-lg-block"><a class="nav-link" href="app-email.html" data-toggle="tooltip" data-placement="top" title="Email"><i class="ficon feather icon-mail"></i></a></li>
-                                <li class="nav-item d-none d-lg-block"><a class="nav-link" href="app-calender.html" data-toggle="tooltip" data-placement="top" title="Calendar"><i class="ficon feather icon-calendar"></i></a></li>
+                            <li class="nav-item d-none d-lg-block"><a class="nav-link" href="app-todo.html" data-toggle="tooltip" data-placement="top" title="Todo"><i class="ficon feather icon-check-square"></i></a></li>
+                            <li class="nav-item d-none d-lg-block"><a class="nav-link" href="app-chat.html" data-toggle="tooltip" data-placement="top" title="Chat"><i class="ficon feather icon-message-square"></i></a></li>
+                            <li class="nav-item d-none d-lg-block"><a class="nav-link" href="app-email.html" data-toggle="tooltip" data-placement="top" title="Email"><i class="ficon feather icon-mail"></i></a></li>
+                            <li class="nav-item d-none d-lg-block"><a class="nav-link" href="app-calender.html" data-toggle="tooltip" data-placement="top" title="Calendar"><i class="ficon feather icon-calendar"></i></a></li>
                             </ul>*@
                     </div>
                     <ul class="nav navbar-nav float-right">
@@ -131,10 +131,10 @@
                                     <a asp-area="" asp-controller="Identifikasi" asp-action="IndexMe"><i class="feather icon-circle"></i><span class="menu-item">Rekap Perencanaan Pengadaan</span></a>
                                 </li>
                                 @*<li class="@Html.IsSelected(controller: "tsIdentifikasi", action: "IndexLapPenyedia")">
-                                        <a asp-area="" asp-controller="Identifikasi" asp-action="IndexLapPenyedia"><i class="feather icon-circle"></i><span class="menu-item">Rekap Pengadaan Penyedia</span></a>
+                                    <a asp-area="" asp-controller="Identifikasi" asp-action="IndexLapPenyedia"><i class="feather icon-circle"></i><span class="menu-item">Rekap Pengadaan Penyedia</span></a>
                                     </li>
                                     <li class="@Html.IsSelected(controller: "tsIdentifikasi", action: "IndexLapSwakelola")">
-                                        <a asp-area="" asp-controller="Identifikasi" asp-action="IndexLapSwakelola"><i class="feather icon-circle"></i><span class="menu-item">Rekap Pengadaan Swakelola</span></a>
+                                    <a asp-area="" asp-controller="Identifikasi" asp-action="IndexLapSwakelola"><i class="feather icon-circle"></i><span class="menu-item">Rekap Pengadaan Swakelola</span></a>
                                     </li>*@
                             </ul>
                         </li>
@@ -159,14 +159,28 @@
                             <li class="@Html.IsSelected(controller: "tsMcpReview", action: "IndexPerencanaan")">
                                 <a asp-area="" asp-controller="Mcp" asp-action="IndexPerencanaanMe"><i class="feather icon-copy"></i><span class="menu-item">Reviu Perencanaan</span></a>
                             </li>
-                            <li class="@Html.IsSelected(controller: "tsMcpReview", action: "IndexPemaketan")">
-                                <a asp-area="" asp-controller="Mcp" asp-action="IndexPemaketanMe"><i class="feather icon-copy"></i><span class="menu-item">Reviu Pemaketan</span></a>
-                            </li>
-                            <li class="@Html.IsSelected(controller: "tsMcpReview", action: "IndexPaketStartegis")">
-                                <a asp-area="" asp-controller="Mcp" asp-action="IndexPaketStrategisMe"><i class="feather icon-copy"></i><span class="menu-item">Paket Strategis</span></a>
-                            </li>
                             <li class="@Html.IsSelected(controller: "tsMcpReview", action: "IndexKesesuaianSirup")">
-                                <a asp-area="" asp-controller="Mcp" asp-action="IndexKesesuaianSirupMe"><i class="feather icon-copy"></i><span class="menu-item">Kesesuaian dengan SIRUP</span></a>
+                                        <a asp-area="" asp-controller="Mcp" asp-action="IndexKesesuaianSirupMe"><i class="feather icon-copy"></i><span class="menu-item">Kesesuaian dengan SIRUP</span></a>
+                                    </li>
+                            <li>
+                                <a href="#"><i class="feather icon-copy"></i><span class="menu-item">Laporan Pemrograman</span></a>
+                                <ul class="menu-content">
+                                    <li class="@Html.IsSelected(controller: "tsMcpReview", action: "IndexLapPerencanaan")">
+                                        <a asp-area="" asp-controller="Mcp" asp-action="IndexLapPerencanaanMe"><i class="feather icon-circle"></i><span class="menu-item">Reviu Perencanaan</span></a>
+                                    </li>
+                                    <li class="@Html.IsSelected(controller: "tsMcpReview", action: "IndexPemaketan")">
+                                        <a asp-area="" asp-controller="Mcp" asp-action="IndexPemaketanMe"><i class="feather icon-circle"></i><span class="menu-item">Reviu Pemaketan</span></a>
+                                    </li>
+                                    <li class="@Html.IsSelected(controller: "tsMcpReview", action: "IndexLapKonsolidasi")">
+                                        <a asp-area="" asp-controller="Mcp" asp-action="IndexLapKonsolidasiMe"><i class="feather icon-circle"></i><span class="menu-item">Konsolidasi Pemaketan Barang/ Jasa</span></a>
+                                    </li>
+                                    <li class="@Html.IsSelected(controller: "tsMcpReview", action: "IndexPaketStartegis")">
+                                        <a asp-area="" asp-controller="Mcp" asp-action="IndexPaketStrategisMe"><i class="feather icon-circle"></i><span class="menu-item">Paket Strategis</span></a>
+                                    </li>
+                                    <li class="@Html.IsSelected(controller: "tsMcpReview", action: "IndexLapKesesuaianSirup")">
+                                        <a asp-area="" asp-controller="Mcp" asp-action="IndexLapKesesuaianSirupMe"><i class="feather icon-circle"></i><span class="menu-item">Kesesuaian dengan SIRUP</span></a>
+                                    </li>
+                                </ul>
                             </li>
                         </ul>
                     </li>
@@ -291,14 +305,28 @@
                             <li class="@Html.IsSelected(controller: "tsMcpReview", action: "IndexPerencanaan")">
                                 <a asp-area="" asp-controller="Mcp" asp-action="IndexPerencanaanMe"><i class="feather icon-copy"></i><span class="menu-item">Reviu Perencanaan</span></a>
                             </li>
-                            <li class="@Html.IsSelected(controller: "tsMcpReview", action: "IndexPemaketan")">
-                                <a asp-area="" asp-controller="Mcp" asp-action="IndexPemaketanMe"><i class="feather icon-copy"></i><span class="menu-item">Reviu Pemaketan</span></a>
-                            </li>
-                            <li class="@Html.IsSelected(controller: "tsMcpReview", action: "IndexPaketStartegis")">
-                                <a asp-area="" asp-controller="Mcp" asp-action="IndexPaketStrategisMe"><i class="feather icon-copy"></i><span class="menu-item">Paket Strategis</span></a>
-                            </li>
                             <li class="@Html.IsSelected(controller: "tsMcpReview", action: "IndexKesesuaianSirup")">
-                                <a asp-area="" asp-controller="Mcp" asp-action="IndexKesesuaianSirupMe"><i class="feather icon-copy"></i><span class="menu-item">Kesesuaian dengan SIRUP</span></a>
+                                        <a asp-area="" asp-controller="Mcp" asp-action="IndexKesesuaianSirupMe"><i class="feather icon-copy"></i><span class="menu-item">Kesesuaian dengan SIRUP</span></a>
+                                    </li>
+                            <li>
+                                <a href="#"><i class="feather icon-copy"></i><span class="menu-item">Laporan Pemrograman</span></a>
+                                <ul class="menu-content">
+                                    <li class="@Html.IsSelected(controller: "tsMcpReview", action: "IndexLapPerencanaan")">
+                                        <a asp-area="" asp-controller="Mcp" asp-action="IndexLapPerencanaanMe"><i class="feather icon-circle"></i><span class="menu-item">Reviu Perencanaan</span></a>
+                                    </li>
+                                    <li class="@Html.IsSelected(controller: "tsMcpReview", action: "IndexPemaketan")">
+                                        <a asp-area="" asp-controller="Mcp" asp-action="IndexPemaketanMe"><i class="feather icon-circle"></i><span class="menu-item">Reviu Pemaketan</span></a>
+                                    </li>
+                                    <li class="@Html.IsSelected(controller: "tsMcpReview", action: "IndexLapKonsolidasi")">
+                                        <a asp-area="" asp-controller="Mcp" asp-action="IndexLapKonsolidasiMe"><i class="feather icon-circle"></i><span class="menu-item">Konsolidasi Pemaketan Barang/ Jasa</span></a>
+                                    </li>
+                                    <li class="@Html.IsSelected(controller: "tsMcpReview", action: "IndexPaketStartegis")">
+                                        <a asp-area="" asp-controller="Mcp" asp-action="IndexPaketStrategisMe"><i class="feather icon-circle"></i><span class="menu-item">Paket Strategis</span></a>
+                                    </li>
+                                    <li class="@Html.IsSelected(controller: "tsMcpReview", action: "IndexLapKesesuaianSirup")">
+                                        <a asp-area="" asp-controller="Mcp" asp-action="IndexLapKesesuaianSirupMe"><i class="feather icon-circle"></i><span class="menu-item">Kesesuaian dengan SIRUP</span></a>
+                                    </li>
+                                </ul>
                             </li>
                         </ul>
                     </li>
@@ -449,8 +477,6 @@
             //ej.base.setCurrencyCode('USD');
     </script>
     <!-- END: Theme JS-->
-
-
     @await RenderSectionAsync("Scripts", required: false)
     @await RenderSectionAsync("SectionControls", required: false)
     <ejs-scripts></ejs-scripts>

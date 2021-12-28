@@ -84,7 +84,7 @@
             }
 
             let query = new ej.data.Query().select(['NamaSubkegiatan', 'IdProgram']).take(10).addParams('IdPosisi', 1);
-            query = (e.text !== '' && e.text.length >= 1) ? query.where(new ej.data.Predicate('NamaSubkegiatan', 'contains', e.text, true).or('IdUrusan', 'contains', e.text, true)) : query;
+            query = (e.text !== '' && e.text.length >= 1) ? query.where(new ej.data.Predicate('NamaSubkegiatan', 'contains', e.text, true)) : query;
 
             e.updateData(SelectObj.dataSource, query);
         }

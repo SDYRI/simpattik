@@ -194,6 +194,7 @@ namespace TasikmalayaKota.Simpatik.Web.Services.tsPaket.DALS
                                 lembaga = (dataReader["rlembaga"].GetType() != typeof(DBNull) ? ((int)dataReader["rlembaga"]).ToString() : ""),
                                 opd = (dataReader["ropd"].GetType() != typeof(DBNull) ? BethaCrypto.Encrypt(((int)dataReader["ropd"]).ToString()) : ""),
                                 namaopd = (dataReader["rnamaopd"].GetType() != typeof(DBNull) ? (string)dataReader["rnamaopd"] : ""),
+                                namaopdutama = (dataReader["rnamaopdutama"].GetType() != typeof(DBNull) ? (string)dataReader["rnamaopdutama"] : ""),
                                 statuspaket = (dataReader["rstatuspaket"].GetType() != typeof(DBNull) ? (string)dataReader["rstatuspaket"] : ""),
                             });
                         }

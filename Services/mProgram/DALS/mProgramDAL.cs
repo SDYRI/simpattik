@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Npgsql;
+using Syncfusion.XlsIO.Implementation.PivotAnalysis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Threading.Tasks;
 using TasikmalayaKota.Simpatik.Web.Models;
 using TasikmalayaKota.Simpatik.Web.Services.mProgram.Interfaces;
@@ -175,8 +177,10 @@ namespace TasikmalayaKota.Simpatik.Web.Services.mProgram.DALS
             catch (Exception Exception)
             {
                 throw Exception;
-            }
+}
             return Result;
         }
     }
 }
+
+

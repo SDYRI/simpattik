@@ -643,8 +643,8 @@ namespace simpat1k.Controllers
             string[] hari = { "Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu" };
             string[] bulan = { "Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "Nopember", "Desember" };
 
-            string hariIni = hari[(int)DateTime.Today.DayOfWeek];
-            string bulanIni = bulan[DateTime.Today.Month];
+            string hariIni = hari[(int)DateTime.Now.DayOfWeek];
+            string bulanIni = bulan[DateTime.Now.Month-1];
             //string TglIndonesia = string.Format("{0}-{1}-{2} ({3})", DateTime.Today.Day, bulanIni, DateTime.Today.Year, hariIni);
             string TglIndonesia = string.Format("{0}-{1}-{2}", DateTime.Today.Day, bulanIni, DateTime.Today.Year);
             return TglIndonesia;
@@ -682,241 +682,154 @@ namespace simpat1k.Controllers
                 IList<tsIdentifikasiModel> subkegiatan = DataSource.AsQueryable().Cast<tsIdentifikasiModel>().ToList();
 
                 int noSheet = 1;
-                //foreach (var subkegiatanName in subkegiatan.GroupBy(c => new { c.opd, c.subopd, c.namappk, c.nipppk, c.namaprogram, c.namakegiatan, c.namasubkegiatan }).Select(sg => new { sg.Key }))
-                //{
-                //    using (SHA256 sha256Hash = SHA256.Create())
-                //    {
-                //        //From String to byte array
-                //        byte[] sourceBytes = Encoding.UTF8.GetBytes("simpattik" + Guid.NewGuid() + subkegiatanName.Key.namasubkegiatan + "tasikmalayakota" + subkegiatanName.Key.opd + "bethasolution");
-                //        byte[] hashBytes = sha256Hash.ComputeHash(sourceBytes);
-                //        hashStyle = BitConverter.ToString(hashBytes).Replace("-", String.Empty);
-                //    }
-
-                //    if(subkegiatanName.Key.namasubkegiatan.Length > 20)
-                //    {
-                //        worksheet = workbook.Worksheets.Create(noSheet + ". " + Regex.Replace(subkegiatanName.Key.namasubkegiatan.Substring(0, 20), @"[^0-9a-zA-Z]+", ""));
-                //    }
-                //    else
-                //    {
-                //        worksheet = workbook.Worksheets.Create(noSheet + ". " + Regex.Replace(subkegiatanName.Key.namasubkegiatan.Substring(0, subkegiatanName.Key.namasubkegiatan.Length), @"[^0-9a-zA-Z]+", ""));
-                //    }
-
-
-                //    IList<tsIdentifikasiModel> reports = DataSource.AsQueryable().Cast<tsIdentifikasiModel>().ToList();
-                //    var visualData = reports.Where(rs => rs.namasubkegiatan.Contains(subkegiatanName.Key.namasubkegiatan)).Select(vd => new { vd.no, vd.namapaket, vd.namabrgkerj, vd.kriteria, vd.usahakecil, vd.tipeswakelolapaket, vd.pihak, vd.uraian, vd.volumepekerjaan, vd.tipepaketnama, vd.namajeniskebutuhan, vd.spesifikasipaket, vd.jumlahbarang, vd.namasatuan, vd.metodepemilihan, vd.lokasi, vd.nilaisumberdanaint, vd.valuesumberdana, vd.pelaksanaanmulai, vd.pelaksanaanakhir }).ToList();
-                //    int FirstRow = 11;
-                //    int CountData = visualData.Count;
-
-                //    //Apply style to headers 
-                //    worksheet["A1:T1"].Merge();
-                //    worksheet["A1"].Text = "RENCANA PENGADAAN " + subkegiatanName.Key.opd.ToUpper();
-
-                //    //Header Laporan
-                //    worksheet["A3:B3"].Merge();
-                //    worksheet["A3"].Text = "Pemerintah Daerah";
-                //    worksheet["C3"].Text = ": TASIKMALAYA";
-
-                //    worksheet["A4:B4"].Merge();
-                //    worksheet["A4"].Text = "Perangkat Daerah";
-                //    worksheet["C4:J4"].Merge();
-                //    worksheet["C4"].Text = ": " + subkegiatanName.Key.subopd.ToUpper();
-
-                //    worksheet["A5:B5"].Merge();
-                //    worksheet["A5"].Text = "Tahun Anggaran";
-                //    worksheet["C5:J5"].Merge();
-                //    worksheet["C5"].Text = ": " + TA;
-
-                //    worksheet["A6:B6"].Merge();
-                //    worksheet["A6"].Text = "Program";
-                //    worksheet["C6:J6"].Merge();
-                //    worksheet["C6"].Text = ": " + subkegiatanName.Key.namaprogram;
-
-                //    worksheet["A7:B7"].Merge();
-                //    worksheet["A7"].Text = "Kegiatan";
-                //    worksheet["C7:J7"].Merge();
-                //    worksheet["C7"].Text = ": " + subkegiatanName.Key.namakegiatan;
-
-                //    worksheet["A8:B8"].Merge();
-                //    worksheet["A8"].Text = "Sub Kegiatan";
-                //    worksheet["C8:J8"].Merge();
-                //    worksheet["C8"].Text = ": " + subkegiatanName.Key.namasubkegiatan;
-
-                //    //Footer Laporan
-                //    //worksheet["K" + (FirstRow + (CountData + 2)) + ":N" + (FirstRow + (CountData + 2))].Merge();
-                //    //worksheet["K" + (FirstRow + CountData + 2)].Text = "TASIKMALAYA, " + formatindonesia();
-                //    //worksheet["K" + (FirstRow + (CountData + 3)) + ":N" + (FirstRow + (CountData + 3))].Merge();
-                //    //worksheet["K" + (FirstRow + CountData + 3)].Text = "Disusun oleh,";
-                //    //worksheet["K" + (FirstRow + (CountData + 4)) + ":N" + (FirstRow + (CountData + 4))].Merge();
-                //    //worksheet["K" + (FirstRow + CountData + 4)].Text = "Pejabat Pembuat Komitmen,";
-                //    //worksheet["K" + (FirstRow + (CountData + 9)) + ":N" + (FirstRow + (CountData + 9))].Merge();
-                //    //worksheet["K" + (FirstRow + CountData + 9)].Text = subkegiatanName.Key.namappk.ToUpper();
-                //    //worksheet["K" + (FirstRow + (CountData + 10)) + ":N" + (FirstRow + (CountData + 10))].Merge();
-                //    //worksheet["K" + (FirstRow + CountData + 10)].Text = "NIP. " + subkegiatanName.Key.nipppk.ToUpper();
-
-                //    //Judul Header Tabel
-                //    worksheet["A10"].Text = "No";
-                //    worksheet["B10"].Text = "Nama Paket";
-                //    worksheet["C10"].Text = "Nama Barang/ Jasa";
-                //    worksheet["D10"].Text = "Kriteria Barang / Jasa";
-                //    worksheet["E10"].Text = "Kriteria Pelaku Usaha";
-                //    worksheet["F10"].Text = "Tipe Swakelola";
-                //    worksheet["G10"].Text = "Penyelenggara Swakelola";
-                //    worksheet["H10"].Text = "Uraian Pekerjaan";
-                //    worksheet["I10"].Text = "Volume Pekerjaan";
-                //    worksheet["J10"].Text = "Cara Pengadaan";
-                //    worksheet["K10"].Text = "Jenis Pengadaan";
-                //    worksheet["L10"].Text = "Spesifikasi";
-                //    worksheet["M10"].Text = "Kuantitas";
-                //    worksheet["N10"].Text = "Satuan";
-                //    worksheet["O10"].Text = "Metode Pemilihan";
-                //    worksheet["P10"].Text = "Lokasi Pekerjaan/ Barang";
-                //    worksheet["Q10"].Text = "Anggaran Pengadaan";
-                //    worksheet["R10"].Text = "Sumber Dana";
-                //    worksheet["S10"].Text = "Jadwal Pelaksanaan Mulai";
-                //    worksheet["T10"].Text = "Jadwal Pelaksanaan Akhir";
-
-                //    IStyle headingStyleLeft = workbook.Styles.Add("HeadingStyleHeader" + hashStyle);
-                //    headingStyleLeft.BeginUpdate();
-                //    headingStyleLeft.Font.Bold = true;
-                //    headingStyleLeft.HorizontalAlignment = ExcelHAlign.HAlignLeft;
-                //    headingStyleLeft.EndUpdate();
-                //    worksheet.Range["A3:A8"].CellStyle = headingStyleLeft;
-
-                //    IStyle headingStyleCenter = workbook.Styles.Add("HeadingStyle" + hashStyle);
-                //    headingStyleCenter.BeginUpdate();
-                //    headingStyleCenter.Font.Bold = true;
-                //    headingStyleCenter.HorizontalAlignment = ExcelHAlign.HAlignCenter;
-                //    headingStyleCenter.EndUpdate();
-                //    worksheet.Range["A1:C1"].CellStyle = headingStyleCenter;
-                //    worksheet.Range["B" + (FirstRow + (CountData + 2)) + ":B" + (FirstRow + (CountData + 3))].CellStyle = headingStyleCenter;
-
-                //    IStyle headingTitleBorder = workbook.Styles.Add("HeadingTitleBorder" + hashStyle);
-                //    headingTitleBorder.BeginUpdate();
-                //    headingTitleBorder.Font.Bold = true;
-                //    headingTitleBorder.HorizontalAlignment = ExcelHAlign.HAlignCenter;
-                //    headingTitleBorder.Borders[ExcelBordersIndex.EdgeLeft].LineStyle = ExcelLineStyle.Thin;
-                //    headingTitleBorder.Borders[ExcelBordersIndex.EdgeRight].LineStyle = ExcelLineStyle.Thin;
-                //    headingTitleBorder.Borders[ExcelBordersIndex.EdgeTop].LineStyle = ExcelLineStyle.Thin;
-                //    headingTitleBorder.Borders[ExcelBordersIndex.EdgeBottom].LineStyle = ExcelLineStyle.Thin;
-                //    headingTitleBorder.EndUpdate();
-                //    worksheet.Range["A10:T10"].CellStyle = headingTitleBorder;
-
-                //    IStyle headingBorder = workbook.Styles.Add("HeadingBorder" + hashStyle);
-                //    headingBorder.BeginUpdate();
-                //    headingBorder.Borders[ExcelBordersIndex.EdgeLeft].LineStyle = ExcelLineStyle.Thin;
-                //    headingBorder.Borders[ExcelBordersIndex.EdgeRight].LineStyle = ExcelLineStyle.Thin;
-                //    headingBorder.Borders[ExcelBordersIndex.EdgeTop].LineStyle = ExcelLineStyle.Thin;
-                //    headingBorder.Borders[ExcelBordersIndex.EdgeBottom].LineStyle = ExcelLineStyle.Thin;
-                //    headingBorder.EndUpdate();
-                //    worksheet.Range["A" + FirstRow + ":T" + (FirstRow + (CountData - 1))].CellStyle = headingBorder;
-
-                //    IStyle footerStyleCenter = workbook.Styles.Add("FooterStyle" + hashStyle);
-                //    footerStyleCenter.BeginUpdate();
-                //    footerStyleCenter.HorizontalAlignment = ExcelHAlign.HAlignCenter;
-                //    footerStyleCenter.EndUpdate();
-                //    worksheet.Range["K" + (FirstRow + (CountData + 2)) + ":N" + (FirstRow + (CountData + 10))].CellStyle = footerStyleCenter;
-
-                //    importDataOptions.FirstRow = FirstRow;
-                //    importDataOptions.IncludeHeader = false;
-                //    importDataOptions.NestedDataLayoutOptions = ExcelNestedDataLayoutOptions.Default;
-                //    worksheet.ImportData(visualData, importDataOptions);
-
-                //    worksheet.UsedRange.AutofitColumns();
-                //    worksheet.Protect(",6Gn]a3VX@whh`>z=,]Ps6Jy<j4.x[n aGA:$-C`.,Kmf)93nYXjS2Q~rGP@, CZb8DmQ9tCh = SDY_RI - &{={pN3m`KxL % B9 + k", ExcelSheetProtection.All);
-
-                //    noSheet = noSheet + 1;
-                //}
-
                 #region All User
-                //using (SHA256 sha256Hash = SHA256.Create())
-                //{
-                //    //From String to byte array
-                //    byte[] sourceBytes = Encoding.UTF8.GetBytes("simpattik" + Guid.NewGuid() + "tasikmalayakota" + "bethasolution");
-                //    byte[] hashBytes = sha256Hash.ComputeHash(sourceBytes);
-                //    hashStyle = BitConverter.ToString(hashBytes).Replace("-", String.Empty);
-                //}
+                if (HttpContext.Session.GetInt32("Tipe") != 1)
+                {
+                    foreach (var subkegiatanName in subkegiatan.GroupBy(c => new { c.opd, c.subopd, c.namappk, c.nipppk, c.namaprogram, c.namakegiatan, c.namasubkegiatan, c.subkegiatan }).Select(sg => new { sg.Key }))
+                    {
+                        using (SHA256 sha256Hash = SHA256.Create())
+                        {
+                            //From String to byte array
+                            byte[] sourceBytes = Encoding.UTF8.GetBytes("simpattik" + Guid.NewGuid() + subkegiatanName.Key.namasubkegiatan + "tasikmalayakota" + subkegiatanName.Key.opd + "bethasolution");
+                            byte[] hashBytes = sha256Hash.ComputeHash(sourceBytes);
+                            hashStyle = BitConverter.ToString(hashBytes).Replace("-", String.Empty);
+                        }
 
-                //worksheet = workbook.Worksheets.Create("Laporan");
+                        if (subkegiatanName.Key.namasubkegiatan.Length > 20)
+                        {
+                            worksheet = workbook.Worksheets.Create(noSheet + ". " + Regex.Replace(subkegiatanName.Key.namasubkegiatan.Substring(0, 20), @"[^0-9a-zA-Z]+", ""));
+                        }
+                        else
+                        {
+                            worksheet = workbook.Worksheets.Create(noSheet + ". " + Regex.Replace(subkegiatanName.Key.namasubkegiatan.Substring(0, subkegiatanName.Key.namasubkegiatan.Length), @"[^0-9a-zA-Z]+", ""));
+                        }
 
 
-                //IList<tsIdentifikasiModel> reports = DataSource.AsQueryable().Cast<tsIdentifikasiModel>().ToList();
-                //var visualData = reports.Select(vd => new { vd.no, vd.namapaket, vd.namabrgkerj, vd.kriteria, vd.usahakecil, vd.tipeswakelolapaket, vd.pihak, vd.uraian, vd.volumepekerjaan, vd.tipepaketnama, vd.namajeniskebutuhan, vd.spesifikasipaket, vd.jumlahbarang, vd.namasatuan, vd.metodepemilihan, vd.lokasi, vd.nilaisumberdanaint, vd.valuesumberdana, vd.pelaksanaanmulai, vd.pelaksanaanakhir }).ToList();
-                //int FirstRow = 4;
-                //int CountData = visualData.Count;
+                        IList<tsIdentifikasiModel> reports = DataSource.AsQueryable().Cast<tsIdentifikasiModel>().ToList();
+                        var visualData = reports.Where(rs => rs.subkegiatan.Contains(subkegiatanName.Key.subkegiatan)).Select(vd => new { vd.no, vd.namapaket, vd.namabrgkerj, vd.kriteria, vd.usahakecil, vd.tipeswakelolapaket, vd.pihak, vd.uraian, vd.volumepekerjaan, vd.tipepaketnama, vd.namajeniskebutuhan, vd.spesifikasipaket, vd.jumlahbarang, vd.namasatuan, vd.metodepemilihan, vd.lokasi, vd.nilaisumberdanaint, vd.valuesumberdana, vd.pelaksanaanmulai, vd.pelaksanaanakhir }).ToList();
+                        int FirstRow = 11;
+                        int CountData = visualData.Count;
 
-                ////Apply style to headers 
-                //worksheet["A1:T1"].Merge();
-                //worksheet["A1"].Text = "RENCANA PENGADAAN ";
+                        //Apply style to headers 
+                        worksheet["A1:T1"].Merge();
+                        worksheet["A1"].Text = "RENCANA PENGADAAN " + subkegiatanName.Key.opd.ToUpper();
 
-                ////Judul Header Tabel
-                //worksheet["A3"].Text = "No";
-                //worksheet["B3"].Text = "Nama Paket";
-                //worksheet["C3"].Text = "Nama Barang/ Jasa";
-                //worksheet["D3"].Text = "Kriteria Barang / Jasa";
-                //worksheet["E3"].Text = "Kriteria Pelaku Usaha";
-                //worksheet["F3"].Text = "Tipe Swakelola";
-                //worksheet["G3"].Text = "Penyelenggara Swakelola";
-                //worksheet["H3"].Text = "Uraian Pekerjaan";
-                //worksheet["I3"].Text = "Volume Pekerjaan";
-                //worksheet["J3"].Text = "Cara Pengadaan";
-                //worksheet["K3"].Text = "Jenis Pengadaan";
-                //worksheet["L3"].Text = "Spesifikasi";
-                //worksheet["M3"].Text = "Kuantitas";
-                //worksheet["N3"].Text = "Satuan";
-                //worksheet["O3"].Text = "Metode Pemilihan";
-                //worksheet["P3"].Text = "Lokasi Pekerjaan/ Barang";
-                //worksheet["Q3"].Text = "Anggaran Pengadaan";
-                //worksheet["R3"].Text = "Sumber Dana";
-                //worksheet["S3"].Text = "Jadwal Pelaksanaan Mulai";
-                //worksheet["T3"].Text = "Jadwal Pelaksanaan Akhir";
+                        //Header Laporan
+                        worksheet["A3:B3"].Merge();
+                        worksheet["A3"].Text = "Pemerintah Daerah";
+                        worksheet["C3"].Text = ": TASIKMALAYA";
 
-                //IStyle headingStyleLeft = workbook.Styles.Add("HeadingStyleHeader" + hashStyle);
-                //headingStyleLeft.BeginUpdate();
-                //headingStyleLeft.Font.Bold = true;
-                //headingStyleLeft.HorizontalAlignment = ExcelHAlign.HAlignLeft;
-                //headingStyleLeft.EndUpdate();
-                //worksheet.Range["A3:A8"].CellStyle = headingStyleLeft;
+                        worksheet["A4:B4"].Merge();
+                        worksheet["A4"].Text = "Perangkat Daerah";
+                        worksheet["C4:J4"].Merge();
+                        worksheet["C4"].Text = ": " + subkegiatanName.Key.subopd.ToUpper();
 
-                //IStyle headingStyleCenter = workbook.Styles.Add("HeadingStyle" + hashStyle);
-                //headingStyleCenter.BeginUpdate();
-                //headingStyleCenter.Font.Bold = true;
-                //headingStyleCenter.HorizontalAlignment = ExcelHAlign.HAlignCenter;
-                //headingStyleCenter.EndUpdate();
-                //worksheet.Range["A1:C1"].CellStyle = headingStyleCenter;
-                //worksheet.Range["B" + (FirstRow + (CountData + 2)) + ":B" + (FirstRow + (CountData + 3))].CellStyle = headingStyleCenter;
+                        worksheet["A5:B5"].Merge();
+                        worksheet["A5"].Text = "Tahun Anggaran";
+                        worksheet["C5:J5"].Merge();
+                        worksheet["C5"].Text = ": " + TA;
 
-                //IStyle headingTitleBorder = workbook.Styles.Add("HeadingTitleBorder" + hashStyle);
-                //headingTitleBorder.BeginUpdate();
-                //headingTitleBorder.Font.Bold = true;
-                //headingTitleBorder.HorizontalAlignment = ExcelHAlign.HAlignCenter;
-                //headingTitleBorder.Borders[ExcelBordersIndex.EdgeLeft].LineStyle = ExcelLineStyle.Thin;
-                //headingTitleBorder.Borders[ExcelBordersIndex.EdgeRight].LineStyle = ExcelLineStyle.Thin;
-                //headingTitleBorder.Borders[ExcelBordersIndex.EdgeTop].LineStyle = ExcelLineStyle.Thin;
-                //headingTitleBorder.Borders[ExcelBordersIndex.EdgeBottom].LineStyle = ExcelLineStyle.Thin;
-                //headingTitleBorder.EndUpdate();
-                //worksheet.Range["A3:T3"].CellStyle = headingTitleBorder;
+                        worksheet["A6:B6"].Merge();
+                        worksheet["A6"].Text = "Program";
+                        worksheet["C6:J6"].Merge();
+                        worksheet["C6"].Text = ": " + subkegiatanName.Key.namaprogram;
 
-                //IStyle headingBorder = workbook.Styles.Add("HeadingBorder" + hashStyle);
-                //headingBorder.BeginUpdate();
-                //headingBorder.Borders[ExcelBordersIndex.EdgeLeft].LineStyle = ExcelLineStyle.Thin;
-                //headingBorder.Borders[ExcelBordersIndex.EdgeRight].LineStyle = ExcelLineStyle.Thin;
-                //headingBorder.Borders[ExcelBordersIndex.EdgeTop].LineStyle = ExcelLineStyle.Thin;
-                //headingBorder.Borders[ExcelBordersIndex.EdgeBottom].LineStyle = ExcelLineStyle.Thin;
-                //headingBorder.EndUpdate();
-                //worksheet.Range["A" + FirstRow + ":T" + (FirstRow + (CountData - 1))].CellStyle = headingBorder;
+                        worksheet["A7:B7"].Merge();
+                        worksheet["A7"].Text = "Kegiatan";
+                        worksheet["C7:J7"].Merge();
+                        worksheet["C7"].Text = ": " + subkegiatanName.Key.namakegiatan;
 
-                //IStyle footerStyleCenter = workbook.Styles.Add("FooterStyle" + hashStyle);
-                //footerStyleCenter.BeginUpdate();
-                //footerStyleCenter.HorizontalAlignment = ExcelHAlign.HAlignCenter;
-                //footerStyleCenter.EndUpdate();
-                //worksheet.Range["K" + (FirstRow + (CountData + 2)) + ":N" + (FirstRow + (CountData + 10))].CellStyle = footerStyleCenter;
+                        worksheet["A8:B8"].Merge();
+                        worksheet["A8"].Text = "Sub Kegiatan";
+                        worksheet["C8:J8"].Merge();
+                        worksheet["C8"].Text = ": " + subkegiatanName.Key.namasubkegiatan;
 
-                //importDataOptions.FirstRow = FirstRow;
-                //importDataOptions.IncludeHeader = false;
-                //importDataOptions.NestedDataLayoutOptions = ExcelNestedDataLayoutOptions.Default;
-                //worksheet.ImportData(visualData, importDataOptions);
+                        //Footer Laporan
+                        worksheet["K" + (FirstRow + (CountData + 2)) + ":N" + (FirstRow + (CountData + 2))].Merge();
+                        worksheet["K" + (FirstRow + CountData + 2)].Text = "TASIKMALAYA, " + formatindonesia();
+                        worksheet["K" + (FirstRow + (CountData + 3)) + ":N" + (FirstRow + (CountData + 3))].Merge();
+                        worksheet["K" + (FirstRow + CountData + 3)].Text = "Disusun oleh,";
+                        worksheet["K" + (FirstRow + (CountData + 4)) + ":N" + (FirstRow + (CountData + 4))].Merge();
+                        worksheet["K" + (FirstRow + CountData + 4)].Text = "Pejabat Pembuat Komitmen,";
+                        worksheet["K" + (FirstRow + (CountData + 9)) + ":N" + (FirstRow + (CountData + 9))].Merge();
+                        worksheet["K" + (FirstRow + CountData + 9)].Text = subkegiatanName.Key.namappk.ToUpper();
+                        worksheet["K" + (FirstRow + (CountData + 10)) + ":N" + (FirstRow + (CountData + 10))].Merge();
+                        worksheet["K" + (FirstRow + CountData + 10)].Text = "NIP. " + subkegiatanName.Key.nipppk.ToUpper();
 
-                //worksheet.UsedRange.AutofitColumns();
+                        //Judul Header Tabel
+                        worksheet["A10"].Text = "No";
+                        worksheet["B10"].Text = "Nama Paket";
+                        worksheet["C10"].Text = "Nama Barang/ Jasa";
+                        worksheet["D10"].Text = "Kriteria Barang / Jasa";
+                        worksheet["E10"].Text = "Kriteria Pelaku Usaha";
+                        worksheet["F10"].Text = "Tipe Swakelola";
+                        worksheet["G10"].Text = "Penyelenggara Swakelola";
+                        worksheet["H10"].Text = "Uraian Pekerjaan";
+                        worksheet["I10"].Text = "Volume Pekerjaan";
+                        worksheet["J10"].Text = "Cara Pengadaan";
+                        worksheet["K10"].Text = "Jenis Pengadaan";
+                        worksheet["L10"].Text = "Spesifikasi";
+                        worksheet["M10"].Text = "Kuantitas";
+                        worksheet["N10"].Text = "Satuan";
+                        worksheet["O10"].Text = "Metode Pemilihan";
+                        worksheet["P10"].Text = "Lokasi Pekerjaan/ Barang";
+                        worksheet["Q10"].Text = "Anggaran Pengadaan";
+                        worksheet["R10"].Text = "Sumber Dana";
+                        worksheet["S10"].Text = "Jadwal Pelaksanaan Mulai";
+                        worksheet["T10"].Text = "Jadwal Pelaksanaan Akhir";
+
+                        IStyle headingStyleLeft = workbook.Styles.Add("HeadingStyleHeader" + hashStyle);
+                        headingStyleLeft.BeginUpdate();
+                        headingStyleLeft.Font.Bold = true;
+                        headingStyleLeft.HorizontalAlignment = ExcelHAlign.HAlignLeft;
+                        headingStyleLeft.EndUpdate();
+                        worksheet.Range["A3:A8"].CellStyle = headingStyleLeft;
+
+                        IStyle headingStyleCenter = workbook.Styles.Add("HeadingStyle" + hashStyle);
+                        headingStyleCenter.BeginUpdate();
+                        headingStyleCenter.Font.Bold = true;
+                        headingStyleCenter.HorizontalAlignment = ExcelHAlign.HAlignCenter;
+                        headingStyleCenter.EndUpdate();
+                        worksheet.Range["A1:C1"].CellStyle = headingStyleCenter;
+                        worksheet.Range["B" + (FirstRow + (CountData + 2)) + ":B" + (FirstRow + (CountData + 3))].CellStyle = headingStyleCenter;
+
+                        IStyle headingTitleBorder = workbook.Styles.Add("HeadingTitleBorder" + hashStyle);
+                        headingTitleBorder.BeginUpdate();
+                        headingTitleBorder.Font.Bold = true;
+                        headingTitleBorder.HorizontalAlignment = ExcelHAlign.HAlignCenter;
+                        headingTitleBorder.Borders[ExcelBordersIndex.EdgeLeft].LineStyle = ExcelLineStyle.Thin;
+                        headingTitleBorder.Borders[ExcelBordersIndex.EdgeRight].LineStyle = ExcelLineStyle.Thin;
+                        headingTitleBorder.Borders[ExcelBordersIndex.EdgeTop].LineStyle = ExcelLineStyle.Thin;
+                        headingTitleBorder.Borders[ExcelBordersIndex.EdgeBottom].LineStyle = ExcelLineStyle.Thin;
+                        headingTitleBorder.EndUpdate();
+                        worksheet.Range["A10:T10"].CellStyle = headingTitleBorder;
+
+                        IStyle headingBorder = workbook.Styles.Add("HeadingBorder" + hashStyle);
+                        headingBorder.BeginUpdate();
+                        headingBorder.Borders[ExcelBordersIndex.EdgeLeft].LineStyle = ExcelLineStyle.Thin;
+                        headingBorder.Borders[ExcelBordersIndex.EdgeRight].LineStyle = ExcelLineStyle.Thin;
+                        headingBorder.Borders[ExcelBordersIndex.EdgeTop].LineStyle = ExcelLineStyle.Thin;
+                        headingBorder.Borders[ExcelBordersIndex.EdgeBottom].LineStyle = ExcelLineStyle.Thin;
+                        headingBorder.EndUpdate();
+                        worksheet.Range["A" + FirstRow + ":T" + (FirstRow + (CountData - 1))].CellStyle = headingBorder;
+
+                        IStyle footerStyleCenter = workbook.Styles.Add("FooterStyle" + hashStyle);
+                        footerStyleCenter.BeginUpdate();
+                        footerStyleCenter.HorizontalAlignment = ExcelHAlign.HAlignCenter;
+                        footerStyleCenter.EndUpdate();
+                        worksheet.Range["K" + (FirstRow + (CountData + 2)) + ":N" + (FirstRow + (CountData + 10))].CellStyle = footerStyleCenter;
+
+                        importDataOptions.FirstRow = FirstRow;
+                        importDataOptions.IncludeHeader = false;
+                        importDataOptions.NestedDataLayoutOptions = ExcelNestedDataLayoutOptions.Default;
+                        worksheet.ImportData(visualData, importDataOptions);
+
+                        worksheet.UsedRange.AutofitColumns();
+                        worksheet.Protect(",6Gn]a3VX@whh`>z=,]Ps6Jy<j4.x[n aGA:$-C`.,Kmf)93nYXjS2Q~rGP@, CZb8DmQ9tCh = SDY_RI - &{={pN3m`KxL % B9 + k", ExcelSheetProtection.All);
+
+                        noSheet = noSheet + 1;
+                    }
+                }
                 #endregion
 
                 #region SuperAdmin

@@ -17,6 +17,7 @@ namespace TasikmalayaKota.Simpatik.Web.Services.tsPaket.Models
         public int tipePaket { get; set; }
         public string opd { get; set; }
         public string namaopd { get; set; }
+        public string namaopdutama { get; set; }
         public string pejabat { get; set; }
         public string thanggrn { get; set; }
         public string nmpaket { get; set; }

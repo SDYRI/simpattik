@@ -41,6 +41,18 @@ namespace TasikmalayaKota.Simpatik.Web.Controllers
             return View();
         }
 
+        [Route("IndexLapPerencanaanMe")]
+        public IActionResult IndexLapPerencanaan()
+        {
+            return View("IndexPemaketan");
+        }
+
+        [Route("IndexLapKonsolidasiMe")]
+        public IActionResult IndexLapKonsolidasi()
+        {
+            return View("IndexPemaketan");
+        }
+
         [Route("IndexPemaketanMe")]
         public IActionResult IndexPemaketan()
         {
@@ -57,6 +69,12 @@ namespace TasikmalayaKota.Simpatik.Web.Controllers
         public IActionResult IndexKesesuaianSirup()
         {
             return View();
+        }
+
+        [Route("IndexLapKesesuaianSirupMe")]
+        public IActionResult IndexLapKesesuaianSirup()
+        {
+            return View("IndexPemaketan");
         }
 
         [Route("IndexUploadHpsMe")]
